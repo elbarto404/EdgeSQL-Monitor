@@ -1,0 +1,102 @@
+<template>
+    <!-- Provide an input text box to search the content -->
+    <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" single-line variant="outlined"
+        hide-details></v-text-field>
+    <v-data-table v-model:search="search" :items="msg?.payload">
+        <template v-slot:header.ev>
+          <div class="text-center">EV Owner</div>
+        </template>
+        <template v-slot:header.rating>
+          <div class="text-center">Customer Satisfaction</div>
+        </template>
+        <template v-slot:header.complete>
+          <div class="text-center">Journey Completed</div>
+        </template>
+
+      <template v-slot:item.email="{ item }">
+        <!-- turn the email column to an Email hyperlink -->
+        <a :href="'mailto:' + item.email">Email</a>
+      </template>
+
+      <template v-slot:item.age="{ item }">
+        <!-- Add a custom suffix "years" after the number -->
+        <v-chip :color="getChipColor(item)">
+          {{ item.age }} years
+        </v-chip>
+      </template>
+
+      <template v-slot:item.ev="{ item }">
+        <!-- Convert the EV values to colored icons -->
+        <div class="text-center"><v-icon :color="evColor(item)" :icon="evIcon(item)"></v-icon></div>
+      </template>
+
+      <template v-slot:item.rating="{ item }">
+        <!-- Display the rating number as star rating -->
+        <v-rating length="5" size="32" :model-value="item.rating" active-color="primary" readonly></v-rating>
+      </template>
+
+      <template v-slot:item.complete="{ item }">
+        <!-- Display the progress as a linear progress -->
+        <v-progress-linear :color="getProgressColor(item)" :model-value="item.complete" height="12"></v-progress-linear>
+      </template>
+
+
+    </v-data-table>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        search: ''
+      }
+    },
+    methods: {
+        // add a function to determine the color of the progress bar given the row's item
+      evColor: function (item) {
+        if (item !== undefined ) {
+          if (item.ev == "yes") {
+            return 'green';
+          } else {
+            return 'grey';
+          }
+        }
+      },
+      evIcon: function (item) {
+        if (item !== undefined ) {
+          if (item.ev == "yes") {
+            return 'mdi-car-electric';
+          } else {
+            return 'mdi-car';
+          }
+        }
+      },
+      getProgressColor: function (item) {
+        if (item !== undefined ) {
+          if (item.complete > 80) {
+            return 'red';
+          } else {
+            if (item.complete > 50) {
+              return 'orange';
+            } else {
+              return 'green';
+            }
+          }
+        }
+      },
+      getChipColor: function (item) {
+        if (item !== undefined ) {
+          if (item.age > 50) {
+            return 'red';
+            } else {
+              if (item.age > 30) {
+                return 'orange';
+              } else {
+                return 'green';
+            }
+          }
+        }
+      }
+    }
+  }
+</script>

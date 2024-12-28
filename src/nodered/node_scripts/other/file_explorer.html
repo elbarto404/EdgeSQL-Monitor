@@ -1,0 +1,41 @@
+<template>
+  <!-- Provide an input text box to search the content -->
+  <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" single-line variant="outlined"
+      hide-details></v-text-field>
+  <v-data-table 
+    v-model:search="search" 
+    :items="msg?.payload" 
+    :headers="msg?.headers"
+    v-model="selected"
+    item-selectable="selectable"
+    select-strategy="all"
+    show-select    
+    return-object
+  >
+
+    <template v-slot:item.icon="{ item }">
+      <v-icon :icon="item.icon"></v-icon>
+    </template>
+
+  </v-data-table>
+</template>
+
+<script>
+  export default {
+  data () {
+    return {
+      selected: [],
+      search: ''
+    }
+  },
+  watch: {
+      selected: function () {
+        this.send({topic:'selected', payload: this.selected});
+      }
+  },
+  methods: {
+      // add a function to determine the color of the progress bar given the row's item
+
+  }
+}
+</script>

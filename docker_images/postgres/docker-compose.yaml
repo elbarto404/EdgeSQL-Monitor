@@ -1,0 +1,78 @@
+version: "2.4"
+
+services:
+  postgres_host:
+    image: postgres:17  # ORIGINAL IMAGE
+    # image: edge-postgres:0.0.1
+    restart: unless-stopped  
+    container_name: postgres_host
+    environment:
+      POSTGRES_USER: edge
+      POSTGRES_PASSWORD: edgeadmin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_etc:/var/lib/postgresql/etc
+      - postgres_logs:/var/log/postgresql
+      - postgres_backups:/backups
+    networks:
+      - proxy-redirect
+    ports:
+      - "35432:5432"
+    mem_limit: 1g
+    command: 
+      -c shared_buffers=256MB
+      -c work_mem=16MB
+      -c maintenance_work_mem=64MB
+      -c effective_cache_size=768MB
+      -c max_connections=100
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0  # ORIGINAL IMAGE
+    restart: unless-stopped  
+    container_name: postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://edge:edgeadmin@postgres_host:5432/edgedatabase?sslmode=disable"
+    networks:
+      - proxy-redirect
+    ports:
+      - "39187:9187"
+    depends_on:
+      - postgres_host
+    mem_limit: 128m
+
+  pgadmin:
+    image: dpage/pgadmin4:8.14   # ORIGINAL IMAGE
+    # image: edge-pgadmin:0.0.1
+    container_name: postgres_admin
+    restart: unless-stopped 
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@edge.com       # Email di default per l'accesso a pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: edgeadmin         # Password di default per l'accesso a pgAdmin
+    ports:
+      - "30080:80"  # Porta su cui accedere a pgAdmin
+    networks:
+      - proxy-redirect
+    depends_on:
+      - postgres_host
+    mem_limit: 512m
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin        
+      - pgadmin_logs:/var/log/pgadmin          
+
+volumes:
+  postgres_data:
+    name: postgres_data
+  postgres_etc:
+    name: postgres_etc
+  postgres_logs:
+    name: postgres_logs
+  postgres_backups:
+    name: postgres_backups
+  pgadmin_data:
+    name: pgadmin_data
+  pgadmin_logs:
+    name: pgadmin_logs
+
+networks:
+  proxy-redirect:
+    external: true

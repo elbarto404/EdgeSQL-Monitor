@@ -1,0 +1,17 @@
+version: "2.4"
+
+services:
+  prometheus:
+    # image: prom/prometheus:v2.54.1  # ORIGINAL IMAGE
+    image: edge-prometheus:0.0.1
+    restart: unless-stopped  
+    container_name: prometheus
+    ports:
+      - "39090:9090"
+    networks:
+      - proxy-redirect
+    mem_limit: 512m
+
+networks:
+  proxy-redirect:
+    external: true

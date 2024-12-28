@@ -1,0 +1,65 @@
+version: "2.4"
+
+services:
+  grafana:
+    image: grafana/grafana-enterprise:11.3.1-ubuntu
+    # image: grafana/grafana:11.3.0-ubuntu  # ORIGINAL IMAGE
+    # image: edge-grafana:0.0.1
+    container_name: grafana
+    restart: unless-stopped 
+    environment:
+      GF_SECURITY_ADMIN_USER: edge
+      GF_SECURITY_ADMIN_PASSWORD: edgeadmin
+    ports:
+      - "33000:3000"
+    networks:
+      - proxy-redirect
+    mem_limit: 1g
+    user: '1000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./custom/provisioning:/etc/grafana/provisioning
+      - ./custom/dashboards:/var/lib/grafana/dashboards
+      - ./custom/bg:/usr/share/grafana/public/img/bg
+      # - $PWD/admin_dashboards:/etc/grafana/dashboards
+      # - $PWD/user_dashboards:/var/lib/grafana/dashboards
+      # - grafana_config:/etc/grafana/provisioning
+      # - grafana_data:/var/lib/grafana
+      # - grafana_share:/usr/share/grafana
+      # - grafana_etc:/etc/grafana         # Mount the entire configuration directory
+      # - grafana_data:/var/lib/grafana    # Mount the entire data directory
+      # - grafana_logs:/var/log/grafana    # (Optional) Mount the log directory for easy access to logs from the host
+
+  filebrowser:
+    image: filebrowser/filebrowser:v2-s6
+    container_name: filebrowser
+    restart: unless-stopped
+    mem_limit: 256m
+    ports:
+      - "8080:80"
+    environment:
+      - TZ=Europe/Rome
+    networks:
+      - proxy-redirect
+    volumes:
+      - ./custom:/srv
+      - filebrowser_config:/config
+      - filebrowser_database:/database
+
+volumes:
+  # grafana_config:
+  #   name: grafana_config
+  grafana_data:
+    name: grafana_data
+  # grafana_share:
+  #   name: grafana_share
+  # grafana_logs:
+  #   name: grafana_logs
+  filebrowser_config:
+    name: filebrowser_config
+  filebrowser_database:
+    name: filebrowser_database
+
+networks:
+  proxy-redirect:
+    external: true

@@ -1,0 +1,114 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "32736db9df34cb89",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "postgres_host",
+        "hostFieldType": "str",
+        "port": "5432",
+        "portFieldType": "num",
+        "database": "edgedata",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": "10",
+        "maxFieldType": "num",
+        "idle": "1000",
+        "idleFieldType": "num",
+        "connectionTimeout": "10000",
+        "connectionTimeoutFieldType": "num",
+        "user": "edge",
+        "userFieldType": "str",
+        "password": "edgeadmin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "51ed21347f66384d",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "iso",
+        "payloadType": "date",
+        "x": 290,
+        "y": 180,
+        "wires": [
+            [
+                "d1eda7a1fb0447b7"
+            ]
+        ]
+    },
+    {
+        "id": "5007df61db252a05",
+        "type": "postgresql",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "query": "",
+        "postgreSQLConfig": "32736db9df34cb89",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 710,
+        "y": 180,
+        "wires": [
+            [
+                "fa1dfd7bb51a327d"
+            ]
+        ]
+    },
+    {
+        "id": "d1eda7a1fb0447b7",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "generate query",
+        "func": "// Generate a random real number between 0 and 100\nlet randomValue = Math.random() * 100;\n\n// Retrieve the timestamp from msg.payload\nlet timestamp = msg.payload;\n\n// Define your table name\nconst tableName = \"sample_table\"; // Replace with your actual table name\n\n// Prepare the SQL query using parameterized statements to prevent SQL injection\nmsg.query = `INSERT INTO ${tableName} (time, value) VALUES ($1, $2)`;\n\n// Set the parameters array with the timestamp and random value\nmsg.params = [timestamp, randomValue];\n\n// Optionally, you can log the query and parameters for debugging\n// node.warn(`Executing Query: ${msg.query}`);\n// node.warn(`With Parameters: ${JSON.stringify(msg.params)}`);\n\n// Return the message object to pass it to the next node\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 180,
+        "wires": [
+            [
+                "5007df61db252a05"
+            ]
+        ]
+    },
+    {
+        "id": "fa1dfd7bb51a327d",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 180,
+        "wires": []
+    }
+]

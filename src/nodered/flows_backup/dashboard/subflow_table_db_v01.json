@@ -1,0 +1,410 @@
+[
+    {
+        "id": "b188661f063477fc",
+        "type": "debug",
+        "z": "f38f1d8bba7489fd",
+        "name": "table_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d591560e71cdaf0a",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "update_status",
+        "func": "// Function to replace underscores with spaces and capitalize words\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\n// Retrieve existing data or initialize\nlet columns = [];\nlet data = global.get(\"machines_types\") || [];\n\n// Extract column names from PostgreSQL query\nif (msg.pgsql && msg.pgsql[0] && msg.pgsql[0].rows) {\n    columns = msg.pgsql[0].rows.map(col => col.column_name);\n}\n\n// Extract data rows from PostgreSQL query\nif (msg.pgsql && msg.pgsql[1] && msg.pgsql[1].rows) {\n    data = msg.pgsql[1].rows;\n}\n\n// Build dynamic table headers\nconst baseHeaders = columns.length > 0\n    ? columns.map(key => ({\n        title: capitalize(key),\n        value: key,\n        headerProps: { style: 'font-weight: 700' },\n    }))\n    : [];\n\n// Assign table data to the message\nmsg.data = data;\n\nmsg.dashboard.table = {\n    title: msg.title,\n    headers: baseHeaders\n};\n\n// Save data back to the global context\nglobal.set(msg.database.table, data);\n\n// Return updated state\nconst now = new Date().toISOString();\nconst state = {\n    payload: { fill: \"green\", shape: \"dot\", text: `last update: ${now}` }\n};\nreturn [msg, state];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 220,
+        "wires": [
+            [
+                "8d88ac36455f0209"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6a9a212b19e8915e",
+        "type": "debug",
+        "z": "f38f1d8bba7489fd",
+        "name": "table_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "17ebc03c09a4794f",
+        "type": "debug",
+        "z": "f38f1d8bba7489fd",
+        "name": "saving_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "42cc1dc8f59570af",
+        "type": "ui-template",
+        "z": "f38f1d8bba7489fd",
+        "group": "4290ffc4397af8c8",
+        "page": "",
+        "ui": "",
+        "name": "table_machine_types",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Main Card Container -->\n  <v-card>\n    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->\n    <v-card-item class=\"bg-blue-darken-3\">\n      <v-row class=\"my-2 align-self-center\" no-gutters>\n        \n        <!-- Title and Reload Button -->\n        <v-col cols=\"auto\" class=\"mx-4 align-self-center\">\n          <v-btn\n            @click=\"updateTable\"\n            variant=\"tonal\"\n            class=\"font-weight-bold text-h5 text-white\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-update</v-icon>\n            <p class=\"mx-1 align-self-center\" v-text=\"msg.dashboard.table.title\"></p>\n          </v-btn>\n        </v-col>\n\n        <!-- Search Bar -->\n        <v-col class=\"mx-4 align-self-center\">\n          <v-text-field\n            v-model=\"search\"\n            label=\"Search\"\n            prepend-inner-icon=\"mdi-magnify\"\n            single-line\n            clearable\n            hide-details\n            color=\"white\"\n          ></v-text-field>\n        </v-col>\n\n        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->\n        <v-col cols=\"auto\" class=\"mx-2 align-self-center text-white\">\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"reloadTable\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-reload</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Reload</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"downloadCsv\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-arrow-down-bold</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">CSV</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"enableEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Edit</span>\n          </v-btn>\n\n          <!-- Buttons visible in Edit Mode -->\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"deploy\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-floppy</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Save</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"addNewItem\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-plus</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Add New</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"discardEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil-off</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Discard</span>\n          </v-btn>\n        </v-col>\n      </v-row>\n    </v-card-item>\n\n    <!-- Data Table with Custom Cell Templates -->\n    <v-data-table\n      v-model=\"selected\"\n      :headers=\"msg.dashboard.table.headers\"\n      :items=\"msg.data\"\n      :search=\"search\"\n      :items-per-page=\"itemsPerPage\"\n      :items-per-page-options=\"[5, 10, 25, 50, -1]\"\n      class=\"elevation-1\"\n      :loading=\"loading\"\n      loading-text=\"Loading...\"\n      density=\"default\"\n    >\n      \n      <!-- Toggle Switch for 'enabled' Field -->\n      <template v-slot:item.enabled=\"{ item }\">\n        <v-switch\n          v-model=\"item.enabled\"\n          :color=\"getSwitchColor(item)\"\n          :base-color=\"getSwitchColor(item)\"\n          :disabled=\"!editMode\"\n          hide-details\n        ></v-switch>\n      </template>\n\n      <!-- Display Tags as Chips -->\n      <template v-slot:item.tag_tables=\"{ item }\">\n        <div>\n          <v-chip\n            v-for=\"(tag, index) in item.tag_tables\"\n            :key=\"index\"\n            class=\"ma-1\"\n            :color=\"getTableColor(tag)\"\n            dark\n          >\n            {{ tag }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Actions Column with Edit and Delete Icons -->\n      <template v-slot:item.actions=\"{ item }\">\n        <div class=\"actions-column\">\n          <v-icon\n            v-show=\"editMode\"\n            small\n            class=\"mr-2\"\n            @click=\"editItem(item)\"\n            color=\"blue-darken-2\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-pencil\n          </v-icon>\n\n          <v-icon\n            v-show=\"editMode\"\n            small\n            @click=\"deleteItem(item)\"\n            color=\"blue-darken-4\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-delete\n          </v-icon>\n        </div>\n      </template>\n\n      <!-- No Data Message -->\n      <template v-slot:no-data>\n        <v-row class=\"ma-4\">\n          <v-alert :value=\"true\" color=\"warning\" icon=\"mdi-alert\">\n            No matching records found.\n          </v-alert>\n        </v-row>\n      </template>\n    </v-data-table>\n  </v-card>\n\n  <!-- Dialog for Adding or Editing Items -->\n  <v-dialog v-model=\"dialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">{{ formTitle }}</span>\n      </v-card-title>\n\n      <v-card-text>\n        <v-form ref=\"form\" v-model=\"valid\" fast-fail @submit.prevent>\n          \n          <!-- Form Fields -->\n          <v-text-field\n            v-model=\"editedItem.type\"\n            label=\"Type\"\n            :rules=\"[v => !!v || 'Type is required']\"\n            required\n          ></v-text-field>\n          <v-text-field\n            v-model=\"editedItem.vendor\"\n            label=\"Vendor\"\n            maxlength=\"50\"\n            counter\n          ></v-text-field>\n          <v-textarea\n            v-model=\"editedItem.details\"\n            label=\"Details\"\n            maxlength=\"200\"\n            counter\n          ></v-text-field>\n          \n        </v-form>\n      </v-card-text>\n\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"saveItem\">Save</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      search: '',\n      loading: false,\n      page: 1,\n      itemsPerPage: 5,\n      editMode: false,\n      dialog: false,\n      formTitle: \"\",\n      editedIndex: -1,\n      editedItem: {},\n      selected: [],\n      actionsHeader: {\n        title: \"Actions\",\n        value: \"actions\",\n        headerProps: { style: 'font-weight: 700' },\n      },\n      snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n    };\n  },\n  computed: {\n    pageCount() {\n      return Math.ceil(this.msg.data.length / this.itemsPerPage);\n    },\n  },\n  watch: {\n    msg: {\n      handler() {\n        if (\n          this.editMode &&\n          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'\n        ) {\n          this.msg.dashboard.table.headers.push(this.actionsHeader);\n        }\n      },\n      deep: true \n    }\n  },\n  methods: {\n    // Sends a message with the current state\n    msgSend() {\n      this.send({\n        topic: this.msg.topic,\n        time: new Date(),\n        title: this.msg.title,\n        database: this.msg.database,\n        data: this.msg.data,\n        dashboard: this.msg.dashboard,\n        payload: this.msg.payload,\n      });\n    },\n    \n    // Notification and table actions\n    notify(item){\n      this.msg.topic = \"notify\";\n      this.msg.payload = item;\n      this.msgSend();\n    },\n    reloadTable() {\n      this.msg.topic = \"reload\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    updateTable() {\n      this.msg.topic = \"update\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    \n    // Edit mode controls\n    enableEdit() {\n      this.msg.dashboard.table.headers.push(this.actionsHeader);\n      this.editMode = true;\n    },\n    disableEdit() {\n      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(\n        header => header !== this.actionsHeader\n      );\n      this.editMode = false;\n    },\n    \n    // Deployment and discarding edits\n    deploy() {\n      this.loading = true;\n      this.disableEdit();\n      this.msg.topic = \"deploy\";\n      this.msg.payload = this.generateCsv();\n      this.msgSend();\n      this.showSnackbar('Deploy action triggered!', 'info');\n    },\n    discardEdit() {\n      this.disableEdit();\n      this.updateTable();\n    },\n    \n    // Handling items\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.headers.forEach(header => {\n        if (header.value !== 'actions') {\n          defaultItem[header.value] = header.value === 'enabled' ? true :\n                                       header.value === 'status' ? \"unknown\" : null;\n        }\n      });\n      return defaultItem;\n    },\n    addNewItem() {\n      this.editedIndex = -1;\n      this.editedItem = this.getDefaultItem();\n      this.formTitle = 'Add Item';\n      this.dialog = true;\n    },\n    editItem(item) {\n      this.editedIndex = this.msg.data.indexOf(item);\n      this.editedItem = { ...item };\n      this.formTitle = 'Edit Item';\n      this.dialog = true;\n    },\n    deleteItem(item) {\n      const deleteIndex = this.msg.data.indexOf(item);\n      if (deleteIndex > -1) {\n        this.msg.data.splice(deleteIndex, 1);\n        this.loading = true;\n        this.showSnackbar('Item deleted successfully!', 'success');\n      }\n    },\n    \n    // Dialog controls\n    closeDialog() {\n      this.dialog = false;\n      this.$refs.form.reset();\n      this.editedItem = this.getDefaultItem();\n    },\n    async saveItem() {\n      const { valid } = await this.$refs.form.validate();\n      if (valid) {\n        if (this.editedIndex > -1) {\n          Object.assign(this.msg.data[this.editedIndex], this.editedItem);\n          this.showSnackbar('Item updated successfully!', 'success');\n        } else {\n          this.msg.data.push({ ...this.editedItem });\n          this.showSnackbar('Item added successfully!', 'success');\n        }\n        // this.loading = true;\n        this.closeDialog();\n      } else {\n        this.showSnackbar('Please correct the errors in the form.', 'error');\n      }\n    },\n    \n    // CSV Generation and Download\n    generateCsv() {\n      const separator = ';';\n      const headers = this.msg.dashboard.table.headers\n        .filter(header => !['actions', 'status'].includes(header.value))\n        .map(header => header.value)\n        .join(separator); \n\n      const rows = this.msg.data.map(item => {\n        return this.msg.dashboard.table.headers\n          .filter(header => !['actions', 'status'].includes(header.value))\n          .map(header => {\n            const cell = item[header.value];\n\n            // Handle different data types\n            if (Array.isArray(cell)) {\n              return JSON.stringify(cell); // Stringify arrays\n            } else if (typeof cell === 'string') {\n              return cell; // Use string as-is\n            } else if (cell == null) {\n              return ''; // Handle null or undefined\n            } else {\n              return String(cell); // Convert other types to string\n            }\n          })\n          .join(separator);\n      }).join('\\n');\n\n\n      return `${headers}\\n${rows}`;\n    },\n    createDownloadLink(csvContent) {\n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const url = URL.createObjectURL(blob);\n      const link = document.createElement(\"a\");\n      link.setAttribute(\"href\", url);\n      link.setAttribute(\"download\", \"data.csv\");\n      link.style.visibility = 'hidden';\n      document.body.appendChild(link);\n      link.click();\n      document.body.removeChild(link);\n      URL.revokeObjectURL(url);\n    },\n    downloadCsv() {\n      try {\n        const csvContent = this.generateCsv();\n        this.createDownloadLink(csvContent);\n        this.showSnackbar('CSV scaricato con successo!', 'success');\n      } catch (error) {\n        console.error('Errore durante il download del CSV:', error);\n        this.showSnackbar('Errore durante il download del CSV.', 'error');\n      }\n    },\n    \n    // Utility Methods\n    getStatusColor(value) {\n      const colors = {\n        \"unknown\": 'blue',\n        \"connecting\": 'amber',\n        \"connected\": 'green',\n        \"error\": 'red'\n      };\n      if (colors[value]) return colors[value];\n      return 'purple';\n    },\n    getSwitchColor(item) {\n      return item.enabled ? this.getStatusColor(item.status)\n                            : 'grey-lighten-2';\n    },\n    getListColor(list, elem, item) {\n      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'\n                            : 'grey-lighten-2';\n    },\n    showSnackbar(message, type) {\n      this.snackbar.text = message;\n      this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                          : type === 'error' ? 'red-lighten-3' \n                          : 'blue-lighten-5';\n      this.snackbar.show = true;\n      this.loading = false;\n    }\n  }\n};\n</script>\n\n<style scoped>\n/* Heading Text Size */\n.text-h5 {\n  font-size: 1.25rem;\n}\n\n/* Actions Column Styling */\n.actions-column {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  width: 60px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 860,
+        "y": 180,
+        "wires": [
+            [
+                "5a1b81688ff1adee",
+                "6a9a212b19e8915e"
+            ]
+        ]
+    },
+    {
+        "id": "5a1b81688ff1adee",
+        "type": "link out",
+        "z": "f38f1d8bba7489fd",
+        "name": "ui_table_out",
+        "mode": "link",
+        "links": [
+            "129b8e3b56023c7b"
+        ],
+        "x": 1035,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "30a4076a37414c40",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "switch",
+        "func": "// Function to format strings by replacing underscores with spaces and capitalizing each word\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\n// Init\nconst tabName = env.get('TABLE');\nmsg.title = capitalize(tabName);\nmsg.database = msg.database || {\n    name: env.get(\"DATABASE\"),\n    schema: env.get(\"SCHEMA\"),\n    table: tabName\n};\nmsg.data = msg.data || flow.get(tabName) || null;\nmsg.dashboard = msg.dashboard || {};\n\nif (msg.database.table !== tabName) {\n    msg.error = \"Message with wrong table\";\n}\n\nconst indexMap = {\n    // Previous Error\n    error:          0,\n\n    // Previous Action\n    check_table:    2,\n    select_data:    3,\n\n    // Next Action\n    start:          1,\n    update:         2,\n    deploy:         4,\n    update_next:    5\n};\n\nconst outputs = [null, null, null, null, null, null];\n\nif (msg.error) outputs[0] = msg;\nelse if (indexMap[msg.topic] !== undefined) outputs[indexMap[msg.topic]] = msg;\n\nreturn outputs;\n\n\n",
+        "outputs": 6,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 200,
+        "wires": [
+            [
+                "cc73c015c75fda21"
+            ],
+            [
+                "24ef560d2d727b47"
+            ],
+            [
+                "0e81f848a29bfbbb"
+            ],
+            [
+                "d591560e71cdaf0a"
+            ],
+            [
+                "a83e3c42dccd2d21"
+            ],
+            [
+                "05b3911c55d5e2ec"
+            ]
+        ]
+    },
+    {
+        "id": "cc73c015c75fda21",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "[TODO] error_show",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 100,
+        "wires": [
+            [
+                "8d88ac36455f0209"
+            ]
+        ]
+    },
+    {
+        "id": "0e81f848a29bfbbb",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "select_data",
+        "func": "msg.query = `\n\n    SELECT column_name \n    FROM information_schema.columns \n    WHERE table_schema = '${msg.database.schema}'\n    AND table_name = '${msg.database.table}';\n\n    SELECT * \n    FROM ${msg.database.schema}.${msg.database.table};\n\n`;\n\nmsg.topic = \"select_data\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "24ef560d2d727b47",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "check_db_table",
+        "func": "msg.query = `\n\n    CREATE TABLE IF NOT EXISTS ${msg.database.schema}.${msg.database.table} (\n        type VARCHAR(255) PRIMARY KEY,\n        vendor VARCHAR(255),\n        details VARCHAR(255)\n    );\n    \n`;\n\nmsg.topic = \"check_table\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c8d2f61ccaadd61b",
+        "type": "comment",
+        "z": "f38f1d8bba7489fd",
+        "name": "to database",
+        "info": "",
+        "x": 830,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f11f3bf2e6a161cc",
+        "type": "comment",
+        "z": "f38f1d8bba7489fd",
+        "name": "to next",
+        "info": "",
+        "x": 810,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "a83e3c42dccd2d21",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "[TODO] deploy",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 260,
+        "wires": [
+            [
+                "17ebc03c09a4794f"
+            ]
+        ]
+    },
+    {
+        "id": "05b3911c55d5e2ec",
+        "type": "function",
+        "z": "f38f1d8bba7489fd",
+        "name": "clear_update",
+        "func": "return {\n    topic: 'update',\n    time: msg.time,\n    _msgid: msg._msgid\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "129b8e3b56023c7b",
+        "type": "link in",
+        "z": "f38f1d8bba7489fd",
+        "name": "switch_in",
+        "links": [
+            "5a1b81688ff1adee"
+        ],
+        "x": 105,
+        "y": 160,
+        "wires": [
+            [
+                "b956b37bba0dce0c"
+            ]
+        ]
+    },
+    {
+        "id": "a433dbb3c48bf268",
+        "type": "debug",
+        "z": "f38f1d8bba7489fd",
+        "name": "switch_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 260,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b956b37bba0dce0c",
+        "type": "junction",
+        "z": "f38f1d8bba7489fd",
+        "x": 160,
+        "y": 200,
+        "wires": [
+            [
+                "30a4076a37414c40",
+                "a433dbb3c48bf268"
+            ]
+        ]
+    },
+    {
+        "id": "8d88ac36455f0209",
+        "type": "junction",
+        "z": "f38f1d8bba7489fd",
+        "x": 700,
+        "y": 160,
+        "wires": [
+            [
+                "42cc1dc8f59570af",
+                "b188661f063477fc"
+            ]
+        ]
+    },
+    {
+        "id": "4290ffc4397af8c8",
+        "type": "ui-group",
+        "name": "General",
+        "page": "ef80b7f9fd2b8842",
+        "width": "12",
+        "height": "1",
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "ef80b7f9fd2b8842",
+        "type": "ui-page",
+        "name": "Settings",
+        "ui": "54a4e86d9749426f",
+        "path": "/settings",
+        "icon": "cog",
+        "layout": "grid",
+        "theme": "70ee3095f0c0fa3d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "54a4e86d9749426f",
+        "type": "ui-base",
+        "name": "Set Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "showPageTitle": true,
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": "1",
+        "showDisconnectNotification": true
+    },
+    {
+        "id": "70ee3095f0c0fa3d",
+        "type": "ui-theme",
+        "name": "Default",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094ce",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    }
+]

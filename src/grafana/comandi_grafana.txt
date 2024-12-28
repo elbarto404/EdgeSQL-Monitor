@@ -1,0 +1,6 @@
+docker cp
+
+/usr/share/grafana/public/img/bg
+/usr/share/grafana/public/img/icons/unicons
+
+Figma Tool per creare svg animati

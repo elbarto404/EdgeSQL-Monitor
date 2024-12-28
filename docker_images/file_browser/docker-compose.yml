@@ -1,0 +1,27 @@
+version: '2.4'
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:v2-s6
+    container_name: filebrowser
+    restart: unless-stopped
+    mem_limit: 256m
+    user: '0'
+    ports:
+      - "8080:80"
+    environment:
+      - TZ=Europe/Rome
+    volumes:
+      - ./edge:/srv
+      - filebrowser_config:/config
+      - filebrowser_database:/database
+
+volumes:
+  filebrowser_config:
+    name: filebrowser_config
+  filebrowser_database:
+    name: filebrowser_database
+
+networks:
+  proxy-redirect:
+    external: true

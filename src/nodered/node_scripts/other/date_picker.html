@@ -1,0 +1,68 @@
+<template>
+    <v-app>
+      <v-container>
+        <!-- Text Field to Display Selected Date -->
+        <v-text-field
+          v-model="formattedDate"
+          label="Service Date"
+          readonly
+        ></v-text-field>
+  
+        <!-- Button to Open Dialog -->
+        <v-btn color="primary" @click="dialog = true">
+          Select Date
+        </v-btn>
+  
+        <!-- Date Picker Dialog -->
+        <v-dialog
+          v-model="dialog"
+          persistent
+        >
+          <v-card>
+            <v-date-picker
+              v-model="selectedDate"
+              @input="saveDate"
+            ></v-date-picker>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="dialog = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="confirmDate">OK</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+  
+        <!-- Debugging -->
+        <p>Selected Date: {{ selectedDate }}</p>
+      </v-container>
+    </v-app>
+  </template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        dialog: false, // Controls dialog visibility
+        selectedDate: null, // Stores the selected date from date picker
+      };
+    },
+    computed: {
+      formattedDate() {
+        // Format date for display in the text field
+        if (!this.selectedDate) return "";
+        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+        return new Date(this.selectedDate).toLocaleDateString(undefined, options);
+      },
+    },
+    methods: {
+      saveDate() {
+        // Auto-close dialog on date selection
+        this.dialog = false;
+      },
+      confirmDate() {
+        // Explicitly confirm date and close the dialog
+        this.dialog = false;
+      },
+    },
+  };
+  </script>
+  

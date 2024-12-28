@@ -1,0 +1,32 @@
+[
+    {
+        "type": "ABC",
+        "vendor": "Cimprogetti",
+        "service_date": "2018",
+        "details": "Compact design, counter-current flow, versatile fuel options, medium-high to low-reactivity lime"
+    },
+    {
+        "type": "Flex_ReVerSy",
+        "vendor": "Cimprogetti",
+        "service_date": "2019",
+        "details": "Direct crossover channel, high- and medium-reactivity lime, energy-efficient"
+    },
+    {
+        "type": "Vanguard",
+        "vendor": "Cimprogetti",
+        "service_date": "2020",
+        "details": "Radial crossover channel, large capacity, superior lime quality"
+    },
+    {
+        "type": "TwinD",
+        "vendor": "Cimprogetti",
+        "service_date": "2017",
+        "details": "Direct crossover channel, high-quality lime, reduced environmental impact"
+    },
+    {
+        "type": "TurNOx",
+        "vendor": "Cimprogetti",
+        "service_date": "2021",
+        "details": "SCR system, reduces NOx emissions, integrates with regenerative kilns"
+    }
+]

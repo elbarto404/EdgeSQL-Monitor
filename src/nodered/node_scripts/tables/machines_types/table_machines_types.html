@@ -1,0 +1,480 @@
+<template>
+  <!-- Main Card Container -->
+  <v-card>
+    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->
+    <v-card-item class="bg-blue-darken-3">
+      <v-row class="my-2 align-self-center" no-gutters>
+        
+        <!-- Title and Reload Button -->
+        <v-col cols="auto" class="mx-4 align-self-center">
+          <v-btn
+            @click="updateTable"
+            variant="tonal"
+            class="font-weight-bold text-h5 text-white"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-update</v-icon>
+            <p class="mx-1 align-self-center" v-text="msg.dashboard.table.title"></p>
+          </v-btn>
+        </v-col>
+
+        <!-- Search Bar -->
+        <v-col class="mx-4 align-self-center">
+          <v-text-field
+            v-model="search"
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            single-line
+            clearable
+            hide-details
+            color="white"
+          ></v-text-field>
+        </v-col>
+
+        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->
+        <v-col cols="auto" class="mx-2 align-self-center text-white">
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="!editMode"
+            @click="reloadTable"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-reload</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Reload</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="!editMode"
+            @click="downloadCsv"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-arrow-down-bold</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">CSV</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="!editMode"
+            @click="enableEdit"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-pencil</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Edit</span>
+          </v-btn>
+
+          <!-- Buttons visible in Edit Mode -->
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="deploy"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-floppy</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Save</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="addNewItem"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-plus</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Add New</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="discardEdit"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-pencil-off</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Discard</span>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-card-item>
+
+    <!-- Data Table with Custom Cell Templates -->
+    <v-data-table
+      v-model="selected"
+      :headers="msg.dashboard.table.headers"
+      :items="msg.data"
+      :search="search"
+      :items-per-page="itemsPerPage"
+      :items-per-page-options="[5, 10, 25, 50, -1]"
+      class="elevation-1"
+      :loading="loading"
+      loading-text="Loading..."
+      density="default"
+    >
+      
+      <!-- Toggle Switch for 'enabled' Field -->
+      <template v-slot:item.enabled="{ item }">
+        <v-switch
+          v-model="item.enabled"
+          :color="getSwitchColor(item)"
+          :base-color="getSwitchColor(item)"
+          :disabled="!editMode"
+          hide-details
+        ></v-switch>
+      </template>
+
+      <!-- Display Tags as Chips -->
+      <template v-slot:item.tag_tables="{ item }">
+        <div>
+          <v-chip
+            v-for="(tag, index) in item.tag_tables"
+            :key="index"
+            class="ma-1"
+            :color="getTableColor(tag)"
+            dark
+          >
+            {{ tag }}
+          </v-chip>
+        </div>
+      </template>
+
+      <!-- Actions Column with Edit and Delete Icons -->
+      <template v-slot:item.actions="{ item }">
+        <div class="actions-column">
+          <v-icon
+            v-show="editMode"
+            small
+            class="mr-2"
+            @click="editItem(item)"
+            color="blue-darken-2"
+            style="cursor: pointer;"
+          >
+            mdi-pencil
+          </v-icon>
+
+          <v-icon
+            v-show="editMode"
+            small
+            @click="deleteItem(item)"
+            color="blue-darken-4"
+            style="cursor: pointer;"
+          >
+            mdi-delete
+          </v-icon>
+        </div>
+      </template>
+
+      <!-- No Data Message -->
+      <template v-slot:no-data>
+        <v-row class="ma-4">
+          <v-alert :value="true" color="warning" icon="mdi-alert">
+            No matching records found.
+          </v-alert>
+        </v-row>
+      </template>
+    </v-data-table>
+  </v-card>
+
+  <!-- Dialog for Adding or Editing Items -->
+  <v-dialog v-model="dialog" max-width="500px" persistent>
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">{{ formTitle }}</span>
+      </v-card-title>
+
+      <v-card-text>
+        <v-form ref="form" v-model="valid" fast-fail @submit.prevent>
+          
+          <!-- Form Fields -->
+          <v-text-field
+            v-model="editedItem.type"
+            label="Type"
+            :rules="[v => !!v || 'Type is required']"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="editedItem.vendor"
+            label="Vendor"
+            maxlength="50"
+            counter
+          ></v-text-field>
+          <v-textarea
+            v-model="editedItem.details"
+            label="Details"
+            maxlength="200"
+            counter
+          ></v-text-field>
+          
+        </v-form>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-1" text @click="closeDialog">Cancel</v-btn>
+        <v-btn color="blue-darken-1" text @click="saveItem">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Snackbar for Notifications -->
+  <v-snackbar v-model="snackbar.show" :color="snackbar.color" timeout="3000">
+    <v-row class="mx-4 align-self-center">
+      <v-col class="my-2 text-subtitle-1 text-center">
+        {{ snackbar.text }}
+      </v-col>
+    </v-row>
+  </v-snackbar>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      search: '',
+      loading: false,
+      page: 1,
+      itemsPerPage: 5,
+      editMode: false,
+      dialog: false,
+      formTitle: "",
+      editedIndex: -1,
+      editedItem: {},
+      selected: [],
+      actionsHeader: {
+        title: "Actions",
+        value: "actions",
+        headerProps: { style: 'font-weight: 700' },
+      },
+      snackbar: {
+        show: false,
+        text: '',
+        color: ''
+      }
+    };
+  },
+  computed: {
+    pageCount() {
+      return Math.ceil(this.msg.data.length / this.itemsPerPage);
+    },
+  },
+  watch: {
+    msg: {
+      handler() {
+        if (
+          this.editMode &&
+          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'
+        ) {
+          this.msg.dashboard.table.headers.push(this.actionsHeader);
+        }
+      },
+      deep: true 
+    }
+  },
+  methods: {
+    // Sends a message with the current state
+    msgSend() {
+      this.send({
+        topic: this.msg.topic,
+        title: this.msg.title,
+        payload: this.msg.payload,
+        data: this.msg.data,
+        dashboard: this.msg.dashboard,
+        file: this.msg.file
+      });
+    },
+    
+    // Notification and table actions
+    notify(item){
+      this.msg.topic = "notify";
+      this.msg.payload = item;
+      this.msgSend();
+    },
+    reloadTable() {
+      this.msg.topic = "reload";
+      this.msg.payload = null;
+      this.msgSend();
+    },
+    updateTable() {
+      this.msg.topic = "update";
+      this.msg.payload = null;
+      this.msgSend();
+    },
+    
+    // Edit mode controls
+    enableEdit() {
+      this.msg.dashboard.table.headers.push(this.actionsHeader);
+      this.editMode = true;
+    },
+    disableEdit() {
+      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(
+        header => header !== this.actionsHeader
+      );
+      this.editMode = false;
+    },
+    
+    // Deployment and discarding edits
+    deploy() {
+      this.loading = true;
+      this.disableEdit();
+      this.msg.topic = "deploy";
+      this.msg.payload = this.generateCsv();
+      this.msgSend();
+      this.showSnackbar('Deploy action triggered!', 'info');
+    },
+    discardEdit() {
+      this.disableEdit();
+      this.updateTable();
+    },
+    
+    // Handling items
+    getDefaultItem() {
+      const defaultItem = {};
+      this.msg.dashboard.table.headers.forEach(header => {
+        if (header.value !== 'actions') {
+          defaultItem[header.value] = header.value === 'enabled' ? true :
+                                       header.value === 'status' ? "unknown" : null;
+        }
+      });
+      return defaultItem;
+    },
+    addNewItem() {
+      this.editedIndex = -1;
+      this.editedItem = this.getDefaultItem();
+      this.formTitle = 'Add Item';
+      this.dialog = true;
+    },
+    editItem(item) {
+      this.editedIndex = this.msg.data.indexOf(item);
+      this.editedItem = { ...item };
+      this.formTitle = 'Edit Item';
+      this.dialog = true;
+    },
+    deleteItem(item) {
+      const deleteIndex = this.msg.data.indexOf(item);
+      if (deleteIndex > -1) {
+        this.msg.data.splice(deleteIndex, 1);
+        this.loading = true;
+        this.showSnackbar('Item deleted successfully!', 'success');
+      }
+    },
+    
+    // Dialog controls
+    closeDialog() {
+      this.dialog = false;
+      this.$refs.form.reset();
+      this.editedItem = this.getDefaultItem();
+    },
+    async saveItem() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.msg.data[this.editedIndex], this.editedItem);
+          this.showSnackbar('Item updated successfully!', 'success');
+        } else {
+          this.msg.data.push({ ...this.editedItem });
+          this.showSnackbar('Item added successfully!', 'success');
+        }
+        // this.loading = true;
+        this.closeDialog();
+      } else {
+        this.showSnackbar('Please correct the errors in the form.', 'error');
+      }
+    },
+    
+    // CSV Generation and Download
+    generateCsv() {
+      const separator = ';';
+      const headers = this.msg.dashboard.table.headers
+        .filter(header => !['actions', 'status'].includes(header.value))
+        .map(header => header.value)
+        .join(separator); 
+
+      const rows = this.msg.data.map(item => {
+        return this.msg.dashboard.table.headers
+          .filter(header => !['actions', 'status'].includes(header.value))
+          .map(header => {
+            const cell = item[header.value];
+
+            // Handle different data types
+            if (Array.isArray(cell)) {
+              return JSON.stringify(cell); // Stringify arrays
+            } else if (typeof cell === 'string') {
+              return cell; // Use string as-is
+            } else if (cell == null) {
+              return ''; // Handle null or undefined
+            } else {
+              return String(cell); // Convert other types to string
+            }
+          })
+          .join(separator);
+      }).join('\n');
+
+
+      return `${headers}\n${rows}`;
+    },
+    createDownloadLink(csvContent) {
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "data.csv");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    },
+    downloadCsv() {
+      try {
+        const csvContent = this.generateCsv();
+        this.createDownloadLink(csvContent);
+        this.showSnackbar('CSV scaricato con successo!', 'success');
+      } catch (error) {
+        console.error('Errore durante il download del CSV:', error);
+        this.showSnackbar('Errore durante il download del CSV.', 'error');
+      }
+    },
+    
+    // Utility Methods
+    getStatusColor(value) {
+      const colors = {
+        "unknown": 'blue',
+        "connecting": 'amber',
+        "connected": 'green',
+        "error": 'red'
+      };
+      if (colors[value]) return colors[value];
+      return 'purple';
+    },
+    getSwitchColor(item) {
+      return item.enabled ? this.getStatusColor(item.status)
+                            : 'grey-lighten-2';
+    },
+    getListColor(list, elem, item) {
+      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'
+                            : 'grey-lighten-2';
+    },
+    showSnackbar(message, type) {
+      this.snackbar.text = message;
+      this.snackbar.color = type === 'success' ? 'green-lighten-3' 
+                          : type === 'error' ? 'red-lighten-3' 
+                          : 'blue-lighten-5';
+      this.snackbar.show = true;
+      this.loading = false;
+    }
+  }
+};
+</script>
+
+<style scoped>
+/* Heading Text Size */
+.text-h5 {
+  font-size: 1.25rem;
+}
+
+/* Actions Column Styling */
+.actions-column {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 60px;
+}
+</style>

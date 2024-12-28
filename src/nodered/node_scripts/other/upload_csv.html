@@ -1,0 +1,148 @@
+<template>
+    <!-- Main Card Header -->
+    <v-card-item class="bg-blue-darken-3">
+      <v-row class="my-2 align-self-center" no-gutters>
+        <!-- Button to Upload CSV -->
+        <v-btn
+          class="mx-2 align-self-center"
+          v-show="!editMode"
+          @click="openCsvDialog"
+          variant="tonal"
+        >
+          <v-icon class="mx-1 align-self-center" left>mdi-file-upload</v-icon>
+          <span class="mx-1 align-self-center font-weight-bold">Upload CSV</span>
+        </v-btn>
+      </v-row>
+    </v-card-item>
+  
+    <!-- Dialog for CSV Upload -->
+    <v-dialog v-model="csvDialog" max-width="500px" persistent>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Upload CSV</span>
+        </v-card-title>
+        <v-card-text>
+          <v-file-input
+            v-model="csvFile"
+            label="Select a CSV file"
+            accept=".csv"
+            clearable
+            hide-details
+          ></v-file-input>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-darken-1" text @click="closeCsvDialog">Cancel</v-btn>
+          <v-btn color="blue-darken-1" text @click="processCsv">Insert</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+        <!-- Snackbar for Notifications -->
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" timeout="3000">
+        <v-row class="mx-4 align-self-center">
+        <v-col class="my-2 text-subtitle-1 text-center">
+            {{ snackbar.text }}
+        </v-col>
+        </v-row>
+    </v-snackbar>
+</template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        csvDialog: false, // Controls the visibility of the CSV upload dialog
+        csvFile: null,    // Stores the selected CSV file
+        snackbar: {
+        show: false,
+        text: '',
+        color: ''
+      }
+      };
+    },
+    methods: {
+      // Opens the CSV upload dialog
+      openCsvDialog() {
+        this.csvDialog = true;
+      },
+      // Closes the CSV upload dialog
+      closeCsvDialog() {
+        this.csvDialog = false;
+        this.csvFile = null;
+      },
+  
+      // Processes the uploaded CSV file
+      async processCsv() {
+        if (!this.csvFile) {
+          this.showSnackbar('No file selected!', 'error');
+          return;
+        }
+  
+        try {
+          // Read the CSV file content
+          const fileContent = await this.readFile(this.csvFile);
+          // Parse the CSV content into a JSON structure
+          const csvData = this.parseCsv(fileContent);
+          // Update the table with the parsed data
+          this.updateTableData(csvData);
+          this.showSnackbar('CSV successfully uploaded!', 'success');
+        } catch (error) {
+          console.error('Error processing CSV:', error);
+          this.showSnackbar(`Error processing CSV. ${error}`, 'error');
+        } finally {
+          // Close the dialog after processing
+          this.closeCsvDialog();
+        }
+      },
+  
+      // Reads the CSV file as plain text
+      readFile(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsText(file);
+        });
+      },
+  
+      // Parses the CSV file content into an array of objects
+      parseCsv(content) {
+        const rows = content.split('\n').filter(row => row.trim()); // Split content into rows and ignore empty ones
+        const headers = rows.shift().split(';'); // Use the first row as headers
+        return rows.map(row => {
+          const values = row.split(';'); // Split each row into values
+          return headers.reduce((acc, header, index) => {
+            acc[header] = values[index]; // Map headers to corresponding values
+            return acc;
+          }, {});
+        });
+      },
+  
+      // Updates the table by modifying existing rows or adding new ones
+      updateTableData(csvData) {
+        csvData.forEach(newItem => {
+          // Check if an item with the same name exists
+          const existingItem = this.msg.data.find(item => item.name === newItem.name);
+          if (existingItem) {
+            // Update existing item
+            Object.assign(existingItem, newItem);
+          } else {
+            // Add new item to the table
+            this.msg.data.push(newItem);
+          }
+        });
+      },
+  
+      // Snackbar notification utility
+      showSnackbar(message, type) {
+        this.snackbar.text = message;
+        this.snackbar.color = type === 'success' ? 'green-lighten-3' 
+                            : type === 'error' ? 'red-lighten-3' 
+                            : 'blue-lighten-5';
+        this.snackbar.show = true;
+      },
+    },
+  };
+  </script>
+  

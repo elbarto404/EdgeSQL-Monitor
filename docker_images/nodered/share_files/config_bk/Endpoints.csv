@@ -1,0 +1,11 @@
+enabled;name;machine;protocol;address;node_id;tag_tables;comment
+TRUE;ABC_1_PLC;ABC_Klin_1;S7;192.168.100.10;;"[""odr_table_S7""]";
+TRUE;ABC_2_PLC;ABC_Klin_2;S7;192.168.100.20;;"[""odr_table_S7_ABC"",""live_table_S7_ABC""]";
+TRUE;Vanguard_1_PLC;Vanguard_Klin_1;S7;192.168.200.10;;"[""odr_table_S7_Vanguard"",""live_table_S7_Vanguard""]";
+TRUE;Vanguard_2_PLC;Vanguard_Klin_2;S7;192.168.200.20;;"[""odr_table_S7_Vanguard"",""live_table_S7_Vanguard""]";
+TRUE;Vanguard_3_PLC;Vanguard_Klin_3;OPC UA;192.168.200.30;;"[""odr_table_OPCUA"",""live_table_OPCUA""]";
+TRUE;Vanguard_4_PLC;Vanguard_Klin_4;OPC UA;192.168.200.40;;"[""odr_table_OPCUA"",""live_table_OPCUA""]";
+TRUE;TwinD_1_PLC;TwinD_Klin_1;ModBus;192.168.300.10;;"[""odr_table_ModBus"",""live_table_ModBus""]";
+TRUE;TwinD_1_KPIgen;TwinD_Klin_1;API Rest;192.168.300.20;;"[""live_table_KPI""]";
+TRUE;TwinD_2_PLC;TwinD_Klin_2;ModBus;192.168.300.30;;"[""odr_table_ModBus"",""live_table_ModBus""]";
+TRUE;TwinD_2_KPIgen;TwinD_Klin_2;API Rest;192.168.300.40;;"[""live_table_KPI""]";

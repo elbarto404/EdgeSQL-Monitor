@@ -1,0 +1,20 @@
+CREATE OR REPLACE PROCEDURE insert_data(
+    in_time TIMESTAMP,
+    in_reale REAL,
+    in_intero INTEGER,
+    in_bit BOOLEAN
+)
+LANGUAGE SQL
+AS $$
+    INSERT INTO tuscanello (time, reale, intero, bit)
+    VALUES (in_time, in_reale, in_intero, in_bit);
+$$;
+
+
+CALL insert_data(
+    LOCALTIMESTAMP,  -- Timestamp corrente senza fuso orario
+    3.14,            -- Valore per `reale`
+    42,              -- Valore per `intero`
+    TRUE             -- Valore per `bit`
+);
+

@@ -1,0 +1,77 @@
+<template>
+  <v-container>
+    <!-- Delete Button -->
+    <v-btn color="red" dark @click="openDeleteDialog">
+      Delete
+    </v-btn>
+
+    <!-- Delete Confirmation Dialog -->
+    <v-dialog v-model="deleteDialog" max-width="500" persistent>
+      <v-card>
+        <v-card-title class="headline mt-1">
+          Confirm Deletion
+        </v-card-title>
+
+        <v-card-text>
+          <p>Deleting this element will also remove associated process data stored in the database.</p>
+          <p class="mt-6">Are you sure you want to proceed?</p>
+        </v-card-text>
+          
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <!-- Cancel Button -->
+          <v-btn color="blue" text @click="cancelDeletion">
+            Cancel
+          </v-btn>
+          <!-- Confirm Button -->
+          <v-btn color="red" text @click="confirmDeletion">
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+        deleteDialog: false, // Controls the visibility of the dialog
+    };
+  },
+  methods: {
+    // Open the delete confirmation dialog
+    openDeleteDialog() {
+      this.deleteDialog = true;
+    },
+
+    // Cancel the deletion and close the dialog
+    cancelDeletion() {
+      this.deleteDialog = false;
+    },
+
+    // Confirm the deletion and execute the deletion logic
+    confirmDeletion() {
+      this.deleteDialog = false;
+      // Perform the deletion (e.g., API call or database operation)
+      this.deleteElement();
+    },
+
+    // Function to handle the actual deletion process
+    deleteElement() {
+      // Replace this with your deletion logic (e.g., Axios call to backend API)
+      console.log('Element and associated data deleted from database');
+      // Example API call:
+      // axios.delete('/api/delete-element', { data: { id: this.elementId } })
+      //   .then(response => {
+      //     console.log('Deletion successful:', response);
+      //   })
+      //   .catch(error => {
+      //     console.error('Error deleting element:', error);
+      //   });
+    },
+  },
+};
+</script>

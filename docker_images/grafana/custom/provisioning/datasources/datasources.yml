@@ -1,0 +1,37 @@
+apiVersion: 1
+
+datasources:
+  - name: Postgres
+    type: postgres
+    access: proxy
+    isDefault: true
+    editable: true
+    url: postgres_host:5432
+    database: odr_data
+    user: edge
+    secureJsonData:
+      password: edgeadmin
+    jsonData:
+      sslmode: disable
+
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    isDefault: false
+    editable: true
+    url: http://prometheus:9090
+
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    isDefault: false
+    editable: true
+    url: http://influxdb:8086
+    database: edge_database
+    user: edge_username
+    secureJsonData:
+      password: edgeadmin
+    jsonData:
+      organization: edge_org
+      bucket: edge_bucket
+      httpMode: http
