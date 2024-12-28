@@ -23,11 +23,13 @@ BEGIN
    ) THEN
       CREATE TABLE ${schemaName}.${tableName} (
         id SERIAL,
+        enabled BOOLEAN,
         name TEXT PRIMARY KEY,
-        type TEXT,
-        site TEXT,
-        service_date TEXT,
-        details TEXT
+        label TEXT,
+        data_type TEXT,
+        address TEXT,
+        access TEXT,
+        comment TEXT
       );
    END IF;
 END $$;
