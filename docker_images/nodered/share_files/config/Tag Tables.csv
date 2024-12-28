@@ -1,10 +1,10 @@
-id;name;sampling_mode;sampling_freq;aggregation;database
-1;odr_table_S7_ABC;trigger_odr;none;none;odr
-2;odr_table_S7_Vanguard;trigger_odr;none;none;odr
-3;odr_table_OPCUA;trigger_odr;none;none;odr
-4;odr_table_ModBus;trigger_odr;none;none;odr
-5;live_table_S7_ABC;continous;1s;['1m', '1h'] ;live
-6;live_table_S7_Vanguard;continous_on_change;1s;['1m', '1h'] ;live
-7;live_table_OPCUA;continous_on_change;1s;['1m', '1h'] ;live
-8;live_table_ModBus;continous;1s;['1m', '1h'] ;live
-9;live_table_KPI;continous_on_change;1m;1g;live
+name;sampling_mode;sampling_freq;aggregation;comment
+odr_table_S7_ABC;trigger_odr;none;none;
+odr_table_S7_Vanguard;trigger_odr;none;none;
+odr_table_OPCUA;trigger_odr;none;none;
+odr_table_ModBus;trigger_odr;none;none;
+live_table_S7_ABC;continous;1s;['1m', '1h'] ;
+live_table_S7_Vanguard;continous_on_change;1s;['1m', '1h'] ;
+live_table_OPCUA;continous_on_change;1s;['1m', '1h'] ;
+live_table_ModBus;continous;1s;['1m', '1h'] ;
+live_table_KPI;continous_on_change;1m;1g;

@@ -554,7 +554,16 @@ export default {
             return value;
           }
         }
-        // Return original value for non-JSON types
+
+        // Check if the string represents a boolean
+        if (value.toLowerCase() === "true") return true;
+        if (value.toLowerCase() === "false") return false;
+
+        // Check if the string represents a number
+        const parsedNumber = Number(value);
+        if (!isNaN(parsedNumber)) return parsedNumber;
+
+        // Return original value for simple strings
         return value;
       }
       return value;

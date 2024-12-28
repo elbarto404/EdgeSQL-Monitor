@@ -120,46 +120,6 @@
     >
 <!-- MODIFY DISPLAY HERE -->
 
-      <!-- Toggle Switch for 'enabled' Field -->
-      <template v-slot:item.enabled="{ item }">
-        <v-switch
-          v-model="item.enabled"
-          :model-value="item.enabled"
-          :color="getSwitchColor(item)"
-          :base-color="getSwitchColor(item)"
-          :disabled="!editMode"
-          hide-details
-          @click="handleEnabled(item)"
-        ></v-switch>
-      </template>      
-
-      <!-- Display Machines as Chips -->
-      <template v-slot:item.machine="{ item }">
-        <div>
-          <v-chip
-            class="ma-1"
-            :color="getListColor(msg.dashboard.form.machine, item.machine, item)"
-            dark
-          >
-            {{ item.machine }}
-          </v-chip>
-        </div>
-      </template>
-
-      <!-- Display Tags as Chips -->
-      <template v-slot:item.tag_tables="{ item }">
-        <div>
-          <v-chip
-            v-for="(tag, index) in item.tag_tables"
-            :key="index"
-            class="ma-1"
-            :color="getListColor(msg.dashboard.form.tag_tables, tag, item)"
-            dark
-          >
-            {{ tag }}
-          </v-chip>
-        </div>
-      </template>
 
 <!-- END MODIFY -->
       <!-- Actions Column with Edit and Delete Icons -->
@@ -218,33 +178,27 @@
             required
           ></v-text-field>
           <v-select
-            v-model="editAction.newItem.machine"
-            label="Machine"
-            :items="msg.dashboard.form.machine"
-            :rules="[v => !!v || 'Machine is required']"
+            v-model="editAction.newItem.sampling_mode"
+            label="Sampling Mode"
+            :items="msg.dashboard.form.sampling_mode"
+            :rules="[v => !!v || 'Sampling Mode is required']"
             required
             clearable
           ></v-select>
           <v-select
-            v-model="editAction.newItem.protocol"
-            label="Protocol"
-            :items="msg.dashboard.form.protocol"
-            :rules="[v => !!v || 'Protocol is required']"
+            v-model="editAction.newItem.sampling_freq"
+            label="Sampling Frequency"
+            :items="msg.dashboard.form.sampling_freq"
+            :rules="[v => !!v || 'Sampling Frequency is required']"
             required
             clearable
           ></v-select>
-          <v-text-field
-            v-model="editAction.newItem.address"
-            label="Address"
-            :rules="[v => !!v || 'Address is required']"
-            required
-          ></v-text-field>
           <v-select
-            v-model="editAction.newItem.tag_tables"
-            label="Tag Tables"
-            :items="msg.dashboard.form.tag_tables"
-            multiple
-            chips
+            v-model="editAction.newItem.aggregation"
+            label="Aggregation"
+            :items="msg.dashboard.form.aggregation"
+            :rules="[v => !!v || 'Aggregation is required']"
+            required
             clearable
           ></v-select>
           <v-textarea
@@ -591,15 +545,7 @@ export default {
             return value;
           }
         }
-        // Check if the string represents a boolean
-        if (value.toLowerCase() === "true") return true;
-        if (value.toLowerCase() === "false") return false;
-
-        // Check if the string represents a number
-        const parsedNumber = Number(value);
-        if (!isNaN(parsedNumber)) return parsedNumber;
-
-        // Return original value for simple strings
+        // Return original value for non-JSON types
         return value;
       }
       return value;

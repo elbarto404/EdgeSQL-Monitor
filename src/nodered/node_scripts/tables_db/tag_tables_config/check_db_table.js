@@ -22,12 +22,12 @@ BEGIN
       WHERE table_schema = '${schemaName}' AND table_name = '${tableName}'
    ) THEN
       CREATE TABLE ${schemaName}.${tableName} (
-        id SERIAL,
-        name TEXT PRIMARY KEY,
-        sampling_mode TEXT,
-        sampling_freq TEXT,
-        aggregation TEXT,
-        comment TEXT
+         id SERIAL,
+         name TEXT PRIMARY KEY,
+         sampling_mode TEXT,
+         sampling_freq TEXT,
+         aggregation TEXT,
+         comment TEXT
       );
    END IF;
 END $$;
