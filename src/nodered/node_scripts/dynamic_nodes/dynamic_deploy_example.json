@@ -1,0 +1,134 @@
+[
+    {
+        "id": "ea391d72b9b73072",
+        "type": "tab",
+        "label": "dynamic_deploy",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "a730d9c9780918ca",
+        "type": "inject",
+        "z": "ea391d72b9b73072",
+        "name": "Trigger dynamic insert",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 100,
+        "wires": [
+            [
+                "0d78d4c70d620f30"
+            ]
+        ]
+    },
+    {
+        "id": "0d78d4c70d620f30",
+        "type": "http request",
+        "z": "ea391d72b9b73072",
+        "name": "GET current flows",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:1880/flows",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 470,
+        "y": 100,
+        "wires": [
+            [
+                "61de67a8d8abeeab",
+                "d47dffb68c3ea9d8"
+            ]
+        ]
+    },
+    {
+        "id": "d47dffb68c3ea9d8",
+        "type": "function",
+        "z": "ea391d72b9b73072",
+        "name": "dynamic_insert",
+        "func": "// This function takes the complete flows array returned by the GET /flows request,\n// finds the tab labeled \"dynamic_deploy\", calculates a new (unique) ID, finds the\n// maximum Y position among existing nodes in that tab, then pushes a new Comment node.\n\nlet allNodes = msg.payload;\nif (!Array.isArray(allNodes)) {\n    node.warn(\"Unexpected flows data. Expected an array.\");\n    return;\n}\n\n// 1) Find the tab with label 'dynamic_deploy'\nlet tab = allNodes.find(n => n.type === 'tab' && n.label === 'dynamic_deploy');\nif (!tab) {\n    node.warn(\"Tab 'dynamic_deploy' not found.\");\n    return;\n}\n\n// 2) Collect all node IDs in the entire flow (to avoid duplicates)\nlet usedIds = allNodes.map(n => n.id);\n\n// 3) Filter out the nodes that belong to that tab\nlet tabNodes = allNodes.filter(n => n.z === tab.id);\n\n// 4) Find the maximum Y coordinate\nlet maxY = 0;\nfor (let node of tabNodes) {\n    if (typeof node.y === 'number' && node.y > maxY) {\n        maxY = node.y;\n    }\n}\n\n// 5) Generate a new unique ID not yet in usedIds\nfunction generateId() {\n    // A short, random hex-like ID; Node-RED often uses 8 or 16 hex digits.\n    function randomHex(n) {\n        const chars = \"0123456789abcdef\";\n        let str = \"\";\n        for (let i = 0; i < n; i++) {\n            str += chars[Math.floor(Math.random() * chars.length)];\n        }\n        return str;\n    }\n    \n    let newId;\n    do {\n        newId = randomHex(usedIds[0].length);\n    } while (usedIds.includes(newId));\n    return newId;\n}\n\nlet newId = generateId();\n\n// 6) Create a new comment node\n//    We'll place it at x=200, y = maxY+100 to ensure it doesn't overlap.\nlet newCommentNode = {\n    id: newId,\n    type: \"comment\",\n    z: tab.id,\n    name: \"Dynamic Inserted Comment\",\n    info: \"\",\n    x: 200,\n    y: maxY + 100,\n    wires: []\n};\n\n// 7) Add the new node to the flows array\nallNodes.push(newCommentNode);\n\n// 8) Return the updated flows for the next HTTP PUT request\nmsg.payload = allNodes;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 100,
+        "wires": [
+            [
+                "0688c34397369a33",
+                "4f3be4a2e6a45180"
+            ]
+        ]
+    },
+    {
+        "id": "0688c34397369a33",
+        "type": "http request",
+        "z": "ea391d72b9b73072",
+        "name": "POST updated flows",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:1880/flows",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 940,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4f3be4a2e6a45180",
+        "type": "debug",
+        "z": "ea391d72b9b73072",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "61de67a8d8abeeab",
+        "type": "debug",
+        "z": "ea391d72b9b73072",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 180,
+        "wires": []
+    }
+]

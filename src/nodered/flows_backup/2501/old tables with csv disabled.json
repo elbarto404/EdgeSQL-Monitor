@@ -1,0 +1,3130 @@
+[
+    {
+        "id": "28240470c357511c",
+        "type": "subflow",
+        "name": "Tag Tables",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 80,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "03f4657386e54cdf"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 700,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "364161d118356c1f",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "FILE_NAME",
+                "type": "str",
+                "value": "Tag_Tables.csv",
+                "ui": {
+                    "icon": "font-awesome/fa-file-o",
+                    "label": {
+                        "en-US": "File Name"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "FILE_DIR",
+                "type": "str",
+                "value": "/config/",
+                "ui": {
+                    "icon": "font-awesome/fa-folder-o",
+                    "label": {
+                        "en-US": "Directory"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "status": {
+            "x": 700,
+            "y": 320,
+            "wires": [
+                {
+                    "id": "364161d118356c1f",
+                    "port": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "f8fb987fe54f61a1",
+        "type": "file in",
+        "z": "28240470c357511c",
+        "name": "file_read",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 460,
+        "y": 200,
+        "wires": [
+            [
+                "c71191868c3b1658"
+            ]
+        ]
+    },
+    {
+        "id": "c71191868c3b1658",
+        "type": "csv",
+        "z": "28240470c357511c",
+        "name": "file2data",
+        "spec": "rfc",
+        "sep": ";",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": true,
+        "include_null_values": true,
+        "x": 640,
+        "y": 200,
+        "wires": [
+            [
+                "48d17d53588b6886",
+                "31808e3738ebbe71"
+            ]
+        ]
+    },
+    {
+        "id": "48d17d53588b6886",
+        "type": "function",
+        "z": "28240470c357511c",
+        "name": "validation",
+        "func": "try {\n    // Validate that msg.payload is an array\n    if (!Array.isArray(msg.payload)) {\n        node.warn(\"msg.payload is not an array\");\n        return msg;\n    }\n\n    // Validate that msg.columns exists and is a non-empty string\n    if (!msg.columns || typeof msg.columns !== 'string') {\n        node.warn(\"msg.columns is undefined or not a string\");\n        return msg;\n    }\n\n    // Store payload in global context\n    global.set(\"machines_types\", msg.payload);\n\n    // Clear payload to prevent unintended propagation\n    msg.payload = null;\n    return msg;\n\n} catch (error) {\n    node.error(`An error occurred: ${error.message}`);\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 200,
+        "wires": [
+            [
+                "114d83f37f65a83c"
+            ]
+        ]
+    },
+    {
+        "id": "23acdc2807613c29",
+        "type": "debug",
+        "z": "28240470c357511c",
+        "name": "table_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "364161d118356c1f",
+        "type": "function",
+        "z": "28240470c357511c",
+        "name": "update_status",
+        "func": "// Function to format strings by replacing underscores with spaces and capitalizing each word\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\n// Retrieve existing table data from global context\nconst table = global.get(\"machines_types\") || [];\n\n// Create dynamic table headers based on table data\nconst baseHeaders = table.length > 0\n    ? Object.keys(table[0])\n        .filter(key => key !== \"status\")\n        .map(key => ({\n            title: capitalize(key),\n            value: key,\n            headerProps: { style: 'font-weight: 700' },\n        }))\n    : [];\n\n// Define possible states for endpoints\nconst states = [\"unknown\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connecting\", \"error\"];\nconst lengthItems = states.length;\n\n// Assign random states to endpoints if not already set\nfor (let i = 0; i < table.length; i++) {\n    let randomIndex = Math.floor(Math.random() * lengthItems);\n    if (!table[i].status) {\n        table[i].status = states[randomIndex];\n    }\n    if (typeof table[i].enabled === 'string') {\n        let enabledLower = table[i].enabled.toLowerCase();\n        table[i].enabled = (enabledLower === 'true');\n    }\n    if (table[i].enabled === null) {\n        table[i].enabled = true;\n    }\n}\n\n// Prepare dashboard table data\nmsg.data = table;\n\nmsg.dashboard = msg.dashboard || {};\nmsg.dashboard.table = {\n    title: \"Machines Types\",\n    headers: baseHeaders\n};\nmsg.dashboard.form = {\n    machine: [\"machine_1\", \"machine_2\", \"machine_3\", \"machine_4\", \"machine_5\"],\n    protocol: global.get(\"protocol\"),\n    tag_tables: [\"odr_table_S7\", \"odr_table_OPCUA\", \"odr_table_Modbus\"]\n};\n\n// Save updated table back to global context\nglobal.set(\"machines_types\", table);\n\n// Notify state and return\nconst now = new Date().toISOString();\nconst state = {\n    payload: { fill: \"green\", shape: \"dot\", text: `last update: ${now}` }\n};\nreturn [msg, state];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 280,
+        "wires": [
+            [
+                "23acdc2807613c29",
+                "ea49bbf2ef3f6584"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c7164fc332fbe26d",
+        "type": "switch",
+        "z": "28240470c357511c",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "deploy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "notify",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 230,
+        "y": 360,
+        "wires": [
+            [
+                "f8fb987fe54f61a1"
+            ],
+            [
+                "364161d118356c1f"
+            ],
+            [
+                "f788206386a4225b"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4bc9e05502aee2e2",
+        "type": "debug",
+        "z": "28240470c357511c",
+        "name": "table_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "f788206386a4225b",
+        "type": "function",
+        "z": "28240470c357511c",
+        "name": "save_table",
+        "func": "\nglobal.set(\"machines_types\", msg.data);\nmsg.topic = \"reload\";\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 360,
+        "wires": [
+            [
+                "ea49bbf2ef3f6584"
+            ],
+            [
+                "707c5724517dd756"
+            ]
+        ]
+    },
+    {
+        "id": "acadebd46937c2dc",
+        "type": "debug",
+        "z": "28240470c357511c",
+        "name": "saving_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "707c5724517dd756",
+        "type": "file",
+        "z": "28240470c357511c",
+        "name": "file_write",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 740,
+        "y": 360,
+        "wires": [
+            [
+                "acadebd46937c2dc",
+                "166a7b24a9e7be5e"
+            ]
+        ]
+    },
+    {
+        "id": "ea49bbf2ef3f6584",
+        "type": "ui-template",
+        "z": "28240470c357511c",
+        "group": "4290ffc4397af8c8",
+        "page": "",
+        "ui": "",
+        "name": "Tag Tables",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Main Card Container -->\n  <v-card>\n    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->\n    <v-card-item class=\"bg-blue-darken-3\">\n      <v-row class=\"my-2 align-self-center\" no-gutters>\n        \n        <!-- Title and Reload Button -->\n        <v-col cols=\"auto\" class=\"mx-4 align-self-center\">\n          <v-btn\n            @click=\"updateTable\"\n            variant=\"tonal\"\n            class=\"font-weight-bold text-h5 text-white\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-update</v-icon>\n            <p class=\"mx-1 align-self-center\" v-text=\"msg.dashboard.table.title\"></p>\n          </v-btn>\n        </v-col>\n\n        <!-- Search Bar -->\n        <v-col class=\"mx-4 align-self-center\">\n          <v-text-field\n            v-model=\"search\"\n            label=\"Search\"\n            prepend-inner-icon=\"mdi-magnify\"\n            single-line\n            clearable\n            hide-details\n            color=\"white\"\n          ></v-text-field>\n        </v-col>\n\n        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->\n        <v-col cols=\"auto\" class=\"mx-2 align-self-center text-white\">\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"reloadTable\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-reload</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Reload</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"downloadCsv\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-arrow-down-bold</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">CSV</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"enableEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Edit</span>\n          </v-btn>\n\n          <!-- Buttons visible in Edit Mode -->\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"deploy\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-floppy</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Save</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"addNewItem\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-plus</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Add New</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"discardEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil-off</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Discard</span>\n          </v-btn>\n        </v-col>\n      </v-row>\n    </v-card-item>\n\n    <!-- Data Table with Custom Cell Templates -->\n    <v-data-table\n      v-model=\"selected\"\n      :headers=\"msg.dashboard.table.headers\"\n      :items=\"msg.data\"\n      :search=\"search\"\n      :items-per-page=\"itemsPerPage\"\n      :items-per-page-options=\"[5, 10, 25, 50, -1]\"\n      class=\"elevation-1\"\n      :loading=\"loading\"\n      loading-text=\"Loading...\"\n      density=\"default\"\n    >\n      \n      <!-- Toggle Switch for 'enabled' Field -->\n      <template v-slot:item.enabled=\"{ item }\">\n        <v-switch\n          v-model=\"item.enabled\"\n          :color=\"getSwitchColor(item)\"\n          :base-color=\"getSwitchColor(item)\"\n          :disabled=\"!editMode\"\n          hide-details\n        ></v-switch>\n      </template>\n\n      <!-- Display Tags as Chips -->\n      <template v-slot:item.tag_tables=\"{ item }\">\n        <div>\n          <v-chip\n            v-for=\"(tag, index) in item.tag_tables\"\n            :key=\"index\"\n            class=\"ma-1\"\n            :color=\"getTableColor(tag)\"\n            dark\n          >\n            {{ tag }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Actions Column with Edit and Delete Icons -->\n      <template v-slot:item.actions=\"{ item }\">\n        <div class=\"actions-column\">\n          <v-icon\n            v-show=\"editMode\"\n            small\n            class=\"mr-2\"\n            @click=\"editItem(item)\"\n            color=\"blue-darken-2\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-pencil\n          </v-icon>\n\n          <v-icon\n            v-show=\"editMode\"\n            small\n            @click=\"deleteItem(item)\"\n            color=\"blue-darken-4\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-delete\n          </v-icon>\n        </div>\n      </template>\n\n      <!-- No Data Message -->\n      <template v-slot:no-data>\n        <v-row class=\"ma-4\">\n          <v-alert :value=\"true\" color=\"warning\" icon=\"mdi-alert\">\n            No matching records found.\n          </v-alert>\n        </v-row>\n      </template>\n    </v-data-table>\n  </v-card>\n\n  <!-- Dialog for Adding or Editing Items -->\n  <v-dialog v-model=\"dialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">{{ formTitle }}</span>\n      </v-card-title>\n\n      <v-card-text>\n        <v-form ref=\"form\" v-model=\"valid\" fast-fail @submit.prevent>\n          \n          <!-- Form Fields -->\n          <v-text-field\n            v-model=\"editedItem.type\"\n            label=\"Type\"\n            :rules=\"[v => !!v || 'Type is required']\"\n            required\n          ></v-text-field>\n          <v-text-field\n            v-model=\"editedItem.vendor\"\n            label=\"Vendor\"\n            maxlength=\"50\"\n            counter\n          ></v-text-field>\n          <v-textarea\n            v-model=\"editedItem.details\"\n            label=\"Details\"\n            maxlength=\"200\"\n            counter\n          ></v-text-field>\n          \n        </v-form>\n      </v-card-text>\n\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"saveItem\">Save</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      search: '',\n      loading: false,\n      page: 1,\n      itemsPerPage: 5,\n      editMode: false,\n      dialog: false,\n      formTitle: \"\",\n      editedIndex: -1,\n      editedItem: {},\n      selected: [],\n      actionsHeader: {\n        title: \"Actions\",\n        value: \"actions\",\n        headerProps: { style: 'font-weight: 700' },\n      },\n      snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n    };\n  },\n  computed: {\n    pageCount() {\n      return Math.ceil(this.msg.data.length / this.itemsPerPage);\n    },\n  },\n  watch: {\n    msg: {\n      handler() {\n        if (\n          this.editMode &&\n          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'\n        ) {\n          this.msg.dashboard.table.headers.push(this.actionsHeader);\n        }\n      },\n      deep: true \n    }\n  },\n  methods: {\n    // Sends a message with the current state\n    msgSend() {\n      this.send({\n        topic: this.msg.topic,\n        title: this.msg.title,\n        payload: this.msg.payload,\n        data: this.msg.data,\n        dashboard: this.msg.dashboard,\n        file: this.msg.file\n      });\n    },\n    \n    // Notification and table actions\n    notify(item){\n      this.msg.topic = \"notify\";\n      this.msg.payload = item;\n      this.msgSend();\n    },\n    reloadTable() {\n      this.msg.topic = \"reload\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    updateTable() {\n      this.msg.topic = \"update\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    \n    // Edit mode controls\n    enableEdit() {\n      this.msg.dashboard.table.headers.push(this.actionsHeader);\n      this.editMode = true;\n    },\n    disableEdit() {\n      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(\n        header => header !== this.actionsHeader\n      );\n      this.editMode = false;\n    },\n    \n    // Deployment and discarding edits\n    deploy() {\n      this.loading = true;\n      this.disableEdit();\n      this.msg.topic = \"deploy\";\n      this.msg.payload = this.generateCsv();\n      this.msgSend();\n      this.showSnackbar('Deploy action triggered!', 'info');\n    },\n    discardEdit() {\n      this.disableEdit();\n      this.updateTable();\n    },\n    \n    // Handling items\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.headers.forEach(header => {\n        if (header.value !== 'actions') {\n          defaultItem[header.value] = header.value === 'enabled' ? true :\n                                       header.value === 'status' ? \"unknown\" : null;\n        }\n      });\n      return defaultItem;\n    },\n    addNewItem() {\n      this.editedIndex = -1;\n      this.editedItem = this.getDefaultItem();\n      this.formTitle = 'Add Item';\n      this.dialog = true;\n    },\n    editItem(item) {\n      this.editedIndex = this.msg.data.indexOf(item);\n      this.editedItem = { ...item };\n      this.formTitle = 'Edit Item';\n      this.dialog = true;\n    },\n    deleteItem(item) {\n      const deleteIndex = this.msg.data.indexOf(item);\n      if (deleteIndex > -1) {\n        this.msg.data.splice(deleteIndex, 1);\n        this.loading = true;\n        this.showSnackbar('Item deleted successfully!', 'success');\n      }\n    },\n    \n    // Dialog controls\n    closeDialog() {\n      this.dialog = false;\n      this.$refs.form.reset();\n      this.editedItem = this.getDefaultItem();\n    },\n    async saveItem() {\n      const { valid } = await this.$refs.form.validate();\n      if (valid) {\n        if (this.editedIndex > -1) {\n          Object.assign(this.msg.data[this.editedIndex], this.editedItem);\n          this.showSnackbar('Item updated successfully!', 'success');\n        } else {\n          this.msg.data.push({ ...this.editedItem });\n          this.showSnackbar('Item added successfully!', 'success');\n        }\n        // this.loading = true;\n        this.closeDialog();\n      } else {\n        this.showSnackbar('Please correct the errors in the form.', 'error');\n      }\n    },\n    \n    // CSV Generation and Download\n    generateCsv() {\n      const separator = ';';\n      const headers = this.msg.dashboard.table.headers\n        .filter(header => !['actions', 'status'].includes(header.value))\n        .map(header => header.value)\n        .join(separator); \n\n      const rows = this.msg.data.map(item => {\n        return this.msg.dashboard.table.headers\n          .filter(header => !['actions', 'status'].includes(header.value))\n          .map(header => {\n            const cell = item[header.value];\n\n            // Handle different data types\n            if (Array.isArray(cell)) {\n              return JSON.stringify(cell); // Stringify arrays\n            } else if (typeof cell === 'string') {\n              return cell; // Use string as-is\n            } else if (cell == null) {\n              return ''; // Handle null or undefined\n            } else {\n              return String(cell); // Convert other types to string\n            }\n          })\n          .join(separator);\n      }).join('\\n');\n\n\n      return `${headers}\\n${rows}`;\n    },\n    createDownloadLink(csvContent) {\n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const url = URL.createObjectURL(blob);\n      const link = document.createElement(\"a\");\n      link.setAttribute(\"href\", url);\n      link.setAttribute(\"download\", \"data.csv\");\n      link.style.visibility = 'hidden';\n      document.body.appendChild(link);\n      link.click();\n      document.body.removeChild(link);\n      URL.revokeObjectURL(url);\n    },\n    downloadCsv() {\n      try {\n        const csvContent = this.generateCsv();\n        this.createDownloadLink(csvContent);\n        this.showSnackbar('CSV scaricato con successo!', 'success');\n      } catch (error) {\n        console.error('Errore durante il download del CSV:', error);\n        this.showSnackbar('Errore durante il download del CSV.', 'error');\n      }\n    },\n    \n    // Utility Methods\n    getStatusColor(value) {\n      const colors = {\n        \"unknown\": 'blue',\n        \"connecting\": 'amber',\n        \"connected\": 'green',\n        \"error\": 'red'\n      };\n      if (colors[value]) return colors[value];\n      return 'purple';\n    },\n    getSwitchColor(item) {\n      return item.enabled ? this.getStatusColor(item.status)\n                            : 'grey-lighten-2';\n    },\n    getListColor(list, elem, item) {\n      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'\n                            : 'grey-lighten-2';\n    },\n    showSnackbar(message, type) {\n      this.snackbar.text = message;\n      this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                          : type === 'error' ? 'red-lighten-3' \n                          : 'blue-lighten-5';\n      this.snackbar.show = true;\n      this.loading = false;\n    }\n  }\n};\n</script>\n\n<style scoped>\n/* Heading Text Size */\n.text-h5 {\n  font-size: 1.25rem;\n}\n\n/* Actions Column Styling */\n.actions-column {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  width: 60px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 750,
+        "y": 280,
+        "wires": [
+            [
+                "4bc9e05502aee2e2",
+                "ba2d527971d7cafd"
+            ]
+        ]
+    },
+    {
+        "id": "7ffa1f3b3fd1d292",
+        "type": "switch",
+        "z": "28240470c357511c",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "read",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 230,
+        "y": 200,
+        "wires": [
+            [
+                "f8fb987fe54f61a1"
+            ],
+            [
+                "f8fb987fe54f61a1"
+            ],
+            [
+                "364161d118356c1f"
+            ]
+        ]
+    },
+    {
+        "id": "114d83f37f65a83c",
+        "type": "link out",
+        "z": "28240470c357511c",
+        "name": "file_read_out",
+        "mode": "link",
+        "links": [
+            "ef33dff4b3b16031"
+        ],
+        "x": 955,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "ef33dff4b3b16031",
+        "type": "link in",
+        "z": "28240470c357511c",
+        "name": "update_table_in",
+        "links": [
+            "114d83f37f65a83c"
+        ],
+        "x": 285,
+        "y": 280,
+        "wires": [
+            [
+                "364161d118356c1f"
+            ]
+        ]
+    },
+    {
+        "id": "ba2d527971d7cafd",
+        "type": "link out",
+        "z": "28240470c357511c",
+        "name": "ui_table_out",
+        "mode": "link",
+        "links": [
+            "826c9369b4c7c9e6"
+        ],
+        "x": 955,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "826c9369b4c7c9e6",
+        "type": "link in",
+        "z": "28240470c357511c",
+        "name": "ui_handlers_in",
+        "links": [
+            "ba2d527971d7cafd",
+            "166a7b24a9e7be5e"
+        ],
+        "x": 85,
+        "y": 360,
+        "wires": [
+            [
+                "c7164fc332fbe26d"
+            ]
+        ]
+    },
+    {
+        "id": "166a7b24a9e7be5e",
+        "type": "link out",
+        "z": "28240470c357511c",
+        "name": "saving_out",
+        "mode": "link",
+        "links": [
+            "826c9369b4c7c9e6"
+        ],
+        "x": 955,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "e7e0d758eff9dcc7",
+        "type": "debug",
+        "z": "28240470c357511c",
+        "name": "temp_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "03f4657386e54cdf",
+        "type": "function",
+        "z": "28240470c357511c",
+        "name": "file_def",
+        "func": "const removeExtension = filename => filename.replace(/\\.[^/.]+$/, \"\");\n\nmsg.title = removeExtension(env.get(\"FILE_NAME\"));\n\nmsg.file = {};\nmsg.file.name = env.get(\"FILE_NAME\");\nmsg.file.title = msg.title;\nmsg.file.directory = env.get(\"FILE_DIR\");\nmsg.file.path = \"/home/nodered/node-red-home/node-red-files/\" + msg.file.directory + msg.file.name;\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 120,
+        "wires": [
+            [
+                "7ffa1f3b3fd1d292"
+            ]
+        ]
+    },
+    {
+        "id": "31808e3738ebbe71",
+        "type": "debug",
+        "z": "28240470c357511c",
+        "name": "csv_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "ea4e09f3d1ab2584",
+        "type": "subflow",
+        "name": "Machines Types",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 180,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "770e20525b619c48"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 800,
+                "y": 300,
+                "wires": [
+                    {
+                        "id": "1962eb6cf0375ae7",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "FILE_NAME",
+                "type": "str",
+                "value": "Machines_Types.csv",
+                "ui": {
+                    "icon": "font-awesome/fa-file-text-o",
+                    "label": {
+                        "en-US": "File Name"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "FILE_DIR",
+                "type": "str",
+                "value": "/conf/",
+                "ui": {
+                    "icon": "font-awesome/fa-folder-o",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "status": {
+            "x": 800,
+            "y": 380,
+            "wires": [
+                {
+                    "id": "1962eb6cf0375ae7",
+                    "port": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "7661ca368e64a795",
+        "type": "file in",
+        "z": "ea4e09f3d1ab2584",
+        "name": "file_read",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 560,
+        "y": 260,
+        "wires": [
+            [
+                "130f8e2a6881f50e"
+            ]
+        ]
+    },
+    {
+        "id": "130f8e2a6881f50e",
+        "type": "csv",
+        "z": "ea4e09f3d1ab2584",
+        "name": "file2data",
+        "spec": "rfc",
+        "sep": ";",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": true,
+        "include_null_values": true,
+        "x": 740,
+        "y": 260,
+        "wires": [
+            [
+                "b836ba5bb5a13001",
+                "03d64af441e68068"
+            ]
+        ]
+    },
+    {
+        "id": "b836ba5bb5a13001",
+        "type": "function",
+        "z": "ea4e09f3d1ab2584",
+        "name": "validation",
+        "func": "try {\n    // Validate that msg.payload is an array\n    if (!Array.isArray(msg.payload)) {\n        node.warn(\"msg.payload is not an array\");\n        return msg;\n    }\n\n    // Validate that msg.columns exists and is a non-empty string\n    if (!msg.columns || typeof msg.columns !== 'string') {\n        node.warn(\"msg.columns is undefined or not a string\");\n        return msg;\n    }\n\n    // Store payload in global context\n    global.set(\"machines_types\", msg.payload);\n\n    // Clear payload to prevent unintended propagation\n    msg.payload = null;\n    return msg;\n\n} catch (error) {\n    node.error(`An error occurred: ${error.message}`);\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 260,
+        "wires": [
+            [
+                "3c583d1f4821398c"
+            ]
+        ]
+    },
+    {
+        "id": "c35d7f91e086880f",
+        "type": "debug",
+        "z": "ea4e09f3d1ab2584",
+        "name": "table_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1962eb6cf0375ae7",
+        "type": "function",
+        "z": "ea4e09f3d1ab2584",
+        "name": "update_status",
+        "func": "// Function to format strings by replacing underscores with spaces and capitalizing each word\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\n// Retrieve existing table data from global context\nconst table = global.get(\"machines_types\") || [];\n\n// Create dynamic table headers based on table data\nconst baseHeaders = table.length > 0\n    ? Object.keys(table[0])\n        .filter(key => key !== \"status\")\n        .map(key => ({\n            title: capitalize(key),\n            value: key,\n            headerProps: { style: 'font-weight: 700' },\n        }))\n    : [];\n\n// Define possible states for endpoints\nconst states = [\"unknown\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connecting\", \"error\"];\nconst lengthItems = states.length;\n\n// Assign random states to endpoints if not already set\nfor (let i = 0; i < table.length; i++) {\n    let randomIndex = Math.floor(Math.random() * lengthItems);\n    if (!table[i].status) {\n        table[i].status = states[randomIndex];\n    }\n    if (typeof table[i].enabled === 'string') {\n        let enabledLower = table[i].enabled.toLowerCase();\n        table[i].enabled = (enabledLower === 'true');\n    }\n    if (table[i].enabled === null) {\n        table[i].enabled = true;\n    }\n}\n\n// Prepare dashboard table data\nmsg.data = table;\n\nmsg.dashboard = msg.dashboard || {};\nmsg.dashboard.table = {\n    title: \"Machines Types\",\n    headers: baseHeaders\n};\nmsg.dashboard.form = {\n    machine: [\"machine_1\", \"machine_2\", \"machine_3\", \"machine_4\", \"machine_5\"],\n    protocol: global.get(\"protocol\"),\n    tag_tables: [\"odr_table_S7\", \"odr_table_OPCUA\", \"odr_table_Modbus\"]\n};\n\n// Save updated table back to global context\nglobal.set(\"machines_types\", table);\n\n// Notify state and return\nconst now = new Date().toISOString();\nconst state = {\n    payload: { fill: \"green\", shape: \"dot\", text: `last update: ${now}` }\n};\nreturn [msg, state];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 340,
+        "wires": [
+            [
+                "c35d7f91e086880f",
+                "129cee93a34d3541"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "946f14017995b675",
+        "type": "switch",
+        "z": "ea4e09f3d1ab2584",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "deploy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "notify",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 330,
+        "y": 420,
+        "wires": [
+            [
+                "7661ca368e64a795"
+            ],
+            [
+                "1962eb6cf0375ae7"
+            ],
+            [
+                "e663b8bf8bc4ca7f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c7d6b70c8b394632",
+        "type": "debug",
+        "z": "ea4e09f3d1ab2584",
+        "name": "table_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e663b8bf8bc4ca7f",
+        "type": "function",
+        "z": "ea4e09f3d1ab2584",
+        "name": "save_table",
+        "func": "\nglobal.set(\"machines_types\", msg.data);\nmsg.topic = \"reload\";\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 420,
+        "wires": [
+            [
+                "129cee93a34d3541"
+            ],
+            [
+                "f168011836680cd1"
+            ]
+        ]
+    },
+    {
+        "id": "9a5e6de17788e732",
+        "type": "debug",
+        "z": "ea4e09f3d1ab2584",
+        "name": "saving_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f168011836680cd1",
+        "type": "file",
+        "z": "ea4e09f3d1ab2584",
+        "name": "file_write",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 840,
+        "y": 420,
+        "wires": [
+            [
+                "9a5e6de17788e732",
+                "ce34cf27be58da89"
+            ]
+        ]
+    },
+    {
+        "id": "129cee93a34d3541",
+        "type": "ui-template",
+        "z": "ea4e09f3d1ab2584",
+        "group": "4290ffc4397af8c8",
+        "page": "",
+        "ui": "",
+        "name": "Machines Types Table",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Main Card Container -->\n  <v-card>\n    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->\n    <v-card-item class=\"bg-blue-darken-3\">\n      <v-row class=\"my-2 align-self-center\" no-gutters>\n        \n        <!-- Title and Reload Button -->\n        <v-col cols=\"auto\" class=\"mx-4 align-self-center\">\n          <v-btn\n            @click=\"updateTable\"\n            variant=\"tonal\"\n            class=\"font-weight-bold text-h5 text-white\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-update</v-icon>\n            <p class=\"mx-1 align-self-center\" v-text=\"msg.dashboard.table.title\"></p>\n          </v-btn>\n        </v-col>\n\n        <!-- Search Bar -->\n        <v-col class=\"mx-4 align-self-center\">\n          <v-text-field\n            v-model=\"search\"\n            label=\"Search\"\n            prepend-inner-icon=\"mdi-magnify\"\n            single-line\n            clearable\n            hide-details\n            color=\"white\"\n          ></v-text-field>\n        </v-col>\n\n        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->\n        <v-col cols=\"auto\" class=\"mx-2 align-self-center text-white\">\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"reloadTable\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-reload</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Reload</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"downloadCsv\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-arrow-down-bold</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">CSV</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"enableEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Edit</span>\n          </v-btn>\n\n          <!-- Buttons visible in Edit Mode -->\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"deploy\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-floppy</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Save</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"addNewItem\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-plus</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Add New</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"discardEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil-off</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Discard</span>\n          </v-btn>\n        </v-col>\n      </v-row>\n    </v-card-item>\n\n    <!-- Data Table with Custom Cell Templates -->\n    <v-data-table\n      v-model=\"selected\"\n      :headers=\"msg.dashboard.table.headers\"\n      :items=\"msg.data\"\n      :search=\"search\"\n      :items-per-page=\"itemsPerPage\"\n      :items-per-page-options=\"[5, 10, 25, 50, -1]\"\n      class=\"elevation-1\"\n      :loading=\"loading\"\n      loading-text=\"Loading...\"\n      density=\"default\"\n    >\n      \n      <!-- Toggle Switch for 'enabled' Field -->\n      <template v-slot:item.enabled=\"{ item }\">\n        <v-switch\n          v-model=\"item.enabled\"\n          :color=\"getSwitchColor(item)\"\n          :base-color=\"getSwitchColor(item)\"\n          :disabled=\"!editMode\"\n          hide-details\n        ></v-switch>\n      </template>\n\n      <!-- Display Tags as Chips -->\n      <template v-slot:item.tag_tables=\"{ item }\">\n        <div>\n          <v-chip\n            v-for=\"(tag, index) in item.tag_tables\"\n            :key=\"index\"\n            class=\"ma-1\"\n            :color=\"getTableColor(tag)\"\n            dark\n          >\n            {{ tag }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Actions Column with Edit and Delete Icons -->\n      <template v-slot:item.actions=\"{ item }\">\n        <div class=\"actions-column\">\n          <v-icon\n            v-show=\"editMode\"\n            small\n            class=\"mr-2\"\n            @click=\"editItem(item)\"\n            color=\"blue-darken-2\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-pencil\n          </v-icon>\n\n          <v-icon\n            v-show=\"editMode\"\n            small\n            @click=\"deleteItem(item)\"\n            color=\"blue-darken-4\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-delete\n          </v-icon>\n        </div>\n      </template>\n\n      <!-- No Data Message -->\n      <template v-slot:no-data>\n        <v-row class=\"ma-4\">\n          <v-alert :value=\"true\" color=\"warning\" icon=\"mdi-alert\">\n            No matching records found.\n          </v-alert>\n        </v-row>\n      </template>\n    </v-data-table>\n  </v-card>\n\n  <!-- Dialog for Adding or Editing Items -->\n  <v-dialog v-model=\"dialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">{{ formTitle }}</span>\n      </v-card-title>\n\n      <v-card-text>\n        <v-form ref=\"form\" v-model=\"valid\" fast-fail @submit.prevent>\n          \n          <!-- Form Fields -->\n          <v-text-field\n            v-model=\"editedItem.type\"\n            label=\"Type\"\n            :rules=\"[v => !!v || 'Type is required']\"\n            required\n          ></v-text-field>\n          <v-text-field\n            v-model=\"editedItem.vendor\"\n            label=\"Vendor\"\n            maxlength=\"50\"\n            counter\n          ></v-text-field>\n          <v-textarea\n            v-model=\"editedItem.details\"\n            label=\"Details\"\n            maxlength=\"200\"\n            counter\n          ></v-text-field>\n          \n        </v-form>\n      </v-card-text>\n\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"saveItem\">Save</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      search: '',\n      loading: false,\n      page: 1,\n      itemsPerPage: 5,\n      editMode: false,\n      dialog: false,\n      formTitle: \"\",\n      editedIndex: -1,\n      editedItem: {},\n      selected: [],\n      actionsHeader: {\n        title: \"Actions\",\n        value: \"actions\",\n        headerProps: { style: 'font-weight: 700' },\n      },\n      snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n    };\n  },\n  computed: {\n    pageCount() {\n      return Math.ceil(this.msg.data.length / this.itemsPerPage);\n    },\n  },\n  watch: {\n    msg: {\n      handler() {\n        if (\n          this.editMode &&\n          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'\n        ) {\n          this.msg.dashboard.table.headers.push(this.actionsHeader);\n        }\n      },\n      deep: true \n    }\n  },\n  methods: {\n    // Sends a message with the current state\n    msgSend() {\n      this.send({\n        topic: this.msg.topic,\n        title: this.msg.title,\n        payload: this.msg.payload,\n        data: this.msg.data,\n        dashboard: this.msg.dashboard,\n        file: this.msg.file\n      });\n    },\n    \n    // Notification and table actions\n    notify(item){\n      this.msg.topic = \"notify\";\n      this.msg.payload = item;\n      this.msgSend();\n    },\n    reloadTable() {\n      this.msg.topic = \"reload\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    updateTable() {\n      this.msg.topic = \"update\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    \n    // Edit mode controls\n    enableEdit() {\n      this.msg.dashboard.table.headers.push(this.actionsHeader);\n      this.editMode = true;\n    },\n    disableEdit() {\n      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(\n        header => header !== this.actionsHeader\n      );\n      this.editMode = false;\n    },\n    \n    // Deployment and discarding edits\n    deploy() {\n      this.loading = true;\n      this.disableEdit();\n      this.msg.topic = \"deploy\";\n      this.msg.payload = this.generateCsv();\n      this.msgSend();\n      this.showSnackbar('Deploy action triggered!', 'info');\n    },\n    discardEdit() {\n      this.disableEdit();\n      this.updateTable();\n    },\n    \n    // Handling items\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.headers.forEach(header => {\n        if (header.value !== 'actions') {\n          defaultItem[header.value] = header.value === 'enabled' ? true :\n                                       header.value === 'status' ? \"unknown\" : null;\n        }\n      });\n      return defaultItem;\n    },\n    addNewItem() {\n      this.editedIndex = -1;\n      this.editedItem = this.getDefaultItem();\n      this.formTitle = 'Add Item';\n      this.dialog = true;\n    },\n    editItem(item) {\n      this.editedIndex = this.msg.data.indexOf(item);\n      this.editedItem = { ...item };\n      this.formTitle = 'Edit Item';\n      this.dialog = true;\n    },\n    deleteItem(item) {\n      const deleteIndex = this.msg.data.indexOf(item);\n      if (deleteIndex > -1) {\n        this.msg.data.splice(deleteIndex, 1);\n        this.loading = true;\n        this.showSnackbar('Item deleted successfully!', 'success');\n      }\n    },\n    \n    // Dialog controls\n    closeDialog() {\n      this.dialog = false;\n      this.$refs.form.reset();\n      this.editedItem = this.getDefaultItem();\n    },\n    async saveItem() {\n      const { valid } = await this.$refs.form.validate();\n      if (valid) {\n        if (this.editedIndex > -1) {\n          Object.assign(this.msg.data[this.editedIndex], this.editedItem);\n          this.showSnackbar('Item updated successfully!', 'success');\n        } else {\n          this.msg.data.push({ ...this.editedItem });\n          this.showSnackbar('Item added successfully!', 'success');\n        }\n        // this.loading = true;\n        this.closeDialog();\n      } else {\n        this.showSnackbar('Please correct the errors in the form.', 'error');\n      }\n    },\n    \n    // CSV Generation and Download\n    generateCsv() {\n      const separator = ';';\n      const headers = this.msg.dashboard.table.headers\n        .filter(header => !['actions', 'status'].includes(header.value))\n        .map(header => header.value)\n        .join(separator); \n\n      const rows = this.msg.data.map(item => {\n        return this.msg.dashboard.table.headers\n          .filter(header => !['actions', 'status'].includes(header.value))\n          .map(header => {\n            const cell = item[header.value];\n\n            // Handle different data types\n            if (Array.isArray(cell)) {\n              return JSON.stringify(cell); // Stringify arrays\n            } else if (typeof cell === 'string') {\n              return cell; // Use string as-is\n            } else if (cell == null) {\n              return ''; // Handle null or undefined\n            } else {\n              return String(cell); // Convert other types to string\n            }\n          })\n          .join(separator);\n      }).join('\\n');\n\n\n      return `${headers}\\n${rows}`;\n    },\n    createDownloadLink(csvContent) {\n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const url = URL.createObjectURL(blob);\n      const link = document.createElement(\"a\");\n      link.setAttribute(\"href\", url);\n      link.setAttribute(\"download\", \"data.csv\");\n      link.style.visibility = 'hidden';\n      document.body.appendChild(link);\n      link.click();\n      document.body.removeChild(link);\n      URL.revokeObjectURL(url);\n    },\n    downloadCsv() {\n      try {\n        const csvContent = this.generateCsv();\n        this.createDownloadLink(csvContent);\n        this.showSnackbar('CSV scaricato con successo!', 'success');\n      } catch (error) {\n        console.error('Errore durante il download del CSV:', error);\n        this.showSnackbar('Errore durante il download del CSV.', 'error');\n      }\n    },\n    \n    // Utility Methods\n    getStatusColor(value) {\n      const colors = {\n        \"unknown\": 'blue',\n        \"connecting\": 'amber',\n        \"connected\": 'green',\n        \"error\": 'red'\n      };\n      if (colors[value]) return colors[value];\n      return 'purple';\n    },\n    getSwitchColor(item) {\n      return item.enabled ? this.getStatusColor(item.status)\n                            : 'grey-lighten-2';\n    },\n    getListColor(list, elem, item) {\n      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'\n                            : 'grey-lighten-2';\n    },\n    showSnackbar(message, type) {\n      this.snackbar.text = message;\n      this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                          : type === 'error' ? 'red-lighten-3' \n                          : 'blue-lighten-5';\n      this.snackbar.show = true;\n      this.loading = false;\n    }\n  }\n};\n</script>\n\n<style scoped>\n/* Heading Text Size */\n.text-h5 {\n  font-size: 1.25rem;\n}\n\n/* Actions Column Styling */\n.actions-column {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  width: 60px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 880,
+        "y": 340,
+        "wires": [
+            [
+                "c7d6b70c8b394632",
+                "23fd5e40ca1f8deb"
+            ]
+        ]
+    },
+    {
+        "id": "c5e56fd893b1a8ba",
+        "type": "switch",
+        "z": "ea4e09f3d1ab2584",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "read",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 330,
+        "y": 260,
+        "wires": [
+            [
+                "7661ca368e64a795"
+            ],
+            [
+                "7661ca368e64a795"
+            ],
+            [
+                "1962eb6cf0375ae7"
+            ]
+        ]
+    },
+    {
+        "id": "3c583d1f4821398c",
+        "type": "link out",
+        "z": "ea4e09f3d1ab2584",
+        "name": "file_read_out",
+        "mode": "link",
+        "links": [
+            "bd5d027343a3d7df"
+        ],
+        "x": 1055,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "bd5d027343a3d7df",
+        "type": "link in",
+        "z": "ea4e09f3d1ab2584",
+        "name": "update_table_in",
+        "links": [
+            "3c583d1f4821398c"
+        ],
+        "x": 385,
+        "y": 340,
+        "wires": [
+            [
+                "1962eb6cf0375ae7"
+            ]
+        ]
+    },
+    {
+        "id": "23fd5e40ca1f8deb",
+        "type": "link out",
+        "z": "ea4e09f3d1ab2584",
+        "name": "ui_table_out",
+        "mode": "link",
+        "links": [
+            "9fc140ee45214e3c"
+        ],
+        "x": 1055,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "9fc140ee45214e3c",
+        "type": "link in",
+        "z": "ea4e09f3d1ab2584",
+        "name": "ui_handlers_in",
+        "links": [
+            "23fd5e40ca1f8deb",
+            "ce34cf27be58da89"
+        ],
+        "x": 185,
+        "y": 420,
+        "wires": [
+            [
+                "946f14017995b675"
+            ]
+        ]
+    },
+    {
+        "id": "ce34cf27be58da89",
+        "type": "link out",
+        "z": "ea4e09f3d1ab2584",
+        "name": "saving_out",
+        "mode": "link",
+        "links": [
+            "9fc140ee45214e3c"
+        ],
+        "x": 1055,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "207761d501dfdb38",
+        "type": "debug",
+        "z": "ea4e09f3d1ab2584",
+        "name": "temp_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "770e20525b619c48",
+        "type": "function",
+        "z": "ea4e09f3d1ab2584",
+        "name": "file_def",
+        "func": "const removeExtension = filename => filename.replace(/\\.[^/.]+$/, \"\");\n\nmsg.title = removeExtension(env.get(\"FILE_NAME\"));\n\nmsg.file = {};\nmsg.file.name = env.get(\"FILE_NAME\");\nmsg.file.title = msg.title;\nmsg.file.directory = env.get(\"FILE_DIR\");\nmsg.file.path = \"/home/nodered/node-red-home/node-red-files/\" + msg.file.directory + msg.file.name;\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 180,
+        "wires": [
+            [
+                "c5e56fd893b1a8ba"
+            ]
+        ]
+    },
+    {
+        "id": "03d64af441e68068",
+        "type": "debug",
+        "z": "ea4e09f3d1ab2584",
+        "name": "csv_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c3870edc9cbe0b12",
+        "type": "subflow",
+        "name": "Machines",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 180,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "4a626430f761e26b"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 800,
+                "y": 280,
+                "wires": [
+                    {
+                        "id": "18f1895debf9e89a",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "FILE_NAME",
+                "type": "str",
+                "value": "Machines.csv",
+                "ui": {
+                    "icon": "font-awesome/fa-file-text-o",
+                    "label": {
+                        "en-US": "File Name"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "FILE_DIR",
+                "type": "str",
+                "value": "/config/",
+                "ui": {
+                    "icon": "font-awesome/fa-folder-o",
+                    "label": {
+                        "en-US": "Directory"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "status": {
+            "x": 800,
+            "y": 360,
+            "wires": [
+                {
+                    "id": "18f1895debf9e89a",
+                    "port": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "f18b1d1ff4497ba0",
+        "type": "file in",
+        "z": "c3870edc9cbe0b12",
+        "name": "file_read",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 560,
+        "y": 240,
+        "wires": [
+            [
+                "ebe8e0b64e3b279a"
+            ]
+        ]
+    },
+    {
+        "id": "ebe8e0b64e3b279a",
+        "type": "csv",
+        "z": "c3870edc9cbe0b12",
+        "name": "file2data",
+        "spec": "rfc",
+        "sep": ";",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": true,
+        "include_null_values": true,
+        "x": 740,
+        "y": 240,
+        "wires": [
+            [
+                "d84699da9fb06aac",
+                "865104f80adeeb70"
+            ]
+        ]
+    },
+    {
+        "id": "d84699da9fb06aac",
+        "type": "function",
+        "z": "c3870edc9cbe0b12",
+        "name": "validation",
+        "func": "try {\n    // Validate that msg.payload is an array\n    if (!Array.isArray(msg.payload)) {\n        node.warn(\"msg.payload is not an array\");\n        return msg;\n    }\n\n    // Validate that msg.columns exists and is a non-empty string\n    if (!msg.columns || typeof msg.columns !== 'string') {\n        node.warn(\"msg.columns is undefined or not a string\");\n        return msg;\n    }\n\n    // Store payload in global context\n    global.set(\"machines\", msg.payload);\n\n    // Clear payload to prevent unintended propagation\n    msg.payload = null;\n    return msg;\n\n} catch (error) {\n    node.error(`An error occurred: ${error.message}`);\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 240,
+        "wires": [
+            [
+                "8114e0ce1f576cfe"
+            ]
+        ]
+    },
+    {
+        "id": "ea3e29754159a3fa",
+        "type": "debug",
+        "z": "c3870edc9cbe0b12",
+        "name": "table_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "18f1895debf9e89a",
+        "type": "function",
+        "z": "c3870edc9cbe0b12",
+        "name": "update_status",
+        "func": "// Function to format strings by replacing underscores with spaces and capitalizing each word\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\n// Retrieve existing table data from global context\nconst table = global.get(\"machines\") || [];\n\n// Create dynamic table headers based on table data\nconst baseHeaders = table.length > 0\n    ? Object.keys(table[0])\n        .filter(key => key !== \"status\")\n        .map(key => ({\n            title: capitalize(key),\n            value: key,\n            headerProps: { style: 'font-weight: 700' },\n        }))\n    : [];\n\n// Define possible states for endpoints\nconst states = [\"unknown\", \"connected\", \"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connecting\", \"error\"];\nconst lengthItems = states.length;\n\n// Assign random states to endpoints if not already set\nfor (let i = 0; i < table.length; i++) {  \n    let randomIndex = Math.floor(Math.random() * lengthItems);\n    if (!table[i].status) {\n        table[i].status = states[randomIndex];\n    }\n    if (typeof table[i].enabled === 'string') {\n        let enabledLower = table[i].enabled.toLowerCase();\n        table[i].enabled = (enabledLower === 'true');\n    }\n    if (table[i].enabled === null) {\n        table[i].enabled = true;\n    }\n}\n\n// Prepare dashboard table data\nmsg.data = table;\n\nmsg.dashboard = msg.dashboard || {};\nmsg.dashboard.table = {\n    title: \"Machines\",\n    headers: baseHeaders\n};\nmsg.dashboard.form = { \n    type: global.get(\"machines_types\").map(mt => mt.type),\n    site: [\"area_1\",\"area_2\",\"area_3\",\"area_4\",\"area_5\"]\n};\n\n// Save updated table back to global context\nglobal.set(\"machines\", table);\n\n// Notify state and return\nconst now = new Date().toISOString();\nconst state = {\n    payload: { fill: \"green\", shape: \"dot\", text: `last update: ${now}` }\n};\nreturn [msg, state];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 320,
+        "wires": [
+            [
+                "ea3e29754159a3fa",
+                "52abec1fdeca2526"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "9dbc8a1a679ebadc",
+        "type": "switch",
+        "z": "c3870edc9cbe0b12",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "deploy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "notify",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 330,
+        "y": 400,
+        "wires": [
+            [
+                "f18b1d1ff4497ba0"
+            ],
+            [
+                "18f1895debf9e89a"
+            ],
+            [
+                "b010b5c37757d4ed"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e5a77d5dbb11bc15",
+        "type": "debug",
+        "z": "c3870edc9cbe0b12",
+        "name": "table_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b010b5c37757d4ed",
+        "type": "function",
+        "z": "c3870edc9cbe0b12",
+        "name": "save_table",
+        "func": "\nglobal.set(\"machines\", msg.data);\nmsg.topic = \"reload\";\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 400,
+        "wires": [
+            [
+                "52abec1fdeca2526"
+            ],
+            [
+                "6862e57cae4e3242"
+            ]
+        ]
+    },
+    {
+        "id": "487784501a53a84d",
+        "type": "debug",
+        "z": "c3870edc9cbe0b12",
+        "name": "saving_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "6862e57cae4e3242",
+        "type": "file",
+        "z": "c3870edc9cbe0b12",
+        "name": "file_write",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 840,
+        "y": 400,
+        "wires": [
+            [
+                "487784501a53a84d",
+                "04936ef136503b70"
+            ]
+        ]
+    },
+    {
+        "id": "52abec1fdeca2526",
+        "type": "ui-template",
+        "z": "c3870edc9cbe0b12",
+        "group": "4290ffc4397af8c8",
+        "page": "",
+        "ui": "",
+        "name": "Machines Table",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Main Card Container -->\n  <v-card>\n    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->\n    <v-card-item class=\"bg-blue-darken-3\">\n      <v-row class=\"my-2 align-self-center\" no-gutters>\n        \n        <!-- Title and Reload Button -->\n        <v-col cols=\"auto\" class=\"mx-4 align-self-center\">\n          <v-btn\n            @click=\"updateTable\"\n            variant=\"tonal\"\n            class=\"font-weight-bold text-h5 text-white\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-update</v-icon>\n            <p class=\"mx-1 align-self-center\" v-text=\"msg.dashboard.table.title\"></p>\n          </v-btn>\n        </v-col>\n\n        <!-- Search Bar -->\n        <v-col class=\"mx-4 align-self-center\">\n          <v-text-field\n            v-model=\"search\"\n            label=\"Search\"\n            prepend-inner-icon=\"mdi-magnify\"\n            single-line\n            clearable\n            hide-details\n            color=\"white\"\n          ></v-text-field>\n        </v-col>\n\n        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->\n        <v-col cols=\"auto\" class=\"mx-2 align-self-center text-white\">\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"reloadTable\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-reload</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Reload</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"downloadCsv\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-arrow-down-bold</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">CSV</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"enableEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Edit</span>\n          </v-btn>\n\n          <!-- Buttons visible in Edit Mode -->\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"deploy\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-floppy</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Save</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"addNewItem\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-plus</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Add New</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"discardEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil-off</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Discard</span>\n          </v-btn>\n        </v-col>\n      </v-row>\n    </v-card-item>\n\n    <!-- Data Table with Custom Cell Templates -->\n    <v-data-table\n      v-model=\"selected\"\n      :headers=\"msg.dashboard.table.headers\"\n      :items=\"msg.data\"\n      :search=\"search\"\n      :items-per-page=\"itemsPerPage\"\n      :items-per-page-options=\"[5, 10, 25, 50, -1]\"\n      class=\"elevation-1\"\n      :loading=\"loading\"\n      loading-text=\"Loading...\"\n      density=\"default\"\n    >\n      \n      <!-- Toggle Switch for 'enabled' Field -->\n      <template v-slot:item.enabled=\"{ item }\">\n        <v-switch\n          v-model=\"item.enabled\"\n          :color=\"getSwitchColor(item)\"\n          :base-color=\"getSwitchColor(item)\"\n          :disabled=\"!editMode\"\n          hide-details\n        ></v-switch>\n      </template>\n\n      <!-- Display Type as Chips -->\n      <template v-slot:item.type=\"{ item }\">\n        <div>\n          <v-chip\n            class=\"ma-1\"\n            :color=\"getListColor(msg.dashboard.form.type, item.type, item)\"\n            dark\n          >\n            {{ item.type }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Actions Column with Edit and Delete Icons -->\n      <template v-slot:item.actions=\"{ item }\">\n        <div class=\"actions-column\">\n          <v-icon\n            v-show=\"editMode\"\n            small\n            class=\"mr-2\"\n            @click=\"editItem(item)\"\n            color=\"blue-darken-2\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-pencil\n          </v-icon>\n\n          <v-icon\n            v-show=\"editMode\"\n            small\n            @click=\"deleteItem(item)\"\n            color=\"blue-darken-4\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-delete\n          </v-icon>\n        </div>\n      </template>\n\n      <!-- No Data Message -->\n      <template v-slot:no-data>\n        <v-row class=\"ma-4\">\n          <v-alert :value=\"true\" color=\"warning\" icon=\"mdi-alert\">\n            No matching records found.\n          </v-alert>\n        </v-row>\n      </template>\n    </v-data-table>\n  </v-card>\n\n  <!-- Dialog for Adding or Editing Items -->\n  <v-dialog v-model=\"dialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">{{ formTitle }}</span>\n      </v-card-title>\n\n      <v-card-text>\n        <v-form ref=\"form\" v-model=\"valid\" fast-fail @submit.prevent>\n          \n          <!-- Form Fields -->\n          <v-text-field\n            v-model=\"editedItem.name\"\n            label=\"Name\"\n            :rules=\"[v => !!v || 'Name is required']\"\n            required\n          ></v-text-field>\n          <v-select\n            v-model=\"editedItem.type\"\n            label=\"Type\"\n            :items=\"msg.dashboard.form.type\"\n            :rules=\"[v => !!v || 'Type is required']\"\n            required\n            clearable\n          ></v-select>\n          <v-select\n            v-model=\"editedItem.site\"\n            label=\"Site\"\n            :items=\"msg.dashboard.form.site\"\n            :rules=\"[v => !!v || 'Site is required']\"\n            required\n            clearable\n          ></v-select>\n          <v-text-field\n            v-model=\"editedItem.service_date\"\n            label=\"Service Date\"\n            clearable\n          ></v-text-field>\n          <v-textarea\n            v-model=\"editedItem.details\"\n            label=\"Details\"\n            maxlength=\"200\"\n            counter\n          ></v-text-field>\n          \n        </v-form>\n      </v-card-text>\n\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"saveItem\">Save</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      search: '',\n      loading: false,\n      valid: false,\n      page: 1,\n      itemsPerPage: 5,\n      editMode: false,\n      dialog: false,\n      formTitle: \"\",\n      editedIndex: -1,\n      editedItem: {},\n      selected: [],\n      actionsHeader: {\n        title: \"Actions\",\n        value: \"actions\",\n        headerProps: { style: 'font-weight: 700' },\n      },\n      snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n    };\n  },\n  computed: {\n    pageCount() {\n      return Math.ceil(this.msg.data.length / this.itemsPerPage);\n    },\n  },\n  watch: {\n    msg: {\n      handler() {\n        if (\n          this.editMode &&\n          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'\n        ) {\n          this.msg.dashboard.table.headers.push(this.actionsHeader);\n        }\n      },\n      deep: true \n    }\n  },\n  methods: {\n    // Sends a message with the current state\n    msgSend() {\n      this.send({\n        topic: this.msg.topic,\n        title: this.msg.title,\n        payload: this.msg.payload,\n        data: this.msg.data,\n        dashboard: this.msg.dashboard,\n        file: this.msg.file\n      });\n    },\n    \n    // Notification and table actions\n    notify(item){\n      this.msg.topic = \"notify\";\n      this.msg.payload = item;\n      this.msgSend();\n    },\n    reloadTable() {\n      this.msg.topic = \"reload\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    updateTable() {\n      this.msg.topic = \"update\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    \n    // Edit mode controls\n    enableEdit() {\n      this.msg.dashboard.table.headers.push(this.actionsHeader);\n      this.editMode = true;\n    },\n    disableEdit() {\n      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(\n        header => header !== this.actionsHeader\n      );\n      this.editMode = false;\n    },\n    \n    // Deployment and discarding edits\n    deploy() {\n      this.loading = true;\n      this.disableEdit();\n      this.msg.topic = \"deploy\";\n      this.msg.payload = this.generateCsv();\n      this.msgSend();\n      this.showSnackbar('Deploy action triggered!', 'info');\n    },\n    discardEdit() {\n      this.disableEdit();\n      this.updateTable();\n    },\n    \n    // Handling items\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.headers.forEach(header => {\n        if (header.value !== 'actions') {\n          defaultItem[header.value] = header.value === 'enabled' ? true :\n                                       header.value === 'status' ? \"unknown\" : null;\n        }\n      });\n      return defaultItem;\n    },\n    addNewItem() {\n      this.editedIndex = -1;\n      this.editedItem = this.getDefaultItem();\n      this.formTitle = 'Add Item';\n      this.dialog = true;\n    },\n    editItem(item) {\n      this.editedIndex = this.msg.data.indexOf(item);\n      this.editedItem = { ...item };\n      this.formTitle = 'Edit Item';\n      this.dialog = true;\n    },\n    deleteItem(item) {\n      const deleteIndex = this.msg.data.indexOf(item);\n      if (deleteIndex > -1) {\n        this.msg.data.splice(deleteIndex, 1);\n        this.loading = true;\n        this.showSnackbar('Item deleted successfully!', 'success');\n      }\n    },\n    \n    // Dialog controls\n    closeDialog() {\n      this.dialog = false;\n      this.$refs.form.reset();\n      this.editedItem = this.getDefaultItem();\n    },\n    async saveItem() {\n      const { valid } = await this.$refs.form.validate();\n      if (valid) {\n        if (this.editedIndex > -1) {\n          Object.assign(this.msg.data[this.editedIndex], this.editedItem);\n          this.showSnackbar('Item updated successfully!', 'success');\n        } else {\n          this.msg.data.push({ ...this.editedItem });\n          this.showSnackbar('Item added successfully!', 'success');\n        }\n        // this.loading = true;\n        this.closeDialog();\n      } else {\n        this.showSnackbar('Please correct the errors in the form.', 'error');\n      }\n    },\n    \n    // CSV Generation and Download\n    generateCsv() {\n      const separator = ';';\n      const headers = this.msg.dashboard.table.headers\n        .filter(header => !['actions', 'status'].includes(header.value))\n        .map(header => header.value)\n        .join(separator); \n\n      const rows = this.msg.data.map(item => {\n        return this.msg.dashboard.table.headers\n          .filter(header => !['actions', 'status'].includes(header.value))\n          .map(header => {\n            const cell = item[header.value];\n\n            // Handle different data types\n            if (Array.isArray(cell)) {\n              return JSON.stringify(cell); // Stringify arrays\n            } else if (typeof cell === 'string') {\n              return cell; // Use string as-is\n            } else if (cell == null) {\n              return ''; // Handle null or undefined\n            } else {\n              return String(cell); // Convert other types to string\n            }\n          })\n          .join(separator);\n      }).join('\\n');\n\n\n      return `${headers}\\n${rows}`;\n    },\n    createDownloadLink(csvContent) {\n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const url = URL.createObjectURL(blob);\n      const link = document.createElement(\"a\");\n      link.setAttribute(\"href\", url);\n      link.setAttribute(\"download\", \"data.csv\");\n      link.style.visibility = 'hidden';\n      document.body.appendChild(link);\n      link.click();\n      document.body.removeChild(link);\n      URL.revokeObjectURL(url);\n    },\n    downloadCsv() {\n      try {\n        const csvContent = this.generateCsv();\n        this.createDownloadLink(csvContent);\n        this.showSnackbar('CSV scaricato con successo!', 'success');\n      } catch (error) {\n        console.error('Errore durante il download del CSV:', error);\n        this.showSnackbar('Errore durante il download del CSV.', 'error');\n      }\n    },\n    \n    // Utility Methods\n    getStatusColor(value) {\n      const colors = {\n        \"unknown\": 'blue',\n        \"connecting\": 'amber',\n        \"connected\": 'green',\n        \"error\": 'red'\n      };\n      if (colors[value]) return colors[value];\n      return 'purple';\n    },\n    getSwitchColor(item) {\n      return item.enabled ? this.getStatusColor(item.status)\n                            : 'grey-lighten-2';\n    },\n    getListColor(list, elem, item) {\n      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'\n                            : 'grey-lighten-2';\n    },\n    showSnackbar(message, type) {\n      this.snackbar.text = message;\n      this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                          : type === 'error' ? 'red-lighten-3' \n                          : 'blue-lighten-5';\n      this.snackbar.show = true;\n      this.loading = false;\n    }\n  }\n};\n</script>\n\n<style scoped>\n/* Heading Text Size */\n.text-h5 {\n  font-size: 1.25rem;\n}\n\n/* Actions Column Styling */\n.actions-column {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  width: 60px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 860,
+        "y": 320,
+        "wires": [
+            [
+                "e5a77d5dbb11bc15",
+                "d39dc0175caac8c2"
+            ]
+        ]
+    },
+    {
+        "id": "3dd0b7899f6417f6",
+        "type": "switch",
+        "z": "c3870edc9cbe0b12",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "read",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 330,
+        "y": 240,
+        "wires": [
+            [
+                "f18b1d1ff4497ba0"
+            ],
+            [
+                "f18b1d1ff4497ba0"
+            ],
+            [
+                "18f1895debf9e89a"
+            ]
+        ]
+    },
+    {
+        "id": "8114e0ce1f576cfe",
+        "type": "link out",
+        "z": "c3870edc9cbe0b12",
+        "name": "file_read_out",
+        "mode": "link",
+        "links": [
+            "fee4b9925cc110b0"
+        ],
+        "x": 1055,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "fee4b9925cc110b0",
+        "type": "link in",
+        "z": "c3870edc9cbe0b12",
+        "name": "update_table_in",
+        "links": [
+            "8114e0ce1f576cfe"
+        ],
+        "x": 385,
+        "y": 320,
+        "wires": [
+            [
+                "18f1895debf9e89a"
+            ]
+        ]
+    },
+    {
+        "id": "d39dc0175caac8c2",
+        "type": "link out",
+        "z": "c3870edc9cbe0b12",
+        "name": "ui_table_out",
+        "mode": "link",
+        "links": [
+            "8a7bcab6d7d23d16"
+        ],
+        "x": 1055,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "8a7bcab6d7d23d16",
+        "type": "link in",
+        "z": "c3870edc9cbe0b12",
+        "name": "ui_handlers_in",
+        "links": [
+            "d39dc0175caac8c2",
+            "04936ef136503b70"
+        ],
+        "x": 185,
+        "y": 400,
+        "wires": [
+            [
+                "9dbc8a1a679ebadc"
+            ]
+        ]
+    },
+    {
+        "id": "04936ef136503b70",
+        "type": "link out",
+        "z": "c3870edc9cbe0b12",
+        "name": "saving_out",
+        "mode": "link",
+        "links": [
+            "8a7bcab6d7d23d16"
+        ],
+        "x": 1055,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "94f27a4bb2c2e0c0",
+        "type": "debug",
+        "z": "c3870edc9cbe0b12",
+        "name": "temp_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "4a626430f761e26b",
+        "type": "function",
+        "z": "c3870edc9cbe0b12",
+        "name": "file_def",
+        "func": "const removeExtension = filename => filename.replace(/\\.[^/.]+$/, \"\");\n\nmsg.title = removeExtension(env.get(\"FILE_NAME\"));\n\nmsg.file = {};\nmsg.file.name = env.get(\"FILE_NAME\");\nmsg.file.title = msg.title;\nmsg.file.directory = env.get(\"FILE_DIR\");\nmsg.file.path = \"/home/nodered/node-red-home/node-red-files/\" + msg.file.directory + msg.file.name;\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 160,
+        "wires": [
+            [
+                "3dd0b7899f6417f6"
+            ]
+        ]
+    },
+    {
+        "id": "865104f80adeeb70",
+        "type": "debug",
+        "z": "c3870edc9cbe0b12",
+        "name": "csv_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "99d4f1b02f3eb0d4",
+        "type": "subflow",
+        "name": "Endpoints",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 160,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "e96f204d3c49e495"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 780,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "290345e4b4c8dba9",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "FILE_NAME",
+                "type": "str",
+                "value": "Endpoints.csv",
+                "ui": {
+                    "icon": "font-awesome/fa-file-text-o",
+                    "label": {
+                        "en-US": "File Name"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "FILE_DIR",
+                "type": "str",
+                "value": "/config/",
+                "ui": {
+                    "icon": "font-awesome/fa-folder-o",
+                    "label": {
+                        "en-US": "Directory"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "status": {
+            "x": 780,
+            "y": 340,
+            "wires": [
+                {
+                    "id": "290345e4b4c8dba9",
+                    "port": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "cfbaafcc5f6fab33",
+        "type": "file in",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "file_read",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 540,
+        "y": 220,
+        "wires": [
+            [
+                "675f3e14581ea1ec"
+            ]
+        ]
+    },
+    {
+        "id": "675f3e14581ea1ec",
+        "type": "csv",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "file2data",
+        "spec": "rfc",
+        "sep": ";",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": true,
+        "include_null_values": true,
+        "x": 720,
+        "y": 220,
+        "wires": [
+            [
+                "d7202e5a9c50b6fa",
+                "61d339c1a5f6b249"
+            ]
+        ]
+    },
+    {
+        "id": "d7202e5a9c50b6fa",
+        "type": "function",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "validation",
+        "func": "try {\n    // Validate that msg.payload is an array\n    if (!Array.isArray(msg.payload)) {\n        node.warn(\"msg.payload is not an array\");\n        return msg;\n    }\n\n    // Validate that msg.columns exists and is a non-empty string\n    if (!msg.columns || typeof msg.columns !== 'string') {\n        node.warn(\"msg.columns is undefined or not a string\");\n        return msg;\n    }\n\n    msg.payload.forEach(item => {\n        if (typeof item.tag_tables === \"string\") {\n            try {\n                item.tag_tables = JSON.parse(item.tag_tables);\n            } catch (error) {\n                node.error(\"Error parsing tag_table:\", error);\n            }\n        }\n    });\n\n    // Store payload in global context\n    global.set(\"endpoints\", msg.payload);\n\n    // Clear payload to prevent unintended propagation\n    msg.payload = null;\n    return msg;\n\n} catch (error) {\n    node.error(`An error occurred: ${error.message}`);\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 220,
+        "wires": [
+            [
+                "aa223827f2a0040a"
+            ]
+        ]
+    },
+    {
+        "id": "ee998f89552e94d2",
+        "type": "debug",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "table_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "290345e4b4c8dba9",
+        "type": "function",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "update_status",
+        "func": "// Function to format strings by replacing underscores with spaces and capitalizing each word\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\n// Retrieve existing table data from global context\nconst table = global.get(\"endpoints\") || [];\n\nconst machines = global.get(\"machines\");\nconst machinesName = machines.map(mh => mh.name);\n\n// Create dynamic table headers based on table data\nconst baseHeaders = table.length > 0\n    ? Object.keys(table[0])\n        .filter(key => key !== \"status\")\n        .map(key => ({\n            title: capitalize(key),\n            value: key,\n            headerProps: { style: 'font-weight: 700' },\n        }))\n    : [];\n\n// Define possible states for endpoints\nconst states = [\"unknown\", \"connected\", \"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connected\",\"connecting\", \"error\"];\nconst lengthItems = states.length;\n\n// Assign random states to endpoints if not already set\nfor (let i = 0; i < table.length; i++) {  \n    let randomIndex = Math.floor(Math.random() * lengthItems);\n    if (!table[i].status) {\n        table[i].status = states[randomIndex];\n    }\n    if (typeof table[i].enabled === 'string') {\n        let enabledLower = table[i].enabled.toLowerCase();\n        table[i].enabled = (enabledLower === 'true');\n    }\n    if (table[i].enabled === null) {\n        table[i].enabled = true;\n    }\n}\n\n// Enabling based on machine\nfor (let i = 0; i < table.length; i++) {\n    const machine = machines.find(m => m.name === table[i].machine); // Find the machine by name\n    if (machine) {\n        table[i].enabled = table[i].enabled && machine.enabled; // Update enabled status\n    } \n}\n\n// Prepare dashboard table data\nmsg.data = table;\n\nmsg.dashboard = msg.dashboard || {};\nmsg.dashboard.table = {\n    title: \"Endpoints\",\n    headers: baseHeaders,\n};\nmsg.dashboard.form = { \n    machine: machinesName,\n    protocol: global.get(\"protocol\"),\n    tag_tables: [\"odr_table_S7\", \"odr_table_OPCUA\", \"odr_table_Modbus\"]\n};\n\n// Save updated table back to global context\nglobal.set(\"endpoints\", table);\n\n// Notify state and return\nconst now = new Date().toISOString();\nconst state = {\n    payload: { fill: \"green\", shape: \"dot\", text: `last update: ${now}` }\n};\nreturn [msg, state];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 300,
+        "wires": [
+            [
+                "ee998f89552e94d2",
+                "91e2a8e521d68610"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5f9869a2b4d2e1b7",
+        "type": "switch",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "deploy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "notify",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 310,
+        "y": 380,
+        "wires": [
+            [
+                "cfbaafcc5f6fab33"
+            ],
+            [
+                "290345e4b4c8dba9"
+            ],
+            [
+                "4cc8132323c648be"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6b34f943b983cbf3",
+        "type": "debug",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "table_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "4cc8132323c648be",
+        "type": "function",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "save_table",
+        "func": "\nglobal.set(\"endpoints\", msg.data);\nmsg.topic = \"reload\";\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 380,
+        "wires": [
+            [
+                "91e2a8e521d68610"
+            ],
+            [
+                "5baf567a69e592c1"
+            ]
+        ]
+    },
+    {
+        "id": "d7d49e96252e2ce3",
+        "type": "debug",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "saving_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "5baf567a69e592c1",
+        "type": "file",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "file_write",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 820,
+        "y": 380,
+        "wires": [
+            [
+                "d7d49e96252e2ce3",
+                "99a17ffdfdaf95fb"
+            ]
+        ]
+    },
+    {
+        "id": "91e2a8e521d68610",
+        "type": "ui-template",
+        "z": "99d4f1b02f3eb0d4",
+        "group": "4290ffc4397af8c8",
+        "page": "",
+        "ui": "",
+        "name": "Endpoints Table",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Main Card Container -->\n  <v-card>\n    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->\n    <v-card-item class=\"bg-blue-darken-3\">\n      <v-row class=\"my-2 align-self-center\" no-gutters>\n        \n        <!-- Title and Reload Button -->\n        <v-col cols=\"auto\" class=\"mx-4 align-self-center\">\n          <v-btn\n            @click=\"updateTable\"\n            variant=\"tonal\"\n            class=\"font-weight-bold text-h5 text-white\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-update</v-icon>\n            <p class=\"mx-1 align-self-center\" v-text=\"msg.dashboard.table.title\"></p>\n          </v-btn>\n        </v-col>\n\n        <!-- Search Bar -->\n        <v-col class=\"mx-4 align-self-center\">\n          <v-text-field\n            v-model=\"search\"\n            label=\"Search\"\n            prepend-inner-icon=\"mdi-magnify\"\n            single-line\n            clearable\n            hide-details\n            color=\"white\"\n          ></v-text-field>\n        </v-col>\n\n        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->\n        <v-col cols=\"auto\" class=\"mx-2 align-self-center text-white\">\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"reloadTable\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-reload</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Reload</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"downloadCsv\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-arrow-down-bold</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">CSV</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"enableEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Edit</span>\n          </v-btn>\n\n          <!-- Buttons visible in Edit Mode -->\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"deploy\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-floppy</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Save</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"addNewItem\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-plus</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Add New</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"discardEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil-off</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Discard</span>\n          </v-btn>\n        </v-col>\n      </v-row>\n    </v-card-item>\n\n    <!-- Data Table with Custom Cell Templates -->\n    <v-data-table\n      v-model=\"selected\"\n      :headers=\"msg.dashboard.table.headers\"\n      :items=\"msg.data\"\n      :search=\"search\"\n      :items-per-page=\"itemsPerPage\"\n      :items-per-page-options=\"[5, 10, 25, 50, -1]\"\n      class=\"elevation-1\"\n      :loading=\"loading\"\n      loading-text=\"Loading...\"\n      density=\"default\"\n    >\n      \n      <!-- Toggle Switch for 'enabled' Field -->\n      <template v-slot:item.enabled=\"{ item }\">\n        <v-switch\n          v-model=\"item.enabled\"\n          :color=\"getSwitchColor(item)\"\n          :base-color=\"getSwitchColor(item)\"\n          :disabled=\"!editMode\"\n          hide-details\n        ></v-switch>\n      </template>\n\n      <!-- Display Tags as Chips -->\n      <template v-slot:item.tag_tables=\"{ item }\">\n        <div>\n          <v-chip\n            v-for=\"(tag, index) in item.tag_tables\"\n            :key=\"index\"\n            class=\"ma-1\"\n            :color=\"getListColor(msg.dashboard.form.tag_tables, tag, item)\"\n            dark\n          >\n            {{ tag }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Display Machines as Chips -->\n      <template v-slot:item.machine=\"{ item }\">\n        <div>\n          <v-chip\n            class=\"ma-1\"\n            :color=\"getListColor(msg.dashboard.form.machine, item.machine, item)\"\n            dark\n          >\n            {{ item.machine }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Actions Column with Edit and Delete Icons -->\n      <template v-slot:item.actions=\"{ item }\">\n        <div class=\"actions-column\">\n          <v-icon\n            v-show=\"editMode\"\n            small\n            class=\"mr-2\"\n            @click=\"editItem(item)\"\n            color=\"blue-darken-2\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-pencil\n          </v-icon>\n\n          <v-icon\n            v-show=\"editMode\"\n            small\n            @click=\"deleteItem(item)\"\n            color=\"blue-darken-4\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-delete\n          </v-icon>\n        </div>\n      </template>\n\n      <!-- No Data Message -->\n      <template v-slot:no-data>\n        <v-row class=\"ma-4\">\n          <v-alert :value=\"true\" color=\"warning\" icon=\"mdi-alert\">\n            No matching records found.\n          </v-alert>\n        </v-row>\n      </template>\n    </v-data-table>\n  </v-card>\n\n  <!-- Dialog for Adding or Editing Items -->\n  <v-dialog v-model=\"dialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">{{ formTitle }}</span>\n      </v-card-title>\n\n      <v-card-text>\n        <v-form ref=\"form\" v-model=\"valid\" fast-fail @submit.prevent>\n          \n          <!-- Form Fields -->\n          <v-text-field\n            v-model=\"editedItem.name\"\n            label=\"Name\"\n            :rules=\"[v => !!v || 'Name is required']\"\n            required\n          ></v-text-field>\n          <v-select\n            v-model=\"editedItem.machine\"\n            label=\"Machine\"\n            :items=\"msg.dashboard.form.machine\"\n            :rules=\"[v => !!v || 'Machine is required']\"\n            required\n            clearable\n          ></v-select>\n          <v-select\n            v-model=\"editedItem.protocol\"\n            label=\"Protocol\"\n            :items=\"msg.dashboard.form.protocol\"\n            :rules=\"[v => !!v || 'Protocol is required']\"\n            required\n            clearable\n          ></v-select>\n          <v-text-field\n            v-model=\"editedItem.address\"\n            label=\"Address\"\n            :rules=\"[v => !!v || 'Address is required']\"\n            required\n          ></v-text-field>\n          <v-select\n            v-model=\"editedItem.tag_tables\"\n            label=\"Tag Tables\"\n            :items=\"msg.dashboard.form.tag_tables\"\n            multiple\n            chips\n            clearable\n          ></v-select>\n          <v-textarea\n            v-model=\"editedItem.comment\"\n            label=\"Comment\"\n            maxlength=\"200\"\n            counter\n          ></v-text-field>\n          \n        </v-form>\n      </v-card-text>\n\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"saveItem\">Save</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      search: '',\n      loading: false,\n      page: 1,\n      itemsPerPage: 5,\n      editMode: false,\n      dialog: false,\n      formTitle: \"\",\n      editedIndex: -1,\n      editedItem: {},\n      selected: [],\n      actionsHeader: {\n        title: \"Actions\",\n        value: \"actions\",\n        headerProps: { style: 'font-weight: 700' },\n      },\n      snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n    };\n  },\n  computed: {\n    pageCount() {\n      return Math.ceil(this.msg.data.length / this.itemsPerPage);\n    },\n  },\n  watch: {\n    msg: {\n      handler() {\n        if (\n          this.editMode &&\n          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'\n        ) {\n          this.msg.dashboard.table.headers.push(this.actionsHeader);\n        }\n      },\n      deep: true \n    }\n  },\n  methods: {\n    // Sends a message with the current state\n    msgSend() {\n      this.send({\n        topic: this.msg.topic,\n        title: this.msg.title,\n        payload: this.msg.payload,\n        data: this.msg.data,\n        dashboard: this.msg.dashboard,\n        file: this.msg.file\n      });\n    },\n    \n    // Notification and table actions\n    notify(item){\n      this.msg.topic = \"notify\";\n      this.msg.payload = item;\n      this.msgSend();\n    },\n    reloadTable() {\n      this.msg.topic = \"reload\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    updateTable() {\n      this.msg.topic = \"update\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n    \n    // Edit mode controls\n    enableEdit() {\n      this.msg.dashboard.table.headers.push(this.actionsHeader);\n      this.editMode = true;\n    },\n    disableEdit() {\n      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(\n        header => header !== this.actionsHeader\n      );\n      this.editMode = false;\n    },\n    \n    // Deployment and discarding edits\n    deploy() {\n      this.loading = true;\n      this.disableEdit();\n      this.msg.topic = \"deploy\";\n      this.msg.payload = this.generateCsv();\n      this.msgSend();\n      this.showSnackbar('Deploy action triggered!', 'info');\n    },\n    discardEdit() {\n      this.disableEdit();\n      this.updateTable();\n    },\n    \n    // Handling items\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.headers.forEach(header => {\n        if (header.value !== 'actions') {\n          defaultItem[header.value] = header.value === 'enabled' ? true :\n                                       header.value === 'status' ? \"unknown\" : null;\n        }\n      });\n      return defaultItem;\n    },\n    addNewItem() {\n      this.editedIndex = -1;\n      this.editedItem = this.getDefaultItem();\n      this.formTitle = 'Add Item';\n      this.dialog = true;\n    },\n    editItem(item) {\n      this.editedIndex = this.msg.data.indexOf(item);\n      this.editedItem = { ...item };\n      this.formTitle = 'Edit Item';\n      this.dialog = true;\n    },\n    deleteItem(item) {\n      const deleteIndex = this.msg.data.indexOf(item);\n      if (deleteIndex > -1) {\n        this.msg.data.splice(deleteIndex, 1);\n        this.loading = true;\n        this.showSnackbar('Item deleted successfully!', 'success');\n      }\n    },\n    \n    // Dialog controls\n    closeDialog() {\n      this.dialog = false;\n      this.$refs.form.reset();\n      this.editedItem = this.getDefaultItem();\n    },\n    async saveItem() {\n      const { valid } = await this.$refs.form.validate();\n      if (valid) {\n        if (this.editedIndex > -1) {\n          Object.assign(this.msg.data[this.editedIndex], this.editedItem);\n          this.showSnackbar('Item updated successfully!', 'success');\n        } else {\n          this.msg.data.push({ ...this.editedItem });\n          this.showSnackbar('Item added successfully!', 'success');\n        }\n        // this.loading = true;\n        this.closeDialog();\n      } else {\n        this.showSnackbar('Please correct the errors in the form.', 'error');\n      }\n    },\n    \n    // CSV Generation and Download\n    generateCsv() {\n      const separator = ';';\n      const headers = this.msg.dashboard.table.headers\n        .filter(header => !['actions', 'status'].includes(header.value))\n        .map(header => header.value)\n        .join(separator); \n\n      const rows = this.msg.data.map(item => {\n        return this.msg.dashboard.table.headers\n          .filter(header => !['actions', 'status'].includes(header.value))\n          .map(header => {\n            const cell = item[header.value];\n\n            // Handle different data types\n            if (Array.isArray(cell)) {\n              return JSON.stringify(cell); // Stringify arrays\n            } else if (typeof cell === 'string') {\n              return cell; // Use string as-is\n            } else if (cell == null) {\n              return ''; // Handle null or undefined\n            } else {\n              return String(cell); // Convert other types to string\n            }\n          })\n          .join(separator);\n      }).join('\\n');\n\n      return `${headers}\\n${rows}`;\n    },\n    createDownloadLink(csvContent) {\n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const url = URL.createObjectURL(blob);\n      const link = document.createElement(\"a\");\n      link.setAttribute(\"href\", url);\n      link.setAttribute(\"download\", \"data.csv\");\n      link.style.visibility = 'hidden';\n      document.body.appendChild(link);\n      link.click();\n      document.body.removeChild(link);\n      URL.revokeObjectURL(url);\n    },\n    downloadCsv() {\n      try {\n        const csvContent = this.generateCsv();\n        this.createDownloadLink(csvContent);\n        this.showSnackbar('CSV scaricato con successo!', 'success');\n      } catch (error) {\n        console.error('Errore durante il download del CSV:', error);\n        this.showSnackbar('Errore durante il download del CSV.', 'error');\n      }\n    },\n    \n    // Utility Methods\n    getStatusColor(value) {\n      const colors = {\n        \"unknown\": 'blue',\n        \"connecting\": 'amber',\n        \"connected\": 'green',\n        \"error\": 'red'\n      };\n      if (colors[value]) return colors[value];\n      return 'purple';\n    },\n    getSwitchColor(item) {\n      return item.enabled ? this.getStatusColor(item.status)\n                            : 'grey-lighten-2';\n    },\n    getListColor(list, elem, item) {\n      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'\n                            : 'grey-lighten-2';\n    },\n    showSnackbar(message, type) {\n      this.snackbar.text = message;\n      this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                          : type === 'error' ? 'red-lighten-3' \n                          : 'blue-lighten-5';\n      this.snackbar.show = true;\n      this.loading = false;\n    }\n  }\n};\n</script>\n\n<style scoped>\n/* Heading Text Size */\n.text-h5 {\n  font-size: 1.25rem;\n}\n\n/* Actions Column Styling */\n.actions-column {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  width: 60px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 300,
+        "wires": [
+            [
+                "6b34f943b983cbf3",
+                "90dd945e90f03ee5"
+            ]
+        ]
+    },
+    {
+        "id": "0e7ebaa9886bcb3b",
+        "type": "switch",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "read",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "cfbaafcc5f6fab33"
+            ],
+            [
+                "cfbaafcc5f6fab33"
+            ],
+            [
+                "290345e4b4c8dba9"
+            ]
+        ]
+    },
+    {
+        "id": "aa223827f2a0040a",
+        "type": "link out",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "file_read_out",
+        "mode": "link",
+        "links": [
+            "3171d42178928ded"
+        ],
+        "x": 1035,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "3171d42178928ded",
+        "type": "link in",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "update_table_in",
+        "links": [
+            "aa223827f2a0040a"
+        ],
+        "x": 365,
+        "y": 300,
+        "wires": [
+            [
+                "290345e4b4c8dba9"
+            ]
+        ]
+    },
+    {
+        "id": "90dd945e90f03ee5",
+        "type": "link out",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "ui_table_out",
+        "mode": "link",
+        "links": [
+            "80d926d5d2d62b32"
+        ],
+        "x": 1035,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "80d926d5d2d62b32",
+        "type": "link in",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "ui_handlers_in",
+        "links": [
+            "90dd945e90f03ee5",
+            "99a17ffdfdaf95fb"
+        ],
+        "x": 165,
+        "y": 380,
+        "wires": [
+            [
+                "5f9869a2b4d2e1b7"
+            ]
+        ]
+    },
+    {
+        "id": "99a17ffdfdaf95fb",
+        "type": "link out",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "saving_out",
+        "mode": "link",
+        "links": [
+            "80d926d5d2d62b32"
+        ],
+        "x": 1035,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "25b9ecf1004804ab",
+        "type": "debug",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "temp_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "e96f204d3c49e495",
+        "type": "function",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "file_def",
+        "func": "const removeExtension = filename => filename.replace(/\\.[^/.]+$/, \"\");\n\nmsg.title = removeExtension(env.get(\"FILE_NAME\"));\n\nmsg.file = {};\nmsg.file.name = env.get(\"FILE_NAME\");\nmsg.file.title = msg.title;\nmsg.file.directory = env.get(\"FILE_DIR\");\nmsg.file.path = \"/home/nodered/node-red-home/node-red-files/\" + msg.file.directory + msg.file.name;\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 140,
+        "wires": [
+            [
+                "0e7ebaa9886bcb3b"
+            ]
+        ]
+    },
+    {
+        "id": "61d339c1a5f6b249",
+        "type": "debug",
+        "z": "99d4f1b02f3eb0d4",
+        "name": "csv_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "4290ffc4397af8c8",
+        "type": "ui-group",
+        "name": "General",
+        "page": "ef80b7f9fd2b8842",
+        "width": "12",
+        "height": "1",
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "0d449cc001de4177",
+        "type": "subflow",
+        "name": "Tag Table",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 180,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "712b3d6c83a3830e"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 800,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "1585597706c8f720",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "FILE_NAME",
+                "type": "str",
+                "value": "tag_table.csv",
+                "ui": {
+                    "icon": "font-awesome/fa-file-text-o",
+                    "label": {
+                        "en-US": "File Name"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "FILE_DIR",
+                "type": "str",
+                "value": "/config/tag_tables/",
+                "ui": {
+                    "icon": "font-awesome/fa-folder-o",
+                    "label": {
+                        "en-US": "Directory"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "status": {
+            "x": 800,
+            "y": 340,
+            "wires": [
+                {
+                    "id": "1585597706c8f720",
+                    "port": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "32498098f1265ecf",
+        "type": "comment",
+        "z": "0d449cc001de4177",
+        "name": "",
+        "info": "",
+        "x": 140,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "fe705a33d7d08fde",
+        "type": "file in",
+        "z": "0d449cc001de4177",
+        "name": "file_read",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 560,
+        "y": 220,
+        "wires": [
+            [
+                "55daf10b61e0c5f2"
+            ]
+        ]
+    },
+    {
+        "id": "55daf10b61e0c5f2",
+        "type": "csv",
+        "z": "0d449cc001de4177",
+        "name": "file2data",
+        "spec": "rfc",
+        "sep": ";",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": true,
+        "include_null_values": true,
+        "x": 740,
+        "y": 220,
+        "wires": [
+            [
+                "d81859eea77f58c4"
+            ]
+        ]
+    },
+    {
+        "id": "d81859eea77f58c4",
+        "type": "function",
+        "z": "0d449cc001de4177",
+        "name": "validation",
+        "func": "try {\n    // Validate msg.file and msg.file.title\n    if (!msg.file || !msg.file.title) {\n        node.warn(\"msg.file.title is undefined\");\n        return msg;\n    }\n\n    // Validate that msg.payload is an array\n    if (!Array.isArray(msg.payload)) {\n        node.warn(\"msg.payload is not an array\");\n        return msg;\n    }\n\n    // Validate that msg.columns exists and is a non-empty string\n    if (!msg.columns || typeof msg.columns !== 'string') {\n        node.warn(\"msg.columns is undefined or not a string\");\n        return msg;\n    }\n\n    // Store payload in global context\n    const tags = global.get(\"tags\") || {};\n    tags[msg.file.title] = msg.payload;\n    global.set(\"tags\", tags);\n\n    // Clear payload to prevent unintended propagation\n    msg.payload = null;\n    return msg;\n\n} catch (error) {\n    node.error(`An error occurred: ${error.message}`);\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 220,
+        "wires": [
+            [
+                "b0edc0df89d2811f",
+                "0ee8574be1379d98"
+            ]
+        ]
+    },
+    {
+        "id": "e28e22066a40c69d",
+        "type": "debug",
+        "z": "0d449cc001de4177",
+        "name": "table_in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "1585597706c8f720",
+        "type": "function",
+        "z": "0d449cc001de4177",
+        "name": "update_status",
+        "func": "// Function to format strings by replacing underscores with spaces and capitalizing each word\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\n\nconst title = msg.file.title;\nconst endpoints = (global.get(\"endpoints\") || [])\n    .filter(ep => Array.isArray(ep.tag_tables) && ep.tag_tables.some(tag => tag === title));\nconst endpointNames = endpoints.map(ep => ep.name);\n\n// Retrieve existing table data from global context\nconst tags = global.get(\"tags\") || {};\nconst table = tags[title] || [];\n\n// Create dynamic table headers for endpoints\nconst endpointsHeaders = [{\n    title: \"Endpoints\",    \n    value: \"endpoints\",    \n    headerProps: { style: 'font-weight: 700' }, \n}];\n\n// Create dynamic table headers based on table data, excluding endpoint keys\nconst baseHeaders = table.length > 0\n    ? Object.keys(table[0])\n        .filter(key => !endpointNames.includes(key)) \n        .map(key => ({\n            title: capitalize(key),\n            value: key,\n            headerProps: { style: 'font-weight: 700' },\n        }))\n    : [];\n\n// Define possible states for endpoints\nconst states = [\"unknown\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connected\", \"connecting\", \"error\"];\nconst lengthItems = states.length;\n\n// Assign random states to endpoints if not already set\nfor (let i = 0; i < table.length; i++) {\n    for (let e = 0; e < endpointNames.length; e++) {\n        let endpointName = endpointNames[e];\n        if (!table[i][endpointName]) {\n            let randomIndex = Math.floor(Math.random() * lengthItems);\n            table[i][endpointName] = states[randomIndex];\n        }\n    }\n}\n\n// Prepare dashboard table data\nmsg.data = table;\nmsg.endpoints = endpoints;\n\nmsg.dashboard = msg.dashboard || {};\nmsg.dashboard.table = {\n    title: msg.file.title,\n    headers: [ ...baseHeaders, ...endpointsHeaders ],\n    baseHeaders: baseHeaders,\n    otherHeaders: endpointsHeaders\n};\nmsg.dashboard.form = { \n    data_type: global.get(\"data_type\"),\n    access: global.get(\"access\"),\n    aggregation_type: global.get(\"aggregation_type\")\n};\n\n// Save updated table back to global context\ntags[title] = table;\nglobal.set(\"tags\", tags);\n\n// Notify state and return\nconst now = new Date().toISOString();\nconst state = {\n    payload: { fill: \"green\", shape: \"dot\", text: `last update: ${now}` }\n};\nreturn [msg, state];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 300,
+        "wires": [
+            [
+                "e28e22066a40c69d",
+                "e4f2440df0d013d4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "feb57a101af8e63d",
+        "type": "switch",
+        "z": "0d449cc001de4177",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "deploy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "notify",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "fe705a33d7d08fde"
+            ],
+            [
+                "1585597706c8f720"
+            ],
+            [
+                "e764f18eeeebc0c4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e8e56faed9f55ed3",
+        "type": "debug",
+        "z": "0d449cc001de4177",
+        "name": "table_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "e764f18eeeebc0c4",
+        "type": "function",
+        "z": "0d449cc001de4177",
+        "name": "save_table",
+        "func": "const tags = global.get(\"tags\")  || {};\ntags[msg.dashboard.table.title] = msg.data;\nglobal.set(\"tags\", tags);\nmsg.topic = \"reload\";\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 380,
+        "wires": [
+            [
+                "e4f2440df0d013d4"
+            ],
+            [
+                "d84db25142853dd5"
+            ]
+        ]
+    },
+    {
+        "id": "b5a1a5bc095036c9",
+        "type": "debug",
+        "z": "0d449cc001de4177",
+        "name": "saving_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "d84db25142853dd5",
+        "type": "file",
+        "z": "0d449cc001de4177",
+        "name": "file_write",
+        "filename": "file.path",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 840,
+        "y": 380,
+        "wires": [
+            [
+                "b5a1a5bc095036c9",
+                "815268c319322e71"
+            ]
+        ]
+    },
+    {
+        "id": "e4f2440df0d013d4",
+        "type": "ui-template",
+        "z": "0d449cc001de4177",
+        "group": "46764671162d2995",
+        "page": "",
+        "ui": "",
+        "name": "tag_table",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <v-card>\n    <!-- Header with Title, Search, and Action Buttons -->\n    <v-card-item class=\"bg-blue-darken-3\">\n      <v-row class=\"my-2 align-self-center\" no-gutters>\n        \n        <!-- Title and Update Button -->\n        <v-col cols=\"auto\" class=\"mx-4 align-self-center\">\n          <v-btn\n            @click=\"updateTable\"\n            variant=\"tonal\"\n            class=\"font-weight-bold text-h5 text-white\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-update</v-icon>\n            <p class=\"mx-1 align-self-center\" v-text=\"msg.dashboard.table.title\"></p>\n          </v-btn>\n        </v-col>\n\n        <!-- Search Field -->\n        <v-col class=\"mx-4 align-self-center\">\n          <v-text-field\n            v-model=\"search\"\n            label=\"Search\"\n            prepend-inner-icon=\"mdi-magnify\"\n            single-line\n            clearable\n            hide-details\n            color=\"white\"\n          ></v-text-field>\n        </v-col>\n\n        <!-- Action Buttons (Reload, CSV Download, Edit, Save, Add New, Discard) -->\n        <v-col cols=\"auto\" class=\"mx-2 align-self-center text-white\">\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"reloadTable\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-reload</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Reload</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"downloadCsv\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-arrow-down-bold</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">CSV</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"!editMode\"\n            @click=\"enableEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Edit</span>\n          </v-btn>\n\n          <!-- Buttons visible in Edit Mode -->\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"deploy\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-floppy</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Save</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"addNewItem\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-plus</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Add New</span>\n          </v-btn>\n\n          <v-btn\n            class=\"mx-2 align-self-center\"\n            v-show=\"editMode\"\n            @click=\"discardEdit\"\n            variant=\"tonal\"\n          >\n            <v-icon class=\"mx-1 align-self-center\" left>mdi-pencil-off</v-icon>\n            <span class=\"mx-1 align-self-center font-weight-bold\">Discard</span>\n          </v-btn>\n        </v-col>\n      </v-row>\n    </v-card-item>\n\n    <!-- Data Table -->\n    <v-data-table\n      v-model=\"selected\"\n      :headers=\"msg.dashboard.table.headers\"\n      :items=\"msg.data\"\n      :search=\"search\"\n      :items-per-page=\"itemsPerPage\"\n      class=\"elevation-1\"\n      :loading=\"loading\"\n      loading-text=\"Loading...\"\n      density=\"default\"\n    >\n      \n      <!-- Custom Endpoint Chips -->\n      <template v-slot:item.endpoints=\"{ item }\">\n        <div>\n          <v-chip \n            v-for=\"(endp, index) in msg.endpoints\"\n            :key=\"index\"\n            class=\"ma-1\"\n            :color=\"getSwitchColor2(endp.enabled, item[endp.name])\"\n            size=\"small\"\n          >\n            {{ endp.name }}\n          </v-chip>\n        </div>\n      </template>\n\n      <!-- Actions Column -->\n      <template v-slot:item.actions=\"{ item }\">\n        <div class=\"actions-column\">\n          <v-icon\n            v-if=\"editMode\"\n            small\n            @click=\"editItem(item)\"\n            color=\"blue-darken-2\"\n            class=\"mr-2\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-pencil\n          </v-icon>\n\n          <v-icon\n            v-if=\"editMode\"\n            small\n            @click=\"deleteItem(item)\"\n            color=\"blue-darken-4\"\n            style=\"cursor: pointer;\"\n          >\n            mdi-delete\n          </v-icon>\n        </div>\n      </template>\n\n      <!-- No Data Message -->\n      <template v-slot:no-data>\n        <v-row class=\"ma-4\">\n          <v-alert color=\"warning\" icon=\"mdi-alert\">\n            No matching records found.\n          </v-alert>\n        </v-row>\n      </template>\n    </v-data-table>\n  </v-card>\n\n  <!-- Add/Edit Dialog -->\n  <v-dialog v-model=\"dialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">{{ formTitle }}</span>\n      </v-card-title>\n\n      <v-card-text>\n        <v-form ref=\"form\" v-model=\"valid\" fast-fail @submit.prevent>\n          <v-text-field \n            v-model=\"editedItem.name\" \n            label=\"Name\" \n            :rules=\"[v => !!v || 'Name is required']\" \n            required\n          ></v-text-field>\n          <v-text-field \n            v-model=\"editedItem.label\" \n            label=\"Label\"\n          ></v-text-field>\n          <v-select\n            v-model=\"editedItem.data_type\"\n            label=\"Data Type\"\n            :items=\"msg.dashboard.form.data_type\"\n            :rules=\"[v => !!v || 'Data Type is required']\"\n            required\n            clearable\n          ></v-select>\n          <v-text-field \n            v-model=\"editedItem.address\" \n            label=\"Address\" \n            :rules=\"[v => !!v || 'Address is required']\" \n            required\n          ></v-text-field>\n          <v-select\n            v-model=\"editedItem.access\"\n            label=\"Access\"\n            :items=\"msg.dashboard.form.access\"\n            :rules=\"[v => !!v || 'Access is required']\"\n            required\n            clearable\n          ></v-select>\n          <v-textarea\n            v-model=\"editedItem.comment\" \n            label=\"Comment\"\n            maxlength=\"100\"\n            rows=\"2\"\n            counter\n            auto-grow\n          ></v-text-field>\n        </v-form>\n      </v-card-text>\n\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn text @click=\"closeDialog\">Cancel</v-btn>\n        <v-btn text @click=\"saveItem\">Save</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\nexport default {\n  props: {\n    msg: {\n      type: Object,\n      required: true,\n      default: () => ({\n        topic: '',\n        payload: null,\n        dashboard: {\n          table: {\n            title: 'Dashboard Table',\n            data: [],\n            headers: [],\n            baseHeaders: [],\n            otherHeaders: []\n          },\n          form: {\n            data_type: [],\n            access: []\n          }\n        }\n      })\n    }\n  },\n  data() {\n    return {\n      search: '',\n      loading: false,\n      itemsPerPage: 10,\n      editMode: false,\n      dialog: false,\n      formTitle: \"\",\n      editedIndex: -1,\n      editedItem: {},\n      selected: [],\n      actionsHeader: {\n        title: \"Actions\",\n        value: \"actions\",\n        headerProps: { style: 'font-weight: 700' },\n      },\n      snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n    };\n  },\n  computed: {\n    pageCount() {\n      return Math.ceil(this.msg.data.length / this.itemsPerPage);\n    },\n  },\n  watch: {\n    msg: {\n      handler() {\n        if (\n          this.editMode &&\n          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'\n        ) {\n          this.msg.dashboard.table.headers.push(this.actionsHeader);\n        }\n      },\n      deep: true \n    }\n  },\n  methods: {\n    // Sends a message with the current state\n    msgSend() {\n      this.send({\n        topic: this.msg.topic,\n        title: this.msg.title,\n        payload: this.msg.payload,\n        data: this.msg.data,\n        dashboard: this.msg.dashboard,\n        file: this.msg.file\n      });\n    },\n    \n    // Notification and table actions\n    notify(item){\n      this.msg.topic = \"notify\";\n      this.msg.payload = item;\n      this.msgSend();\n    },\n\n    reloadTable() {\n      this.msg.topic = \"reload\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n\n    updateTable() {\n      this.msg.topic = \"update\";\n      this.msg.payload = null;\n      this.msgSend();\n    },\n\n    // Edit mode controls\n    enableEdit() {\n      this.msg.dashboard.table.headers.push(this.actionsHeader);\n      this.editMode = true;\n    },\n\n    disableEdit() {\n      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(\n        header => header !== this.actionsHeader\n      );\n      this.editMode = false;\n    },\n\n    // Deployment and discarding edits\n    deploy() {\n      this.loading = true;\n      this.disableEdit();\n      this.msg.topic = \"deploy\";\n      this.msg.payload = this.generateCsv();\n      this.msgSend();\n      this.showSnackbar('Deploy action triggered!', 'info');\n    },\n\n    discardEdit() {\n      this.disableEdit();\n      this.updateTable();\n    },\n\n    // Handling items\n    /*\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.baseHeaders.forEach(header => {\n        if (header.value !== 'actions') defaultItem[header.value] = \"\";\n      });\n      this.msg.dashboard.table.otherHeaders.forEach(header => {\n        if (header.value !== 'actions') defaultItem[header.value] = \"unknown\";\n      });\n      return defaultItem;\n    },\n    */\n    getDefaultItem() {\n      const defaultItem = {};\n      this.msg.dashboard.table.headers.forEach(header => {\n        if (header.value !== 'actions') {\n          defaultItem[header.value] = header.value === 'enabled' ? true :\n                                       header.value === 'status' ? \"unknown\" : null;\n        }\n      });\n      return defaultItem;\n    },\n    addNewItem() {\n      this.editedIndex = -1;\n      this.editedItem = this.getDefaultItem();\n      this.formTitle = 'Add Item';\n      this.dialog = true;\n    },\n    editItem(item) {\n      this.editedIndex = this.msg.data.indexOf(item);\n      this.editedItem = { ...item };\n      this.formTitle = 'Edit Item';\n      this.dialog = true;\n    },\n    deleteItem(item) {\n      const deleteIndex = this.msg.data.indexOf(item);\n      if (deleteIndex > -1) {\n        this.msg.data.splice(deleteIndex, 1);\n        this.loading = true;\n        this.showSnackbar('Item deleted successfully!', 'success');\n      }\n    },\n\n    // Dialog controls\n    closeDialog() {\n      this.dialog = false;\n      this.$refs.form.reset();\n      this.editedItem = this.getDefaultItem();\n    },\n    async saveItem() {\n      const { valid } = await this.$refs.form.validate();\n      if (valid) {\n        if (this.editedIndex > -1) {\n          Object.assign(this.msg.data[this.editedIndex], this.editedItem);\n          this.showSnackbar('Item updated successfully!', 'success');\n        } else {\n          this.msg.data.push({ ...this.editedItem });\n          this.showSnackbar('Item added successfully!', 'success');\n        }\n        // this.loading = true;\n        this.closeDialog();\n      } else {\n        this.showSnackbar('Please correct the errors in the form.', 'error');\n      }\n    },\n\n    // CSV Generation and Download\n    generateCsv() {\n      const separator = ';';\n      const headers = this.msg.dashboard.table.baseHeaders\n        .filter(header => !['actions', 'status'].includes(header.value))\n        .map(header => header.value)\n        .join(separator); \n\n      const rows = this.msg.data.map(item => {\n        return this.msg.dashboard.table.baseHeaders\n          .filter(header => !['actions', 'status'].includes(header.value))\n          .map(header => {\n            const cell = item[header.value];\n\n            // Handle different data types\n            if (Array.isArray(cell)) {\n              return JSON.stringify(cell); // Stringify arrays\n            } else if (typeof cell === 'string') {\n              return cell; // Use string as-is\n            } else if (cell == null) {\n              return ''; // Handle null or undefined\n            } else {\n              return String(cell); // Convert other types to string\n            }\n          })\n          .join(separator);\n      }).join('\\n');\n\n\n      return `${headers}\\n${rows}`;\n    },\n    createDownloadLink(csvContent) {\n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const url = URL.createObjectURL(blob);\n      const link = document.createElement(\"a\");\n      link.setAttribute(\"href\", url);\n      link.setAttribute(\"download\", \"data.csv\");\n      link.style.visibility = 'hidden';\n      document.body.appendChild(link);\n      link.click();\n      document.body.removeChild(link);\n      URL.revokeObjectURL(url);\n    },\n    downloadCsv() {\n      try {\n        const csvContent = this.generateCsv();\n        this.createDownloadLink(csvContent);\n        this.showSnackbar('CSV downloaded successfully!', 'success');\n      } catch (error) {\n        console.error('Error downloading CSV:', error);\n        this.showSnackbar('Error downloading CSV.', 'error');\n      }\n    },\n\n    // Utility Methods\n    getStatusColor(value) {\n      const colors = {\n        \"unknown\": 'blue',\n        \"connecting\": 'amber',\n        \"connected\": 'green',\n        \"error\": 'red',\n      };\n      if (colors[value]) return colors[value];\n      return 'purple';\n    },\n    getSwitchColor(item) {\n      return item.enabled ? this.getStatusColor(item.status)\n                            : 'grey-lighten-2';\n    },\n    getSwitchColor2(enabled, status) {\n      return enabled ? this.getStatusColor(status)\n                            : 'grey-lighten-2';\n    },\n    getListColor(list, elem, item) {\n      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'\n                            : 'grey-lighten-2';\n    },\n    showSnackbar(message, type) {\n      this.snackbar.text = message;\n      this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                            : type === 'error' ? 'red-lighten-3' \n                            : 'blue-lighten-3';\n      this.snackbar.show = true;\n      this.loading = false;\n    },\n    capitalize(str) {\n      if (typeof str !== 'string') {\n        console.warn('capitalize: Expected a string but received', typeof str);\n        return '';\n      }\n      return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n    },\n  }\n};\n</script>\n\n<style scoped>\n.text-h5 {\n  font-size: 1.25rem;\n}\n.actions-column {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  width: 60px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 300,
+        "wires": [
+            [
+                "e8e56faed9f55ed3",
+                "618ae8732fb0ec0b"
+            ]
+        ]
+    },
+    {
+        "id": "492d1372dc2feb4b",
+        "type": "switch",
+        "z": "0d449cc001de4177",
+        "name": "topic switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "read",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "reload",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "update",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "fe705a33d7d08fde"
+            ],
+            [
+                "fe705a33d7d08fde"
+            ],
+            [
+                "1585597706c8f720"
+            ]
+        ]
+    },
+    {
+        "id": "b0edc0df89d2811f",
+        "type": "link out",
+        "z": "0d449cc001de4177",
+        "name": "file_read_out",
+        "mode": "link",
+        "links": [
+            "1d610d9dad608801"
+        ],
+        "x": 1055,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "1d610d9dad608801",
+        "type": "link in",
+        "z": "0d449cc001de4177",
+        "name": "update_table_in",
+        "links": [
+            "b0edc0df89d2811f"
+        ],
+        "x": 385,
+        "y": 300,
+        "wires": [
+            [
+                "1585597706c8f720"
+            ]
+        ]
+    },
+    {
+        "id": "618ae8732fb0ec0b",
+        "type": "link out",
+        "z": "0d449cc001de4177",
+        "name": "ui_table_out",
+        "mode": "link",
+        "links": [
+            "56771779356cba6f"
+        ],
+        "x": 1055,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "56771779356cba6f",
+        "type": "link in",
+        "z": "0d449cc001de4177",
+        "name": "ui_handlers_in",
+        "links": [
+            "618ae8732fb0ec0b",
+            "815268c319322e71"
+        ],
+        "x": 185,
+        "y": 380,
+        "wires": [
+            [
+                "feb57a101af8e63d"
+            ]
+        ]
+    },
+    {
+        "id": "815268c319322e71",
+        "type": "link out",
+        "z": "0d449cc001de4177",
+        "name": "saving_out",
+        "mode": "link",
+        "links": [
+            "56771779356cba6f"
+        ],
+        "x": 1055,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "0ee8574be1379d98",
+        "type": "debug",
+        "z": "0d449cc001de4177",
+        "name": "temp_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "712b3d6c83a3830e",
+        "type": "function",
+        "z": "0d449cc001de4177",
+        "name": "file_def",
+        "func": "const removeExtension = filename => filename.replace(/\\.[^/.]+$/, \"\");\n\nmsg.title = removeExtension(env.get(\"FILE_NAME\"));\n\nmsg.file = {};\nmsg.file.name = env.get(\"FILE_NAME\");\nmsg.file.title = msg.title;\nmsg.file.directory = env.get(\"FILE_DIR\");\nmsg.file.path = \"/home/nodered/node-red-home/node-red-files/\" + msg.file.directory + msg.file.name;\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 140,
+        "wires": [
+            [
+                "492d1372dc2feb4b"
+            ]
+        ]
+    },
+    {
+        "id": "470a368f27b605de",
+        "type": "debug",
+        "z": "0d449cc001de4177",
+        "name": "csv_out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "46764671162d2995",
+        "type": "ui-group",
+        "name": "Tag Tables",
+        "page": "ef80b7f9fd2b8842",
+        "width": "12",
+        "height": "1",
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "ef80b7f9fd2b8842",
+        "type": "ui-page",
+        "name": "Settings",
+        "ui": "54a4e86d9749426f",
+        "path": "/settings",
+        "icon": "cog",
+        "layout": "grid",
+        "theme": "70ee3095f0c0fa3d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "54a4e86d9749426f",
+        "type": "ui-base",
+        "name": "Set Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "showPageTitle": true,
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": "1",
+        "showDisconnectNotification": true
+    },
+    {
+        "id": "70ee3095f0c0fa3d",
+        "type": "ui-theme",
+        "name": "Default",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094ce",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "a9455c1b9730c4f4",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "update",
+        "x": 170,
+        "y": 540,
+        "wires": [
+            [
+                "b5867c3e03ee1cf4"
+            ]
+        ]
+    },
+    {
+        "id": "005b9c46e29c45f9",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "read",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "read",
+        "x": 170,
+        "y": 500,
+        "wires": [
+            [
+                "b5867c3e03ee1cf4"
+            ]
+        ]
+    },
+    {
+        "id": "b5867c3e03ee1cf4",
+        "type": "subflow:0d449cc001de4177",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "odr_table_S7",
+        "env": [
+            {
+                "name": "FILE_NAME",
+                "value": "odr_table_S7.csv",
+                "type": "str"
+            },
+            {
+                "name": "FILE_DIR",
+                "value": "config/tag_tables/",
+                "type": "str"
+            }
+        ],
+        "x": 350,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4726d7eef68490fe",
+        "type": "subflow:99d4f1b02f3eb0d4",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "",
+        "x": 340,
+        "y": 320,
+        "wires": [
+            [
+                "146806ea367b4b9f"
+            ]
+        ]
+    },
+    {
+        "id": "61c006648f12c386",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "update",
+        "x": 170,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b08d0be509213bfb",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "read",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "read",
+        "x": 170,
+        "y": 300,
+        "wires": [
+            [
+                "4726d7eef68490fe"
+            ]
+        ]
+    },
+    {
+        "id": "6a92e1e8d751a1d2",
+        "type": "subflow:c3870edc9cbe0b12",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "",
+        "x": 800,
+        "y": 180,
+        "wires": [
+            [
+                "4726d7eef68490fe"
+            ]
+        ]
+    },
+    {
+        "id": "fd88450f7c409ab5",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "update",
+        "x": 630,
+        "y": 200,
+        "wires": [
+            [
+                "6a92e1e8d751a1d2"
+            ]
+        ]
+    },
+    {
+        "id": "662ec814c463b4ae",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "read",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "read",
+        "x": 630,
+        "y": 160,
+        "wires": [
+            [
+                "6a92e1e8d751a1d2"
+            ]
+        ]
+    },
+    {
+        "id": "16b367bfa1daadfc",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "update",
+        "x": 170,
+        "y": 200,
+        "wires": [
+            [
+                "8a48b0ac1e629e0c"
+            ]
+        ]
+    },
+    {
+        "id": "f1fcdf4c7c995bee",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "read",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "read",
+        "x": 170,
+        "y": 160,
+        "wires": [
+            [
+                "8a48b0ac1e629e0c"
+            ]
+        ]
+    },
+    {
+        "id": "8a48b0ac1e629e0c",
+        "type": "subflow:ea4e09f3d1ab2584",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "",
+        "env": [
+            {
+                "name": "FILE_DIR",
+                "value": "/config/",
+                "type": "str"
+            }
+        ],
+        "x": 360,
+        "y": 180,
+        "wires": [
+            [
+                "6a92e1e8d751a1d2"
+            ]
+        ]
+    },
+    {
+        "id": "4fd2b92da027b2bf",
+        "type": "link in",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "tag_table_in",
+        "links": [
+            "550a6b2917620e58"
+        ],
+        "x": 205,
+        "y": 520,
+        "wires": [
+            [
+                "b5867c3e03ee1cf4"
+            ]
+        ]
+    },
+    {
+        "id": "550a6b2917620e58",
+        "type": "link out",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "endpoints_out",
+        "mode": "link",
+        "links": [
+            "4fd2b92da027b2bf"
+        ],
+        "x": 925,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "65eea93a82376331",
+        "type": "ui-template",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "group": "4ef9bcc0d874c9bb",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n    <v-app>\n      <v-container>\n        <!-- Text Field to Display Selected Date -->\n        <v-text-field\n          v-model=\"formattedDate\"\n          label=\"Service Date\"\n          readonly\n        ></v-text-field>\n  \n        <!-- Button to Open Dialog -->\n        <v-btn color=\"primary\" @click=\"dialog = true\">\n          Select Date\n        </v-btn>\n  \n        <!-- Date Picker Dialog -->\n        <v-dialog\n          v-model=\"dialog\"\n          persistent\n        >\n          <v-card class=\"fill\">\n            <v-date-picker\n              v-model=\"selectedDate\"\n              @input=\"saveDate\"\n            ></v-date-picker>\n            <v-card-actions>\n              <v-spacer></v-spacer>\n              <v-btn text color=\"primary\" @click=\"dialog = false\">Cancel</v-btn>\n              <v-btn text color=\"primary\" @click=\"confirmDate\">OK</v-btn>\n            </v-card-actions>\n          </v-card>\n        </v-dialog>\n  \n        <!-- Debugging -->\n        <p>Selected Date: {{ selectedDate }}</p>\n      </v-container>\n    </v-app>\n  </template>\n  \n  <script>\n  export default {\n    data() {\n      return {\n        dialog: false, // Controls dialog visibility\n        selectedDate: null, // Stores the selected date from date picker\n      };\n    },\n    computed: {\n      formattedDate() {\n        // Format date for display in the text field\n        if (!this.selectedDate) return \"\";\n        const options = { year: \"numeric\", month: \"2-digit\", day: \"2-digit\" };\n        return new Date(this.selectedDate).toLocaleDateString(undefined, options);\n      },\n    },\n    methods: {\n      saveDate() {\n        // Auto-close dialog on date selection\n        this.dialog = false;\n      },\n      confirmDate() {\n        // Explicitly confirm date and close the dialog\n        this.dialog = false;\n      },\n    },\n  };\n  </script>\n  ",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 780,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "146806ea367b4b9f",
+        "type": "subflow:28240470c357511c",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "",
+        "x": 800,
+        "y": 320,
+        "wires": [
+            [
+                "550a6b2917620e58"
+            ]
+        ]
+    },
+    {
+        "id": "0567d854504cee34",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "read",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "read",
+        "x": 630,
+        "y": 300,
+        "wires": [
+            [
+                "146806ea367b4b9f"
+            ]
+        ]
+    },
+    {
+        "id": "7c2e295b7e19444e",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "update",
+        "x": 630,
+        "y": 340,
+        "wires": [
+            [
+                "146806ea367b4b9f"
+            ]
+        ]
+    },
+    {
+        "id": "54f2dabc246a868a",
+        "type": "ui-template",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "group": "4ef9bcc0d874c9bb",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Modifica nel Card Header -->\n  <v-card-item class=\"bg-blue-darken-3\">\n    <v-row class=\"my-2 align-self-center\" no-gutters>\n      <!-- Pulsante per caricare il CSV -->\n      <v-btn\n        class=\"mx-2 align-self-center\"\n        v-show=\"!editMode\"\n        @click=\"openCsvDialog\"\n        variant=\"tonal\"\n      >\n        <v-icon class=\"mx-1 align-self-center\" left>mdi-file-upload</v-icon>\n        <span class=\"mx-1 align-self-center font-weight-bold\">Upload CSV</span>\n      </v-btn>\n    </v-row>\n  </v-card-item>\n\n  <!-- Dialog per il caricamento del CSV -->\n  <v-dialog v-model=\"csvDialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">Carica CSV</span>\n      </v-card-title>\n      <v-card-text>\n        <v-file-input\n          v-model=\"csvFile\"\n          label=\"Seleziona un file CSV\"\n          accept=\".csv\"\n          clearable\n          hide-details\n        ></v-file-input>\n      </v-card-text>\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeCsvDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"processCsv\">Insert</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      csvDialog: false,\n      csvFile: null,\n    };\n  },\n  methods: {\n    // Aprire e chiudere il dialog del CSV\n    openCsvDialog() {\n      this.csvDialog = true;\n    },\n    closeCsvDialog() {\n      this.csvDialog = false;\n      this.csvFile = null;\n    },\n\n    // Elaborare il CSV caricato\n    async processCsv() {\n      if (!this.csvFile) {\n        this.showSnackbar('Nessun file selezionato!', 'error');\n        return;\n      }\n\n      try {\n        const fileContent = await this.readFile(this.csvFile);\n        const csvData = this.parseCsv(fileContent);\n        this.updateTableData(csvData);\n        this.showSnackbar('CSV caricato con successo!', 'success');\n      } catch (error) {\n        console.error('Errore durante l’elaborazione del CSV:', error);\n        this.showSnackbar('Errore durante l’elaborazione del CSV.', 'error');\n      } finally {\n        this.closeCsvDialog();\n      }\n    },\n\n    // Leggere il file CSV come testo\n    readFile(file) {\n      return new Promise((resolve, reject) => {\n        const reader = new FileReader();\n        reader.onload = () => resolve(reader.result);\n        reader.onerror = () => reject(reader.error);\n        reader.readAsText(file);\n      });\n    },\n\n    // Analizzare il CSV in formato JSON\n    parseCsv(content) {\n      const rows = content.split('\\n').filter(row => row.trim());\n      const headers = rows.shift().split(';');\n      return rows.map(row => {\n        const values = row.split(';');\n        return headers.reduce((acc, header, index) => {\n          acc[header] = values[index];\n          return acc;\n        }, {});\n      });\n    },\n\n    // Aggiornare i dati della tabella\n    updateTableData(csvData) {\n      csvData.forEach(newItem => {\n        const existingItem = this.msg.data.find(item => item.name === newItem.name);\n        if (existingItem) {\n          Object.assign(existingItem, newItem);\n        } else {\n          this.msg.data.push(newItem);\n        }\n      });\n    },\n  },\n};\n</script>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 740,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c9dfcc7834834d4b",
+        "type": "ui-template",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "group": "4ef9bcc0d874c9bb",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- Main Card Header -->\n  <v-card-item class=\"bg-blue-darken-3\">\n    <v-row class=\"my-2 align-self-center\" no-gutters>\n      <!-- Button to Upload CSV -->\n      <v-btn class=\"mx-2 align-self-center\" v-show=\"!editMode\" @click=\"openCsvDialog\" variant=\"tonal\">\n        <v-icon class=\"mx-1 align-self-center\" left>mdi-file-upload</v-icon>\n        <span class=\"mx-1 align-self-center font-weight-bold\">Upload CSV</span>\n      </v-btn>\n    </v-row>\n  </v-card-item>\n\n  <!-- Dialog for CSV Upload -->\n  <v-dialog v-model=\"csvDialog\" max-width=\"500px\" persistent>\n    <v-card>\n      <v-card-title>\n        <span class=\"text-h5\">Upload CSV</span>\n      </v-card-title>\n      <v-card-text>\n        <v-file-input v-model=\"csvFile\" label=\"Select a CSV file\" accept=\".csv\" clearable hide-details></v-file-input>\n      </v-card-text>\n      <v-card-actions>\n        <v-spacer></v-spacer>\n        <v-btn color=\"blue-darken-1\" text @click=\"closeCsvDialog\">Cancel</v-btn>\n        <v-btn color=\"blue-darken-1\" text @click=\"processCsv\">Insert</v-btn>\n      </v-card-actions>\n    </v-card>\n  </v-dialog>\n\n  <!-- Snackbar for Notifications -->\n  <v-snackbar v-model=\"snackbar.show\" :color=\"snackbar.color\" timeout=\"3000\">\n    <v-row class=\"mx-4 align-self-center\">\n      <v-col class=\"my-2 text-subtitle-1 text-center\">\n        {{ snackbar.text }}\n      </v-col>\n    </v-row>\n  </v-snackbar>\n</template>\n\n<script>\n  export default {\n    data() {\n      return {\n        csvDialog: false, // Controls the visibility of the CSV upload dialog\n        csvFile: null,    // Stores the selected CSV file\n        snackbar: {\n        show: false,\n        text: '',\n        color: ''\n      }\n      };\n    },\n    methods: {\n      // Opens the CSV upload dialog\n      openCsvDialog() {\n        this.csvDialog = true;\n      },\n      // Closes the CSV upload dialog\n      closeCsvDialog() {\n        this.csvDialog = false;\n        this.csvFile = null;\n      },\n  \n      // Processes the uploaded CSV file\n      async processCsv() {\n        if (!this.csvFile) {\n          this.showSnackbar('No file selected!', 'error');\n          return;\n        }\n  \n        try {\n          // Read the CSV file content\n          const fileContent = await this.readFile(this.csvFile);\n          // Parse the CSV content into a JSON structure\n          const csvData = this.parseCsv(fileContent);\n          // Update the table with the parsed data\n          this.updateTableData(csvData);\n          this.showSnackbar('CSV successfully uploaded!', 'success');\n        } catch (error) {\n          console.error('Error processing CSV:', error);\n          this.showSnackbar(`Error processing CSV. ${error}`, 'error');\n        } finally {\n          // Close the dialog after processing\n          this.closeCsvDialog();\n        }\n      },\n  \n      // Reads the CSV file as plain text\n      readFile(file) {\n        return new Promise((resolve, reject) => {\n          const reader = new FileReader();\n          reader.onload = () => resolve(reader.result);\n          reader.onerror = () => reject(reader.error);\n          reader.readAsText(file);\n        });\n      },\n  \n      // Parses the CSV file content into an array of objects\n      parseCsv(content) {\n        const rows = content.split('\\n').filter(row => row.trim()); // Split content into rows and ignore empty ones\n        const headers = rows.shift().split(';'); // Use the first row as headers\n        return rows.map(row => {\n          const values = row.split(';'); // Split each row into values\n          return headers.reduce((acc, header, index) => {\n            acc[header] = values[index]; // Map headers to corresponding values\n            return acc;\n          }, {});\n        });\n      },\n  \n      // Updates the table by modifying existing rows or adding new ones\n      updateTableData(csvData) {\n        csvData.forEach(newItem => {\n          // Check if an item with the same name exists\n          const existingItem = this.msg.data.find(item => item.name === newItem.name);\n          if (existingItem) {\n            // Update existing item\n            Object.assign(existingItem, newItem);\n          } else {\n            // Add new item to the table\n            this.msg.data.push(newItem);\n          }\n        });\n      },\n  \n      // Snackbar notification utility\n      showSnackbar(message, type) {\n        this.snackbar.text = message;\n        this.snackbar.color = type === 'success' ? 'green-lighten-3' \n                            : type === 'error' ? 'red-lighten-3' \n                            : 'blue-lighten-5';\n        this.snackbar.show = true;\n      },\n    },\n  };\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 700,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a26eec4a2095d0ed",
+        "type": "ui-template",
+        "z": "4b69c9fd15f72033",
+        "d": true,
+        "group": "4ef9bcc0d874c9bb",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <!-- Delete Button -->\n    <v-btn color=\"red\" dark @click=\"openDeleteDialog\">\n      Delete\n    </v-btn>\n\n    <!-- Delete Confirmation Dialog -->\n    <v-dialog v-model=\"dialog\" max-width=\"500\" persistent>\n      <v-card>\n        <v-card-title class=\"headline mt-1\">\n          Confirm Deletion\n        </v-card-title>\n\n        <v-card-text>\n        <p>Deleting this element will also remove associated process data stored in the database.</p>\n        <p class=\"mt-6\">Are you sure you want to proceed?</p>\n        </v-card-text>\n          \n\n        <v-card-actions>\n          <v-spacer></v-spacer>\n          <!-- Cancel Button -->\n          <v-btn color=\"blue\" text @click=\"cancelDeletion\">\n            Cancel\n          </v-btn>\n          <!-- Confirm Button -->\n          <v-btn color=\"red\" text @click=\"confirmDeletion\">\n            Delete\n          </v-btn>\n        </v-card-actions>\n      </v-card>\n    </v-dialog>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      dialog: false, // Controls the visibility of the dialog\n    };\n  },\n  methods: {\n    // Open the delete confirmation dialog\n    openDeleteDialog() {\n      this.dialog = true;\n    },\n\n    // Cancel the deletion and close the dialog\n    cancelDeletion() {\n      this.dialog = false;\n    },\n\n    // Confirm the deletion and execute the deletion logic\n    confirmDeletion() {\n      this.dialog = false;\n      // Perform the deletion (e.g., API call or database operation)\n      this.deleteElement();\n    },\n\n    // Function to handle the actual deletion process\n    deleteElement() {\n      // Replace this with your deletion logic (e.g., Axios call to backend API)\n      console.log('Element and associated data deleted from database');\n      // Example API call:\n      // axios.delete('/api/delete-element', { data: { id: this.elementId } })\n      //   .then(response => {\n      //     console.log('Deletion successful:', response);\n      //   })\n      //   .catch(error => {\n      //     console.error('Error deleting element:', error);\n      //   });\n    },\n  },\n};\n</script>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 640,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4ef9bcc0d874c9bb",
+        "type": "ui-group",
+        "name": "Splashboard",
+        "page": "c6d817962b44c6e6",
+        "width": "6",
+        "height": "1",
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "c6d817962b44c6e6",
+        "type": "ui-page",
+        "name": "Home",
+        "ui": "54a4e86d9749426f",
+        "path": "/home",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "70ee3095f0c0fa3d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    }
+]

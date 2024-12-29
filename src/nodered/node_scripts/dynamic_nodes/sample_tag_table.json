@@ -1,0 +1,119 @@
+[
+    {
+        "id": "b6efce463b4cd331",
+        "type": "subflow:96d5a2eeb5f112bc",
+        "z": "4b69c9fd15f72033",
+        "name": "tags_odr_s7",
+        "env": [
+            {
+                "name": "SCHEMA",
+                "value": "tags",
+                "type": "str"
+            },
+            {
+                "name": "TABLE",
+                "value": "tags_odr_s7",
+                "type": "str"
+            }
+        ],
+        "x": 410,
+        "y": 860,
+        "wires": [
+            [
+                "0fcbb776626abfc3"
+            ]
+        ]
+    },
+    {
+        "id": "4d9ca0142d780768",
+        "type": "link in",
+        "z": "4b69c9fd15f72033",
+        "name": "tags_odr_s7",
+        "links": [
+            "bc31f07c227e2c67"
+        ],
+        "x": 105,
+        "y": 860,
+        "wires": [
+            [
+                "b6efce463b4cd331"
+            ]
+        ]
+    },
+    {
+        "id": "0fcbb776626abfc3",
+        "type": "link call",
+        "z": "4b69c9fd15f72033",
+        "name": "",
+        "links": [
+            "b845df89960615f1"
+        ],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 680,
+        "y": 860,
+        "wires": [
+            [
+                "b6efce463b4cd331"
+            ]
+        ]
+    },
+    {
+        "id": "987a712a5358cdfa",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "time",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "update",
+        "x": 210,
+        "y": 880,
+        "wires": [
+            [
+                "b6efce463b4cd331"
+            ]
+        ]
+    },
+    {
+        "id": "403677f01d3d0fc1",
+        "type": "inject",
+        "z": "4b69c9fd15f72033",
+        "name": "start",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "time",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "start",
+        "x": 210,
+        "y": 840,
+        "wires": [
+            [
+                "b6efce463b4cd331"
+            ]
+        ]
+    }
+]

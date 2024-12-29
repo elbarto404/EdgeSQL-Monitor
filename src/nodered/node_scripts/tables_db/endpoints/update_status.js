@@ -98,7 +98,7 @@ msg.dashboard.table = {
 msg.dashboard.form = { 
     machine: global.get("machines").map(mch => mch.name),
     protocol: global.get("protocol"),
-    tag_tables: ["odr_table_S7", "odr_table_OPCUA", "odr_table_Modbus"]
+    tag_tables: global.get("tag_tables").map(tbl => tbl.name),
 };
 
 msg.dashboard.history = msg.dashboard.history || [];

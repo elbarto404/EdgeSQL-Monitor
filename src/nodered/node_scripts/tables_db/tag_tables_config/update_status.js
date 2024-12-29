@@ -58,10 +58,10 @@ tag_tables.forEach(tableName => {
     if (!data.some(row => row.name === tableName)) {
         let newItem = {
             name: tableName,
-            sampling_mode: 'continuous_on_change',
-            sampling_freq: '1s',
+            sampling_mode: 'none',
+            sampling_freq: 'none',
             aggregation: 'none',
-            comment: 'auto-generated, modify as needed',
+            comment: 'auto-generated, modification needed for proper configuration',
         }
         let editAction = {
             index: -1,
@@ -127,6 +127,8 @@ msg.dashboard.form = {
     sampling_freq: global.get("sampling_freq"),
     aggregation: global.get("aggregation"),
 };
+
+msg.dashboard.history = msg.dashboard.history || [];
 
 msg.dashboard.snackbar = {
     show: true,
