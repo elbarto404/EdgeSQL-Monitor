@@ -60,7 +60,6 @@ tag_tables.forEach(tableName => {
             name: tableName,
             sampling_mode: 'none',
             sampling_freq: 'none',
-            aggregation: 'none',
             comment: 'auto-generated, modification needed for proper configuration',
         }
         let editAction = {
@@ -125,7 +124,6 @@ msg.dashboard.table = {
 msg.dashboard.form = { 
     sampling_mode: global.get("sampling_mode"),
     sampling_freq: global.get("sampling_freq"),
-    aggregation: global.get("aggregation"),
 };
 
 msg.dashboard.history = msg.dashboard.history || [];

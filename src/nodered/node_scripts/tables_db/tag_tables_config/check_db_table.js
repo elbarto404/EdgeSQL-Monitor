@@ -26,7 +26,6 @@ BEGIN
          name TEXT PRIMARY KEY,
          sampling_mode TEXT,
          sampling_freq TEXT,
-         aggregation TEXT,
          comment TEXT
       );
    END IF;

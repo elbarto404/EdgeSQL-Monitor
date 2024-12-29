@@ -453,6 +453,7 @@ export default {
     },
     discardEdit() {
       this.disableEdit();
+      this.msg.dashboard.history = [];
       this.updateTable();
     },
     
