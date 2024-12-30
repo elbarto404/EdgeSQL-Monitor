@@ -178,6 +178,14 @@
             required
           ></v-text-field>
           <v-select
+          v-model="editAction.newItem.protocol"
+            label="Protocol"
+            :items="msg.dashboard.form.protocol"
+            :rules="[v => !!v || 'Protocol is required']"
+            required
+            clearable
+          ></v-select>
+          <v-select
             v-model="editAction.newItem.sampling_mode"
             label="Sampling Mode"
             :items="msg.dashboard.form.sampling_mode"

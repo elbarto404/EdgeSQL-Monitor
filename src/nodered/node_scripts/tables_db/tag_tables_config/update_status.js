@@ -58,7 +58,8 @@ tag_tables.forEach(tableName => {
     if (!data.some(row => row.name === tableName)) {
         let newItem = {
             name: tableName,
-            sampling_mode: 'none',
+            protocol: null,
+            sampling_mode: 'static',
             sampling_freq: 'none',
             comment: 'auto-generated, modification needed for proper configuration',
         }
@@ -122,6 +123,7 @@ msg.dashboard.table = {
     headers: baseHeaders,
 };
 msg.dashboard.form = { 
+    protocol: global.get("protocol"),
     sampling_mode: global.get("sampling_mode"),
     sampling_freq: global.get("sampling_freq"),
 };
@@ -150,6 +152,10 @@ if (deploy_needed) {
     msg.topic = 'deploy';
     return [msg, null, null];
 } else {
+    // Prapare the dynamic_insert history and resets the dashboard history
+    msg.history = [...msg.dashboard.history];
+    msg.dashboard.history = [];
+    
     msg.topic = 'update_status';
     return [null, msg, state];
 }

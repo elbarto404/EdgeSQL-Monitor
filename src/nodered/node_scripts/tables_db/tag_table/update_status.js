@@ -110,7 +110,7 @@ msg.dashboard.form = {
     aggregation_type: global.get("aggregation_type")
 };
 
-msg.dashboard.history = msg.dashboard.history || [];
+msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
     show: true,

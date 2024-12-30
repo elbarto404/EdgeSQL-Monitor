@@ -4,6 +4,8 @@ msg.dashboard.snackbar = {
     color: "red-lighten-3"
 }
 
+msg.dashboard.history = [];
+
 msg.dashboard.loading = false;
 
 return msg;

@@ -80,7 +80,7 @@ msg.dashboard.form = {
     site: ["area_1","area_2","area_3","area_4","area_5"]
 };
 
-msg.dashboard.history = msg.dashboard.history || [];
+msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
     show: true,

@@ -60,9 +60,6 @@ BEGIN
 END $$;
 `;
 
-// Resets the dashboard history
-msg.dashboard.history = [];
-
 msg.target = msg.database.name;
 msg.topic = 'deploy_changes';
 return msg;

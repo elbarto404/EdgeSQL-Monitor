@@ -76,7 +76,7 @@ msg.dashboard.table = {
     title: msg.title,
     headers: baseHeaders
 };
-msg.dashboard.history = msg.dashboard.history || [];
+msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
     show: true,

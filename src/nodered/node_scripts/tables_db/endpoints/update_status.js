@@ -98,10 +98,10 @@ msg.dashboard.table = {
 msg.dashboard.form = { 
     machine: global.get("machines").map(mch => mch.name),
     protocol: global.get("protocol"),
-    tag_tables: global.get("tag_tables").map(tbl => tbl.name),
+    tag_tables: global.get("tag_tables"),
 };
 
-msg.dashboard.history = msg.dashboard.history || [];
+msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
     show: true,

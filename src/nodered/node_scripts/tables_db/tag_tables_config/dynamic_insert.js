@@ -3,10 +3,11 @@
 // 2. Removes nodes that no longer correspond to msg.data.
 
 const inputData = msg.data; // Array of objects to verify
+const inputHistory = msg.history; // Array of objects to verify
 let allNodes = msg.payload;   // Current nodes
 
-if (!Array.isArray(inputData) || !Array.isArray(allNodes)) {
-    node.error("Input data or allNodes is not in the expected format.");
+if (!Array.isArray(inputData) || !Array.isArray(inputHistory) || !Array.isArray(allNodes)) {
+    node.error("Input data or history or allNodes is not in the expected format.");
     return;
 }
 
@@ -58,7 +59,7 @@ function createNodesForName(name) {
                 { name: "SCHEMA", value: "tags", type: "str" },
                 { name: "TABLE", value: name, type: "str" }
             ],
-            x: 470,
+            x: 350,
             y: maxY + 100, // Position below the current maximum Y
             wires: [[linkCallId]]
         },
@@ -80,48 +81,18 @@ function createNodesForName(name) {
             links: [],
             linkType: "dynamic",
             timeout: "30",
-            x: 710,
+            x: 640,
             y: maxY + 100, // Match Y position
-            wires: [[baseId]]
-        },
-        {
-            id: generateId(existingIds),
-            type: "inject",
-            z: "4b69c9fd15f72033",
-            name: "update",
-            props: [
-                { p: "topic", vt: "str" },
-                { p: "time", v: "", vt: "date" }
-            ],
-            repeat: "",
-            crontab: "",
-            once: false,
-            onceDelay: 0.1,
-            topic: "update",
-            x: 210,
-            y: maxY + 120, // Slight offset
-            wires: [[baseId]]
-        },
-        {
-            id: generateId(existingIds),
-            type: "inject",
-            z: "4b69c9fd15f72033",
-            name: "start",
-            props: [
-                { p: "topic", vt: "str" },
-                { p: "time", v: "", vt: "date" }
-            ],
-            repeat: "",
-            crontab: "",
-            once: false,
-            onceDelay: 0.1,
-            topic: "start",
-            x: 210,
-            y: maxY + 80, // Slight offset
             wires: [[baseId]]
         }
     ];
 }
+
+// _________________________History Processing (edits)_______________________________
+
+
+
+// ______________________Data Processing (new or delete)_____________________________
 
 // Process each item in inputData
 let deployNeded = false;
@@ -134,13 +105,13 @@ for (const item of inputData) {
     if (!isPresent) {
         // Add the required nodes for this name
         const newNodes = createNodesForName(name);
-        maxY += 120; // Increase the maximum Y coordinate
+        maxY += 100; // Increase the maximum Y coordinate
         updatedNodes.push(...newNodes);
         deployNeded = true;
     }
 }
 
-// Remove nodes that are no longer needed
+// Remove nodes that not correspond to inputData
 const namesInData = inputData.map(item => item.name);
 let idsToRemove = [];
 for (let node of updatedNodes) {
