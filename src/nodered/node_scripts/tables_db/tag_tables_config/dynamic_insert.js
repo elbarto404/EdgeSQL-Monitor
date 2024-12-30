@@ -5,6 +5,7 @@
 const inputData = msg.data; // Array of objects to verify
 const inputHistory = msg.history; // Array of objects to verify
 let allNodes = msg.payload;   // Current nodes
+let deployNeded = false;    // Flag to indicate if a deploy is needed
 
 if (!Array.isArray(inputData) || !Array.isArray(inputHistory) || !Array.isArray(allNodes)) {
     node.error("Input data or history or allNodes is not in the expected format.");
@@ -77,7 +78,7 @@ function createNodesForName(name) {
             id: linkCallId,
             type: "link call",
             z: "4b69c9fd15f72033",
-            name: "",
+            name: "to_database",
             links: [],
             linkType: "dynamic",
             timeout: "30",
@@ -90,12 +91,43 @@ function createNodesForName(name) {
 
 // _________________________History Processing (edits)_______________________________
 
+// Name editing
+for (const action of inputHistory) {
+    if (action.newItem && action.oldItem && action.newItem.name !== action.oldItem.name) {
+        const oldName = action.oldItem.name;
+        const newName = action.newItem.name;
 
+        // Check if the subflow for the old name exists
+        const oldSubflow = updatedNodes.find(node => node.name === oldName && node.type === "subflow:96d5a2eeb5f112bc");
+
+        if (oldSubflow) {
+            // Update the subflow name
+            oldSubflow.name = newName;
+            // Update the environment variables where the table name is stored (if present else add it)
+            let updated = false;
+            for (let env of oldSubflow.env) {
+                if (env.name === "TABLE") {
+                    env.value = newName;
+                    updated = true;
+                }
+            }
+            if (!updated) {
+                oldSubflow.env.push({ name: "TABLE", value: newName, type: "str" });
+            }
+            // Update the link in node name
+            const linkInNode = updatedNodes.find(node => node.type === "link in" && node.name === oldName);
+            if (linkInNode) {
+                linkInNode.name = newName;
+            }
+            deployNeded = true;
+        }
+    }
+
+}
 
 // ______________________Data Processing (new or delete)_____________________________
 
-// Process each item in inputData
-let deployNeded = false;
+// Add the required nodes for each table name in the inputData (new)
 for (const item of inputData) {
     const name = item.name;
 
@@ -107,11 +139,14 @@ for (const item of inputData) {
         const newNodes = createNodesForName(name);
         maxY += 100; // Increase the maximum Y coordinate
         updatedNodes.push(...newNodes);
+        const settingsOut = updatedNodes.find(node => node.id === "bc31f07c227e2c67");
+        settingsOut.links.push(newNodes[1].id);
+        settingsOut.links.sort();
         deployNeded = true;
     }
 }
 
-// Remove nodes that not correspond to inputData
+// Remove nodes that not correspond to inputData (delete)
 const namesInData = inputData.map(item => item.name);
 let idsToRemove = [];
 for (let node of updatedNodes) {
@@ -120,10 +155,12 @@ for (let node of updatedNodes) {
         const subflowId = node.id;
         idsToRemove.push(subflowId);
         for (let n of updatedNodes) {
-            for (let i = 0; i < n.wires.length; i++) {
-                if (n.wires[i].includes(subflowId)) {
-                    idsToRemove.push(n.id);
-                };
+            if (Object.keys(n).includes("wires") && Array.isArray(n.wires)) {
+                for (let i = 0; i < n.wires.length; i++) {
+                    if (n.wires[i].includes(subflowId)) {
+                        idsToRemove.push(n.id);
+                    };
+                }
             }
         }
         deployNeded = true;
@@ -131,7 +168,9 @@ for (let node of updatedNodes) {
 }
 
 const finalNodes = updatedNodes.filter(node => !idsToRemove.includes(node.id));
+const settingsOut = updatedNodes.find(node => node.id === "bc31f07c227e2c67");
+settingsOut.links.filter(id => !idsToRemove.includes(id));
 
 msg.payload = finalNodes;
 
-if (deployNeded) {return msg;} else {return null;}
+if (deployNeded) {return [msg, null];} else {return [null, msg];}

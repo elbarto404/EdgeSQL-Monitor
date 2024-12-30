@@ -38,12 +38,10 @@ const indexMap = {
     // Next Action
     start:          1,
     update:         2,
-    deploy:         3,
-    update_next:    5,
-    
+    deploy:         3,   
 };
 
-const outputs = [null, null, null, null, null, null];
+const outputs = [null, null, null, null, null];
 
 if (msg.error) outputs[0] = msg;
 else if (indexMap[msg.topic] !== undefined) outputs[indexMap[msg.topic]] = msg;
