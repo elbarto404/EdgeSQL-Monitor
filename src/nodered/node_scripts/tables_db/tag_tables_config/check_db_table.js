@@ -24,6 +24,7 @@ BEGIN
       CREATE TABLE ${schemaName}.${tableName} (
          id SERIAL,
          name TEXT PRIMARY KEY,
+         data_table TEXT,
          protocol TEXT,
          sampling_mode TEXT,
          sampling_freq TEXT,

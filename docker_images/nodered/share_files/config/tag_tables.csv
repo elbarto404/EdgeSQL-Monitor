@@ -1,0 +1,6 @@
+name;data_table;protocol;sampling_mode;sampling_freq;comment
+tags_odr_opcua;tags_odr_opcua_data;OPC UA;static;none;auto-generated, modification needed for proper configuration
+tags_odr_opcua3;tags_odr_opcua3_data;OPC UA;static;none;auto-generated, modification needed for proper configuration
+tags_live_s7;tags_live_s7_data;S7;static;none;auto-generated, modification needed for proper configuration
+tags_odr_s7;tags_odr_s7_data;S7;static;none;auto-generated, modification needed for proper configuration
+tags_very_long_name_for_a_tags_table;tags_very_long_name_for_a_tags_table_data;ModBus;static;none;auto-generated, modification needed for proper configuration

@@ -75,11 +75,7 @@ msg.dashboard.table = {
     title: msg.title,
     headers: baseHeaders
 };
-msg.dashboard.form = { 
-    type: global.get("machine_types").map(mt => mt.name),
-    site: ["area_1","area_2","area_3","area_4","area_5"]
-};
-
+msg.dashboard.form = {};
 msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {

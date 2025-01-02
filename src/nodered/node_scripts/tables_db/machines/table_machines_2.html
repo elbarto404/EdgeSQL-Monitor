@@ -120,19 +120,6 @@
     >
 <!-- MODIFY DISPLAY HERE -->   
 
-      <!-- Display Type as Chips -->
-      <template v-slot:item.type="{ item }">
-        <div>
-          <v-chip
-            class="ma-1"
-            :color="getListColorStatic(msg.dashboard.form.type, item.type)"
-            dark
-          >
-            {{ item.type }}
-          </v-chip>
-        </div>
-      </template>
-
 <!-- END MODIFY -->
       <!-- Actions Column with Edit and Delete Icons -->
       <template v-slot:item.actions="{ item }">
@@ -189,22 +176,24 @@
           :rules="[v => !!v || 'Name is required']"
           required
           ></v-text-field>
-          <v-select
+          <v-text-field
           v-model="editAction.newItem.type"
           label="Type"
-          :items="msg.dashboard.form.type"
           :rules="[v => !!v || 'Type is required']"
           required
-          clearable
-          ></v-select>
-          <v-select
+          ></v-text-field>
+          <v-text-field
+          v-model="editAction.newItem.vendor"
+          label="Vendor"
+          :rules="[v => !!v || 'Vendor is required']"
+          required
+          ></v-text-field>
+          <v-text-field
           v-model="editAction.newItem.site"
           label="Site"
-          :items="msg.dashboard.form.site"
           :rules="[v => !!v || 'Site is required']"
           required
-          clearable
-          ></v-select>
+          ></v-text-field>
           <v-text-field
           v-model="editAction.newItem.service_date"
           label="Service Date"
@@ -315,7 +304,7 @@ export default {
     return {
       search: '',
       page: 1,
-      itemsPerPage: 5,
+      itemsPerPage: -1,
       headerNames: [],
       dialog: false,
       deleteDialog: false,

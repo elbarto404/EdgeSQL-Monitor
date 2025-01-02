@@ -23,10 +23,12 @@ BEGIN
    ) THEN
       CREATE TABLE ${schemaName}.${tableName} (
         id SERIAL,
+        enabled BOOLEAN,
         name TEXT PRIMARY KEY,
-        sampling_mode TEXT,
-        sampling_freq TEXT,
-        aggregation TEXT,
+        machine TEXT,
+        protocol TEXT,
+        address TEXT,
+        tag_tables TEXT,
         comment TEXT
       );
    END IF;

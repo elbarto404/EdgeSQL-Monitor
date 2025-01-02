@@ -25,6 +25,7 @@ BEGIN
         id SERIAL,
         name TEXT PRIMARY KEY,
         type TEXT,
+        vendor TEXT,
         site TEXT,
         service_date TEXT,
         details TEXT

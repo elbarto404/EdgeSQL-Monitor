@@ -16,7 +16,9 @@ msg.database = msg.database || {
     schema: env.get("SCHEMA"),
     table: tabName,
     tagsSchema: env.get("TAGS_SCHEMA"),
+    processSchema: env.get("PROCESS_SCHEMA"),
 };
+global.set("processSchema", env.get("PROCESS_SCHEMA"));  // Save process schema for common tags_table use
 msg.data = msg.data || flow.get(tabName) || null;
 msg.dashboard = msg.dashboard || {};
 msg.dashboard.info = msg.dashboard.info || flow.get("info");

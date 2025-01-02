@@ -28,15 +28,18 @@ let commands = [];
 const table = escapeValue(msg.database.table);
 const schema = escapeValue(msg.database.schema);
 const tagsSchema = escapeValue(msg.database.tagsSchema);
+const processSchema = escapeValue(msg.database.processSchema);
 
 for (const change of msg.dashboard.history) {
     const { index, oldItem, newItem } = change;
     const oldName = oldItem ? escapeValue(oldItem.name) : null;
+    const oldDataTable = oldItem ? escapeValue(oldItem.data_table) : null;
 
     if (oldItem && !newItem) {
         // Case: deletion
         commands.push(`DELETE FROM "${schema}"."${table}"WHERE name = '${oldName}';`);
         commands.push(`DROP TABLE IF EXISTS "${tagsSchema}"."${oldName}";`);
+        commands.push(`DROP TABLE IF EXISTS "${processSchema}"."${oldDataTable}";`);
 
     } else if (!oldItem && newItem) {
         // Case: insertion
@@ -53,7 +56,12 @@ for (const change of msg.dashboard.history) {
             .map(key => `${key} = '${escapeValue(newItem[key])}'`) // Escape values
             .join(', ');
         commands.push(`UPDATE "${schema}"."${table}" SET ${updates} WHERE name = '${oldName}';`);
-        commands.push(`ALTER TABLE "${tagsSchema}"."${oldName}" RENAME TO "${escapeValue(newItem.name)}";`);
+        if (oldName !== newItem.name) {
+            commands.push(`ALTER TABLE IF EXISTS "${tagsSchema}"."${oldName}" RENAME TO "${escapeValue(newItem.name)}";`);
+        }
+        if (oldDataTable !== newItem.data_table) {
+            commands.push(`ALTER TABLE IF EXISTS "${processSchema}"."${oldDataTable}" RENAME TO "${escapeValue(newItem.data_table)}";`);
+        }
     }
 }
 
