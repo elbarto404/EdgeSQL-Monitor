@@ -1,0 +1,54 @@
+TIA Portal (Siemens)           → PostgreSQL
+----------------------------------------------------
+**Bool**                        → BOOLEAN
+**Byte** (8 bit)                → SMALLINT (2 byte, 0-255)
+**Char** (1 carattere)          → CHAR(1)
+**Word** (16 bit)               → SMALLINT (2 byte, 0-65535)
+**DWord** (32 bit)              → INTEGER (4 byte, -2^31 a 2^31-1)
+**LWord** (64 bit)              → BIGINT (8 byte, -2^63 a 2^63-1)
+**SInt** (8 bit con segno)      → SMALLINT (2 byte, -128 a 127)
+**USInt** (8 bit senza segno)   → SMALLINT (2 byte, 0 a 255)
+**Int** (16 bit con segno)      → SMALLINT (2 byte, -32,768 a 32,767)
+**UInt** (16 bit senza segno)   → INTEGER (4 byte, 0 a 65535)
+**DInt** (32 bit con segno)     → INTEGER (4 byte, -2,147,483,648 a +2,147,483,647)
+**UDInt** (32 bit senza segno)  → BIGINT (8 byte, 0 a 4,294,967,295)
+**LInt** (64 bit con segno)     → BIGINT (8 byte, -9E18 a +9E18)
+**ULInt** (64 bit senza segno)  → NUMERIC (per supportare grandi numeri)
+**Real** (32 bit, float)        → REAL (32 bit, precisione approssimativa)
+**LReal** (64 bit, double)      → DOUBLE PRECISION (64 bit, precisione approssimativa)
+**Time** (Durata in ms)         → INTERVAL
+**Date** (Data senza ora)       → DATE
+**TimeOfDay** (Ora del giorno)  → TIME
+**Date_And_Time** (Data e ora)  → TIMESTAMP
+**String** (fino a 254 char)    → VARCHAR(254)
+**WString** (Wide String)       → VARCHAR(254) o TEXT (per Unicode esteso)
+
+
+
+JSON
+----------------------------------------------------
+
+{
+  "Bool": "BOOLEAN",
+  "Byte": "SMALLINT",
+  "Char": "CHAR(1)",
+  "Word": "SMALLINT",
+  "DWord": "INTEGER",
+  "LWord": "BIGINT",
+  "SInt": "SMALLINT",
+  "USInt": "SMALLINT",
+  "Int": "SMALLINT",
+  "UInt": "INTEGER",
+  "DInt": "INTEGER",
+  "UDInt": "BIGINT",
+  "LInt": "BIGINT",
+  "ULInt": "NUMERIC",
+  "Real": "REAL",
+  "LReal": "DOUBLE PRECISION",
+  "Time": "INTERVAL",
+  "Date": "DATE",
+  "TimeOfDay": "TIME",
+  "Date_And_Time": "TIMESTAMP",
+  "String": "VARCHAR(254)",
+  "WString": "TEXT"
+}

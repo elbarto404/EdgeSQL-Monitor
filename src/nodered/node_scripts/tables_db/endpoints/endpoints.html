@@ -482,9 +482,6 @@ export default {
           return obj;
         }, {});
     },
-    filterHeaders(headers) {
-      return headers.filter(header => !['actions', 'status', 'id'].includes(header.value)) // Exludes some columns
-    },
     addEditAction(){
       let action = JSON.parse(JSON.stringify(this.editAction));
       action.oldItem = this.filterItem(action.oldItem);
@@ -581,6 +578,9 @@ export default {
     },
     parseValue(value) {
       if (typeof value === 'string') {
+        // Handle empty strings
+        if (value === '') return null;
+
         // Remove leading/trailing quotes and unescape inner quotes if present
         if ((value.startsWith('"[') && value.endsWith(']"')) || (value.startsWith('"{') && value.endsWith('}"'))) {
           value = value.slice(1, -1).replace(/""/g, '"');
@@ -636,13 +636,18 @@ export default {
     },
     parseCsv(content) {  // Parses the CSV file content into an array of objects
       const rows = content.split(/\r?\n/).filter(row => row.trim()); 
-      const headers = rows.shift().split(';'); // Use the first row as headers
+      const headers = rows.shift().split(';').map(header => header.trim()); // Use the first row as headers
+      const filteredHeaders = headers.filter(header => !['action', 'status', 'id'].includes(header)) // Exclude some columns
+                        
       return rows.map(row => {
-        const values = row.split(';'); 
-        return headers.reduce((acc, header, index) => {
-          acc[header] = this.parseValue(values[index]); // Map headers to corresponding values
-          return acc;
-        }, {});
+          const values = row.split(';');
+          return filteredHeaders.reduce((acc, header) => {
+              const index = headers.indexOf(header); // Ensure the original index is respected
+              if (index !== -1) {
+                  acc[header] = this.parseValue(values[index]); 
+              }
+              return acc;
+          }, {});
       });
     },
     updateTableData(csvData) {
@@ -667,14 +672,16 @@ export default {
     // CSV Generation and Download
     generateCsv() {
       const separator = ';';
-      const headers = this.filterHeaders(this.msg.dashboard.table.headers)
+      const headersValue = this.msg.dashboard.table.headers
+        .filter(header => !['actions', 'status', 'id'].includes(header.value)) // Exludes some columns
         .map(header => header.value)
-        .join(separator); 
+        headersValue.unshift('id'); // Add id header at the beginning
+      const headers = headersValue.join(separator);
 
       const rows = this.msg.data.map(item => {
-        return this.filterHeaders(this.msg.dashboard.table.headers)
+        return headersValue
           .map(header => {
-            return this.stringifyValue(item[header.value]);
+            return this.stringifyValue(item[header]);
           })
           .join(separator);
       }).join('\n');

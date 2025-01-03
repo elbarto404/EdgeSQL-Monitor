@@ -22,9 +22,9 @@ BEGIN
       WHERE table_schema = '${schemaName}' AND table_name = '${tableName}'
    ) THEN
       CREATE TABLE ${schemaName}.${tableName} (
-        id SERIAL,
+        id SERIAL PRIMARY KEY,
         enabled BOOLEAN,
-        name TEXT PRIMARY KEY,
+        name TEXT,
         machine TEXT,
         protocol TEXT,
         address TEXT,

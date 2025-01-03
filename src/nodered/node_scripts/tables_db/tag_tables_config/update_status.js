@@ -58,7 +58,7 @@ tag_tables.forEach(tableName => {
     if (!data.some(row => row.name === tableName)) {
         let newItem = {
             name: tableName,
-            data_table: tableName + '_data',
+            process_table: tableName + '_data',
             protocol: null,
             sampling_mode: 'static',
             sampling_freq: 'none',

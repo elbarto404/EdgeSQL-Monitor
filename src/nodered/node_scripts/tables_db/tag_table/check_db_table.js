@@ -1,6 +1,8 @@
 // Extract schema and table names from the message
 const schemaName = msg.database.schema;
 const tableName = msg.database.table;
+const processSchema = msg.database.processSchema;
+const processTable = msg.database.processTable;
 
 // Construct the dynamic query for creating the schema and the table
 msg.query = `
@@ -15,7 +17,7 @@ BEGIN
       CREATE SCHEMA ${schemaName};
    END IF;
 
-   -- Check if table exists and create if it doesn't
+   -- Check if tags table exists and create if it doesn't
    IF NOT EXISTS (
       SELECT 1
       FROM information_schema.tables
@@ -30,6 +32,19 @@ BEGIN
         address TEXT,
         access TEXT,
         comment TEXT
+      );
+   END IF;
+
+   -- Check if process table exists and create if it doesn't
+   IF NOT EXISTS (
+      SELECT 1
+      FROM information_schema.tables
+      WHERE table_schema = '${processSchema}' AND table_name = '${processTable}'
+   ) THEN
+      CREATE TABLE ${processSchema}.${processTable} (
+         time TIMESTAMP,
+         endpoint NUMERIC,
+         PRIMARY KEY (time, endpoint)
       );
    END IF;
 END $$;

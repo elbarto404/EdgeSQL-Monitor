@@ -1,11 +1,11 @@
-enabled;name;machine;protocol;address;tag_tables;comment
-true;ABC_1_PLC;ABC_Klin_1;S7;192.168.100.12;["tags_odr_s7"];
-true;ABC_2_PLC;ABC_Klin_2;S7;192.168.100.20;["tags_odr_s7"];
-false;Vanguard_1_PLC;Vanguard_Klin_1;S7;192.168.200.10;["tags_live_s7","tags_odr_s7"];
-true;Vanguard_2_PLC;Vanguard_Klin_2;S7;192.168.200.20;["tags_live_s7","tags_odr_s7"];
-true;Vanguard_3_PLC;Vanguard_Klin_3;OPC UA;192.168.200.30;["tags_odr_opcua"];
-true;Vanguard_4_PLC;Vanguard_Klin_4;OPC UA;192.168.200.40;["tags_odr_opcua","tags_odr_opcua3"];
-true;TwinD_1_PLC;TwinD_Klin_1;ModBus;192.168.300.10;["tags_very_long_name_for_a_tags_table"];
-true;TwinD_1_KPIgen;TwinD_Klin_1;API Rest;192.168.300.20;["live_table_KPI"];
-true;TwinD_2_PLC;TwinD_Klin_2;ModBus;192.168.300.30;["odr_table_ModBus","live_table_ModBus"];
-true;TwinD_2_KPIgen;TwinD_Klin_2;API Rest;192.168.300.40;["live_table_KPI"];
+id;enabled;name;machine;protocol;address;tag_tables;comment
+1;true;ABC_1_PLC;ABC_Klin_1;S7;192.168.100.12;["tags_odr_s7"];
+2;true;ABC_2_PLC;ABC_Klin_2;S7;192.168.100.20;["tags_odr_s7"];
+3;false;Vanguard_1_PLC;Vanguard_Klin_1;S7;192.168.200.10;["tags_live_s7","tags_odr_s7"];
+4;true;Vanguard_2_PLC;Vanguard_Klin_2;S7;192.168.200.20;["tags_live_s7","tags_odr_s7"];
+5;true;Vanguard_3_PLC;Vanguard_Klin_3;OPCUA;192.168.200.30;["tags_odr_opcua"];
+6;true;Vanguard_4_PLC;Vanguard_Klin_4;OPCUA;192.168.200.40;["tags_odr_opcua3"];
+7;true;TwinD_1_PLC;TwinD_Klin_1;ModBus;192.168.300.10;["tags_odr_modbus"];
+8;true;TwinD_1_KPIgen;TwinD_Klin_1;API Rest;192.168.300.20;["live_table_KPI"];
+9;true;TwinD_2_PLC;TwinD_Klin_2;ModBus;192.168.300.30;["odr_table_ModBus","live_table_ModBus"];
+10;true;TwinD_2_KPIgen;TwinD_Klin_2;API Rest;192.168.300.40;["live_table_KPI"];

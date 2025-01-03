@@ -105,9 +105,10 @@ msg.dashboard.table = {
     otherHeaders: [endpointsHeader]
 };
 msg.dashboard.form = { 
-    data_type: global.get("data_type"),
+    data_type: Object.keys(global.get("data_type")),
     access: global.get("access"),
-    aggregation_type: global.get("aggregation_type")
+    aggregation_type: global.get("aggregation_type"),
+    protocol: env.get("PROTOCOL")
 };
 
 msg.dashboard.history = [];

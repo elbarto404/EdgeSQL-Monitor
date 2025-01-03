@@ -46,7 +46,8 @@ for (let node of tabNodes) {
 }
 
 // Function to create the required nodes for a specific name
-function createNodesForName(name) {
+function createNodesForItem(item) {
+    const name = item.name;
     const baseId = generateId(existingIds);
     const linkCallId = generateId(existingIds);
 
@@ -58,7 +59,10 @@ function createNodesForName(name) {
             name: name,
             env: [
                 { name: "SCHEMA", value: "tags", type: "str" },
-                { name: "TABLE", value: name, type: "str" }
+                { name: "TABLE", value: name, type: "str" },
+                { name: "PROCESS_SCHEMA", value: msg.database.processSchema, type: "str" },
+                { name: "PROCESS_TABLE", value: item.process_table, type: "str" },
+                { name: "PROTOCOL", value: item.protocol, type: "str" }
             ],
             x: 350,
             y: maxY + 100, // Position below the current maximum Y
@@ -91,11 +95,15 @@ function createNodesForName(name) {
 
 // _________________________History Processing (edits)_______________________________
 
-// Name editing
 for (const action of inputHistory) {
-    if (action.newItem && action.oldItem && action.newItem.name !== action.oldItem.name) {
+    if (action.newItem && action.oldItem && 
+            (action.newItem.name !== action.oldItem.name ||                     // Name change
+            action.newItem.process_table !== action.oldItem.process_table ||    // Process Table change
+            action.newItem.protocol !== action.oldItem.protocol)) {             // Protocol change
         const oldName = action.oldItem.name;
         const newName = action.newItem.name;
+        const newProcessTable = action.newItem.process_table;
+        const newProtocol = action.newItem.protocol;
 
         // Check if the subflow for the old name exists
         const oldSubflow = updatedNodes.find(node => node.name === oldName && node.type === "subflow:96d5a2eeb5f112bc");
@@ -104,15 +112,31 @@ for (const action of inputHistory) {
             // Update the subflow name
             oldSubflow.name = newName;
             // Update the environment variables where the table name is stored (if present else add it)
-            let updated = false;
+            let tableUpdated = false;
+            let processUpdated = false;
+            let protocolUpdated = false;
             for (let env of oldSubflow.env) {
                 if (env.name === "TABLE") {
                     env.value = newName;
-                    updated = true;
+                    tableUpdated = true;
+                }
+                if (env.name === "PROCESS_TABLE") {
+                    env.value = newProcessTable;
+                    processUpdated = true;
+                }
+                if (env.name === "PROTOCOL") {
+                    env.value = newProtocol;
+                    protocolUpdated = true;
                 }
             }
-            if (!updated) {
+            if (!tableUpdated) {
                 oldSubflow.env.push({ name: "TABLE", value: newName, type: "str" });
+            }
+            if (!processUpdated) { 
+                oldSubflow.env.push({ name: "PROCESS_TABLE", value: newProcessTable, type: "str" });
+            }
+            if (!protocolUpdated) {
+                oldSubflow.env.push({ name: "PROTOCOL", value: newProtocol, type: "str" });
             }
             // Update the link in node name
             const linkInNode = updatedNodes.find(node => node.type === "link in" && node.name === oldName);
@@ -129,14 +153,12 @@ for (const action of inputHistory) {
 
 // Add the required nodes for each table name in the inputData (new)
 for (const item of inputData) {
-    const name = item.name;
-
     // Check if the subflow for this name already exists
-    const isPresent = allNodes.some(node => node.name === name && node.type.startsWith("subflow"));
+    const isPresent = allNodes.some(node => node.name === item.name && node.type.startsWith("subflow"));
 
     if (!isPresent) {
         // Add the required nodes for this name
-        const newNodes = createNodesForName(name);
+        const newNodes = createNodesForItem(item);
         maxY += 100; // Increase the maximum Y coordinate
         updatedNodes.push(...newNodes);
         const settingsOut = updatedNodes.find(node => node.id === "bc31f07c227e2c67");

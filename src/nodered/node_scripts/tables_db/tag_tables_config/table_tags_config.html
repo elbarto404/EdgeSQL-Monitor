@@ -173,12 +173,12 @@
           <!-- Form Fields -->
           <v-text-field
             v-model="editAction.newItem.name"
-            label="Name"
-            :rules="[v => !!v || 'Name is required']"
+            label="Tags Table Name"
+            :rules="[v => !!v || 'Tags Table Name is required']"
             required
           ></v-text-field>
           <v-text-field
-            v-model="editAction.newItem.data_table"
+            v-model="editAction.newItem.process_table"
             label="Process Data Table Name"
             :rules="[v => !!v || 'Process Data Table Name is required']"
             required
@@ -539,6 +539,9 @@ export default {
     },
     parseValue(value) {
       if (typeof value === 'string') {
+        // Handle empty strings
+        if (value === '') return null;
+
         // Remove leading/trailing quotes and unescape inner quotes if present
         if ((value.startsWith('"[') && value.endsWith(']"')) || (value.startsWith('"{') && value.endsWith('}"'))) {
           value = value.slice(1, -1).replace(/""/g, '"');
@@ -552,7 +555,15 @@ export default {
             return value;
           }
         }
-        // Return original value for non-JSON types
+        // Check if the string represents a boolean
+        if (value.toLowerCase() === "true") return true;
+        if (value.toLowerCase() === "false") return false;
+
+        // Check if the string represents a number
+        const parsedNumber = Number(value);
+        if (!isNaN(parsedNumber)) return parsedNumber;
+
+        // Return original value for simple strings
         return value;
       }
       return value;

@@ -50,7 +50,8 @@ if (msg.pgsql && msg.pgsql[1] && msg.pgsql[1].rows) {
 // Build dynamic table headers
 const baseHeaders = columns.length > 0
     ? columns
-        .filter(key => !['actions', 'status', 'id'].includes(key)) // Exludes some columns
+        .filter(key => !['actions', 'status'].includes(key)) // Exludes some columns
+        .sort((a, b) => (a === 'enabled' ? -1 : b === 'enabled' ? 1 : 0)) // Sorts 'enabled' column first
         .map(key => ({
             title: capitalize(key),
             value: key,
