@@ -1,0 +1,306 @@
+[
+    {
+        "id": "1694b0a36e73293d",
+        "type": "tab",
+        "label": "Publishers",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "acbdb652a665445a",
+        "type": "junction",
+        "z": "1694b0a36e73293d",
+        "x": 600,
+        "y": 300,
+        "wires": [
+            [
+                "f9013dbd8c8f165c",
+                "4691f00421186101"
+            ]
+        ]
+    },
+    {
+        "id": "3831dd3dfb7cfd2a",
+        "type": "junction",
+        "z": "1694b0a36e73293d",
+        "x": 600,
+        "y": 180,
+        "wires": [
+            [
+                "81172c41b88738e4",
+                "a4c21410cda55d68"
+            ]
+        ]
+    },
+    {
+        "id": "9f54f25cbf53c163",
+        "type": "link in",
+        "z": "1694b0a36e73293d",
+        "name": "publish",
+        "links": [],
+        "x": 185,
+        "y": 240,
+        "wires": [
+            [
+                "f2df480a63bf05b6",
+                "0b3ba546757efe3e",
+                "90503fd93b7b69e7"
+            ]
+        ]
+    },
+    {
+        "id": "f2df480a63bf05b6",
+        "type": "function",
+        "z": "1694b0a36e73293d",
+        "name": "mqtt_parser",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "3831dd3dfb7cfd2a"
+            ]
+        ]
+    },
+    {
+        "id": "0b3ba546757efe3e",
+        "type": "function",
+        "z": "1694b0a36e73293d",
+        "name": "opcua_parser",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 300,
+        "wires": [
+            [
+                "acbdb652a665445a"
+            ]
+        ]
+    },
+    {
+        "id": "81172c41b88738e4",
+        "type": "mqtt out",
+        "z": "1694b0a36e73293d",
+        "name": "",
+        "topic": "mqtt/aggregator",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "0b75090e5169005e",
+        "x": 740,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "f9013dbd8c8f165c",
+        "type": "OpcUa-Server",
+        "z": "1694b0a36e73293d",
+        "port": "53880",
+        "name": "",
+        "endpoint": "",
+        "users": "users.json",
+        "nodesetDir": "",
+        "folderName4PKI": "",
+        "autoAcceptUnknownCertificate": true,
+        "registerToDiscovery": false,
+        "constructDefaultAddressSpace": true,
+        "allowAnonymous": true,
+        "endpointNone": true,
+        "endpointSign": true,
+        "endpointSignEncrypt": true,
+        "endpointBasic128Rsa15": true,
+        "endpointBasic256": true,
+        "endpointBasic256Sha256": true,
+        "maxNodesPerBrowse": 0,
+        "maxNodesPerHistoryReadData": 0,
+        "maxNodesPerHistoryReadEvents": 0,
+        "maxNodesPerHistoryUpdateData": 0,
+        "maxNodesPerRead": 0,
+        "maxNodesPerWrite": 0,
+        "maxNodesPerMethodCall": 0,
+        "maxNodesPerRegisterNodes": 0,
+        "maxNodesPerNodeManagement": 0,
+        "maxMonitoredItemsPerCall": 0,
+        "maxNodesPerHistoryUpdateEvents": 0,
+        "maxNodesPerTranslateBrowsePathsToNodeIds": 0,
+        "maxConnectionsPerEndpoint": 20,
+        "maxMessageSize": 4096,
+        "maxBufferSize": 4096,
+        "x": 740,
+        "y": 300,
+        "wires": [
+            [
+                "784f26f614063137",
+                "37da5eb9e9ecc140"
+            ]
+        ]
+    },
+    {
+        "id": "784f26f614063137",
+        "type": "debug",
+        "z": "1694b0a36e73293d",
+        "name": "OPCUA Server Out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "4691f00421186101",
+        "type": "debug",
+        "z": "1694b0a36e73293d",
+        "name": "OPCUA Server In",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "2121915637155a80",
+        "type": "inject",
+        "z": "1694b0a36e73293d",
+        "name": "start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "start",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 380,
+        "wires": [
+            [
+                "37da5eb9e9ecc140"
+            ]
+        ]
+    },
+    {
+        "id": "a2a8da8df37acb61",
+        "type": "comment",
+        "z": "1694b0a36e73293d",
+        "name": "From Data Handlers",
+        "info": "",
+        "x": 150,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "37da5eb9e9ecc140",
+        "type": "function",
+        "z": "1694b0a36e73293d",
+        "name": "initialize_opcua_server",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 380,
+        "wires": [
+            [
+                "acbdb652a665445a"
+            ]
+        ]
+    },
+    {
+        "id": "a4c21410cda55d68",
+        "type": "debug",
+        "z": "1694b0a36e73293d",
+        "name": "MQTT Aggregator Out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "90503fd93b7b69e7",
+        "type": "link out",
+        "z": "1694b0a36e73293d",
+        "name": "link out 1",
+        "mode": "return",
+        "links": [],
+        "x": 335,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0b75090e5169005e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

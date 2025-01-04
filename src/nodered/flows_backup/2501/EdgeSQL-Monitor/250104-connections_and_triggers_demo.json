@@ -1,0 +1,1778 @@
+[
+    {
+        "id": "5268bc2e3f733ac2",
+        "type": "subflow",
+        "name": "Endpoint Data Handler",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 140,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "1e02bad20c4678c8"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 990,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "86615f513a209ccc",
+                        "port": 0
+                    },
+                    {
+                        "id": "0f0a228ee2485f05",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 990,
+                "y": 280,
+                "wires": [
+                    {
+                        "id": "e0b7b86e0fe972d0",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "ENDPOINT",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-plug",
+                    "label": {
+                        "en-US": "Endpoint"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "TAG_TABLE",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-tags",
+                    "label": {
+                        "en-US": "Tag Table"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "flag",
+                "type": "bool",
+                "value": "true",
+                "ui": {
+                    "type": "checkbox"
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#C7E9C0",
+        "outputLabels": [
+            "to_database",
+            "to_endpoint"
+        ],
+        "icon": "font-awesome/fa-braille",
+        "status": {
+            "x": 560,
+            "y": 100,
+            "wires": [
+                {
+                    "id": "1e02bad20c4678c8",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
+        "id": "86615f513a209ccc",
+        "type": "function",
+        "z": "5268bc2e3f733ac2",
+        "name": "sampled_data_processing",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e0b7b86e0fe972d0",
+        "type": "function",
+        "z": "5268bc2e3f733ac2",
+        "name": "read_on_trigger",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1e02bad20c4678c8",
+        "type": "function",
+        "z": "5268bc2e3f733ac2",
+        "name": "switch",
+        "func": "\nreturn msg;",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 160,
+        "wires": [
+            [],
+            [
+                "86615f513a209ccc"
+            ],
+            [
+                "0f0a228ee2485f05",
+                "e0b7b86e0fe972d0"
+            ]
+        ]
+    },
+    {
+        "id": "0f0a228ee2485f05",
+        "type": "function",
+        "z": "5268bc2e3f733ac2",
+        "name": "store_on_trigger",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2dbd8c6f774fdb61",
+        "type": "tab",
+        "label": "Connections Demo",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3ecc762e238ea08e",
+        "type": "s7 in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "endpoint": "4d546db47d274425",
+        "mode": "all",
+        "variable": "",
+        "diff": true,
+        "name": "",
+        "x": 230,
+        "y": 140,
+        "wires": [
+            [
+                "c5fffa97ccdb96aa"
+            ]
+        ]
+    },
+    {
+        "id": "c5fffa97ccdb96aa",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 140,
+        "wires": [
+            [
+                "53ea4e9c8a13e7f2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "53ea4e9c8a13e7f2",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 140,
+        "wires": [
+            [
+                "c5fffa97ccdb96aa"
+            ]
+        ]
+    },
+    {
+        "id": "ce54031f6322814f",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Status",
+        "scope": [
+            "3ecc762e238ea08e"
+        ],
+        "x": 210,
+        "y": 100,
+        "wires": [
+            [
+                "c5fffa97ccdb96aa"
+            ]
+        ]
+    },
+    {
+        "id": "7aa53ce4aca3cb95",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 620,
+        "wires": [
+            [
+                "76203f45daf5e0ab"
+            ]
+        ]
+    },
+    {
+        "id": "76203f45daf5e0ab",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 620,
+        "wires": [
+            [
+                "7aa53ce4aca3cb95"
+            ],
+            [
+                "2852a215e2725329"
+            ]
+        ]
+    },
+    {
+        "id": "2852a215e2725329",
+        "type": "modbus-flex-getter",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Modbus Endpoint 1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "logIOActivities": false,
+        "server": "edb89972098ee9ef",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 230,
+        "y": 620,
+        "wires": [
+            [
+                "76203f45daf5e0ab"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "faa334a80c20fe94",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "2852a215e2725329"
+        ],
+        "x": 240,
+        "y": 580,
+        "wires": [
+            [
+                "76203f45daf5e0ab"
+            ]
+        ]
+    },
+    {
+        "id": "b47b82208845e664",
+        "type": "OpcUa-Client",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "endpoint": "f9ff10e208cdc5aa",
+        "action": "read",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 10,
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "folderName4PKI": "",
+        "name": "",
+        "x": 260,
+        "y": 1100,
+        "wires": [
+            [
+                "f5af8255d64c456c"
+            ]
+        ]
+    },
+    {
+        "id": "db4f24df3f586f2c",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 1100,
+        "wires": [
+            [
+                "f5af8255d64c456c"
+            ]
+        ]
+    },
+    {
+        "id": "f5af8255d64c456c",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 1100,
+        "wires": [
+            [
+                "db4f24df3f586f2c"
+            ],
+            [
+                "b47b82208845e664"
+            ]
+        ]
+    },
+    {
+        "id": "3fae9cd32b15b74e",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "b47b82208845e664"
+        ],
+        "x": 240,
+        "y": 1060,
+        "wires": [
+            [
+                "f5af8255d64c456c"
+            ]
+        ]
+    },
+    {
+        "id": "50bcba057bef55f6",
+        "type": "mqtt in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "topic": "mqtt/data/topic/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "0b75090e5169005e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 280,
+        "y": 1580,
+        "wires": [
+            [
+                "7c3969b3796059ac"
+            ]
+        ]
+    },
+    {
+        "id": "2dab64c9f05c941d",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 1580,
+        "wires": [
+            [
+                "7c3969b3796059ac"
+            ]
+        ]
+    },
+    {
+        "id": "7c3969b3796059ac",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 1580,
+        "wires": [
+            [
+                "2dab64c9f05c941d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "55dba90205a364e0",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "50bcba057bef55f6"
+        ],
+        "x": 260,
+        "y": 1540,
+        "wires": [
+            [
+                "7c3969b3796059ac"
+            ]
+        ]
+    },
+    {
+        "id": "e04ffaab590af905",
+        "type": "http request",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 270,
+        "y": 2080,
+        "wires": [
+            [
+                "4f5d8f605f0adcca",
+                "52a1e2ebc58f8602"
+            ]
+        ]
+    },
+    {
+        "id": "937143b415496a48",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "50bcba057bef55f6"
+        ],
+        "x": 260,
+        "y": 2040,
+        "wires": [
+            [
+                "4f5d8f605f0adcca"
+            ]
+        ]
+    },
+    {
+        "id": "4f5d8f605f0adcca",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 2080,
+        "wires": [
+            [
+                "3889866fd5203de2"
+            ],
+            [
+                "e04ffaab590af905"
+            ]
+        ]
+    },
+    {
+        "id": "3889866fd5203de2",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 2080,
+        "wires": [
+            [
+                "4f5d8f605f0adcca"
+            ]
+        ]
+    },
+    {
+        "id": "52a1e2ebc58f8602",
+        "type": "http response",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 570,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "ddb4b50a2c26c102",
+        "type": "s7 in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "endpoint": "095dbaf71f1d0856",
+        "mode": "all",
+        "variable": "",
+        "diff": true,
+        "name": "",
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "edc26fda8335ab7f"
+            ]
+        ]
+    },
+    {
+        "id": "edc26fda8335ab7f",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 380,
+        "wires": [
+            [
+                "0cddc95d6981d3dd"
+            ],
+            [
+                "699c37c704596ef7"
+            ]
+        ]
+    },
+    {
+        "id": "0cddc95d6981d3dd",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 380,
+        "wires": [
+            [
+                "edc26fda8335ab7f"
+            ]
+        ]
+    },
+    {
+        "id": "0f58c33e6a75767e",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Status",
+        "scope": [
+            "ddb4b50a2c26c102"
+        ],
+        "x": 210,
+        "y": 340,
+        "wires": [
+            [
+                "edc26fda8335ab7f"
+            ]
+        ]
+    },
+    {
+        "id": "ef6990e16be58d1b",
+        "type": "link in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "ABC_2_PLC_trigger_in",
+        "links": [
+            "37a26891c1f32a25"
+        ],
+        "x": 425,
+        "y": 340,
+        "wires": [
+            [
+                "edc26fda8335ab7f"
+            ]
+        ]
+    },
+    {
+        "id": "699c37c704596ef7",
+        "type": "s7 control",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "endpoint": "095dbaf71f1d0856",
+        "function": "trigger",
+        "name": "",
+        "x": 930,
+        "y": 440,
+        "wires": [
+            [
+                "430ac8513d3c4aaf"
+            ]
+        ]
+    },
+    {
+        "id": "430ac8513d3c4aaf",
+        "type": "debug",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "f5b847a91b330971",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "S7 Continous / S7 Continous on change",
+        "info": "For 'on_change' there is the flag on the S7 in node\n\nREADME: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
+        "x": 210,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "f03e9b134174c950",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "S7 Custom Trigger",
+        "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md\n\nThe S7 in node is configured as follows:\n'on_change' flag = false\n'cycle_interval' = 0  (no cycles)\n\nThe trigger event is passed from remote (link in)\nwith a msg with topic 'trigger'\n\nThe data handler generate a msg with \nmsg.function = 'trigger' to trigger the read cycle\non the configured s7 endpont through the s7 control node.\n\nAlternativly the 'trigger' function\ncan be staticly configured directly on the s7 control node.\n\nHere the reference code inside the s7 control node:\n\n    function onMessage(msg, send, done) {\n        var res;\n        let func = config.function || msg.function;\n        switch (func) {\n            case 'cycletime':\n                res = node.endpoint.updateCycleTime(msg.payload);\n                if (res) {\n                    done(res);\n                } else {\n                    send(msg);\n                    done();\n                }\n                break;\n            case 'trigger':\n                node.endpoint.doCycle();\n                send(msg);\n                done();\n                break;\n\n            ... also other controls on datablocks are available",
+        "x": 150,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "e44bcab12e3b48e9",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Modbus Continous / Modbus Continous on change",
+        "info": "### Main Behaviour  ###\n\n    The cyclic trigger is managed by the Endpoint Data Handler\n    The read trigger is sent from the OUT 2 of data handler to the Modbus flex getter\n    The data handler manage also the 'on_change' method by storing a temporary reading data\n\n\n###  Modbus-Flex-Getter ###\n\nModbus flexible input triggered read node with connection input parameters.\n\nConnects to a Modbus TCP or serial to read coils/inputs/registers at the rate of the incoming msg.\n\n\nFunction codes (1:4) currently supported include:\nFC 1: Read Coil Status\nFC 2: Read Input Status\nFC 3: Read Holding Registers\nFC 4: Read Input Registers\nInput parameter for connecting Modbus - in msg.payload:\n\nunitid (0..255 tcp | 0..247 serial) - overrides default Unit-ID\nfc (1..4)\nstart address (0:65535)\nquantity (1:65535) of coils/inputs/registers to be read from the start address\nOutput 1: data Array (PDU), modbus response Buffer, input message\n\nOutput 2: modbus response Buffer, data Array (PDU), input message\n\nFunction node code example for single input:\n\nmsg.payload = { value: msg.payload, 'fc': 1, 'unitid': 1, 'address': 0 , 'quantity': 1 } return msg\nFunction node code example for multiple inputs:\n\nmsg.payload = { value: msg.payload, 'fc': 3, 'unitid': 1, 'address': 0 , 'quantity': 10 } return msg\nThe status of the Flex-Getter-Node is \"active\" if the operating system opens up the dev with no error. Connection issues with your ethernet connection won't affect this status. Warnings and notifications about ethernet connection issues will be displayed in the Debug-window.\n\nTo use the Flex-Getter-Node with \"split\"- and \"join\"-nodes, please make sure to enable \"Keep Msg Properties\" in the nodes' \"Optionals\" properties.\n\n\n### Source code ###\n\n    node.prepareMsg = function (msg) {\n      if (typeof msg.payload === 'string') {\n        msg.payload = JSON.parse(msg.payload)\n      }\n\n      msg.payload.fc = parseInt(msg.payload.fc) || 3\n      msg.payload.unitid = parseInt(msg.payload.unitid)\n      msg.payload.address = parseInt(msg.payload.address) || 0\n      msg.payload.quantity = parseInt(msg.payload.quantity) || 1\n\n      return msg\n    }\n\n    node.isValidModbusMsg = function (msg) {\n      let isValid = true\n\n      if (!(Number.isInteger(msg.payload.fc) &&\n        msg.payload.fc >= 1 &&\n        msg.payload.fc <= 4)) {\n        node.error('FC Not Valid', msg)\n        isValid &= false\n      }\n\n      if (isValid &&\n        !(Number.isInteger(msg.payload.address) &&\n          msg.payload.address >= 0 &&\n          msg.payload.address <= 65535)) {\n        node.error('Address Not Valid', msg)\n        isValid &= false\n      }\n\n      if (isValid &&\n        !(Number.isInteger(msg.payload.quantity) &&\n          msg.payload.quantity >= 1 &&\n          msg.payload.quantity <= 65535)) {\n        node.error('Quantity Not Valid', msg)\n        isValid &= false\n      }\n\n      return isValid\n    }\n\n\n### Repository ###\nhttps://github.com/BiancoRoyal/node-red-contrib-modbus/tree/master",
+        "x": 250,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "8348bc25b897370a",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Opcua Continous / Opcua Continous on change",
+        "info": "The data handler subscribe for reading all the variables\nManage the 'continous' with a temporary data storage\n",
+        "x": 240,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "200868d02607b68f",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "MQTT Continous / MQTT Continous on change",
+        "info": "Mqtt stream data,\nThe Data Handler manage the continous and on_change writing to the database",
+        "x": 240,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "f9d90c36309e34f4",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "API Rest Continous / API Rest Continous on change",
+        "info": "",
+        "x": 250,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "2f1f3607f2da5ba5",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 860,
+        "wires": [
+            [
+                "72e022a736b23132"
+            ]
+        ]
+    },
+    {
+        "id": "72e022a736b23132",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 860,
+        "wires": [
+            [
+                "2f1f3607f2da5ba5"
+            ],
+            [
+                "ba205b4ca777299f"
+            ]
+        ]
+    },
+    {
+        "id": "ba205b4ca777299f",
+        "type": "modbus-flex-getter",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Modbus Endpoint 2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "logIOActivities": false,
+        "server": "edb89972098ee9ef",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 230,
+        "y": 860,
+        "wires": [
+            [
+                "72e022a736b23132"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f6ece95825274efa",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "ba205b4ca777299f"
+        ],
+        "x": 240,
+        "y": 820,
+        "wires": [
+            [
+                "72e022a736b23132"
+            ]
+        ]
+    },
+    {
+        "id": "376f733dff485f8f",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Modbus Custom Trigger",
+        "info": "### Main Behaviour  ###\n\n    The custom trigger is passed trough the link in node with a msg with topic 'trigger'\n    The read trigger is sent from the OUT 2 of data handler to the Modbus flex getter\n    The data handler manage also the 'on_change' method by storing a temporary reading data\n\n\n###  Modbus-Flex-Getter ###\n\nModbus flexible input triggered read node with connection input parameters.\n\nConnects to a Modbus TCP or serial to read coils/inputs/registers at the rate of the incoming msg.\n\n\nFunction codes (1:4) currently supported include:\nFC 1: Read Coil Status\nFC 2: Read Input Status\nFC 3: Read Holding Registers\nFC 4: Read Input Registers\nInput parameter for connecting Modbus - in msg.payload:\n\nunitid (0..255 tcp | 0..247 serial) - overrides default Unit-ID\nfc (1..4)\nstart address (0:65535)\nquantity (1:65535) of coils/inputs/registers to be read from the start address\nOutput 1: data Array (PDU), modbus response Buffer, input message\n\nOutput 2: modbus response Buffer, data Array (PDU), input message\n\nFunction node code example for single input:\n\nmsg.payload = { value: msg.payload, 'fc': 1, 'unitid': 1, 'address': 0 , 'quantity': 1 } return msg\nFunction node code example for multiple inputs:\n\nmsg.payload = { value: msg.payload, 'fc': 3, 'unitid': 1, 'address': 0 , 'quantity': 10 } return msg\nThe status of the Flex-Getter-Node is \"active\" if the operating system opens up the dev with no error. Connection issues with your ethernet connection won't affect this status. Warnings and notifications about ethernet connection issues will be displayed in the Debug-window.\n\nTo use the Flex-Getter-Node with \"split\"- and \"join\"-nodes, please make sure to enable \"Keep Msg Properties\" in the nodes' \"Optionals\" properties.\n\n\n### Source code ###\n\n    node.prepareMsg = function (msg) {\n      if (typeof msg.payload === 'string') {\n        msg.payload = JSON.parse(msg.payload)\n      }\n\n      msg.payload.fc = parseInt(msg.payload.fc) || 3\n      msg.payload.unitid = parseInt(msg.payload.unitid)\n      msg.payload.address = parseInt(msg.payload.address) || 0\n      msg.payload.quantity = parseInt(msg.payload.quantity) || 1\n\n      return msg\n    }\n\n    node.isValidModbusMsg = function (msg) {\n      let isValid = true\n\n      if (!(Number.isInteger(msg.payload.fc) &&\n        msg.payload.fc >= 1 &&\n        msg.payload.fc <= 4)) {\n        node.error('FC Not Valid', msg)\n        isValid &= false\n      }\n\n      if (isValid &&\n        !(Number.isInteger(msg.payload.address) &&\n          msg.payload.address >= 0 &&\n          msg.payload.address <= 65535)) {\n        node.error('Address Not Valid', msg)\n        isValid &= false\n      }\n\n      if (isValid &&\n        !(Number.isInteger(msg.payload.quantity) &&\n          msg.payload.quantity >= 1 &&\n          msg.payload.quantity <= 65535)) {\n        node.error('Quantity Not Valid', msg)\n        isValid &= false\n      }\n\n      return isValid\n    }\n\n\n### Repository ###\nhttps://github.com/BiancoRoyal/node-red-contrib-modbus/tree/master",
+        "x": 160,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "f85c22a4ad0eca0e",
+        "type": "link in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Modbus Endpoint 2 Trigger In",
+        "links": [
+            "f67d44986870e735",
+            "83d53b4a07b209e6",
+            "5013c4151da80025",
+            "ea971b1902305135"
+        ],
+        "x": 435,
+        "y": 820,
+        "wires": [
+            [
+                "72e022a736b23132"
+            ]
+        ]
+    },
+    {
+        "id": "01a26f7c1022392a",
+        "type": "OpcUa-Client",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "endpoint": "f9ff10e208cdc5aa",
+        "action": "read",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 10,
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "folderName4PKI": "",
+        "name": "",
+        "x": 260,
+        "y": 1340,
+        "wires": [
+            [
+                "550d1f94264ae0f4"
+            ]
+        ]
+    },
+    {
+        "id": "ce63366bc7ce288a",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 1340,
+        "wires": [
+            [
+                "550d1f94264ae0f4"
+            ]
+        ]
+    },
+    {
+        "id": "550d1f94264ae0f4",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 1340,
+        "wires": [
+            [
+                "ce63366bc7ce288a"
+            ],
+            [
+                "01a26f7c1022392a"
+            ]
+        ]
+    },
+    {
+        "id": "e8bcd80ff24080ea",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "01a26f7c1022392a"
+        ],
+        "x": 240,
+        "y": 1300,
+        "wires": [
+            [
+                "550d1f94264ae0f4"
+            ]
+        ]
+    },
+    {
+        "id": "0e5ef356022649e4",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "Opcua Custom trigger",
+        "info": "The trigger triggers a read multiple event \n",
+        "x": 160,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "d83539d8592deaf3",
+        "type": "link in",
+        "z": "2dbd8c6f774fdb61",
+        "name": "link in 1",
+        "links": [],
+        "x": 435,
+        "y": 1300,
+        "wires": [
+            [
+                "550d1f94264ae0f4"
+            ]
+        ]
+    },
+    {
+        "id": "9b5b0224060bd900",
+        "type": "mqtt in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "topic": "mqtt/data/topic/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "0b75090e5169005e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 280,
+        "y": 1820,
+        "wires": [
+            [
+                "97aff958c632c721"
+            ]
+        ]
+    },
+    {
+        "id": "289d35c6b72b8875",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 1820,
+        "wires": [
+            [
+                "97aff958c632c721"
+            ]
+        ]
+    },
+    {
+        "id": "97aff958c632c721",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 1820,
+        "wires": [
+            [
+                "289d35c6b72b8875"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "10ed18de4753ac84",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "9b5b0224060bd900"
+        ],
+        "x": 260,
+        "y": 1780,
+        "wires": [
+            [
+                "97aff958c632c721"
+            ]
+        ]
+    },
+    {
+        "id": "5cd013cef2954e8b",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "MQTT Custom Trigger",
+        "info": "Mqtt stream data,\nThe Data Handler manage the writing on database on trigger",
+        "x": 160,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "70f4f4e12df78ea8",
+        "type": "link in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "link in 2",
+        "links": [],
+        "x": 455,
+        "y": 1780,
+        "wires": [
+            [
+                "97aff958c632c721"
+            ]
+        ]
+    },
+    {
+        "id": "ae9b93f6024f1a5b",
+        "type": "http request",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 270,
+        "y": 2340,
+        "wires": [
+            [
+                "c8dfb0e21d473b9f",
+                "36cfc10739b6d43e"
+            ]
+        ]
+    },
+    {
+        "id": "d16924b25768d18c",
+        "type": "status",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "scope": [
+            "50bcba057bef55f6"
+        ],
+        "x": 260,
+        "y": 2300,
+        "wires": [
+            [
+                "c8dfb0e21d473b9f"
+            ]
+        ]
+    },
+    {
+        "id": "c8dfb0e21d473b9f",
+        "type": "subflow:5268bc2e3f733ac2",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "x": 620,
+        "y": 2340,
+        "wires": [
+            [
+                "224a7eb602518d7e"
+            ],
+            [
+                "ae9b93f6024f1a5b"
+            ]
+        ]
+    },
+    {
+        "id": "224a7eb602518d7e",
+        "type": "link call",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 920,
+        "y": 2340,
+        "wires": [
+            [
+                "c8dfb0e21d473b9f"
+            ]
+        ]
+    },
+    {
+        "id": "36cfc10739b6d43e",
+        "type": "http response",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 570,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "b4c28d85c484f3a6",
+        "type": "comment",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "API Rest Custom Trigger",
+        "info": "",
+        "x": 170,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "e0ab7b4f47f25c3c",
+        "type": "link in",
+        "z": "2dbd8c6f774fdb61",
+        "d": true,
+        "name": "link in 3",
+        "links": [],
+        "x": 265,
+        "y": 2400,
+        "wires": [
+            [
+                "c8dfb0e21d473b9f"
+            ]
+        ]
+    },
+    {
+        "id": "df3350b83720a10b",
+        "type": "tab",
+        "label": "Custom Triggers Demo",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6a3b133f18ac42b5",
+        "type": "s7 in",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "endpoint": "29a6bb4325ebcb7d",
+        "mode": "single",
+        "variable": "",
+        "diff": true,
+        "name": "",
+        "x": 270,
+        "y": 160,
+        "wires": [
+            [
+                "afc50602cc0c6679"
+            ]
+        ]
+    },
+    {
+        "id": "afc50602cc0c6679",
+        "type": "function",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "trigger_logic",
+        "func": "\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 160,
+        "wires": [
+            [
+                "37a26891c1f32a25"
+            ],
+            [
+                "87dab3481f04949b"
+            ]
+        ]
+    },
+    {
+        "id": "87dab3481f04949b",
+        "type": "s7 out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "endpoint": "29a6bb4325ebcb7d",
+        "variable": "Trigger",
+        "name": "Trigger Reset",
+        "x": 840,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "37a26891c1f32a25",
+        "type": "link out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "ABC_2_PLC_trigger_out",
+        "mode": "link",
+        "links": [
+            "ef6990e16be58d1b"
+        ],
+        "x": 775,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "18bdbd6fd0b658a9",
+        "type": "comment",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Custom Trigger Flow - S7",
+        "info": "1 - Read On Change only the trigger variable:\n    to do so a new endpoint s7 must be configured. \n    the reading cycle is always for all the configured variables.\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to write the trigger variable if needed \n    to ack the reading process ",
+        "x": 170,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "533a2951ab37fee3",
+        "type": "comment",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Custom Trigger Flow - Modbus",
+        "info": "1 - Read Continous only the trigger variable:\n    to do so a new endpoint ModBus must be configured. \n    the Read Node is used for Simple Reading\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to write the trigger variable if needed \n    to ack the reading process ",
+        "x": 190,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "0e0b089593f87680",
+        "type": "modbus-read",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "rate": "1",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "edb89972098ee9ef",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 270,
+        "y": 340,
+        "wires": [
+            [
+                "309d933b335f7d4d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f44733df4ac4a281",
+        "type": "modbus-write",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "edb89972098ee9ef",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 840,
+        "y": 360,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "309d933b335f7d4d",
+        "type": "function",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "trigger_logic",
+        "func": "\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 340,
+        "wires": [
+            [
+                "f67d44986870e735"
+            ],
+            [
+                "f44733df4ac4a281"
+            ]
+        ]
+    },
+    {
+        "id": "f67d44986870e735",
+        "type": "link out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Modbus Endpoint 2 Trigger out",
+        "mode": "link",
+        "links": [
+            "f85c22a4ad0eca0e"
+        ],
+        "x": 775,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5b764b3d19b0edeb",
+        "type": "OpcUa-Client",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "endpoint": "f9ff10e208cdc5aa",
+        "action": "read",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 10,
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "folderName4PKI": "",
+        "name": "",
+        "x": 280,
+        "y": 520,
+        "wires": [
+            [
+                "eecbca3df74aec50"
+            ]
+        ]
+    },
+    {
+        "id": "714e45a1241959e7",
+        "type": "comment",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Custom Trigger Flow - Opcua",
+        "info": "1 - Subscribe only the trigger variable:\n    handled by the the trigger logic\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to subscribe / read / write the trigger variable ",
+        "x": 180,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "eecbca3df74aec50",
+        "type": "function",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "trigger_logic",
+        "func": "\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 520,
+        "wires": [
+            [
+                "83d53b4a07b209e6"
+            ],
+            [
+                "5b764b3d19b0edeb"
+            ]
+        ]
+    },
+    {
+        "id": "83d53b4a07b209e6",
+        "type": "link out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Modbus Endpoint 2 Trigger out",
+        "mode": "link",
+        "links": [
+            "f85c22a4ad0eca0e"
+        ],
+        "x": 775,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "6b73ee34ddba7d55",
+        "type": "mqtt in",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "",
+        "topic": "mqtt/data/read/trigger/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "0b75090e5169005e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 300,
+        "y": 700,
+        "wires": [
+            [
+                "c4dcf6d983d6f46a"
+            ]
+        ]
+    },
+    {
+        "id": "8f35e15e19ac99a9",
+        "type": "comment",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Custom Trigger Flow - Mqtt",
+        "info": "1 - Subscribe only the trigger variable:\n    handled by the the trigger logic\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to subscribe / read / write the trigger variable ",
+        "x": 170,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "5013c4151da80025",
+        "type": "link out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Modbus Endpoint 2 Trigger out",
+        "mode": "link",
+        "links": [
+            "f85c22a4ad0eca0e"
+        ],
+        "x": 775,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "c4dcf6d983d6f46a",
+        "type": "function",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "trigger_logic",
+        "func": "\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 700,
+        "wires": [
+            [
+                "5013c4151da80025"
+            ],
+            [
+                "ba2c3473170233f0"
+            ]
+        ]
+    },
+    {
+        "id": "ba2c3473170233f0",
+        "type": "mqtt out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "",
+        "topic": "mqtt/data/write/trigger",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "0b75090e5169005e",
+        "x": 860,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "55e353211bf7dcc3",
+        "type": "http request",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "",
+        "persist": false,
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 270,
+        "y": 900,
+        "wires": [
+            [
+                "f3118b8bab6de184",
+                "2edcd94ecb0f2e5d"
+            ]
+        ]
+    },
+    {
+        "id": "622a54d7047c99ca",
+        "type": "comment",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Custom Trigger Flow - API Rest",
+        "info": "1 - Subscribe only the trigger variable:\n    handled by the the trigger logic\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to subscribe / read / write the trigger variable ",
+        "x": 190,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "f3118b8bab6de184",
+        "type": "function",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "trigger_logic",
+        "func": "\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 900,
+        "wires": [
+            [
+                "ea971b1902305135"
+            ],
+            [
+                "55e353211bf7dcc3"
+            ]
+        ]
+    },
+    {
+        "id": "2edcd94ecb0f2e5d",
+        "type": "http response",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 530,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "ea971b1902305135",
+        "type": "link out",
+        "z": "df3350b83720a10b",
+        "d": true,
+        "name": "Modbus Endpoint 2 Trigger out",
+        "mode": "link",
+        "links": [
+            "f85c22a4ad0eca0e"
+        ],
+        "x": 775,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "4d546db47d274425",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.100",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "1000",
+        "timeout": "2000",
+        "name": "ABC_1_PLC",
+        "vartable": [
+            {
+                "addr": "DB1,R0",
+                "name": "First Variable"
+            }
+        ]
+    },
+    {
+        "id": "edb89972098ee9ef",
+        "type": "modbus-client",
+        "name": "",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "127.0.0.1",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true,
+        "showErrors": false,
+        "showWarnings": true,
+        "showLogs": true
+    },
+    {
+        "id": "f9ff10e208cdc5aa",
+        "type": "OpcUa-Endpoint",
+        "endpoint": "tcp-opcua:192168.1.100",
+        "secpol": "None",
+        "secmode": "None",
+        "none": true,
+        "login": false,
+        "usercert": false,
+        "usercertificate": "",
+        "userprivatekey": ""
+    },
+    {
+        "id": "0b75090e5169005e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "095dbaf71f1d0856",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.101",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "0",
+        "timeout": "2000",
+        "name": "ABC_2_PLC",
+        "vartable": [
+            {
+                "addr": "DB1,R1",
+                "name": "First Variable"
+            }
+        ]
+    },
+    {
+        "id": "29a6bb4325ebcb7d",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.101",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "1000",
+        "timeout": "2000",
+        "name": "Trigger_Odr_ABC_2",
+        "vartable": [
+            {
+                "addr": "DB2,B1",
+                "name": "Trigger"
+            }
+        ]
+    }
+]
