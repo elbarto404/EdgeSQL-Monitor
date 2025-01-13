@@ -42,9 +42,9 @@ BEGIN
       WHERE table_schema = '${processSchema}' AND table_name = '${processTable}'
    ) THEN
       CREATE TABLE ${processSchema}.${processTable} (
-         time TIMESTAMP,
+         created_at TIMESTAMP,
          endpoint NUMERIC,
-         PRIMARY KEY (time, endpoint)
+         PRIMARY KEY (created_at, endpoint)
       );
    END IF;
 END $$;
