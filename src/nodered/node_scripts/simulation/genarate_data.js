@@ -11,6 +11,49 @@ function getRandomFloat(min, max, decimals=2) {
     return Math.round((Math.random() * (max - min) + min) * factor) / factor;
 }
 
+// Utility function to get gaussian random number between min and max with factor precision
+function getGaussianRandom(min, max, decimals=2) {
+    const factor = Math.pow(10, decimals);
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random(); // Avoid zero
+    while(v === 0) v = Math.random(); // Avoid zero
+    
+    // Box-Muller transform
+    let z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    
+    // Normalize to the desired range
+    let mean = (max + min) / 2;
+    let stddev = (max - min) / 6; // Approx 99.7% of data within [min, max]
+    
+    let value = mean + z * stddev;
+    
+    // Clamp the value to stay within bounds and round it with the factor
+    value = Math.max(min, Math.min(max, value));
+    return Math.round(value * factor) / factor;
+}
+
+// Utility function to generate random float with waithed probability
+function getWeightedRandomItem(items) {
+    // 1) Get total weight
+    let totalWeight = 0;
+    for (let item of items) {
+        totalWeight += item[weight]; 
+    }
+
+    // 2) Generate a random number in [0, totalWeight)
+    let random = Math.random() * totalWeight;
+
+    // 3) Iterate until we find which key we land on
+    let sum = 0;
+    for (let item of items) {
+        sum += item[weight];
+        if (random <= sum) {
+            return item;
+        }
+    }
+    return items[-1];
+}
+
 // Helper function to distribute total time into 'count' random parts
 function distributeTime(total, count) {
     if (count === 0) return [];
@@ -33,14 +76,337 @@ function distributeTime(total, count) {
     return times;
 }
 
-let cycle_id = flow.get("cycle_id") + 1;
+// Define Cycle Number and Shaft
+let CY = flow.get("CY") + 1;
+let S = flow.get("S") || 1;
+S = S === 1 ? 2 : 1;
+flow.set("CY", CY);
+flow.set('S', S); 
 
+// Define setpoints
+let TCYsp  =   300.0; // Cycle time setpoint [s]
+let TCOsp  =   250.0; // Combustion time setpoint [s]
+let TFSsp  =   200.0; // Time fuel supply setpoint [s]
+
+let LSCY1sp =   600.0; // Limestone for cycle, first charge - Setpoint [kg/cy]
+let LSCY2sp =   400.0; // Limestone for cycle, second charge - Setpoint [kg/cy]
+let LSCY3sp =   400.0; // Limestone for cycle, third charge - Setpoint [kg/cy]
+let HCsp   =  5000.0; // Heat consumption - Setpoint [kcal/kg]
+let FCYsp  =   600.0; // Fuel for Cycle - Setpoint [m3(n)/cy]
+let EANsp  =    25.0; // Combustion air index (Excess of air) - Setpoint [#]
+let ALCsp  =    40.0; // Lime cooling air ratio - Setpoint [#]
+
+// Define cycle times for different operations
+let TCY = 0; 
+let TCO = 0;
+let TFS = 0;
+let TI = 0;
+
+let TWaitPar = [  // weight for probaility, min time, max time
+    {name: 'TWait1', weight: 0.40, tRange: [TCYsp*0.5, TCYsp*1.5]},  // Drawer Sampling [s]	
+    {name: 'TWait2', weight: 0.08, tRange: [TCYsp*1.0, TCYsp*3.0]},  // Valves Maintenance [s]
+    {name: 'TWait3', weight: 0.08, tRange: [TCYsp*2.0, TCYsp*8.0]},  // Hydraulic Oil Unit Maintenance [s]
+    {name: 'TWait4', weight: 0.08, tRange: [TCYsp*3.0, TCYsp*9.9]},  // Hydraulic Oil Plant Maintenance [s]
+    {name: 'TWait5', weight: 0.08, tRange: [TCYsp*2.5, TCYsp*6.0]},  // Blower Maintenance [s]
+    {name: 'TWait6', weight: 0.08, tRange: [TCYsp*3.0, TCYsp*7.0]},  // Skip Maintenance [s]
+    {name: 'TWait7', weight: 0.05, tRange: [TCYsp*1.0, TCYsp*3.0]},  // Weighed hopper calibration [s]
+    {name: 'TWait8', weight: 0.05, tRange: [TCYsp*1.0, TCYsp*3.0]},  // Coal weighed tank calibration [s]
+    {name: 'TWait9', weight: 0.15, tRange: [TCYsp*2.0, TCYsp*9.9]}   // Other Maintenance [s]
+];
+let TWaitAll = TWaitPar.reduce((acc, item) => ({ ...acc, [item.name]: 0 }), {});
+
+let TOffPar = [  // weight for probaility, min time, max time
+    {name: 'TOff1', weight: 0.30, tRange: [TCYsp*3.0, TCYsp*8.0]},   // Mechanical Issue [s]
+    {name: 'TOff2', weight: 0.20, tRange: [TCYsp*1.0, TCYsp*5.0]},   // Electrical Issue [s]
+    {name: 'TOff3', weight: 0.30, tRange: [TCYsp*2.0, TCYsp*6.0]},   // Process Issue [s]
+    {name: 'TOff4', weight: 0.20, tRange: [TCYsp*1.0, TCYsp*9.0]}    // Other Issue [s]
+];
+let TOffAll = TOffPar.reduce((acc, item) => ({ ...acc, [item.name]: 0 }), {});
+
+let shaft = flow.get("shaft") || 1;
+if (shaft === 1) {shaft = 2;} else {shaft = 1;}
+flow.set('shaft', shaft);
+
+// Randomly generate maintenance or issue
+let flag_maintenance = getRandomInt(0, 100) < 5; // 5% chance of maintenance
+let flag_issue = getRandomInt(0, 100) < 2; // 2% chance of issue
+
+// Cycles with issues
+if (flag_issue) {
+    let issue = getWeightedRandomItem(TOffPar);
+    TOff = getRandomFloat(issue.tRange[0], issue.tRange[1]);
+    for (let item of TOffPar) {
+        if (issue === item) {TOffAll[item.name] = TOff;}
+    }
+
+    flag_maintenance = getRandomInt(0, 100) < 50; // 50% chance of maintenance after issue
+    
+    TCY = getRandomFloat(TCYsp*0.2, TCYsp*0.8);
+    TCO = getRandomFloat(min(TCOsp*0.1, TCY), min(TCOsp*0.8, TCY));
+    TFS = getRandomFloat(min(TFSsp*0.1, TCO), min(TFSsp*0.8, TCO));
+    TI = TCY - TCO;
+
+// Cycles without issues
+} else {
+    TCY = getGaussianRandom(TCYsp*0.9, TCYsp*1.1);
+    TCO = getGaussianRandom(TCOsp*0.9, min(TCOsp*1.1, TCY));
+    TFS = getGaussianRandom(TFSsp*0.9, min(TFSsp*1.1, TCO));
+    TI = TCY - TCO;
+}
+
+// Cycles with maintenance
+if (flag_maintenance) {
+    for (let i = 0; i < getRandomInt(1, 3); i++) { // 1 to 3 maintenances types
+        let maintenance = getWeightedRandomItem(TWaitPar);
+        TWait = getRandomFloat(maintenance.tRange[0], maintenance.tRange[1]);
+        for (let item of TOffPar) {
+            if (maintenance === item) {TWaitAll[item.name] = TOff;}
+        }
+    }
+}
+
+let TWait = TWaitAll.reduce((acc, item) => acc = max(acc, item.value), 0); // max of all TWait values
+let TOff = TOffAll.reduce((acc, item) => acc = max(acc, item.value), 0); // max of all TOff values
+let TStop = TWait + TOff; 
+
+let LSCYsp = LSCY1sp + LSCY2sp + LSCY3sp; // Limestone for cycle - Setpoint [kg/cy]
+let LSCYpv = getGaussianRandom(LSCYsp*0.9, LSCYsp*1.1); // Limestone for cycle - Process Value [kg/cy]
+let LCY = getGaussianRandom(LSCYpv*0.7, LSCYpv*0.9); // Lime for cycle [kg/cy]
+let NP = LCY/1000; // Nominal production [tpd]
+
+let S1PS = getGaussianRandom(LCY/15, LCY/10, 0); // Shaft 1 - Prim Number of Strokes
+let S1SS = getGaussianRandom(LCY/15, LCY/10, 0); // Shaft 1 - Sec Number of Strokes
+let S2PS = getGaussianRandom(LCY/15, LCY/10, 0); // Shaft 2 - Prim- Number of Strokes
+let S2SS = getGaussianRandom(LCY/15, LCY/10, 0); // Shaft 2 - Sec- Number of Strokes
+let S1tot = S1PS + S1SS; // Shaft 1 - Number of Total Strokes [#]
+let S2tot = S2PS + S2SS; // Shaft 2 - Number of Total Strokes [#]
+
+let ATMP = getGaussianRandom(1000, 1020); // Barometric pressure [mbar]
+
+
+const initialValues = {
+    CY: CY, // Progressive Cycle Number (1 to 99999)[#]
+    S: S, // Shaft in combustion [#]
+    TCY: TCY, // Cycle time [s]
+    TCO: TCO, // Combustion time [s]
+    TI: TI, // Inversion time [s]
+    TStop: TStop, // Time Cycle Disabled [s]
+    TFS: TFS, // Time fuel supply [s]
+    LSCYpv: LSCYpv, // Limestone for cycle - Process Value [kg/cy]
+    LSCYsp: LSCYsp, // Limestone for cycle - Setpoint [kg/cy]
+    LCY: LCY, // Lime for cycle [kg/cy]
+    NP: NP, // Nominal production [tpd]
+    HCpv: getGaussianRandom(5000*0.9, 5000*1.1), // Heat consumption - Process Value [kcal/kg]
+    HCsp: 5000, // Heat consumption - Setpoint [kcal/kg]
+    FCYpv: getGaussianRandom(60*0.9, 60*1.1), // Fuel for cycle Process Value [Nm3/cy]
+    FCYsp: 60, // Fuel for Cycle - Setpoint [m3(n)/cy]
+    FFpv: 100, // Fuel flow - Process Value [Nm3/h]
+    FFsp: getGaussianRandom(100*0.9, 100*1.1), // Fuel Flow - Set Point
+    LHV: 7000, // Low heat value [kacl/Nm3]
+    SA: 25, // Stoichiometric air [#]
+    CAF: getGaussianRandom(300*0.9, 300*1.1), // Combustion air flow [Nm3/h]
+    EANpv: getGaussianRandom(30*0.9, 30*1.1), // Combustion air index - Process Value [#]
+    EANsp: 30, // Combustion air index (Excess of air) - Setpoint [#]
+    LCAF: getGaussianRandom(400*0.9, 400*1.1), // Lime cooling air flow [Nm3/h]
+    ALCpv: getGaussianRandom(40*0.9, 40*1.1),  // Lime cooling air ratio - Process Value [#]
+    ALCsp: 40, // Lime cooling air ratio - Setpoint [#]
+    TC1: getGaussianRandom(90, 110), // Channel temperature 1 [�C]
+    TC2: getGaussianRandom(90, 110), // Channel temperature 2 [�C]
+    TWG: getGaussianRandom(120, 140), // Waste gases temperature-outlet kiln [�C]
+    TFLT: getGaussianRandom(90, 110), // Waste gases temperature-inlet kiln filter [�C]
+    LT1: getGaussianRandom(350, 400), // Skip side Shaft 1 - lime temperature (Inspection door ZS204101)
+    LT2: getGaussianRandom(150, 250), // External side Shaft 1 - lime temperature (Inspection door ZS204102)
+    LT3: getGaussianRandom(150, 250), // External side Shaft 1 - lime temperature (Inspection door ZS204103)
+    LT4: getGaussianRandom(500, 700), // Pipe side Shaft 1 - lime temperature (Inspection door ZS204104)
+    LT5: getGaussianRandom(500, 700), // Pipe side Shaft 1 - lime temperature (Inspection door ZS204105)
+    LT6: getGaussianRandom(600, 800), // Internal side Shaft 1 - lime temperature (Inspection door ZS204106)
+    LT7: getGaussianRandom(600, 800), // Internal side Shaft 1 - lime temperature (Inspection door ZS204107)
+    LT8: getGaussianRandom(350, 400), // Skip side Shaft 1 - lime temperature (Inspection door ZS204109)
+    LT9: getGaussianRandom(350, 400), // Skip side Shaft 2 - lime temperature (Inspection door ZS204201)
+    LT10: getGaussianRandom(150, 250), // External side Shaft 2 - lime temperature (Inspection door ZS204202)
+    LT11: getGaussianRandom(150, 250), // External side Shaft 2 - lime temperature (Inspection door ZS204203)
+    LT12: getGaussianRandom(500, 700), // Pipe side Shaft 2 - lime temperature (Inspection door ZS204204)
+    LT13: getGaussianRandom(500, 700), // Pipe side Shaft 2 - lime temperature (Inspection door ZS204205)
+    LT14: getGaussianRandom(600, 800), // Internal side Shaft 2 - lime temperature (Inspection door ZS204206)
+    LT15: getGaussianRandom(600, 800), // Internal side Shaft 2 - lime temperature (Inspection door ZS204207)
+    LT16: getGaussianRandom(350, 400), // Skip side Shaft 2 - lime temperature (Inspection door ZS204209)
+    CBAP: getGaussianRandom(50, 100), // Combustion air pressure [mbar]
+    CLAP: getGaussianRandom(50, 100), // Lime cooling air pressure [mbar]
+    CHAP: getGaussianRandom(50, 100), // Channel air pressure [mbar]
+    CTAP: getGaussianRandom(50, 100), // Transport air pressure [mbar]
+    ATMP: ATMP, // Barometric pressure [mbar]
+    LCAPS1: getGaussianRandom(50, 100), // Shaft 1 - Lances cooling / Final injection air pressure [mbar]
+    LCAPS2: getGaussianRandom(50, 100), // Shaft 2 - Lances cooling / Final injection air pressure [mbar]
+    S1tot: S1tot, // Shaft 1 - Number of Total Strokes [#]
+    S1PS: S1PS, // Shaft 1 - Prim Number of Strokes
+    S1SS: S1SS, // Shaft 1 - Sec Number of Strokes
+    S2tot: S2tot, // Shaft 2 - Number of Total Strokes [#]
+    S2PS: S2PS, // Shaft 2 - Prim- Number of Strokes
+    S2SS: S2SS, // Shaft 2 - Sec- Number of Strokes
+    DBLINE1: getGaussianRandom(0, 5), // Delta pressure line 1 - Fuel coal [mbar]
+    DBLINE2: getGaussianRandom(0, 5), // Delta pressure line 2 - Fuel coal [mbar]
+    DBLINE3: getGaussianRandom(0, 5), // Delta pressure line 3 - Fuel coal [mbar]
+    DBLINE4: getGaussianRandom(0, 5), // Delta pressure line 4 - Fuel coal [mbar]
+    DBLINE5: getGaussianRandom(0, 5), // Delta pressure line 5 - Fuel coal [mbar]
+    DBLINE6: getGaussianRandom(0, 5), // Delta pressure line 6 - Fuel coal [mbar]
+    DBLINE7: getGaussianRandom(0, 5), // Delta pressure line 7 - Fuel coal [mbar]
+    DBLINE8: getGaussianRandom(0, 5), // Delta pressure line 8 - Fuel coal [mbar]
+    DBLINE9: getGaussianRandom(0, 5), // Delta pressure line 9 - Fuel coal [mbar]
+    RATIOS1LN1: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 1 [%]
+    RATIOS1LN2: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 2 [%]
+    RATIOS1LN3: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 3 [%]
+    RATIOS1LN4: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 4 [%]
+    RATIOS1LN5: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 5 [%]
+    RATIOS1LN6: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 6 [%]
+    RATIOS1LN7: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 7 [%]
+    RATIOS1LN8: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 8 [%]
+    RATIOS1LN9: getGaussianRandom(90, 100), // Shaft 1 - Speed ratio line 9 [%]
+    RATIOS2LN1: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 1 [%]
+    RATIOS2LN2: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 2 [%]
+    RATIOS2LN3: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 3 [%]
+    RATIOS2LN4: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 4 [%]
+    RATIOS2LN5: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 5 [%]
+    RATIOS2LN6: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 6 [%]
+    RATIOS2LN7: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 7 [%]
+    RATIOS2LN8: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 8 [%]
+    RATIOS2LN9: getGaussianRandom(90, 100), // Shaft 2 - Speed ratio line 9 [%]
+    S1SPEEDL1: getGaussianRandom(10, 20), // Shaft 1 - Speed line 1 - Process value [rpm]
+    S1SPEEDL2: getGaussianRandom(10, 20), // Shaft 1 - Speed line 2 - Process value [rpm]
+    S1SPEEDL3: getGaussianRandom(10, 20), // Shaft 1 - Speed line 3 - Process value [rpm]
+    S1SPEEDL4: getGaussianRandom(10, 20), // Shaft 1 - Speed line 4 - Process value [rpm]
+    S1SPEEDL5: getGaussianRandom(10, 20), // Shaft 1 - Speed line 5 - Process value [rpm]
+    S1SPEEDL6: getGaussianRandom(10, 20), // Shaft 1 - Speed line 6 - Process value [rpm]
+    S1SPEEDL7: getGaussianRandom(10, 20), // Shaft 1 - Speed line 7 - Process value [rpm]
+    S1SPEEDL8: getGaussianRandom(10, 20), // Shaft 1 - Speed line 8 - Process value [rpm]
+    S1SPEEDL9: getGaussianRandom(10, 20), // Shaft 1 - Speed line 9 - Process value [rpm]
+    S2SPEEDL1: getGaussianRandom(10, 20), // Shaft 2 - Speed line 1 - Process value [rpm]
+    S2SPEEDL2: getGaussianRandom(10, 20), // Shaft 2 - Speed line 2 - Process value [rpm]
+    S2SPEEDL3: getGaussianRandom(10, 20), // Shaft 2 - Speed line 3 - Process value [rpm]
+    S2SPEEDL4: getGaussianRandom(10, 20), // Shaft 2 - Speed line 4 - Process value [rpm]
+    S2SPEEDL5: getGaussianRandom(10, 20), // Shaft 2 - Speed line 5 - Process value [rpm]
+    S2SPEEDL6: getGaussianRandom(10, 20), // Shaft 2 - Speed line 6 - Process value [rpm]
+    S2SPEEDL7: getGaussianRandom(10, 20), // Shaft 2 - Speed line 7 - Process value [rpm]
+    S2SPEEDL8: getGaussianRandom(10, 20), // Shaft 2 - Speed line 8 - Process value [rpm]
+    S2SPEEDL9: getGaussianRandom(10, 20), // Shaft 2 - Speed line 9 - Process value [rpm]
+    COALTANKP: getGaussianRandom(200, 250), // Fuel Coal - Pressure weighed tank T235301_1 [mbar]
+    COALTANKT: getGaussianRandom(200, 250), // Fuel Coal - Temperature weighed tank T235301_1 [�C]
+    HYT: getGaussianRandom(20, 30), // Hydraulic Oil - Temperature [�C]
+    HYP: getGaussianRandom(150, 200), // Hydraulic Oil - Pressure [bar]
+    TWait: TWait, // Waitnig Time [s]
+    TOff: TOff, // Unavailability time [s]
+    TWait1: TWaitAll.TWait1, // Drawer Sampling [s]
+    TWait2: TWaitAll.TWait2, // Valves time maintenance [s]
+    TWait3: TWaitAll.TWait3, // Hydraulic oil unit time maintenance [s]
+    TWait4: TWaitAll.TWait4, // Hydraulic oil plant time maintenance [s]
+    TWait5: TWaitAll.TWait5, // Blower time maintenance [s]
+    TWait6: TWaitAll.TWait6, // Skip time maintenance [s]
+    TWait7: TWaitAll.TWait7, // Weighed hopper calibration [s]
+    TWait8: TWaitAll.TWait8, // Coal weighed tank calibration [s]
+    TWait9: TWaitAll.TWait9, // Other maintenance [s]
+    TOff1: TOffAll.TOff1, // Mechanical issue [s]
+    TOff2: TOffAll.TOff2, // Electrical issue [s]
+    TOff3: TOffAll.TOff3, // Process issue[s]
+    TOff4: TOffAll.TOff4, // Other issue [s]
+    SKIP_ULD1CHpv: getGaussianRandom(40, 60), // ULD skip side position at first charge - Process Value [%]
+    PIPE_ULD1CHpv: getGaussianRandom(40, 60), // ULD pipe side position at first charge - Process Value [%]
+    ULD1CHsp: 50, // ULD position at first charge - Setpoint [%]
+    SKIP_ULD2CHpv: getGaussianRandom(40, 60), // ULD skip side position at second charge - Process Value [%]
+    PIPE_ULD2CHpv: getGaussianRandom(40, 60), // ULD pipe side position at second charge - Process Value [%]
+    ULD2CHsp: 50, // ULD position at second charge - Setpoint [%]
+    SKIP_ULD3CHpv: getGaussianRandom(40, 60), // ULD skip side position at third charge - Process Value [%]
+    PIPE_ULD3CHpv: getGaussianRandom(40, 60), // ULD pipe side position at third charge - Process Value [%]
+    ULD3CHsp: 50, // ULD position at third charge - Setpoint [%]
+    LSCY1pv: getGaussianRandom(LSCY1sp*0.9, LSCY1sp*1.1), // LSCY at first charge - Process Value [Kg]
+    LSCY1sp: LSCY1sp, // LSCY at first charge - Setpoint [Kg]
+    LSCY2pv: getGaussianRandom(LSCY1sp*0.9, LSCY1sp*1.1), // LSCY at second charge - Process Value [Kg]
+    LSCY2sp: LSCY2sp, // LSCY at second charge - Setpoint [Kg]
+    LSCY3pv: getGaussianRandom(LSCY1sp*0.9, LSCY1sp*1.1), // LSCY at third charge - Process Value [Kg]
+    LSCY3sp: LSCY3sp, // LSCY at third charge - Setpoint [Kg]
+    TCH1: getGaussianRandom(TCY*0.1, TCY*0.15), // Time first charge [s]
+    TCH2: getGaussianRandom(TCY*0.2, TCY*0.25), // Time second charge [s]
+    TCH3: getGaussianRandom(TCY*0.3, TCY*0.35), // Time third charge [s]
+    LSTARCMB: getGaussianRandom(10, 25), // Level position in shaft in combustion at cycle start [%]
+    LSTOPCMB: getGaussianRandom(90, 100), // Level position in shaft in combustion at cycle end [%]
+    LSTARPRH: getGaussianRandom(10, 25), // Level position in shaft in preheating at cycle start [%]
+    LSTOPPRH: getGaussianRandom(90, 100), // Level position in shaft in preheating at cycle end [%]
+    LVLCMBsp: getGaussianRandom(40, 50), // Setpoint level in shaft in combustion [%]
+    LVLPRHsp: getGaussianRandom(30, 40), // Setpoint level in shaft in preheating [%]
+    EXTCMB: 0, // Extraction Mode in Combustion [0=By level; 1=By Strokes] [#]
+    EXTPRH: 0, // Extraction Mode in Preheating [0=By level; 1=By Strokes] [#]
+    S1EXTAUTO: 1, // Shaft 1 - Drawmatic in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    S2EXTAUTO: 1, // Shaft 2 - Drawmatic in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    S1MNRATIO: 100, // Shaft 1 - Ratio Setpoint of Strokes main drawer [#]
+    S1SCRATIO: 99, // Shaft 1 - Ratio Setpoint of Strokes secondary drawer [#]
+    S1FSTLVL: 5, // Shaft 1 - Delay start fast extraction in level mode [s]
+    S1STROKsp: round(S1tot/10)*10, // Shaft 1 - Setpoint of total strokes [#]
+    S1SDELAYsp: 2, // Shaft 1 - Setpoint delay time between two strokes [s]
+    S1FSTSTRT: 4, // Shaft 1 - Delay start fast extraction in strokes mode [s]
+    S2MNRATIO: 98, // Shaft 2 - Ratio Setpoint of Strokes main drawer [#]
+    S2SCRATIO: 97, // Shaft 2 - Ratio Setpoint of Strokes secondary drawer [#]
+    S2FSTLVL: 6, // Shaft 2 - Delay start fast extraction in level mode [s]
+    S2STROKsp: round(S2tot/10)*10, // Shaft 2 - Setpoint of total strokes [#]
+    S2SDELAYsp: 3, // Shaft 2 - Setpoint delay time between two strokes [s]
+    S2FSTSTR: 7, // Shaft 2 - Delay start fast extraction in strokes mode [s]
+    EANAUTO: 1, // EANMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    ALCAUTO: 1, // COOLMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    FUELAUTO: 1, // FUELMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    FILTERAUTO: 1, // FILTERMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    REDAUTO: 1, // FIREREDUCTION in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    CUTAUTO: 1, // FIRECUT in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]
+    TSTRREDsp: 1000, // Temperature Setpoint for start fuel reduction [�C]
+    TSTPREDsp: 900, // Temperature Setpoint for stop fuel reduction [�C]
+    PERCREDsp: 20, // Percentage of fuel reduction [%]
+    TSTRCUTsp: 1100, // Temperature Setpoint for start fuel cut [�C]
+    TSTPCUTsp: 1000, // Temperature Setpoint for stop fuel cut [�C]
+    REDENABL: 1, // Fuel reduction enabled during last cycle [#]
+    REDTIMEpv: TCYsp*0.2, // Working time of Fuel reduction during last cycle [s]
+    CUTENABL: 1, // Fuel cut enabled during last cycle [#]
+    CUTTIMEpv: TCYsp*0.1, // Working time of Fuel cut during last cycle [s]
+    PATM: ATMP, // Barometric Pressure [mbar]
+    FCVS1pv: getGaussianRandom(75, 85), // FCV Lime cooling valve - Shaft 1 - Process value [%]
+    FCVS1sp: 80, // FCV Lime cooling valve - Shaft 1 - Setpoint [%]
+    FCVS1AUTO: 1, // Shaft 1 - Flow Control Valve in auto mode [0=Manual Mode; 1=Automatic Mode] [#]
+    FCVS2pv: getGaussianRandom(75, 85), // FCV Lime cooling valve - Shaft 2 - Process value [%]
+    FCVS2sp: 80, // FCV Lime cooling valve - Shaft 2 - Setpoint [%]
+    FCVS2AUTO: 1, // Shaft 2 - Flow Control Valve in auto mode [0=Manual Mode; 1=Automatic Mode] [#]
+    CMB1pv: getGaussianRandom(1800*0.9, 1800*1.1), // Combustion Air Blower 1 - Speed - Process Value [rpm]
+    CMB1sp: 1800, // Combustion Air Blower 1 - Speed - Setpoint [rpm]
+    CMB2pv: getGaussianRandom(2000*0.9, 2000*1.1), // Combustion Air Blower 2 - Speed - Process Value [rpm]
+    CMB2SP: 2000, // Combustion Air Blower 2 - Speed - Set Point [rpm]
+    CMB3pv: getGaussianRandom(2200*0.9, 2200*1.1), // Combustion Air Blower 3 - Speed - Process Value [rpm]
+    CMB3sp: 2200, // Combustion Air Blower 3 - Speed - Set Point [rpm]
+    LCB1pv: getGaussianRandom(2000*0.9, 2000*1.1), // Lime Cooling Air Blower 1 - Speed - Process Value [rpm]
+    LCB1sp: 2000, // Lime Cooling Air Blower 1 - Speed - Setpoint [rpm]
+    LCB2pv: getGaussianRandom(2400*0.9, 2400*1.1), // Lime Cooling Air Blower 2 - Speed - Process Value [rpm]
+    LCB2sp: 2400, // Lime Cooling Air Blower 2 - Speed - Set Point [rpm]
+    FANpv: getGaussianRandom(1200*0.9, 1200*1.1), // Filter Fan - Speed - Process Value [rpm]
+    FANsp: 1200, // Filter Fan - Speed - Setpoint [rpm]
+    S1CAPSPpv: getGaussianRandom(1800*0.9, 1800*1.1), // Shaft 1 - Lances cooling blower - Speed - Process value [rpm]
+    S1CAPSPsp: 1800, // Shaft 1 - Lances cooling blower - Speed - Setpoint [rpm]
+    S2CAPSPpv: getGaussianRandom(1800*0.9, 1800*1.1), // Shaft 2 - Lances cooling blower - Speed - Process value [rpm]
+    S2CAPSPsp: 1800, // Shaft 2 - Lances cooling blower - Speed - Setpoint [rpm]
+    CTBSPpv: getGaussianRandom(1400*0.9, 1400*1.1), // Transport air - Speed - Process value [rpm]
+    CTBSPsp: 1400, // Transport air - Speed - Setpoint [rpm]
+    CMB1CUR: getGaussianRandom(150, 200), // Combustion Air Blower 1 - Current - Process Value
+    CMB2CUR: getGaussianRandom(150, 200), // Combustion Air Blower 2 - Current - Process Value
+    CMB3CUR: getGaussianRandom(150, 200), // Combustion Air Blower 3 - Current - Process Value
+    LCB1CUR: getGaussianRandom(150, 200), // Lime Cooling Air Blower 1 - Current - Process Value
+    LCB2CUR: getGaussianRandom(150, 200), // Lime Cooling Air Blower 2 - Current - Process Value
+    FANCUR: getGaussianRandom(100, 150), // Filter Fan - Current - Process Value
+    S1CAPCUR: getGaussianRandom(150, 200), // Shaft 1 - Lance cooling blower - Current - Process value
+    S2CAPCUR: getGaussianRandom(150, 200), // Shaft 2 - Lance cooling blower - Current - Process value
+    CTBCURR: getGaussianRandom(200, 250), // Transport air - Current - Process value
+    HYDP1CUR: getGaussianRandom(75, 100), // Hydraulic Unit - Pump 1 - Current
+    HYDP2CUR: getGaussianRandom(75, 100), // Hydraulic Unit - Pump 2 - Current
+};
+
+/*
 // Generate simulated data
-let payload = {
-    cycle_id: cycle_id,
+let initialValues = {
+    CY: CY,
     
     // Production Data
-    shaft_combustion: getRandomInt(50, 150), // e.g., number of combustions
+    S: shaft, // e.g., number of combustions
     limestone_cycle: getRandomFloat(100.0, 500.0), // tons per cycle
     limestone_cycle_setpoint: 400.0, // target tons per cycle
     lime_cycle: getRandomFloat(200.0, 600.0), // tons produced per cycle
@@ -142,11 +508,12 @@ for (let i = 0; i < timeVariables.length; i++) {
 // Example: If there are other variables not related to cycle_time, assign them here
 // (In this case, all time-related variables are handled above)
 
-flow.set("cycle_id", cycle_id);
+*/
+
 
 // Assign the payload to msg.payload
 msg.topic = "simulated_data";
-msg.payload = payload;
+msg.payload = initialValues;
 
 // Return the message
 return msg;
