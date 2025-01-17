@@ -154,7 +154,7 @@ let TStop = TWait + TOff;
 let LSCYsp = LSCY1sp + LSCY2sp + LSCY3sp; // Limestone for cycle - Setpoint [kg/cy]
 let LSCYpv = getGaussianRandom(LSCYsp * 0.9, LSCYsp * 1.1); // Limestone for cycle - Process Value [kg/cy]
 let LCY = getGaussianRandom(LSCYpv * 0.7, LSCYpv * 0.9); // Lime for cycle [kg/cy]
-let NP = LCY / 1000; // Nominal production [tpd]
+let NP = LCY / (TCY + TStop) * 86.4; // Nominal production [tpd]
 
 let S1PS = getGaussianRandom(LCY / 15, LCY / 10, 0); // Shaft 1 - Prim Number of Strokes
 let S1SS = getGaussianRandom(LCY / 15, LCY / 10, 0); // Shaft 1 - Sec Number of Strokes
