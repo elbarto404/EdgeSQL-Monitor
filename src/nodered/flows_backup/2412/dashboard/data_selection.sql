@@ -213,3 +213,89 @@ WHERE endpoint = ${endpoint_id}
 
 
 
+WITH temp AS (
+  SELECT 
+    created_at,
+    CASE 
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '1 day' 
+        THEN date_bin(${__interval_ms} * INTERVAL '1 millisecond', created_at, TIMESTAMP 'epoch')
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '7 days' 
+        THEN date_trunc('day', created_at)
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '21 days' 
+        THEN date_trunc('week', created_at)
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '70 days' 
+        THEN date_trunc('month', created_at)
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '365 days' 
+        THEN date_trunc('quarter', created_at)
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' >= INTERVAL '365 days' 
+        THEN date_trunc('year', created_at)
+    END AS time,
+    TStop
+  FROM ${data_table}
+  WHERE endpoint = ${endpoint_id}
+  AND $__timeFilter(created_at)
+)
+SELECT 
+  time,
+  (extract(epoch from time) * 1000)::TEXT  AS from_time,
+  ((extract(epoch from time) * 1000) + ${__interval_ms})::TEXT AS to_time,
+  SUM(TStop) AS "Cycle Disabled"
+FROM temp
+GROUP BY time
+ORDER BY time ASC;
+
+
+
+WITH temp AS (
+  SELECT 
+    created_at,
+    CASE 
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '1 day' 
+        THEN date_bin(${__interval_ms} * INTERVAL '1 millisecond', created_at + ((TCY + TStop) * INTERVAL '1 second'), TIMESTAMP 'epoch')
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '7 days' 
+        THEN date_trunc('day', created_at + ((TCY + TStop) * INTERVAL '1 second'))
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '21 days' 
+        THEN date_trunc('week', created_at + ((TCY + TStop) * INTERVAL '1 second'))
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '70 days' 
+        THEN date_trunc('month', created_at + ((TCY + TStop) * INTERVAL '1 second'))
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' < INTERVAL '365 days' 
+        THEN date_trunc('quarter', created_at + ((TCY + TStop) * INTERVAL '1 second'))
+      WHEN ${__interval_ms} * INTERVAL '1 millisecond' >= INTERVAL '365 days' 
+        THEN date_trunc('year', created_at + ((TCY + TStop) * INTERVAL '1 second'))
+    END AS time,
+    TOff1, 
+    TOff2,
+    TOff3,
+    TOff4
+  FROM ${data_table}
+  WHERE endpoint = ${endpoint_id}
+  AND $__timeFilter(created_at)
+)
+SELECT 
+  time,
+  (extract(epoch from MIN(created_at))*1000)::TEXT AS from_time,
+  (extract(epoch from MAX(created_at))*1000)::TEXT AS to_time,
+  SUM(TOff1) AS "Mechanical Issue Time",
+  SUM(TOff2) AS "Electrical Issue Time",
+  SUM(TOff3) AS "Process Issue Time",
+  SUM(TOff4) AS "Other Issue Time"
+FROM temp
+GROUP BY time
+ORDER BY time ASC;
+
+
+
+
+WITH temp AS (
+  SELECT 
+    created_at AS time_start,
+    created_at + ((TCY + TStop) * INTERVAL '1 second') AS time_end,
+    LCY AS value
+  FROM ${data_table}
+  WHERE endpoint = ${endpoint_id}
+    AND $__timeFilter(created_at) 
+)
+SELECT
+  SUM(value) / extract(epoch from (max(time_end) - min(time_start))) * 3.6 AS "Lime Rate"
+FROM temp
+  

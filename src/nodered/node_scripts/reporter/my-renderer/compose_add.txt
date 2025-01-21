@@ -1,0 +1,32 @@
+ on grafana env:
+
+      GF_PATHS_CONFIG: /etc/grafana/custom.ini
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
+      GF_INSTALL_PLUGINS: grafana-image-renderer
+ 
+ 
+ 
+ on servicies:
+ 
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    container_name: renderer
+    restart: unless-stopped
+    mem_limit: 1g
+    ports:
+      - "8081:8081"
+    networks:
+      - proxy-redirect
+    volumes:
+      - ./custom/renderer_config.json:/usr/src/app/config.json
+
+
+
+
+on grafana dashboard link:
+https://localhost:1880/report
+
+mark all flags
+

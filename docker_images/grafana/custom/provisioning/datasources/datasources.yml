@@ -7,7 +7,7 @@ datasources:
     isDefault: true
     editable: true
     url: postgres_host:5432
-    database: odr_data
+    database: edge
     user: edge
     secureJsonData:
       password: edgeadmin

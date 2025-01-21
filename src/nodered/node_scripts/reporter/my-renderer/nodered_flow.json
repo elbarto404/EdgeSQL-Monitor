@@ -1,0 +1,257 @@
+[
+    {
+        "id": "9d39d688.2fa658",
+        "type": "tab",
+        "label": "Download Grafana Image",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "29f37670.2db7f8",
+        "type": "inject",
+        "z": "9d39d688.2fa658",
+        "name": "Trigger Image Download",
+        "props": [
+            {
+                "p": "image_path",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 260,
+        "wires": [
+            [
+                "59308414b5bc75af"
+            ]
+        ]
+    },
+    {
+        "id": "12345678.abcd12",
+        "type": "http request",
+        "z": "9d39d688.2fa658",
+        "name": "Download Image",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "http://grafana:3000/render/d/reversyover1/reversy-klin-overview?var-interval_text=1m&orgId=1&from=now-24h&to=now&timezone=browser&var-endpoint=Reversy_PLC1&var-endpoint_id=11&var-tag_table=tags_reversy_odr_s7&var-data_table=data_reversy_odr_s7&var-lables=air&var-time_range=86400&var-interval_ms=60000&refresh=10s&width=1920&height=5000&zoom=0.5&theme=light&kiosk",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 630,
+        "y": 260,
+        "wires": [
+            [
+                "23456789.efgh34"
+            ]
+        ]
+    },
+    {
+        "id": "23456789.efgh34",
+        "type": "file",
+        "z": "9d39d688.2fa658",
+        "name": "Save Image",
+        "filename": "image_path",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "x": 870,
+        "y": 260,
+        "wires": [
+            [
+                "443d896337e36dbb"
+            ]
+        ]
+    },
+    {
+        "id": "443d896337e36dbb",
+        "type": "debug",
+        "z": "9d39d688.2fa658",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c3b7bc2906f00261",
+        "type": "inject",
+        "z": "9d39d688.2fa658",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 540,
+        "wires": [
+            [
+                "5ed1fac2d6ae79af"
+            ]
+        ]
+    },
+    {
+        "id": "5ed1fac2d6ae79af",
+        "type": "http request",
+        "z": "9d39d688.2fa658",
+        "name": "Fetch Dashboard Info",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://grafana:3000/api/dashboards/uid/reversyover1",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 360,
+        "y": 540,
+        "wires": [
+            [
+                "b3cf0da5db84a27f"
+            ]
+        ]
+    },
+    {
+        "id": "b3cf0da5db84a27f",
+        "type": "debug",
+        "z": "9d39d688.2fa658",
+        "name": "Display Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "60ccca32129fdbb7",
+        "type": "comment",
+        "z": "9d39d688.2fa658",
+        "name": "Read from image render grafana",
+        "info": "",
+        "x": 190,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "0fcc2641eeffe2b6",
+        "type": "comment",
+        "z": "9d39d688.2fa658",
+        "name": "Read from Grafana json in API",
+        "info": "",
+        "x": 190,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "59308414b5bc75af",
+        "type": "function",
+        "z": "9d39d688.2fa658",
+        "name": "file_name",
+        "func": "let dateTime = new Date().toISOString();\nmsg.image_path = `/home/nodered/node-red-home/node-red-files/${dateTime}_dashboard.png`\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 260,
+        "wires": [
+            [
+                "12345678.abcd12"
+            ]
+        ]
+    },
+    {
+        "id": "http_in",
+        "type": "http in",
+        "z": "9d39d688.2fa658",
+        "name": "HTTP Report Endpoint",
+        "url": "/report",
+        "method": "get",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 300,
+        "y": 360,
+        "wires": [
+            [
+                "process_data",
+                "debug_node"
+            ]
+        ]
+    },
+    {
+        "id": "process_data",
+        "type": "function",
+        "z": "9d39d688.2fa658",
+        "name": "Process Data",
+        "func": "msg.payload = { received: msg.payload, timestamp: Date.now() }; \nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 360,
+        "wires": [
+            [
+                "http_response"
+            ]
+        ]
+    },
+    {
+        "id": "http_response",
+        "type": "http response",
+        "z": "9d39d688.2fa658",
+        "name": "Send Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 760,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "debug_node",
+        "type": "debug",
+        "z": "9d39d688.2fa658",
+        "name": "Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 510,
+        "y": 400,
+        "wires": []
+    }
+]

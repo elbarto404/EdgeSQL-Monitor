@@ -15,16 +15,16 @@ if (msg.error) {
     return null;
 }
 if (msg.topic === 'start') {
-    msg = {topic: 'simulation_trigger'};
+    msg = { topic: 'simulation_trigger' };
     if (context.get('simulationRunning')) {
         node.status({ fill: 'green', shape: 'ring', text: 'Simulation already running' });
         return null;  // Prevent starting a new simulation if already running
     }
     context.set('simulationRunning', true);
-    node.status({ fill: 'blue', shape: 'ring', text: `Starting...` });
+    node.status({ fill: 'blue', shape: 'ring', text: `Starting ...` });
     if (waitTime <= 0) {
         msg.time = new_time;
-        node.status({ fill: 'green', shape: 'dot', text: 'New Cycle Started' });
+        node.status({ fill: 'blue', shape: 'dot', text: 'Starting New Cycle ...' });
         context.set('simulationRunning', false);
         return msg;
     }
@@ -33,14 +33,15 @@ if (msg.topic === 'start') {
         if (waitTime <= 0 && context.get('simulationRunning')) {
             clearInterval(interval);
             msg.time = new_time;
-            node.status({ fill: 'green', shape: 'dot', text: `New Cycle Started` });
+            node.status({ fill: 'blue', shape: 'dot', text: `Starting New Cycle ...` });
             context.set('simulationRunning', false);
-            return msg; // Send message only after waiting
+            node.send(msg);
         } else if (!context.get('simulationRunning')) {
             clearInterval(interval);
             node.status({ fill: 'yellow', shape: 'ring', text: 'Simulation stopped' });
         } else {
-            node.status({ fill: 'green', shape: 'ring', text: ` 
+            node.status({
+                fill: 'green', shape: 'dot', text: ` 
                 Last Cycle: ${last_CY}, 
                 Created at: ${last_time.toISOString()}, 
                 Waiting ${Math.ceil(waitTime / 1000)} sec
@@ -48,7 +49,7 @@ if (msg.topic === 'start') {
         }
     }, 1000);
     return null;
-} 
+}
 else if (msg.topic === 'stop') {
     if (!context.get('simulationRunning')) {
         node.status({ fill: 'red', shape: 'ring', text: 'No simulation running' });
