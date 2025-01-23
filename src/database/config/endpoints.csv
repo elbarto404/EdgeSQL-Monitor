@@ -1,0 +1,9 @@
+id;enabled;name;machine;protocol;address;tag_tables;comment
+1;TRUE;ABC_S7_PLC;ABC_Klin_1;S7;192.168.100.12;"[""tags_odr_s7"",""tags_live_s7""]";
+2;TRUE;ABC_MOD_PLC;ABC_Klin_2;ModBus;192.168.100.20;"[""tags_odr_s7"",""tags_live_s7""]";
+3;FALSE;Vanguard_S7_PLC;Vanguard_Klin_1;S7;192.168.200.10;"[""tags_live_s7"",""tags_odr_s7""]";
+5;TRUE;Vanguard_OPC_PLC;Vanguard_Klin_3;OPCUA;192.168.200.30;"[""tags_odr_opcua""]";
+9;TRUE;TwinD_OPC_PLC;TwinD_Klin_2;OPCUA;192.168.300.30;"[""odr_table_ModBus"",""live_table_ModBus""]";
+10;TRUE;TwinD_API_SERV1;TwinD_Klin_2;API Rest;192.168.300.40;"[""live_table_KPI""]";
+11;TRUE;Reversy_S7_SIM1;Flex_Reversy;S7;127.0.0.1;"[""tags_reversy_odr_s7""]";localhost
+11;TRUE;Reversy_S7_SIM2;Flex_Reversy;S7;127.0.0.1;"[""tags_reversy_odr_s7""]";localhost

@@ -14,7 +14,7 @@ if (msg.error) {
     node.status({ fill: 'red', shape: 'ring', text: `${msg.error.message}` });
     return null;
 }
-if (msg.topic === 'start') {
+if (msg.topic === 'run') {
     msg = { topic: 'simulation_trigger' };
     if (context.get('simulationRunning')) {
         node.status({ fill: 'green', shape: 'ring', text: 'Simulation already running' });
@@ -40,10 +40,11 @@ if (msg.topic === 'start') {
             clearInterval(interval);
             node.status({ fill: 'yellow', shape: 'ring', text: 'Simulation stopped' });
         } else {
+            const localTime = last_time.toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
             node.status({
                 fill: 'green', shape: 'dot', text: ` 
                 Last Cycle: ${last_CY}, 
-                Created at: ${last_time.toISOString()}, 
+                Created at: ${localTime}, 
                 Waiting ${Math.ceil(waitTime / 1000)} sec
             ` });
         }

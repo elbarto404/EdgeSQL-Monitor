@@ -1,0 +1,6 @@
+name;process_table;protocol;sampling_mode;sampling_freq;comment
+tags_odr_s7;data_odr_s7;S7;trigger_custom;none;ODR S7
+tags_odr_opcua;data_odr_opcua;OPCUA;trigger_custom;none;ODR OPCUA
+tags_odr_modbus;data_odr_modbus;ModBus;trigger_custom;none;ODR ModBus
+tags_live_s7;data_live_s7;S7;continous_on_change;1s;Live Process Data
+tags_odr_reversy_s7;data_odr_reversy_s7;S7;trigger_custom;none;Klin Flex Reversy - odr tags s7

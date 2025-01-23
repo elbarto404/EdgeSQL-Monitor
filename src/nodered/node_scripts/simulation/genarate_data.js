@@ -187,8 +187,8 @@ const initialValues = {
     HCsp: 5000, // Heat consumption - Setpoint [kcal/kg]
     FCYpv: getGaussianRandom(60 * 0.9, 60 * 1.1), // Fuel for cycle Process Value [Nm3/cy]
     FCYsp: 60, // Fuel for Cycle - Setpoint [m3(n)/cy]
-    FFpv: 100, // Fuel flow - Process Value [Nm3/h]
-    FFsp: getGaussianRandom(100 * 0.9, 100 * 1.1), // Fuel Flow - Set Point
+    FFpv: getGaussianRandom(100 * 0.9, 100 * 1.1), // Fuel flow - Process Value [Nm3/h]
+    FFsp: 100, // Fuel Flow - Set Point
     LHV: 7000, // Low heat value [kacl/Nm3]
     SA: 25, // Stoichiometric air [#]
     CAF: getGaussianRandom(300 * 0.9, 300 * 1.1), // Combustion air flow [Nm3/h]
@@ -499,7 +499,7 @@ for (let i = 0; i < timeVariables.length; i++) {
 
 
 // Assign the payload to msg.payload
-msg.topic = "simulated_data";
+msg.topic = "start";
 msg.payload = initialValues;
 
 // Return the message

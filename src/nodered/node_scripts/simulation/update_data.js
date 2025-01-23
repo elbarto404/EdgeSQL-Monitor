@@ -1,4 +1,4 @@
-if (msg.topic === 'update_last_id' && !msg.error) {
+if (msg.topic === 'update' && !msg.error) {
     if (msg.payload && msg.payload.length) {
         flow.set('last_time', msg.payload[0].created_at);
         flow.set('CY', msg.payload[0].cy);
@@ -15,5 +15,5 @@ if (msg.topic === 'update_last_id' && !msg.error) {
 }
 
 msg = {};
-msg.topic = 'start'
+msg.topic = 'run'
 return msg;

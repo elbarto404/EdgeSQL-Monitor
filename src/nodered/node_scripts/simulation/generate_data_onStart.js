@@ -3,8 +3,8 @@
 context.set('maintenance_probability', 10); // Maintenance probability [%]
 context.set('issue_probability', 1); // Issue probability [%]
 
-let TCYsp = 900.0; // Cycle time setpoint [s]
-context.set('TCYsp', TCYsp); 
+let TCYsp = env.get('CYCLE_TIME'); // Cycle time setpoint [s]
+context.set('TCYsp', TCYsp);
 context.set('TCOsp', 750.0); // Combustion time setpoint [s]
 context.set('TFSsp', 600.0); // Time fuel supply setpoint [s]
 

@@ -1,0 +1,214 @@
+enabled;name;label;data_type;address;access;comment
+TRUE;CY;info;Real;;Read;Progressive Cycle Number (1 to 99999)[#]
+TRUE;S;info;Real;;Read;Shaft in combustion [#]
+TRUE;TCY;time;Real;;Read;Cycle time [s]
+TRUE;TCO;time;Real;;Read;Combustion time [s]
+TRUE;TI;time;Real;;Read;Inversion time [s]
+TRUE;TStop;time;Real;;Read;Time Cycle Disabled [s]
+TRUE;TFS;time;Real;;Read;Time fuel supply [s]
+TRUE;LSCYpv;production;Real;;Read;Limestone for cycle - Process Value [kg/cy]
+TRUE;LSCYsp;production;Real;;Read;Limestone for cycle - Setpoint [kg/cy]
+TRUE;LCY;production;Real;;Read;Lime for cycle [kg/cy]
+TRUE;NP;production;Real;;Read;Nominal production [tpd]
+TRUE;HCpv;fuel;Real;;Read;Heat consumption - Process Value [kcal/kg]
+TRUE;HCsp;fuel;Real;;Read;Heat consumption - Setpoint [kcal/kg]
+TRUE;FCYpv;fuel;Real;;Read;Fuel for cycle Process Value [Nm3/cy]
+TRUE;FCYsp;fuel;Real;;Read;Fuel for Cycle - Setpoint [m3(n)/cy]
+TRUE;FFpv;fuel;Real;;Read;Fuel flow - Process Value [Nm3/h]
+TRUE;FFsp;fuel;Real;;Read;Fuel Flow - Set Point
+TRUE;LHV;fuel;Real;;Read;Low heat value [kacl/Nm3]
+TRUE;SA;fuel;Real;;Read;Stoichiometric air [#]
+TRUE;CAF;air;Real;;Read;Combustion air flow [Nm3/h]
+TRUE;EANpv;air;Real;;Read;Combustion air index - Process Value [#]
+TRUE;EANsp;air;Real;;Read;Combustion air index (Excess of air) - Setpoint [#]
+TRUE;LCAF;air;Real;;Read;Lime cooling air flow [Nm3/h]
+TRUE;ALCpv;air;Real;;Read;Lime cooling air ratio - Process Value [#]
+TRUE;ALCsp;air;Real;;Read;Lime cooling air ratio - Setpoint [#]
+TRUE;TC1;temperature;Real;;Read;Channel temperature 1 [°C]
+TRUE;TC2;temperature;Real;;Read;Channel temperature 2 [°C]
+TRUE;TWG;temperature;Real;;Read;Waste gases temperature-outlet kiln [°C]
+TRUE;TFLT;temperature;Real;;Read;Waste gases temperature-inlet kiln filter [°C]
+TRUE;LT1;temperature;Real;;Read;Skip side Shaft 1 - lime temperature (Inspection door ZS204101)
+TRUE;LT2;temperature;Real;;Read;External side Shaft 1 - lime temperature (Inspection door ZS204102)
+TRUE;LT3;temperature;Real;;Read;External side Shaft 1 - lime temperature (Inspection door ZS204103)
+TRUE;LT4;temperature;Real;;Read;Pipe side Shaft 1 - lime temperature (Inspection door ZS204104)
+TRUE;LT5;temperature;Real;;Read;Pipe side Shaft 1 - lime temperature (Inspection door ZS204105)
+TRUE;LT6;temperature;Real;;Read;Internal side Shaft 1 - lime temperature (Inspection door ZS204106)
+TRUE;LT7;temperature;Real;;Read;Internal side Shaft 1 - lime temperature (Inspection door ZS204107)
+TRUE;LT8;temperature;Real;;Read;Skip side Shaft 1 - lime temperature (Inspection door ZS204109)
+TRUE;LT9;temperature;Real;;Read;Skip side Shaft 2 - lime temperature (Inspection door ZS204201)
+TRUE;LT10;temperature;Real;;Read;External side Shaft 2 - lime temperature (Inspection door ZS204202)
+TRUE;LT11;temperature;Real;;Read;External side Shaft 2 - lime temperature (Inspection door ZS204203)
+TRUE;LT12;temperature;Real;;Read;Pipe side Shaft 2 - lime temperature (Inspection door ZS204204)
+TRUE;LT13;temperature;Real;;Read;Pipe side Shaft 2 - lime temperature (Inspection door ZS204205)
+TRUE;LT14;temperature;Real;;Read;Internal side Shaft 2 - lime temperature (Inspection door ZS204206)
+TRUE;LT15;temperature;Real;;Read;Internal side Shaft 2 - lime temperature (Inspection door ZS204207)
+TRUE;LT16;temperature;Real;;Read;Skip side Shaft 2 - lime temperature (Inspection door ZS204209)
+TRUE;CBAP;air;Real;;Read;Combustion air pressure [mbar]
+TRUE;CLAP;air;Real;;Read;Lime cooling air pressure [mbar]
+TRUE;CHAP;air;Real;;Read;Channel air pressure [mbar]
+TRUE;CTAP;air;Real;;Read;Transport air pressure [mbar]
+TRUE;ATMP;info;Real;;Read;Barometric pressure [mbar]
+TRUE;LCAPS1;pressure;Real;;Read;Shaft 1 - Lances cooling / Final injection air pressure [mbar]
+TRUE;LCAPS2;pressure;Real;;Read;Shaft 2 - Lances cooling / Final injection air pressure [mbar]
+TRUE;S1tot;mechanic;Real;;Read;Shaft 1 - Number of Total Strokes [#]
+TRUE;S1PS;mechanic;Real;;Read;Shaft 1 - Prim Number of Strokes
+TRUE;S1SS;mechanic;Real;;Read;Shaft 1 - Sec Number of Strokes
+TRUE;S2tot;mechanic;Real;;Read;Shaft 2 - Number of Total Strokes [#]
+TRUE;S2PS;mechanic;Real;;Read;Shaft 2 - Prim- Number of Strokes
+TRUE;S2SS;mechanic;Real;;Read;Shaft 2 - Sec- Number of Strokes
+TRUE;DBLINE1;pressure;Real;;Read;Delta pressure line 1 - Fuel coal [mbar]
+TRUE;DBLINE2;pressure;Real;;Read;Delta pressure line 2 - Fuel coal [mbar]
+TRUE;DBLINE3;pressure;Real;;Read;Delta pressure line 3 - Fuel coal [mbar]
+TRUE;DBLINE4;pressure;Real;;Read;Delta pressure line 4 - Fuel coal [mbar]
+TRUE;DBLINE5;pressure;Real;;Read;Delta pressure line 5 - Fuel coal [mbar]
+TRUE;DBLINE6;pressure;Real;;Read;Delta pressure line 6 - Fuel coal [mbar]
+TRUE;DBLINE7;pressure;Real;;Read;Delta pressure line 7 - Fuel coal [mbar]
+TRUE;DBLINE8;pressure;Real;;Read;Delta pressure line 8 - Fuel coal [mbar]
+TRUE;DBLINE9;pressure;Real;;Read;Delta pressure line 9 - Fuel coal [mbar]
+TRUE;RATIOS1LN1;ratio;Real;;Read;Shaft 1 - Speed ratio line 1 [%]
+TRUE;RATIOS1LN2;ratio;Real;;Read;Shaft 1 - Speed ratio line 2 [%]
+TRUE;RATIOS1LN3;ratio;Real;;Read;Shaft 1 - Speed ratio line 3 [%]
+TRUE;RATIOS1LN4;ratio;Real;;Read;Shaft 1 - Speed ratio line 4 [%]
+TRUE;RATIOS1LN5;ratio;Real;;Read;Shaft 1 - Speed ratio line 5 [%]
+TRUE;RATIOS1LN6;ratio;Real;;Read;Shaft 1 - Speed ratio line 6 [%]
+TRUE;RATIOS1LN7;ratio;Real;;Read;Shaft 1 - Speed ratio line 7 [%]
+TRUE;RATIOS1LN8;ratio;Real;;Read;Shaft 1 - Speed ratio line 8 [%]
+TRUE;RATIOS1LN9;ratio;Real;;Read;Shaft 1 - Speed ratio line 9 [%]
+TRUE;RATIOS2LN1;ratio;Real;;Read;Shaft 2 - Speed ratio line 1 [%]
+TRUE;RATIOS2LN2;ratio;Real;;Read;Shaft 2 - Speed ratio line 2 [%]
+TRUE;RATIOS2LN3;ratio;Real;;Read;Shaft 2 - Speed ratio line 3 [%]
+TRUE;RATIOS2LN4;ratio;Real;;Read;Shaft 2 - Speed ratio line 4 [%]
+TRUE;RATIOS2LN5;ratio;Real;;Read;Shaft 2 - Speed ratio line 5 [%]
+TRUE;RATIOS2LN6;ratio;Real;;Read;Shaft 2 - Speed ratio line 6 [%]
+TRUE;RATIOS2LN7;ratio;Real;;Read;Shaft 2 - Speed ratio line 7 [%]
+TRUE;RATIOS2LN8;ratio;Real;;Read;Shaft 2 - Speed ratio line 8 [%]
+TRUE;RATIOS2LN9;ratio;Real;;Read;Shaft 2 - Speed ratio line 9 [%]
+TRUE;S1SPEEDL1;speed;Real;;Read;Shaft 1 - Speed line 1 - Process value [rpm]
+TRUE;S1SPEEDL2;speed;Real;;Read;Shaft 1 - Speed line 2 - Process value [rpm]
+TRUE;S1SPEEDL3;speed;Real;;Read;Shaft 1 - Speed line 3 - Process value [rpm]
+TRUE;S1SPEEDL4;speed;Real;;Read;Shaft 1 - Speed line 4 - Process value [rpm]
+TRUE;S1SPEEDL5;speed;Real;;Read;Shaft 1 - Speed line 5 - Process value [rpm]
+TRUE;S1SPEEDL6;speed;Real;;Read;Shaft 1 - Speed line 6 - Process value [rpm]
+TRUE;S1SPEEDL7;speed;Real;;Read;Shaft 1 - Speed line 7 - Process value [rpm]
+TRUE;S1SPEEDL8;speed;Real;;Read;Shaft 1 - Speed line 8 - Process value [rpm]
+TRUE;S1SPEEDL9;speed;Real;;Read;Shaft 1 - Speed line 9 - Process value [rpm]
+TRUE;S2SPEEDL1;speed;Real;;Read;Shaft 2 - Speed line 1 - Process value [rpm]
+TRUE;S2SPEEDL2;speed;Real;;Read;Shaft 2 - Speed line 2 - Process value [rpm]
+TRUE;S2SPEEDL3;speed;Real;;Read;Shaft 2 - Speed line 3 - Process value [rpm]
+TRUE;S2SPEEDL4;speed;Real;;Read;Shaft 2 - Speed line 4 - Process value [rpm]
+TRUE;S2SPEEDL5;speed;Real;;Read;Shaft 2 - Speed line 5 - Process value [rpm]
+TRUE;S2SPEEDL6;speed;Real;;Read;Shaft 2 - Speed line 6 - Process value [rpm]
+TRUE;S2SPEEDL7;speed;Real;;Read;Shaft 2 - Speed line 7 - Process value [rpm]
+TRUE;S2SPEEDL8;speed;Real;;Read;Shaft 2 - Speed line 8 - Process value [rpm]
+TRUE;S2SPEEDL9;speed;Real;;Read;Shaft 2 - Speed line 9 - Process value [rpm]
+TRUE;COALTANKP;pressure;Real;;Read;Fuel Coal - Pressure weighed tank T235301_1 [mbar]
+TRUE;COALTANKT;temperature;Real;;Read;Fuel Coal - Temperature weighed tank T235301_1 [°C]
+TRUE;HYT;temperature;Real;;Read;Hydraulic Oil - Temperature [°C]
+TRUE;HYP;pressure;Real;;Read;Hydraulic Oil - Pressure [bar]
+TRUE;TWait;time;Real;;Read;Waitnig Time [s]
+TRUE;TOff;time;Real;;Read;Unavailability time [s]
+TRUE;TWait1;time;Real;;Read;Drawer Sampling [s]
+TRUE;TWait2;time;Real;;Read;Valves time maintenance [s]
+TRUE;TWait3;time;Real;;Read;Hydraulic oil unit time maintenance [s]
+TRUE;TWait4;time;Real;;Read;Hydraulic oil plant time maintenance [s]
+TRUE;TWait5;time;Real;;Read;Blower time maintenance [s]
+TRUE;TWait6;time;Real;;Read;Skip time maintenance [s]
+TRUE;TWait7;time;Real;;Read;Weighed hopper calibration [s]
+TRUE;TWait8;time;Real;;Read;Coal weighed tank calibration [s]
+TRUE;TWait9;time;Real;;Read;Other maintenance [s]
+TRUE;TOff1;time;Real;;Read;Mechanical issue [s]
+TRUE;TOff2;time;Real;;Read;Electrical issue [s]
+TRUE;TOff3;time;Real;;Read;Process issue[s]
+TRUE;TOff4;time;Real;;Read;Other issue [s]
+TRUE;SKIP_ULD1CHpv;other;Real;;Read;ULD skip side position at first charge - Process Value [%]
+TRUE;PIPE_ULD1CHpv;other;Real;;Read;ULD pipe side position at first charge - Process Value [%]
+TRUE;ULD1CHsp;other;Real;;Read;ULD position at first charge - Setpoint [%]
+TRUE;SKIP_ULD2CHpv;other;Real;;Read;ULD skip side position at second charge - Process Value [%]
+TRUE;PIPE_ULD2CHpv;other;Real;;Read;ULD pipe side position at second charge - Process Value [%]
+TRUE;ULD2CHsp;other;Real;;Read;ULD position at second charge - Setpoint [%]
+TRUE;SKIP_ULD3CHpv;other;Real;;Read;ULD skip side position at third charge - Process Value [%]
+TRUE;PIPE_ULD3CHpv;other;Real;;Read;ULD pipe side position at third charge - Process Value [%]
+TRUE;ULD3CHsp;other;Real;;Read;ULD position at third charge - Setpoint [%]
+TRUE;LSCY1pv;production;Real;;Read;LSCY at first charge - Process Value [Kg]
+TRUE;LSCY1sp;production;Real;;Read;LSCY at first charge - Setpoint [Kg]
+TRUE;LSCY2pv;production;Real;;Read;LSCY at second charge - Process Value [Kg]
+TRUE;LSCY2sp;production;Real;;Read;LSCY at second charge - Setpoint [Kg]
+TRUE;LSCY3pv;production;Real;;Read;LSCY at third charge - Process Value [Kg]
+TRUE;LSCY3sp;production;Real;;Read;LSCY at third charge - Setpoint [Kg]
+TRUE;TCH1;time;Real;;Read;Time first charge [s]
+TRUE;TCH2;time;Real;;Read;Time second charge [s]
+TRUE;TCH3;time;Real;;Read;Time third charge [s]
+TRUE;LSTARCMB;level;Real;;Read;Level position in shaft in combustion at cycle start [%]
+TRUE;LSTOPCMB;level;Real;;Read;Level position in shaft in combustion at cycle end [%]
+TRUE;LSTARPRH;level;Real;;Read;Level position in shaft in preheating at cycle start [%]
+TRUE;LSTOPPRH;level;Real;;Read;Level position in shaft in preheating at cycle end [%]
+TRUE;LVLCMBsp;level;Real;;Read;Setpoint level in shaft in combustion [%]
+TRUE;LVLPRHsp;level;Real;;Read;Setpoint level in shaft in preheating [%]
+TRUE;EXTCMB;other;Real;;Read;"Extraction Mode in Combustion [0=By level; 1=By Strokes] [#]"
+TRUE;EXTPRH;other;Real;;Read;"Extraction Mode in Preheating [0=By level; 1=By Strokes] [#]"
+TRUE;S1EXTAUTO;other;Real;;Read;"Shaft 1 - Drawmatic in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;S2EXTAUTO;other;Real;;Read;"Shaft 2 - Drawmatic in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;S1MNRATIO;other;Real;;Read;Shaft 1 - Ratio Setpoint of Strokes main drawer [#]
+TRUE;S1SCRATIO;other;Real;;Read;Shaft 1 - Ratio Setpoint of Strokes secondary drawer [#]
+TRUE;S1FSTLVL;other;Real;;Read;Shaft 1 - Delay start fast extraction in level mode [s]
+TRUE;S1STROKsp;other;Real;;Read;Shaft 1 - Setpoint of total strokes [#]
+TRUE;S1SDELAYsp;other;Real;;Read;Shaft 1 - Setpoint delay time between two strokes [s]
+TRUE;S1FSTSTRT;other;Real;;Read;Shaft 1 - Delay start fast extraction in strokes mode [s]
+TRUE;S2MNRATIO;other;Real;;Read;Shaft 2 - Ratio Setpoint of Strokes main drawer [#]
+TRUE;S2SCRATIO;other;Real;;Read;Shaft 2 - Ratio Setpoint of Strokes secondary drawer [#]
+TRUE;S2FSTLVL;other;Real;;Read;Shaft 2 - Delay start fast extraction in level mode [s]
+TRUE;S2STROKsp;other;Real;;Read;Shaft 2 - Setpoint of total strokes [#]
+TRUE;S2SDELAYsp;other;Real;;Read;Shaft 2 - Setpoint delay time between two strokes [s]
+TRUE;S2FSTSTR;other;Real;;Read;Shaft 2 - Delay start fast extraction in strokes mode [s]
+TRUE;EANAUTO;other;Real;;Read;"EANMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;ALCAUTO;other;Real;;Read;"COOLMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;FUELAUTO;other;Real;;Read;"FUELMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;FILTERAUTO;other;Real;;Read;"FILTERMATIC in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;REDAUTO;other;Real;;Read;"FIREREDUCTION in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;CUTAUTO;other;Real;;Read;"FIRECUT in automatic mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;TSTRREDsp;other;Real;;Read;Temperature Setpoint for start fuel reduction [°C]
+TRUE;TSTPREDsp;other;Real;;Read;Temperature Setpoint for stop fuel reduction [°C]
+TRUE;PERCREDsp;other;Real;;Read;Percentage of fuel reduction [%]
+TRUE;TSTRCUTsp;other;Real;;Read;Temperature Setpoint for start fuel cut [°C]
+TRUE;TSTPCUTsp;other;Real;;Read;Temperature Setpoint for stop fuel cut [°C]
+TRUE;REDENABL;other;Real;;Read;Fuel reduction enabled during last cycle [#]
+TRUE;REDTIMEpv;other;Real;;Read;Working time of Fuel reduction during last cycle [s]
+TRUE;CUTENABL;other;Real;;Read;Fuel cut enabled during last cycle [#]
+TRUE;CUTTIMEpv;other;Real;;Read;Working time of Fuel cut during last cycle [s]
+TRUE;PATM;other;Real;;Read;Barometric Pressure [mbar]
+TRUE;FCVS1pv;other;Real;;Read;FCV Lime cooling valve - Shaft 1 - Process value [%]
+TRUE;FCVS1sp;other;Real;;Read;FCV Lime cooling valve - Shaft 1 - Setpoint [%]
+TRUE;FCVS1AUTO;other;Real;;Read;"Shaft 1 - Flow Control Valve in auto mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;FCVS2pv;other;Real;;Read;FCV Lime cooling valve - Shaft 2 - Process value [%]
+TRUE;FCVS2sp;other;Real;;Read;FCV Lime cooling valve - Shaft 2 - Setpoint [%]
+TRUE;FCVS2AUTO;other;Real;;Read;"Shaft 2 - Flow Control Valve in auto mode [0=Manual Mode; 1=Automatic Mode] [#]"
+TRUE;CMB1pv;speed;Real;;Read;Combustion Air Blower 1 - Speed - Process Value [rpm]
+TRUE;CMB1sp;speed;Real;;Read;Combustion Air Blower 1 - Speed - Setpoint [rpm]
+TRUE;CMB2pv;speed;Real;;Read;Combustion Air Blower 2 - Speed - Process Value [rpm]
+TRUE;CMB2SP;speed;Real;;Read;Combustion Air Blower 2 - Speed - Set Point [rpm]
+TRUE;CMB3pv;speed;Real;;Read;Combustion Air Blower 3 - Speed - Process Value [rpm]
+TRUE;CMB3sp;speed;Real;;Read;Combustion Air Blower 3 - Speed - Set Point [rpm]
+TRUE;LCB1pv;speed;Real;;Read;Lime Cooling Air Blower 1 - Speed - Process Value [rpm]
+TRUE;LCB1sp;speed;Real;;Read;Lime Cooling Air Blower 1 - Speed - Setpoint [rpm]
+TRUE;LCB2pv;speed;Real;;Read;Lime Cooling Air Blower 2 - Speed - Process Value [rpm]
+TRUE;LCB2sp;speed;Real;;Read;Lime Cooling Air Blower 2 - Speed - Set Point [rpm]
+TRUE;FANpv;speed;Real;;Read;Filter Fan - Speed - Process Value [rpm]
+TRUE;FANsp;speed;Real;;Read;Filter Fan - Speed - Setpoint [rpm]
+TRUE;S1CAPSPpv;speed;Real;;Read;Shaft 1 - Lances cooling blower - Speed - Process value [rpm]
+TRUE;S1CAPSPsp;speed;Real;;Read;Shaft 1 - Lances cooling blower - Speed - Setpoint [rpm]
+TRUE;S2CAPSPpv;speed;Real;;Read;Shaft 2 - Lances cooling blower - Speed - Process value [rpm]
+TRUE;S2CAPSPsp;speed;Real;;Read;Shaft 2 - Lances cooling blower - Speed - Setpoint [rpm]
+TRUE;CTBSPpv;speed;Real;;Read;Transport air - Speed - Process value [rpm]
+TRUE;CTBSPsp;speed;Real;;Read;Transport air - Speed - Setpoint [rpm]
+TRUE;CMB1CUR;current;Real;;Read;Combustion Air Blower 1 - Current - Process Value
+TRUE;CMB2CUR;current;Real;;Read;Combustion Air Blower 2 - Current - Process Value
+TRUE;CMB3CUR;current;Real;;Read;Combustion Air Blower 3 - Current - Process Value
+TRUE;LCB1CUR;current;Real;;Read;Lime Cooling Air Blower 1 - Current - Process Value
+TRUE;LCB2CUR;current;Real;;Read;Lime Cooling Air Blower 2 - Current - Process Value
+TRUE;FANCUR;current;Real;;Read;Filter Fan - Current - Process Value
+TRUE;S1CAPCUR;current;Real;;Read;Shaft 1 - Lance cooling blower - Current - Process value
+TRUE;S2CAPCUR;current;Real;;Read;Shaft 2 - Lance cooling blower - Current - Process value
+TRUE;CTBCURR;current;Real;;Read;Transport air - Current - Process value
+TRUE;HYDP1CUR;current;Real;;Read;Hydraulic Unit - Pump 1 - Current
+TRUE;HYDP2CUR;current;Real;;Read;Hydraulic Unit - Pump 2 - Current

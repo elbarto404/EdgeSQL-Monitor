@@ -1,0 +1,9 @@
+name;type;vendor;site;service_date;details
+ABC Klin 1;abc;Cimprogetti;area_1;01/01/2016;Produzione Calce Tipo 1
+ABC Klin 2;abc;Cimprogetti;area_1;01/01/2017;Produzione Calce Tipo 1
+Vanguard Klin 1;vanguard;Cimprogetti;area_2;01/01/2020;Produzione Calce Tipo 2
+Vanguard Klin 2;vanguard;Cimprogetti;area_2;01/01/2021;Produzione Calce Tipo 2
+TwinD Klin 1;twind;Cimprogetti;area_3;01/01/2018;Produzione Calce Tipo 3
+TwinD Klin 2;twind;Cimprogetti;area_3;01/01/2019;Produzione Calce Tipo 3
+Flex Reversy 1;reversy;Cimprogetti;De Vizi;22/11/2023;Simulation Flex Reversy
+Flex Reversy 2;reversy;Cimprogetti;Cilea;24/01/2025;Test Flex Reversy
