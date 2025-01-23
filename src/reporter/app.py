@@ -71,7 +71,7 @@ def render_panel(panel, dashboard_uid, dashboard_slug, output_file, api_token, p
 
     params['panelId'] = panel['id']
     params['height']  = 40 * panel['gridPos']['h']
-    params['width']   = 60 * panel['gridPos']['w']
+    params['width']   = 90 * panel['gridPos']['w']
 
     # Construct the URL with the parameters
     query_string = "&".join(f"{key}={value}" for key, value in params.items() if value != "")
