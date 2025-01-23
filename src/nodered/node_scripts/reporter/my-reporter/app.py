@@ -4,24 +4,29 @@ import sys
 import requests # type: ignore
 from flask import Flask, request, jsonify # type: ignore
 from concurrent.futures import ThreadPoolExecutor
-from subprocess import run
+import subprocess
 import logging
 from time import sleep
 
 app = Flask(__name__)
 
-# Configurazioni
+# Configurations
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
 
 GRAFANA_URL = sys.argv[1] if len(sys.argv) > 1 else input("Inserisci l'URL del server Grafana (es. http://grafana:3000): ").strip()
 RENDER_URL = f"{GRAFANA_URL}/render/d-solo"
 POS_LAYOUT = True
 LATEX_TEMPLATE = "templates/report_template.tex"
-OUTPUT_DIR = "reports"
+OUTPUT_DIR = "temp"  # Temp png directory
+OUTPUT_PDF = "reports"
 MAX_CONCURRENT_RENDER = 3
 
-# Assicura che la directory di output esista
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(OUTPUT_PDF, exist_ok=True)
+
+tex_name = "report.tex"
+pdf_name = ""
+
 
 def remove_all_files_from_folder(folder_path):
     try:
@@ -47,8 +52,8 @@ def remove_all_files_from_folder(folder_path):
 
 def get_panel_filename(panel):
     if POS_LAYOUT:
-        posX = f"000{panel['gridPos']['x']}"[-3:]
-        posY = f"000{panel['gridPos']['y']}"[-3:]
+        posX = f"0000{panel['gridPos']['x']}"[-4:]
+        posY = f"0000{panel['gridPos']['y']}"[-4:]
         return os.path.join(OUTPUT_DIR, f"panel_{posY}-{posX}.png")
     else:
         return os.path.join(OUTPUT_DIR, f"panel_{panel['id']}.png")
@@ -114,8 +119,8 @@ def render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, pa
     """
     Render all panels in a dashboard with retry mechanism for failures.
     """
-    images = []
     failed_panels = []
+    images_count = 0
 
     with ThreadPoolExecutor(max_workers=MAX_CONCURRENT_RENDER) as executor:
         future_to_panel = {
@@ -136,7 +141,7 @@ def render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, pa
             try:
                 success = future.result()
                 if success:
-                    images.append(os.path.join(OUTPUT_DIR, f"panel_{panel['id']}.png"))
+                    images_count += 1
                 else:
                     failed_panels.append(panel)
             except Exception as e:
@@ -149,26 +154,78 @@ def render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, pa
             output_file = get_panel_filename(panel)
             success = render_with_retry(panel, dashboard_uid, dashboard_slug, output_file, api_token, params)
             if success:
-                images.append(output_file)
+                images_count += 1
             else:
                 logging.error(f"Final failure for panel {panel['id']} after retries.")
 
-    logging.info(f"Rendering complete. Total panels rendered: {len(images)}")
-    return images
+    logging.info(f"Rendering complete. Total panels rendered: {images_count}")
+    return 
 
-def generate_pdf(images, output_pdf):
-    logging.debug("Generating PDF from rendered images")
-    with open(LATEX_TEMPLATE, "r") as template:
-        latex_content = template.read()
-    image_includes = "\n".join([f"\\includegraphics[width=\\textwidth]{{{img}}}" for img in images])
-    latex_content = latex_content.replace("{{images}}", image_includes)
+def generate_pdf():
+    """
+    Generate a PDF from rendered PNG images using a LaTeX template.
+    """
+    # List PNG files in the output directory
+    images = sorted([f for f in os.listdir(OUTPUT_DIR) if f.endswith(".png")])
+
+    if not images:
+        logging.error(f"No PNG images found in the output directory: {OUTPUT_DIR}")
+        return
+
+    logging.debug(f"Found images for PDF generation: {images}")
+
+    # Read LaTeX template
+    try:
+        with open(LATEX_TEMPLATE, "r") as template:
+            latex_content = template.read()
+    except FileNotFoundError:
+        logging.error(f"Template file not found: {LATEX_TEMPLATE}")
+        return
+
+    # Generate LaTeX code for including images
+    image_includes = "\n".join(
+        [f"\\includegraphics[width=\\textwidth]{{{img}}}" for img in images]
+    )
+
+    # Replace placeholder in the template
+    latex_content = latex_content.replace("{{IMAGES}}", image_includes)
+
+    # Save the LaTeX file
     tex_file = os.path.join(OUTPUT_DIR, "report.tex")
-    with open(tex_file, "w") as f:
-        f.write(latex_content)
-    logging.debug(f"Running pdflatex to generate PDF at {output_pdf}")
-    run(["pdflatex", "-output-directory", OUTPUT_DIR, tex_file], check=True)
-    os.rename(os.path.join(OUTPUT_DIR, "report.pdf"), output_pdf)
-    logging.debug("PDF generation complete")
+    try:
+        with open(tex_file, "w") as f:
+            f.write(latex_content)
+    except Exception as e:
+        logging.error(f"Error writing LaTeX file: {e}")
+        return
+
+    # Run pdflatex to generate the PDF
+    try:
+        logging.debug(f"Running pdflatex to generate PDF from {tex_file}")
+        result = subprocess.run(
+            [
+                "pdflatex",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                f"-output-directory={OUTPUT_PDF}",
+                f"-jobname={pdf_name}",
+                tex_file,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,  # Ensures the output is in string format
+            check=True,
+        )
+        logging.debug("PDF generation complete")
+        logging.debug(f"pdflatex stdout:\n{result.stdout}")
+        logging.debug(f"pdflatex stderr:\n{result.stderr}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"pdflatex failed with error: {e}")
+        logging.error(f"Command output:\n{e.output}")
+    except Exception as e:
+        logging.error(f"Unexpected error during PDF generation: {e}")
+
+# C:\Users\matteo.bartoli\AppData\Local\MiKTeX
 
 @app.route("/generate_report", methods=["GET"])
 def generate_report():
@@ -196,13 +253,18 @@ def generate_report():
         dashboard = fetch_dashboard(dashboard_uid, api_token)
 
         logging.info(f"Requested Dashboard RAW: {dashboard}")
-        panels = dashboard["dashboard"]["panels"]
+        panels = []
+        for panel in dashboard["dashboard"]["panels"]:
+            if panel['type'] == 'row':
+                logging.debug(f"Skip Panel: {panel}")
+                continue
+            panels.append(panel)
         dashboard_slug = dashboard["meta"]["slug"]
-        images = render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, params)
+        pdf_name = dashboard_slug
+        render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, params)
 
-        output_pdf = os.path.join(OUTPUT_DIR, "report.pdf")
-        generate_pdf(images, output_pdf)
-        return jsonify({"message": "Report generated", "pdf": output_pdf}), 200
+        generate_pdf()
+        return jsonify({"message": "Report generated", "pdf": pdf_name}), 200
     
     except Exception as e:
         logging.error(f"Error generating report: {e}")
