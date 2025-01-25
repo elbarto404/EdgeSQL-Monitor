@@ -1,31 +1,54 @@
 import os
+import io
 import json
-import sys
-import requests # type: ignore
-from flask import Flask, request, jsonify # type: ignore
+import argparse
+import requests 
+from flask import Flask, request, send_file, jsonify 
 from concurrent.futures import ThreadPoolExecutor
-import subprocess
 import logging
 from time import sleep
+
+from generate_pdf import generate_pdf
 
 app = Flask(__name__)
 
 # Configurations
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
 
-GRAFANA_URL = sys.argv[1] if len(sys.argv) > 1 else input("Inserisci l'URL del server Grafana (es. http://grafana:3000): ").strip()
+# Command-line arguments setup
+parser = argparse.ArgumentParser(description="Generate and render Grafana reports.")
+parser.add_argument("--grafana-url", type=str, default="http://grafana:3000", help="URL of the Grafana server (default: http://grafana:3000)")
+parser.add_argument("--render", action="store_true", help="Flag to enable image rendering")
+parser.add_argument("--generate", action="store_true", help="Flag to enable report generation")
+parser.add_argument("--xfactor", type=int, default=80, help="Value for the x-factor (default: 80)")
+parser.add_argument("--yfactor", type=int, default=45, help="Value for the y-factor (default: 45)")
+parser.add_argument("--template", type=str, default="report_template.tex", help="Latex template file name (report_template.tex)")
+
+args = parser.parse_args()
+
+GRAFANA_URL = args.grafana_url.strip()
 RENDER_URL = f"{GRAFANA_URL}/render/d-solo"
-POS_LAYOUT = True
-LATEX_TEMPLATE = "templates/report_template.tex"
-OUTPUT_DIR = "temp"  # Temp png directory
-OUTPUT_PDF = "reports"
+WORKING_DIR = "temp"  # Temp png directory
+TEX_NAME = "report.tex"
+OUTPUT_DIR = "reports"
 MAX_CONCURRENT_RENDER = 3
 
+os.makedirs(WORKING_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-os.makedirs(OUTPUT_PDF, exist_ok=True)
 
-tex_name = "report.tex"
-pdf_name = ""
+render_flag = args.render
+generate_flag = args.generate
+xfactor = args.xfactor
+yfactor = args.yfactor
+latex_template = f"templates/{args.template}"
+
+params = {
+    "panelId": 0,
+    "orgId": 1,
+    "width": 500,
+    "height": 1000,
+    "theme": "light"
+}
 
 
 def remove_all_files_from_folder(folder_path):
@@ -51,12 +74,9 @@ def remove_all_files_from_folder(folder_path):
         logging.info(f"An error occurred: {e}")
 
 def get_panel_filename(panel):
-    if POS_LAYOUT:
-        posX = f"0000{panel['gridPos']['x']}"[-4:]
-        posY = f"0000{panel['gridPos']['y']}"[-4:]
-        return os.path.join(OUTPUT_DIR, f"panel_{posY}-{posX}.png")
-    else:
-        return os.path.join(OUTPUT_DIR, f"panel_{panel['id']}.png")
+    posX = f"0000{panel['gridPos']['x']}"[-4:]
+    posY = f"0000{panel['gridPos']['y']}"[-4:]
+    return os.path.join(WORKING_DIR, f"panel_{posY}-{posX}.png")
 
 def fetch_dashboard(dashboard_uid, api_token):
     logging.debug(f"Fetching dashboard with UID: {dashboard_uid}")
@@ -70,8 +90,8 @@ def render_panel(panel, dashboard_uid, dashboard_slug, output_file, api_token, p
     logging.debug(f"Rendering panel {panel['id']} from dashboard {dashboard_uid}")
 
     params['panelId'] = panel['id']
-    params['height']  = 40 * panel['gridPos']['h']
-    params['width']   = 90 * panel['gridPos']['w']
+    params['width']   = xfactor * panel['gridPos']['w']
+    params['height']  = yfactor * panel['gridPos']['h']
 
     # Construct the URL with the parameters
     query_string = "&".join(f"{key}={value}" for key, value in params.items() if value != "")
@@ -161,85 +181,17 @@ def render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, pa
     logging.info(f"Rendering complete. Total panels rendered: {images_count}")
     return 
 
-def generate_pdf():
-    """
-    Generate a PDF from rendered PNG images using a LaTeX template.
-    """
-    # List PNG files in the output directory
-    images = sorted([f for f in os.listdir(OUTPUT_DIR) if f.endswith(".png")])
-
-    if not images:
-        logging.error(f"No PNG images found in the output directory: {OUTPUT_DIR}")
-        return
-
-    logging.debug(f"Found images for PDF generation: {images}")
-
-    # Read LaTeX template
-    try:
-        with open(LATEX_TEMPLATE, "r") as template:
-            latex_content = template.read()
-    except FileNotFoundError:
-        logging.error(f"Template file not found: {LATEX_TEMPLATE}")
-        return
-
-    # Generate LaTeX code for including images
-    image_includes = "\n".join(
-        [f"\\includegraphics[width=\\textwidth]{{{img}}}" for img in images]
-    )
-
-    # Replace placeholder in the template
-    latex_content = latex_content.replace("{{IMAGES}}", image_includes)
-
-    # Save the LaTeX file
-    tex_file = os.path.join(OUTPUT_DIR, "report.tex")
-    try:
-        with open(tex_file, "w") as f:
-            f.write(latex_content)
-    except Exception as e:
-        logging.error(f"Error writing LaTeX file: {e}")
-        return
-
-    # Run pdflatex to generate the PDF
-    try:
-        logging.debug(f"Running pdflatex to generate PDF from {tex_file}")
-        result = subprocess.run(
-            [
-                "pdflatex",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                f"-output-directory={OUTPUT_PDF}",
-                f"-jobname={pdf_name}",
-                tex_file,
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,  # Ensures the output is in string format
-            check=True,
-        )
-        logging.debug("PDF generation complete")
-        logging.debug(f"pdflatex stdout:\n{result.stdout}")
-        logging.debug(f"pdflatex stderr:\n{result.stderr}")
-    except subprocess.CalledProcessError as e:
-        logging.error(f"pdflatex failed with error: {e}")
-        logging.error(f"Command output:\n{e.output}")
-    except Exception as e:
-        logging.error(f"Unexpected error during PDF generation: {e}")
-
 # C:\Users\matteo.bartoli\AppData\Local\MiKTeX
 
 @app.route("/generate_report", methods=["GET"])
 def generate_report():
+    global pdf_name, params
     try:
         logging.info(f"Received request with params: {request.args}")
-        remove_all_files_from_folder(OUTPUT_DIR)
+
+        remove_all_files_from_folder(WORKING_DIR) if render_flag else None
+
         # Parse parameters from the query string
-        params = {
-            "panelId": 0,
-            "orgId": 1,
-            "width": 500,
-            "height": 1000,
-            "theme": "light"
-        }
         query_params = request.args.to_dict()
         dashboard_uid = query_params.pop("dashboardUID", None)
         api_token = query_params.pop("apitoken", None)
@@ -251,6 +203,8 @@ def generate_report():
 
         logging.info(f"Generating report for dashboard UID: {dashboard_uid}")
         dashboard = fetch_dashboard(dashboard_uid, api_token)
+        with open(os.path.join(WORKING_DIR, 'dashboard.json'), 'w') as out:
+            json.dump(dashboard, out, indent=2)
 
         logging.info(f"Requested Dashboard RAW: {dashboard}")
         panels = []
@@ -260,15 +214,33 @@ def generate_report():
                 continue
             panels.append(panel)
         dashboard_slug = dashboard["meta"]["slug"]
-        pdf_name = dashboard_slug
-        render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, params)
 
-        generate_pdf()
-        return jsonify({"message": "Report generated", "pdf": pdf_name}), 200
-    
+        render_dashboard_panels(panels, dashboard_uid, dashboard_slug, api_token, params) if render_flag else None
+
+        pdf_path = generate_pdf(WORKING_DIR, OUTPUT_DIR, latex_template, params) if generate_flag else None
+        if not pdf_path:
+            return jsonify({"test": 'ok'}), 500
+        
+        logging.info(f"Report pdf generated. Path: {pdf_path}")
+
+        with open(pdf_path, "rb") as pdf_file:
+            pdf_content = io.BytesIO(pdf_file.read())
+            pdf_content.seek(0)
+
+        logging.info(f"File read successfully")
+
+        # Return the PDF file as a response
+        return send_file(
+            pdf_content,
+            as_attachment=False,  # Force download if True, inline preview if False
+            download_name=f"{dashboard['meta']['provisionedExternalId']}.pdf",  # Name for the downloaded file
+            mimetype='application/pdf'
+        )
+        
     except Exception as e:
         logging.error(f"Error generating report: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     logging.info("Starting the Flask server")

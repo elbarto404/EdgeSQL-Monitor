@@ -1,0 +1,50 @@
+\documentclass[a4paper,landscape]{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage[sfdefault]{roboto}
+\usepackage{lastpage}
+
+% Configurazione precisa dei margini
+\geometry{
+    a4paper,        % Formato carta A4
+    landscape,      % Orientamento orizzontale
+    top=1in,        % Margine superiore
+    bottom=0.5in,   % Margine inferiore
+    left=0.5in,     % Margine sinistro
+    right=0.5in     % Margine destro
+}
+
+% Header e Footer personalizzati
+\pagestyle{fancy}
+\fancyhf{} % Pulisce header e footer
+
+% Header personalizzato
+\fancyhead[L]{%
+    \makebox[2cm][l]{From:} {{from_date}}\\
+    \makebox[2cm][l]{To:} {{to_date}}
+}
+
+\fancyhead[C]{\huge\textbf{{{title}}}}
+\fancyhead[R]{
+    page \thepage of \pageref{LastPage}\\
+    \small{{time_range}} range | interval {{interval}}
+}
+
+\fancyfoot[L]{\small{{f1}}\\{{f3}}} % Testo a destra nel footer
+\fancyfoot[C]{\small{{f5}}\\{{f6}}}
+%\fancyfoot[C]{\Large\thepage/\pageref{LastPage}} % Numero di pagina centrato nel footer
+\fancyfoot[R]{\small{{f2}}\\{{f4}}} % Testo a destra nel footer
+
+\renewcommand{\headrulewidth}{0.4pt}
+% \renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+% Ambiente picture per posizionamento assoluto
+\setlength{\unitlength}{1pt} % Imposta l'unità di misura in punti
+\begin{picture}(0,0)(0,0)
+\put(0,0){\circle*{20}}
+\end{picture}
+
+\end{document}

@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\title{Grafana Report}
+\author{}
+\date{}
+
+\maketitle
+
+{{IMAGES}}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+\begin{document}
+
+% Ambiente picture per posizionamento assoluto
+\setlength{\unitlength}{1pt} % Imposta l'unità di misura in punti
+%\begin{picture}(0,0)(0,0) % L'origine è in alto a sinistra
+    % Immagini posizionate con coordinate (x, y)
+    %\put(290, -700){\includegraphics[width=200pt,height=150pt]{temp/panel_0017-0000.png}}
+    %{{IMAGES}}
+%\end{picture}
+
+\end{document}
+
+
+
+
+% Prima pagina
+\begin{picture}(0,0)(0,0) % Ambiente per la prima pagina
+    \put(50, -50){\includegraphics[width=200pt,height=150pt]{image1.png}}
+    \put(300, -50){\includegraphics[width=200pt,height=150pt]{image2.png}}
+    \put(50, -250){\includegraphics[width=200pt,height=150pt]{image3.png}}
+    % Altre immagini fino al fondo della pagina
+\end{picture}
+
+\newpage % Interruzione di pagina
+
+% Seconda pagina
+\begin{picture}(0,0)(0,0) % Ambiente per la seconda pagina
+    \put(50, -50){\includegraphics[width=200pt,height=150pt]{image4.png}}
+    \put(300, -50){\includegraphics[width=200pt,height=150pt]{image5.png}}
+    % Altre immagini per la seconda pagina
+\end{picture}

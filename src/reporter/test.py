@@ -1,32 +1,50 @@
-import os
 import subprocess
+import logging
 
-def compile_latex(tex_file_path):
-    # Ottieni la directory del file .tex
-    tex_dir = os.path.dirname(tex_file_path)
+logging.basicConfig(level=logging.DEBUG)
 
-    try:
-        # Compila il file LaTeX usando pdflatex
-        result = subprocess.run(
-            ['pdflatex', '-output-directory', tex_dir, tex_file_path],
-            check=True,
-            text=True,
-            capture_output=True
-        )
-        print("Compilazione completata con successo!")
-        print(result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("Errore durante la compilazione:")
-        print(e.stderr)
+tex_file = "templates/test_page.tex"
+OUTPUT_PDF = "reports"
+pdf_name = "grafana_dashboard"
 
-def main():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    tex_file = os.path.join(base_dir, 'temp', 'report.tex')
+# Run pdflatex to generate the PDF
+try:
+    logging.debug(f"Running pdflatex to generate PDF from {tex_file}")
+    result = subprocess.run(
+        [
+            "pdflatex",
+            "-interaction=nonstopmode",
+            "-file-line-error",
+            f"-output-directory={OUTPUT_PDF}",
+            f"-jobname={pdf_name}",
+            tex_file,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,  # Ensures the output is in string format
+        check=True,
+    )
+    logging.debug(f"Running pdflatex to generate PDF from {tex_file} - 2")
+    result = subprocess.run(
+        [
+            "pdflatex",
+            "-interaction=nonstopmode",
+            "-file-line-error",
+            f"-output-directory={OUTPUT_PDF}",
+            f"-jobname={pdf_name}",
+            tex_file,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,  # Ensures the output is in string format
+        check=True,
+    )
+    logging.debug("PDF generation complete")
+    logging.debug(f"pdflatex stdout:\n{result.stdout}")
+    logging.debug(f"pdflatex stderr:\n{result.stderr}")
+except subprocess.CalledProcessError as e:
+    logging.error(f"pdflatex failed with error: {e}")
+    logging.error(f"Command output:\n{e.output}")
+except Exception as e:
+    logging.error(f"Unexpected error during PDF generation: {e}")
 
-    if os.path.exists(tex_file):
-        compile_latex(tex_file)
-    else:
-        print(f"Il file {tex_file} non esiste. Assicurati che sia presente nella directory.")
-
-if __name__ == "__main__":
-    main()
