@@ -342,3 +342,16 @@ WHERE endpoint = ${endpoint_id}
   AND created_at BETWEEN
       TO_TIMESTAMP(${__from}/1000)
       AND TO_TIMESTAMP(${__to}/1000);
+
+
+
+
+
+
+SELECT dt.*, tg.name
+FROM ${data_table} dt
+JOIN tags.${tag_table} tg ON dt.name = tg.name
+WHERE dt.endpoint = $endpoint_id
+  AND tg.label = 'temperature'
+  AND $__timeFilter(dt.created_at)
+ORDER BY dt.created_at DESC;

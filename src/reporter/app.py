@@ -28,12 +28,13 @@ args = parser.parse_args()
 
 GRAFANA_URL = args.grafana_url.strip()
 RENDER_URL = f"{GRAFANA_URL}/render/d-solo"
-WORKING_DIR = "temp"  # Temp png directory
-TEX_NAME = "report.tex"
+WORKING_DIR = "temp" 
 OUTPUT_DIR = "reports"
+TEX_NAME = "report.tex"
 MAX_CONCURRENT_RENDER = 3
 
 os.makedirs(WORKING_DIR, exist_ok=True)
+os.makedirs(f"{WORKING_DIR}/images", exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 render_flag = args.render
@@ -76,7 +77,7 @@ def remove_all_files_from_folder(folder_path):
 def get_panel_filename(panel):
     posX = f"0000{panel['gridPos']['x']}"[-4:]
     posY = f"0000{panel['gridPos']['y']}"[-4:]
-    return os.path.join(WORKING_DIR, f"panel_{posY}-{posX}.png")
+    return os.path.join(f"{WORKING_DIR}/images", f"panel_{posY}-{posX}.png")
 
 def fetch_dashboard(dashboard_uid, api_token):
     logging.debug(f"Fetching dashboard with UID: {dashboard_uid}")
@@ -233,7 +234,7 @@ def generate_report():
         return send_file(
             pdf_content,
             as_attachment=False,  # Force download if True, inline preview if False
-            download_name=f"{dashboard['meta']['provisionedExternalId']}.pdf",  # Name for the downloaded file
+            download_name=f"{dashboard['meta']['provisionedExternalId'].replace(".json", "")}.pdf",  # Name for the downloaded file
             mimetype='application/pdf'
         )
         

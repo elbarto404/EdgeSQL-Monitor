@@ -37,7 +37,7 @@ def format_time_range(milliseconds):
 def get_panel_filename(working_dir, panel):
     posX = f"0000{panel['gridPos']['x']}"[-4:]
     posY = f"0000{panel['gridPos']['y']}"[-4:]
-    return os.path.join(working_dir, f"panel_{posY}-{posX}.png")
+    return os.path.join(f"{working_dir}/images", f"panel_{posY}-{posX}.png")
 
 def generate_tex(working_dir, latex_content, dashboard, config):
     print(f"Config: {config}")
@@ -174,10 +174,10 @@ def generate_pdf(working_dir, output_dir, template_file, config):
     """
     # List PNG files in the output directory
     print(f"{working_dir} type {type(working_dir)}")
-    images = sorted([f for f in os.listdir(working_dir) if f.endswith(".png")])
+    images = sorted([f for f in os.listdir(f"{working_dir}/images") if f.endswith(".png")])
 
     if not images:
-        logging.error(f"No PNG images found in the output directory: {working_dir}")
+        logging.error(f"No PNG images found in the output directory: {working_dir}/images")
         return
 
     logging.debug(f"Found images for PDF generation: {images}")

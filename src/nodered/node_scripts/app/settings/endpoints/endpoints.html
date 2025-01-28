@@ -1,0 +1,771 @@
+<template>
+  <!-- Main Card Container -->
+  <v-card>
+    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->
+    <v-card-item class="bg-primary">
+      <v-row class="my-2 align-self-center" no-gutters>
+        
+        <!-- Title -->
+        <v-col cols="auto" class="mx-4 align-self-center">
+          <v-btn
+            @click="openInfoDialog"
+            variant="tonal"
+            class="font-weight-bold text-h5 text-white"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-table</v-icon>
+            <p class="mx-1 align-self-center" v-text="msg.dashboard.table.title"></p>
+          </v-btn>
+        </v-col>
+
+        <!-- Search Bar -->
+        <v-col class="mx-4 align-self-center">
+          <v-text-field
+            v-model="search"
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            single-line
+            clearable
+            hide-details
+            color="white"
+          ></v-text-field>
+        </v-col>
+
+        <!-- Action Buttons (CSV Upload, CSV Download, Edit, Save, Add New, Discard) -->
+        <v-col cols="auto" class="mx-2 align-self-center text-white">
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="!editMode"
+            @click="updateTable"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-reload</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Reload</span>
+          </v-btn>
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="!editMode"
+            @click="downloadCsv"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-export</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Export</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="!editMode"
+            @click="enableEdit"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-pencil</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Edit</span>
+          </v-btn>
+
+          <!-- Buttons visible in Edit Mode -->
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="openCsvDialog"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-import</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Import</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="addNewItem"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-plus</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Add New</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="deploy"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-floppy</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Save</span>
+          </v-btn>
+
+          <v-btn
+            class="mx-2 align-self-center"
+            v-show="editMode"
+            @click="discardEdit"
+            variant="tonal"
+          >
+            <v-icon class="mx-1 align-self-center" left>mdi-pencil-off</v-icon>
+            <span class="mx-1 align-self-center font-weight-bold">Discard</span>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-card-item>
+
+    <!-- Data Table with Custom Cell Templates -->
+    <v-data-table
+      v-model="selected"
+      :headers="msg.dashboard.table.headers"
+      :items="msg.data"
+      :search="search"
+      :items-per-page="itemsPerPage"
+      :items-per-page-options="[5, 10, 25, 50, -1]"
+      class="elevation-1"
+      :loading="msg.dashboard.loading"
+      loading-text="Loading..."
+      density="default"
+    >
+<!-- MODIFY DISPLAY HERE -->
+
+      <!-- Toggle Switch for 'enabled' Field -->
+      <template v-slot:item.enabled="{ item }">
+        <v-switch
+          v-model="item.enabled"
+          :model-value="item.enabled"
+          :color="getSwitchColor(item)"
+          :base-color="getSwitchColor(item)"
+          :disabled="!editMode"
+          hide-details
+          @click="handleEnabled(item)"
+        ></v-switch>
+      </template>      
+
+      <!-- Display Machines as Chips -->
+      <template v-slot:item.machine="{ item }">
+        <div>
+          <v-chip
+            class="ma-1"
+            :color="getListColor(msg.dashboard.form.machine, item.machine, item)"
+            dark
+          >
+            {{ item.machine }}
+          </v-chip>
+        </div>
+      </template>
+
+      <!-- Display Tags as Chips -->
+      <template v-slot:item.tag_tables="{ item }">
+        <div>
+          <v-chip
+            v-for="(tag, index) in item.tag_tables"
+            :key="index"
+            class="ma-1"
+            :color="getListColor(msg.dashboard.form.tag_tables.map(tab => tab.name), tag, item)"
+            dark
+          >
+            {{ tag }}
+          </v-chip>
+        </div>
+      </template>
+
+<!-- END MODIFY -->
+      <!-- Actions Column with Edit and Delete Icons -->
+      <template v-slot:item.actions="{ item }">
+        <div class="actions-column">
+          <v-icon
+            v-show="editMode"
+            small
+            class="mr-2"
+            @click="editItem(item)"
+            color="blue-darken-2"
+            style="cursor: pointer;"
+          >
+            mdi-pencil
+          </v-icon>
+
+          <v-icon
+            v-show="editMode"
+            small
+            @click="deleteItem(item)"
+            color="error"
+            style="cursor: pointer;"
+          >
+            mdi-delete
+          </v-icon>
+        </div>
+      </template>
+
+      <!-- No Data Message -->
+      <template v-slot:no-data>
+        <v-row class="ma-4">
+          <v-alert :value="true" color="warning" icon="mdi-alert">
+            No matching records found.
+          </v-alert>
+        </v-row>
+      </template>
+    </v-data-table>
+  </v-card>
+
+  <!-- Dialog for Adding or Editing Items -->
+  <v-dialog v-model="dialog" max-width="500px" persistent>
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">{{ formTitle }}</span>
+      </v-card-title>
+
+      <v-card-text>
+        <v-form ref="form" v-model="valid" fast-fail @submit.prevent>
+<!-- MODIFY FORM HERE -->
+
+          <!-- Form Fields -->
+          <v-text-field
+            v-model="editAction.newItem.name"
+            label="Name"
+            :rules="[v => !!v || 'Name is required']"
+            required
+          ></v-text-field>
+          <v-select
+            v-model="editAction.newItem.machine"
+            label="Machine"
+            :items="msg.dashboard.form.machine"
+            :rules="[v => !!v || 'Machine is required']"
+            required
+            clearable
+          ></v-select>
+          <v-select
+            v-model="editAction.newItem.protocol"
+            label="Protocol"
+            :items="msg.dashboard.form.protocol"
+            :rules="[v => !!v || 'Protocol is required']"
+            required
+            clearable
+          ></v-select>
+          <v-text-field
+            v-model="editAction.newItem.address"
+            label="Address"
+            :rules="[v => !!v || 'Address is required']"
+            required
+          ></v-text-field>
+          <v-select
+            v-model="editAction.newItem.tag_tables"
+            label="Tag Tables"
+            :items="msg.dashboard.form.tag_tables
+                      .filter(tab => tab.protocol === editAction.newItem.protocol)
+                      .map(tab => tab.name)"
+            multiple
+            chips
+            clearable
+          ></v-select>
+          <v-textarea
+            v-model="editAction.newItem.comment"
+            label="Comment"
+            maxlength="200"
+            counter
+          ></v-text-field>
+
+<!-- END MODIFY-->
+        </v-form>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-1" text @click="closeDialog">Cancel</v-btn>
+        <v-btn color="blue-darken-1" text @click="saveItem">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Dialog for CSV Upload -->
+  <v-dialog v-model="csvDialog" max-width="500px" persistent>
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">Upload CSV</span>
+      </v-card-title>
+      <v-card-text>
+        <v-file-input
+          v-model="csvFile"
+          label="Select a CSV file"
+          accept=".csv"
+          clearable
+          hide-details
+        ></v-file-input>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-1" text @click="closeCsvDialog">Cancel</v-btn>
+        <v-btn color="blue-darken-1" text @click="processCsv">Insert</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Delete Confirmation Dialog -->
+  <v-dialog v-model="deleteDialog" max-width="500" persistent>
+    <v-card>
+      <v-card-title class="headline mt-1">
+        Confirm Deletion
+      </v-card-title>
+
+      <v-card-text>
+        <p>Deleting this element will also remove associated process data stored in the database.</p>
+        <p class="mt-6">Are you sure you want to proceed?</p>
+      </v-card-text>
+        
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <!-- Cancel Button -->
+        <v-btn color="blue-darken-1" text @click="cancelDeletion">
+          Cancel
+        </v-btn>
+        <!-- Confirm Button -->
+        <v-btn color="error" text @click="confirmDeletion">
+          Delete
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Info Dialog -->
+  <v-dialog v-model="infoDialog" max-width="500" persistent>
+    <v-card>
+      <v-card-title class="headline mt-1">
+        Info
+      </v-card-title>
+
+      <v-card-text>
+        <p v-text="msg.dashboard.info"></p>
+      </v-card-text>
+        
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <!-- Close Button -->
+        <v-btn color="blue" text @click="closeInfoDialog">
+          OK
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Snackbar for Notifications -->
+  <v-snackbar v-model="snackbar.show" :color="snackbar.color" timeout="3000">
+    <v-row class="mx-4 align-self-center">
+      <v-col class="my-2 text-subtitle-1 text-center">
+        {{ snackbar.text }}
+      </v-col>
+    </v-row>
+  </v-snackbar>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      search: '',
+      page: 1,
+      itemsPerPage: -1,
+      headerNames: [],
+      dialog: false,
+      deleteDialog: false,
+      csvDialog: false,
+      infoDialog: false,
+      csvFile: null,    
+      formTitle: "",
+      editMode: false,
+      editAction: {
+        index: -1,
+        oldItem: null,
+        newItem: null,
+      },
+      selected: [],
+      actionsHeader: {
+        title: "Actions",
+        value: "actions",
+        headerProps: { style: 'font-weight: 700' },
+      },
+      snackbar: {
+        show: false,
+        text: '',
+        color: ''
+      }
+    };
+  },
+  computed: {
+    pageCount() {
+      return Math.ceil(this.msg.data.length / this.itemsPerPage);
+    },
+  },
+  watch: {
+    msg: {
+      handler() {
+        if (this.msg?.dashboard?.table?.headers) {
+          this.headerNames = this.msg.dashboard.table.headers.map(header => header.value);
+        };
+        if (
+          this.editMode &&
+          this.msg?.dashboard?.table?.headers?.[this.msg.dashboard.table.headers.length - 1]?.value !== 'actions'
+        ) {
+          this.msg.dashboard.table.headers.push(this.actionsHeader);
+        };
+        // Dynamically update snackbar parameters
+        if (this.msg?.dashboard?.snackbar) {
+          const { show, text, color } = this.msg.dashboard.snackbar;
+          this.snackbar.show = show;
+          this.snackbar.text = text || '';
+          this.snackbar.color = color || 'default';
+        }
+      },
+      deep: true 
+    }
+  },
+  methods: {
+    // Sends a message with the current state
+    msgSend() {
+      this.msg.dashboard.snackbar = null;
+      this.send({
+        topic: this.msg.topic,
+        topicMain: this.msg.topicMain,
+        title: this.msg.title,
+        database: this.msg.database,
+        data: this.msg.data,
+        dashboard: this.msg.dashboard,
+        payload: this.msg.payload,
+        time: new Date(),
+      });
+    },
+    
+    // Edit mode controls
+    enableEdit() {
+      this.msg.dashboard.snackbar.show = false;
+      this.msg.dashboard.table.headers.push(this.actionsHeader);
+      this.editMode = true;
+    },
+    disableEdit() {
+      this.msg.dashboard.table.headers = this.msg.dashboard.table.headers.filter(
+        header => header !== this.actionsHeader
+      );
+      this.editMode = false;
+    },
+    
+    // Message Outputs: Update, Deploy and discard edits 
+    updateTable() {
+      this.msg.topic = "update";
+      this.msg.topicMain = "update";
+      this.msg.payload = null;
+      this.msgSend();
+    },
+    deploy() {
+      this.msg.dashboard.loading = true;
+      this.disableEdit();
+      this.msg.topic = "deploy";
+      this.msg.topicMain = "deploy";
+      this.msgSend();
+      // this.showSnackbar('Deploy action triggered!', 'info');
+    },
+    discardEdit() {
+      this.disableEdit();
+      this.msg.dashboard.history = [];
+      this.updateTable();
+    },
+    
+    // Handling items
+    getDefaultItem() {
+      const defaultItem = {};
+      this.msg.dashboard.table.headers.forEach(header => {
+        if (header.value !== 'actions') {
+          defaultItem[header.value] = header.value === 'enabled' ? true :
+                                        header.value === 'status' ? "unknown" : null;
+        }
+      });
+      return defaultItem;
+    },
+    filterItem(item) {
+      if (!item) {
+        return null;
+      }
+      return Object.keys(item)
+        .filter(key => !['actions', 'status', 'id'].includes(key)) // Exclude keys
+        .filter(key => this.headerNames.includes(key)) // Exclude keys
+        .reduce((obj, key) => {
+          obj[key] = item[key];
+          return obj;
+        }, {});
+    },
+    addEditAction(){
+      let action = JSON.parse(JSON.stringify(this.editAction));
+      action.oldItem = this.filterItem(action.oldItem);
+      action.newItem = this.filterItem(action.newItem);
+      this.msg.dashboard.history.push(action);
+    },
+    addNewItem() {
+      this.editAction.index = -1;
+      this.editAction.oldItem = null;
+      this.editAction.newItem = this.getDefaultItem();
+      this.formTitle = 'Add Item';
+      this.dialog = true;
+    },
+    editItem(item) {
+      this.editAction.index = this.msg.data.indexOf(item);
+      this.editAction.oldItem = { ...item };
+      this.editAction.newItem = { ...item };
+      this.formTitle = 'Edit Item';
+      this.dialog = true;
+    },
+    deleteItem(item) {
+      this.editAction.index = this.msg.data.indexOf(item);
+      this.editAction.oldItem = { ...item };
+      this.editAction.newItem = null;
+      this.deleteDialog = true;
+    },
+
+    // Delete Dialog controls
+    cancelDeletion() {
+      this.deleteDialog = false;
+    },
+    confirmDeletion() {
+      this.deleteDialog = false;
+      if (this.editAction.index > -1) {
+        this.msg.data.splice(this.editAction.index, 1);
+        this.addEditAction();
+        // this.showSnackbar('Item deleted successfully!', 'success');
+      }
+    },
+
+    // Form Dialog controls
+    closeDialog() {
+      this.dialog = false;
+      this.$refs.form.reset();
+    },
+    async saveItem() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        if (this.editAction.index > -1) {
+          Object.assign(this.msg.data[this.editAction.index], this.editAction.newItem);
+          // this.showSnackbar('Item updated successfully!', 'success');
+        } else {
+          this.msg.data.push({ ...this.editAction.newItem });
+          // this.showSnackbar('Item added successfully!', 'success');
+        }
+        this.addEditAction();
+        this.closeDialog();
+      } else {
+        this.showSnackbar('Please correct the errors in the form.', 'error');
+      }
+    },
+
+    // Info Dialog controls
+    openInfoDialog() {
+      this.infoDialog = true;
+    },
+    closeInfoDialog() {
+      this.infoDialog = false;
+    },
+
+    // CSV Dialog controls
+    openCsvDialog() {
+      this.csvDialog = true;
+    },
+    closeCsvDialog() {
+      this.csvDialog = false;
+      this.csvFile = null;
+    },
+
+    // Data Handling
+    // Stringify function that handles different data types
+    stringifyValue(value) {
+      if (value === undefined || value === null) {
+        return ''; // Handle null or undefined
+      } else if (Array.isArray(value)) {
+        return JSON.stringify(value); // Handle arrays by converting them to a JSON string
+      } else if (typeof value === 'object') {
+        return JSON.stringify(value); // Handle objects by converting them to a JSON string
+      } else if (typeof value === 'string') {
+        return value; // Use string as-is
+      } else {
+        return String(value); // Convert other types (number, boolean, etc.) to string
+      }
+    },
+    parseValue(value) {
+      if (typeof value === 'string') {
+        // Handle empty strings
+        if (value === '') return null;
+
+        // Remove leading/trailing quotes and unescape inner quotes if present
+        if ((value.startsWith('"[') && value.endsWith(']"')) || (value.startsWith('"{') && value.endsWith('}"'))) {
+          value = value.slice(1, -1).replace(/""/g, '"');
+        }
+
+        // Parse value as JSON if it's a valid JSON string
+        if ((value.startsWith('[') && value.endsWith(']')) || (value.startsWith('{') && value.endsWith('}'))) {
+          try {
+            return JSON.parse(value);
+          } catch (error) {
+            return value;
+          }
+        }
+        // Check if the string represents a boolean
+        if (value.toLowerCase() === "true") return true;
+        if (value.toLowerCase() === "false") return false;
+
+        // Check if the string represents a number
+        const parsedNumber = Number(value);
+        if (!isNaN(parsedNumber)) return parsedNumber;
+
+        // Return original value for simple strings
+        return value;
+      }
+      return value;
+    },
+
+    // CSV Upload and Loading
+    async processCsv() {  // Processes the uploaded CSV file
+      if (!this.csvFile) {
+        this.showSnackbar('No file selected!', 'error');
+        return;
+      }
+
+      try {
+        const fileContent = await this.readFile(this.csvFile);
+        const csvData = this.parseCsv(fileContent);
+        this.updateTableData(csvData);
+        this.showSnackbar('CSV successfully uploaded!', 'success');
+      } catch (error) {
+        this.showSnackbar(`Error processing CSV. ${error}`, 'error');
+      } finally {
+        this.closeCsvDialog();
+      }
+    },
+    readFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(file);
+      });
+    },
+    parseCsv(content) {  // Parses the CSV file content into an array of objects
+      const rows = content.split(/\r?\n/).filter(row => row.trim()); 
+      const headers = rows.shift().split(';').map(header => header.trim()); // Use the first row as headers
+      const filteredHeaders = headers.filter(header => !['action', 'status', 'id'].includes(header)) // Exclude some columns
+                        
+      return rows.map(row => {
+          const values = row.split(';');
+          return filteredHeaders.reduce((acc, header) => {
+              const index = headers.indexOf(header); // Ensure the original index is respected
+              if (index !== -1) {
+                  acc[header] = this.parseValue(values[index]); 
+              }
+              return acc;
+          }, {});
+      });
+    },
+    updateTableData(csvData) {
+      csvData.forEach(newItem => {  // Check if an item with the same name exists
+        const existingItem = this.msg.data.find(item => item.name === newItem.name);
+        if (existingItem) {
+          if (JSON.stringify(existingItem) !== JSON.stringify(newItem)) {
+            this.editAction.oldItem = {...existingItem};
+            this.editAction.newItem = {...newItem};
+            this.addEditAction()
+            Object.assign(existingItem, newItem); // Update 
+          }
+        } else {
+          this.editAction.oldItem = null;
+          this.editAction.newItem = {...newItem};
+          this.addEditAction()
+          this.msg.data.push(newItem);  // Add new 
+        }
+      });
+    },
+    
+    // CSV Generation and Download
+    generateCsv() {
+      const separator = ';';
+      const headersValue = this.msg.dashboard.table.headers
+        .filter(header => !['actions', 'status', 'id'].includes(header.value)) // Exludes some columns
+        .map(header => header.value)
+        headersValue.unshift('id'); // Add id header at the beginning
+      const headers = headersValue.join(separator);
+
+      const rows = this.msg.data.map(item => {
+        return headersValue
+          .map(header => {
+            return this.stringifyValue(item[header]);
+          })
+          .join(separator);
+      }).join('\n');
+
+
+      return `${headers}\n${rows}`;
+    },
+    createDownloadLink(csvContent) {
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${this.msg.database.table}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    },
+    downloadCsv() {
+      try {
+        const csvContent = this.generateCsv();
+        this.createDownloadLink(csvContent);
+        this.showSnackbar('CSV scaricato con successo!', 'success');
+      } catch (error) {
+        console.error('Errore durante il download del CSV:', error);
+        this.showSnackbar('Errore durante il download del CSV.', 'error');
+      }
+    },
+    
+    // Utility Methods
+    getStatusColor(value) {
+      const colors = {
+        "unknown": 'blue',
+        "connecting": 'amber',
+        "connected": 'green',
+        "error": 'red'
+      };
+      if (colors[value]) return colors[value];
+      return 'purple';
+    },
+    getSwitchColor(item) {
+      return item.enabled ? this.getStatusColor(item.status)
+                            : 'grey-lighten-2';
+    },
+    getListColor(list, elem, item) {
+      return item.enabled ? list.includes(elem) ? this.getStatusColor(item.status) : 'red'
+                            : 'grey-lighten-2';
+    },
+    getListColorStatic(list, elem) {
+      return list.includes(elem) ? 'green' : 'red';
+    },
+    handleEnabled(item) {
+      // Custom logic for enabling/disabling
+      this.editAction.index = this.msg.data.indexOf(item);
+      this.editAction.oldItem = { ...item };
+      item.enabled = !item.enabled;
+      this.editAction.newItem = { ...item };
+      this.addEditAction();
+      
+    },
+    showSnackbar(message, type) {
+      this.snackbar.text = message;
+      this.snackbar.color = type === 'success' ? 'green-lighten-3' 
+                          : type === 'error' ? 'red-lighten-3' 
+                          : 'blue-lighten-5';
+      this.snackbar.show = true;
+      this.msg.dashboard.loading = false;
+    }
+  }
+};
+</script>
+
+<style scoped>
+/* Heading Text Size */
+.text-h5 {
+  font-size: 1.25rem;
+}
+
+/* Actions Column Styling */
+.actions-column {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 60px;
+}
+</style>
