@@ -1276,10 +1276,10 @@
     {
         "id": "169cdd00f95ae9ec",
         "type": "ui-link",
-        "name": "Grafana Home",
+        "name": "Grafana Dashboards",
         "ui": "d7cef5fd92f5328c",
-        "path": "http://localhost:33000",
-        "icon": "finance",
+        "path": "http://localhost:33000/dashboards",
+        "icon": "view-dashboard",
         "order": 3,
         "visible": "true",
         "disabled": "false"
@@ -1420,7 +1420,7 @@
         "name": "Kiln - Overview",
         "ui": "d7cef5fd92f5328c",
         "path": "http://localhost:33000/d/reversyover1/reversy-klin-overview",
-        "icon": "chart-arc",
+        "icon": "finance",
         "order": 4,
         "visible": "true",
         "disabled": "false"
