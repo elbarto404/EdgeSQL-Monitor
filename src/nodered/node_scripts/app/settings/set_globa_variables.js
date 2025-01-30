@@ -40,7 +40,6 @@ const access = [
     "read/write"
 ];
 const sampling_mode = [
-    "static", 
     "continous", 
     "continous_on_change", 
     "trigger_custom"
@@ -50,7 +49,12 @@ const sampling_freq = [
     "500ms", 
     "1s", 
     "2s", 
-    "5s"
+    "5s",
+    "10s",
+    "30s",
+    "1m",
+    "2m",
+    "5m",
 ];
 const aggregations = [
     "none",

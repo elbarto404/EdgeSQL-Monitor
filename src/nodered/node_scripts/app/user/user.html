@@ -1,0 +1,81 @@
+<template>
+    <v-container class="d-flex align-center justify-center" style="height: 100vh;">
+      <v-card class="elevation-3" width="540" height="340">
+        <v-card-title class="text-h5 text-center">Login</v-card-title>
+        <v-card-text>
+          <v-form ref="loginForm" v-model="isValid">
+            <v-text-field
+              v-model="user"
+              label="User"
+              type="user"
+              :rules="userRules"
+              required
+              outlined
+            ></v-text-field>
+            <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+              :rules="passwordRules"
+              required
+              outlined
+            ></v-text-field>
+            <v-btn
+              :disabled="!isValid"
+              color="blue-darken-3"
+              class="mt-4"
+              block
+              @click="submitLogin"
+            >
+              Login
+            </v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </template>
+  
+  <script>
+  export default {
+    data() {
+        return {
+            user: "",
+            password: "",
+            isValid: false,
+            userRules: [
+            (v) => !!v || "User is required",
+            (v) => v.length >= 3 || "User must be at least 3 characters long",
+            (v) => /^[a-zA-Z0-9_]+$/.test(v) || "User can only contain letters, numbers, and underscores",
+            ],
+            passwordRules: [
+            (v) => !!v || "Password is required",
+            (v) => v.length >= 6 || "Password must be at least 6 characters",
+            (v) => /\d/.test(v) || "Password must contain at least one number",
+            ],
+        };
+    },
+    methods: {
+      submitLogin() {
+        if (this.isValid) {
+          // Simulate login logic
+          this.send({
+            payload: {
+                page: "Home"
+            },
+            _client: this.msg._client,
+            _msgid: this.msg._msgid,
+        });
+          alert(`Welcome, ${this.user}!`);
+        } else {
+          alert("Please fill in all fields correctly.");
+        }
+      },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  .v-card {
+    padding: 20px;
+  }
+  </style>

@@ -102,6 +102,7 @@ msg.dashboard.form = {
     tag_tables: global.get("tag_tables"),
 };
 
+msg.history = msg.dashboard.history || [];
 msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {

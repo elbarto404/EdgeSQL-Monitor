@@ -23,7 +23,11 @@
             }
         },
         "debug": {
-            "filter": "filterSelected"
-        }
+            "filter": "filterCurrent"
+        },
+        "menu-menu-item-sidebar": true,
+        "menu-deploymenu-item-node": false,
+        "menu-deploymenu-item-full": true,
+        "menu-deploymenu-item-flow": false
     }
 }

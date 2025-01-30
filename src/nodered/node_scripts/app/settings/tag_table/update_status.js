@@ -145,12 +145,12 @@ node.status({ fill: "green", shape: "dot", text: `last update: ${localTime}` });
 
 if (deploy_needed) {
     msg.topic = 'deploy';
-    return [msg, null];
+    return  [null, msg];
 } else {
     // Prapare the dynamic_insert history and resets the dashboard history
     msg.history = [...msg.dashboard.history];
     msg.dashboard.history = [];
 
     msg.topic = 'update_status';
-    return [null, msg];
+    return [msg, null];
 }

@@ -11,13 +11,14 @@ function capitalize(str) {
 const tabName = env.get('TABLE');
 msg.title = capitalize(tabName);
 msg.topicMain = msg.topicMain || msg.topic;
-msg.database = msg.database || {
-    name: env.get("DATABASE"),
-    schema: env.get("SCHEMA"),
-    table: tabName,
-    dataSchema: env.get("DATA_SCHEMA"),
-    dataTable: env.get("DATA_TABLE")
-};
+
+msg.database = msg.database || {};
+msg.database.name = env.get("DATABASE");
+msg.database.schema = env.get("SCHEMA");
+msg.database.table = tabName;
+msg.database.dataSchema = env.get("DATA_SCHEMA");
+msg.database.dataTable = env.get("DATA_TABLE");
+
 msg.data = msg.data || flow.get(tabName) || null;
 msg.dashboard = msg.dashboard || {};
 msg.dashboard.info = msg.dashboard.info || flow.get("info");
@@ -29,17 +30,17 @@ if (msg.database.table !== tabName) {
 // Topic switch
 const indexMap = {
     // Previous Error
-    error:          0,
+    error: 0,
 
     // Previous Action (postgres response)
-    check_table:    2,
+    check_table: 2, 
     deploy_changes: 2,
-    select_data:    4,
+    select_data: 3,
 
     // Next Action
-    start:          1,
-    update:         2,
-    deploy:         3,    
+    start: 1,
+    update: 2,
+    deploy: 4,
 };
 
 const outputs = [null, null, null, null, null];

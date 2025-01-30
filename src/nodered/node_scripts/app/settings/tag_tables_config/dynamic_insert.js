@@ -27,11 +27,13 @@ function generateId(existingIds) {
     do {
         id = randomHex(16);
     } while (existingIds.includes(id));
+
+    existingIds.push(id);
     return id;
 }
 
 // Collect all currently existing IDs
-const existingIds = allNodes.map(node => node.id);
+let existingIds = allNodes.map(node => node.id);
 const updatedNodes = [...allNodes];
 
 // Filter out the nodes that belong to the tab with ID "4b69c9fd15f72033" (Settings tab)

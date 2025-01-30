@@ -2,6 +2,7 @@ import os
 import json
 import subprocess
 import logging
+import traceback
 
 # Configurations
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -202,7 +203,7 @@ def generate_pdf(working_dir, output_dir, template_file, config):
     tex_path = generate_tex(working_dir, latex_content, dashboard, config)
     if not tex_path:
         return
-    
+    # tex_path = str(tex_path).replace('/', '\\')
     # Extract Dashboard name
     pdf_name = dashboard["meta"]["slug"]
 
@@ -242,9 +243,11 @@ def generate_pdf(working_dir, output_dir, template_file, config):
         logging.debug(f"pdflatex stdout:\n{result.stdout}")
         logging.debug(f"pdflatex stderr:\n{result.stderr}")
     except subprocess.CalledProcessError as e:
+        traceback.print_exc()
         logging.error(f"pdflatex failed with error: {e}")
         logging.error(f"Command output:\n{e.output}")
     except Exception as e:
+        traceback.print_exc()
         logging.error(f"Unexpected error during PDF generation: {e}")
         return
 

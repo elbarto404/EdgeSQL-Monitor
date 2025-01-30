@@ -7,6 +7,7 @@ from flask import Flask, request, send_file, jsonify
 from concurrent.futures import ThreadPoolExecutor
 import logging
 from time import sleep
+import traceback
 
 from generate_pdf import generate_pdf
 
@@ -52,27 +53,26 @@ params = {
 }
 
 
-def remove_all_files_from_folder(folder_path):
+def remove_all_files_from_folder_recursive(folder_path):
     try:
         # Check if the folder exists
         if not os.path.exists(folder_path):
             logging.warning(f"The folder '{folder_path}' does not exist.")
             return
 
-        # Iterate through the files in the folder
-        for filename in os.listdir(folder_path):
-            file_path = os.path.join(folder_path, filename)
-            
-            # Check if it is a file (not a directory)
-            if os.path.isfile(file_path):
-                os.remove(file_path)  # Remove the file
-                logging.info(f"Removed: {file_path}")
-            else:
-                logging.info(f"Skipping non-file item: {file_path}")
+        # Walk through the folder and its subfolders
+        for root, _, files in os.walk(folder_path):
+            for filename in files:
+                file_path = os.path.join(root, filename)
+                try:
+                    os.remove(file_path)  # Remove the file
+                    logging.info(f"Removed: {file_path}")
+                except Exception as e:
+                    logging.error(f"Failed to remove {file_path}: {e}")
 
         logging.info("All files removed successfully.")
     except Exception as e:
-        logging.info(f"An error occurred: {e}")
+        logging.error(f"An error occurred: {e}")
 
 def get_panel_filename(panel):
     posX = f"0000{panel['gridPos']['x']}"[-4:]
@@ -190,7 +190,7 @@ def generate_report():
     try:
         logging.info(f"Received request with params: {request.args}")
 
-        remove_all_files_from_folder(WORKING_DIR) if render_flag else None
+        remove_all_files_from_folder_recursive(WORKING_DIR) if render_flag else None
 
         # Parse parameters from the query string
         query_params = request.args.to_dict()
@@ -239,6 +239,7 @@ def generate_report():
         )
         
     except Exception as e:
+        traceback.print_exc()
         logging.error(f"Error generating report: {e}")
         return jsonify({"error": str(e)}), 500
 

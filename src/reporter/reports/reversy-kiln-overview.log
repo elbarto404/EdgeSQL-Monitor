@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.22)  27 JAN 2025 13:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.22)  30 JAN 2025 00:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -402,121 +402,109 @@ LaTeX Font Info:    Font shape `OT1/Roboto-LF/b/n' aliased to
 (Font)              `OT1/Roboto-LF/bold/n' on input line 65.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/bold/n' will be
 (Font)              scaled to size 14.4pt on input line 65.
-<temp/images/panel_0001-0000.png, id=12, 642.4pt x 180.675pt>
+<temp/images/panel_0001-0000.png, id=36, 642.4pt x 180.675pt>
 File: temp/images/panel_0001-0000.png Graphic file (type png)
 <use temp/images/panel_0001-0000.png>
 Package pdftex.def Info: temp/images/panel_0001-0000.png  used on input line 68
 .
 (pdftex.def)             Requested size: 239.9976pt x 67.9983pt.
-<temp/images/panel_0001-0008.png, id=13, 642.4pt x 180.675pt>
+<temp/images/panel_0001-0008.png, id=37, 642.4pt x 180.675pt>
 File: temp/images/panel_0001-0008.png Graphic file (type png)
 <use temp/images/panel_0001-0008.png>
 Package pdftex.def Info: temp/images/panel_0001-0008.png  used on input line 69
 .
 (pdftex.def)             Requested size: 239.9976pt x 67.9983pt.
-<temp/images/panel_0001-0016.png, id=14, 642.4pt x 180.675pt>
+<temp/images/panel_0001-0016.png, id=38, 642.4pt x 180.675pt>
 File: temp/images/panel_0001-0016.png Graphic file (type png)
 <use temp/images/panel_0001-0016.png>
 Package pdftex.def Info: temp/images/panel_0001-0016.png  used on input line 70
 .
 (pdftex.def)             Requested size: 239.9976pt x 67.9983pt.
-<temp/images/panel_0005-0000.png, id=15, 1927.2pt x 180.675pt>
+<temp/images/panel_0005-0000.png, id=39, 1927.2pt x 180.675pt>
 File: temp/images/panel_0005-0000.png Graphic file (type png)
 <use temp/images/panel_0005-0000.png>
 Package pdftex.def Info: temp/images/panel_0005-0000.png  used on input line 71
 .
 (pdftex.def)             Requested size: 719.99283pt x 67.9983pt.
-<temp/images/panel_0009-0000.png, id=16, 401.5pt x 135.50626pt>
+<temp/images/panel_0009-0000.png, id=40, 401.5pt x 135.50626pt>
 File: temp/images/panel_0009-0000.png Graphic file (type png)
 <use temp/images/panel_0009-0000.png>
 Package pdftex.def Info: temp/images/panel_0009-0000.png  used on input line 72
 .
 (pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
-<temp/images/panel_0009-0005.png, id=17, 722.7pt x 271.0125pt>
+<temp/images/panel_0009-0005.png, id=41, 722.7pt x 271.0125pt>
 File: temp/images/panel_0009-0005.png Graphic file (type png)
 <use temp/images/panel_0009-0005.png>
 Package pdftex.def Info: temp/images/panel_0009-0005.png  used on input line 73
 .
 (pdftex.def)             Requested size: 269.9973pt x 101.99747pt.
-<temp/images/panel_0009-0014.png, id=18, 401.5pt x 135.50626pt>
+<temp/images/panel_0009-0014.png, id=42, 401.5pt x 135.50626pt>
 File: temp/images/panel_0009-0014.png Graphic file (type png)
 <use temp/images/panel_0009-0014.png>
 Package pdftex.def Info: temp/images/panel_0009-0014.png  used on input line 74
 .
 (pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
-<temp/images/panel_0009-0019.png, id=19, 240.9pt x 271.0125pt>
+<temp/images/panel_0009-0019.png, id=43, 240.9pt x 271.0125pt>
 File: temp/images/panel_0009-0019.png Graphic file (type png)
 <use temp/images/panel_0009-0019.png>
 Package pdftex.def Info: temp/images/panel_0009-0019.png  used on input line 75
 .
 (pdftex.def)             Requested size: 89.99908pt x 101.99747pt.
-<temp/images/panel_0009-0022.png, id=20, 160.6pt x 135.50626pt>
+<temp/images/panel_0009-0022.png, id=44, 160.6pt x 135.50626pt>
 File: temp/images/panel_0009-0022.png Graphic file (type png)
 <use temp/images/panel_0009-0022.png>
 Package pdftex.def Info: temp/images/panel_0009-0022.png  used on input line 76
 .
 (pdftex.def)             Requested size: 59.99939pt x 50.99873pt.
-<temp/images/panel_0012-0000.png, id=21, 160.6pt x 135.50626pt>
+<temp/images/panel_0012-0000.png, id=45, 160.6pt x 135.50626pt>
 File: temp/images/panel_0012-0000.png Graphic file (type png)
 <use temp/images/panel_0012-0000.png>
 Package pdftex.def Info: temp/images/panel_0012-0000.png  used on input line 77
 .
 (pdftex.def)             Requested size: 59.99939pt x 50.99873pt.
-<temp/images/panel_0012-0002.png, id=22, 240.9pt x 135.50626pt>
+<temp/images/panel_0012-0002.png, id=46, 240.9pt x 135.50626pt>
 File: temp/images/panel_0012-0002.png Graphic file (type png)
 <use temp/images/panel_0012-0002.png>
 Package pdftex.def Info: temp/images/panel_0012-0002.png  used on input line 78
 .
 (pdftex.def)             Requested size: 89.99908pt x 50.99873pt.
-<temp/images/panel_0012-0014.png, id=23, 401.5pt x 135.50626pt>
+<temp/images/panel_0012-0014.png, id=47, 401.5pt x 135.50626pt>
 File: temp/images/panel_0012-0014.png Graphic file (type png)
 <use temp/images/panel_0012-0014.png>
 Package pdftex.def Info: temp/images/panel_0012-0014.png  used on input line 79
 .
 (pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
-<temp/images/panel_0012-0022.png, id=24, 160.6pt x 135.50626pt>
+<temp/images/panel_0012-0022.png, id=48, 160.6pt x 135.50626pt>
 File: temp/images/panel_0012-0022.png Graphic file (type png)
 <use temp/images/panel_0012-0022.png>
 Package pdftex.def Info: temp/images/panel_0012-0022.png  used on input line 80
 .
 (pdftex.def)             Requested size: 59.99939pt x 50.99873pt.
-<temp/images/panel_0016-0000.png, id=25, 401.5pt x 135.50626pt>
-File: temp/images/panel_0016-0000.png Graphic file (type png)
-<use temp/images/panel_0016-0000.png>
-Package pdftex.def Info: temp/images/panel_0016-0000.png  used on input line 81
-.
-(pdftex.def)             Requested size: 720.10797pt x 16.9982pt.
-<temp/images/panel_0019-0000.png, id=26, 401.5pt x 587.19376pt>
-File: temp/images/panel_0019-0000.png Graphic file (type png)
-<use temp/images/panel_0019-0000.png>
-Package pdftex.def Info: temp/images/panel_0019-0000.png  used on input line 82
-.
-(pdftex.def)             Requested size: 720.10797pt x 16.99681pt.
 
 
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/m/n' aliased to
-(Font)              `OT1/Roboto-LF/regular/n' on input line 85.
+(Font)              `OT1/Roboto-LF/regular/n' on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/regular/n' will be
-(Font)              scaled to size 20.74pt on input line 85.
+(Font)              scaled to size 20.74pt on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/b/n' aliased to
-(Font)              `OT1/Roboto-LF/bold/n' on input line 85.
+(Font)              `OT1/Roboto-LF/bold/n' on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/bold/n' will be
-(Font)              scaled to size 20.74pt on input line 85.
+(Font)              scaled to size 20.74pt on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/b/n' aliased to
-(Font)              `OT1/Roboto-LF/bold/n' on input line 85.
+(Font)              `OT1/Roboto-LF/bold/n' on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/bold/n' will be
-(Font)              scaled to size 10.0pt on input line 85.
+(Font)              scaled to size 10.0pt on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/m/n' aliased to
-(Font)              `OT1/Roboto-LF/regular/n' on input line 85.
+(Font)              `OT1/Roboto-LF/regular/n' on input line 83.
 LaTeX Font Info:    Font shape `OT1/Roboto-LF/regular/n' will be
-(Font)              scaled to size 9.0pt on input line 85.
+(Font)              scaled to size 9.0pt on input line 83.
 LaTeX Font Info:    Trying to load font information for OMS+Roboto-LF on input 
-line 85.
-LaTeX Font Info:    No file OMSRoboto-LF.fd. on input line 85.
+line 83.
+LaTeX Font Info:    No file OMSRoboto-LF.fd. on input line 83.
 
 LaTeX Font Warning: Font shape `OMS/Roboto-LF/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbar' on input line 85.
+(Font)              for symbol `textbar' on input line 83.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -533,49 +521,79 @@ p/images/panel_0001-0016.png> <./temp/images/panel_0005-0000.png> <./temp/image
 s/panel_0009-0000.png> <./temp/images/panel_0009-0005.png> <./temp/images/panel
 _0009-0014.png> <./temp/images/panel_0009-0019.png> <./temp/images/panel_0009-0
 022.png> <./temp/images/panel_0012-0000.png> <./temp/images/panel_0012-0002.png
-> <./temp/images/panel_0012-0014.png> <./temp/images/panel_0012-0022.png> <./te
-mp/images/panel_0016-0000.png> <./temp/images/panel_0019-0000.png>]
-<temp/images/panel_0025-0000.png, id=37, 642.4pt x 316.18124pt>
-File: temp/images/panel_0025-0000.png Graphic file (type png)
-<use temp/images/panel_0025-0000.png>
-Package pdftex.def Info: temp/images/panel_0025-0000.png  used on input line 91
+> <./temp/images/panel_0012-0014.png> <./temp/images/panel_0012-0022.png>]
+<temp/images/panel_0016-0000.png, id=59, 401.5pt x 135.50626pt>
+File: temp/images/panel_0016-0000.png Graphic file (type png)
+<use temp/images/panel_0016-0000.png>
+Package pdftex.def Info: temp/images/panel_0016-0000.png  used on input line 89
 .
-(pdftex.def)             Requested size: 239.9976pt x 118.99706pt.
-<temp/images/panel_0025-0008.png, id=38, 642.4pt x 316.18124pt>
-File: temp/images/panel_0025-0008.png Graphic file (type png)
-<use temp/images/panel_0025-0008.png>
-Package pdftex.def Info: temp/images/panel_0025-0008.png  used on input line 92
+(pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
+<temp/images/panel_0016-0005.png, id=60, 401.5pt x 135.50626pt>
+File: temp/images/panel_0016-0005.png Graphic file (type png)
+<use temp/images/panel_0016-0005.png>
+Package pdftex.def Info: temp/images/panel_0016-0005.png  used on input line 90
 .
-(pdftex.def)             Requested size: 239.9976pt x 118.99706pt.
-<temp/images/panel_0025-0016.png, id=39, 642.4pt x 316.18124pt>
-File: temp/images/panel_0025-0016.png Graphic file (type png)
-<use temp/images/panel_0025-0016.png>
-Package pdftex.def Info: temp/images/panel_0025-0016.png  used on input line 93
+(pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
+<temp/images/panel_0016-0010.png, id=61, 321.2pt x 180.675pt>
+File: temp/images/panel_0016-0010.png Graphic file (type png)
+<use temp/images/panel_0016-0010.png>
+Package pdftex.def Info: temp/images/panel_0016-0010.png  used on input line 91
 .
-(pdftex.def)             Requested size: 239.9976pt x 118.99706pt.
-<temp/images/panel_0032-0000.png, id=40, 1927.2pt x 858.20625pt>
-File: temp/images/panel_0032-0000.png Graphic file (type png)
-<use temp/images/panel_0032-0000.png>
-Package pdftex.def Info: temp/images/panel_0032-0000.png  used on input line 94
+(pdftex.def)             Requested size: 119.9988pt x 67.9983pt.
+<temp/images/panel_0016-0014.png, id=62, 401.5pt x 135.50626pt>
+File: temp/images/panel_0016-0014.png Graphic file (type png)
+<use temp/images/panel_0016-0014.png>
+Package pdftex.def Info: temp/images/panel_0016-0014.png  used on input line 92
 .
-(pdftex.def)             Requested size: 719.99283pt x 323.00511pt.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 32.84816pt, for example:
-(fancyhdr)                \setlength{\headheight}{32.84816pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
-
-[2 <./temp/images/panel_0025-0000.png> <./temp/images/panel_0025-0008.png> <./t
-emp/images/panel_0025-0016.png> <./temp/images/panel_0032-0000.png>]
-<temp/images/panel_0051-0000.png, id=46, 1927.2pt x 677.53125pt>
-File: temp/images/panel_0051-0000.png Graphic file (type png)
-<use temp/images/panel_0051-0000.png>
-Package pdftex.def Info: temp/images/panel_0051-0000.png  used on input line 10
+(pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
+<temp/images/panel_0016-0019.png, id=63, 401.5pt x 135.50626pt>
+File: temp/images/panel_0016-0019.png Graphic file (type png)
+<use temp/images/panel_0016-0019.png>
+Package pdftex.def Info: temp/images/panel_0016-0019.png  used on input line 93
+.
+(pdftex.def)             Requested size: 150.00462pt x 50.99873pt.
+<temp/images/panel_0019-0000.png, id=64, 401.5pt x 587.19376pt>
+File: temp/images/panel_0019-0000.png Graphic file (type png)
+<use temp/images/panel_0019-0000.png>
+Package pdftex.def Info: temp/images/panel_0019-0000.png  used on input line 94
+.
+(pdftex.def)             Requested size: 150.00462pt x 220.99454pt.
+<temp/images/panel_0019-0005.png, id=65, 401.5pt x 587.19376pt>
+File: temp/images/panel_0019-0005.png Graphic file (type png)
+<use temp/images/panel_0019-0005.png>
+Package pdftex.def Info: temp/images/panel_0019-0005.png  used on input line 95
+.
+(pdftex.def)             Requested size: 150.00462pt x 220.99454pt.
+<temp/images/panel_0019-0014.png, id=66, 401.5pt x 587.19376pt>
+File: temp/images/panel_0019-0014.png Graphic file (type png)
+<use temp/images/panel_0019-0014.png>
+Package pdftex.def Info: temp/images/panel_0019-0014.png  used on input line 96
+.
+(pdftex.def)             Requested size: 150.00462pt x 220.99454pt.
+<temp/images/panel_0019-0019.png, id=67, 401.5pt x 587.19376pt>
+File: temp/images/panel_0019-0019.png Graphic file (type png)
+<use temp/images/panel_0019-0019.png>
+Package pdftex.def Info: temp/images/panel_0019-0019.png  used on input line 97
+.
+(pdftex.def)             Requested size: 150.00462pt x 220.99454pt.
+<temp/images/panel_0020-0010.png, id=68, 321.2pt x 180.675pt>
+File: temp/images/panel_0020-0010.png Graphic file (type png)
+<use temp/images/panel_0020-0010.png>
+Package pdftex.def Info: temp/images/panel_0020-0010.png  used on input line 98
+.
+(pdftex.def)             Requested size: 119.9988pt x 67.9983pt.
+<temp/images/panel_0024-0010.png, id=69, 321.2pt x 180.675pt>
+File: temp/images/panel_0024-0010.png Graphic file (type png)
+<use temp/images/panel_0024-0010.png>
+Package pdftex.def Info: temp/images/panel_0024-0010.png  used on input line 99
+.
+(pdftex.def)             Requested size: 119.9988pt x 67.9983pt.
+<temp/images/panel_0028-0010.png, id=70, 321.2pt x 180.675pt>
+File: temp/images/panel_0028-0010.png Graphic file (type png)
+<use temp/images/panel_0028-0010.png>
+Package pdftex.def Info: temp/images/panel_0028-0010.png  used on input line 10
 0.
-(pdftex.def)             Requested size: 719.99283pt x 255.00403pt.
+(pdftex.def)             Requested size: 119.9988pt x 67.9983pt.
 
 
 
@@ -585,7 +603,472 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
 
-[3 <./temp/images/panel_0051-0000.png>]
+[2 <./temp/images/panel_0016-0000.png> <./temp/images/panel_0016-0005.png> <./t
+emp/images/panel_0016-0010.png> <./temp/images/panel_0016-0014.png> <./temp/ima
+ges/panel_0016-0019.png> <./temp/images/panel_0019-0000.png> <./temp/images/pan
+el_0019-0005.png> <./temp/images/panel_0019-0014.png> <./temp/images/panel_0019
+-0019.png> <./temp/images/panel_0020-0010.png> <./temp/images/panel_0024-0010.p
+ng> <./temp/images/panel_0028-0010.png>]
+<temp/images/panel_0033-0000.png, id=76, 1927.2pt x 135.50626pt>
+File: temp/images/panel_0033-0000.png Graphic file (type png)
+<use temp/images/panel_0033-0000.png>
+Package pdftex.def Info: temp/images/panel_0033-0000.png  used on input line 10
+9.
+(pdftex.def)             Requested size: 719.99283pt x 50.99873pt.
+<temp/images/panel_0036-0000.png, id=77, 1927.2pt x 451.6875pt>
+File: temp/images/panel_0036-0000.png Graphic file (type png)
+<use temp/images/panel_0036-0000.png>
+Package pdftex.def Info: temp/images/panel_0036-0000.png  used on input line 11
+0.
+(pdftex.def)             Requested size: 719.99283pt x 170.00269pt.
+<temp/images/panel_0046-0000.png, id=78, 1927.2pt x 271.0125pt>
+File: temp/images/panel_0046-0000.png Graphic file (type png)
+<use temp/images/panel_0046-0000.png>
+Package pdftex.def Info: temp/images/panel_0046-0000.png  used on input line 11
+1.
+(pdftex.def)             Requested size: 719.99283pt x 101.99747pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[3 <./temp/images/panel_0033-0000.png> <./temp/images/panel_0036-0000.png> <./t
+emp/images/panel_0046-0000.png>]
+<temp/images/panel_0053-0000.png, id=84, 1927.2pt x 587.19376pt>
+File: temp/images/panel_0053-0000.png Graphic file (type png)
+<use temp/images/panel_0053-0000.png>
+Package pdftex.def Info: temp/images/panel_0053-0000.png  used on input line 12
+0.
+(pdftex.def)             Requested size: 719.99283pt x 220.99454pt.
+<temp/images/panel_0066-0000.png, id=85, 562.1pt x 180.675pt>
+File: temp/images/panel_0066-0000.png Graphic file (type png)
+<use temp/images/panel_0066-0000.png>
+Package pdftex.def Info: temp/images/panel_0066-0000.png  used on input line 12
+1.
+(pdftex.def)             Requested size: 209.9979pt x 67.9983pt.
+<temp/images/panel_0066-0007.png, id=86, 401.5pt x 180.675pt>
+File: temp/images/panel_0066-0007.png Graphic file (type png)
+<use temp/images/panel_0066-0007.png>
+Package pdftex.def Info: temp/images/panel_0066-0007.png  used on input line 12
+2.
+(pdftex.def)             Requested size: 150.00462pt x 67.9983pt.
+<temp/images/panel_0066-0012.png, id=87, 401.5pt x 180.675pt>
+File: temp/images/panel_0066-0012.png Graphic file (type png)
+<use temp/images/panel_0066-0012.png>
+Package pdftex.def Info: temp/images/panel_0066-0012.png  used on input line 12
+3.
+(pdftex.def)             Requested size: 150.00462pt x 67.9983pt.
+<temp/images/panel_0066-0017.png, id=88, 562.1pt x 180.675pt>
+File: temp/images/panel_0066-0017.png Graphic file (type png)
+<use temp/images/panel_0066-0017.png>
+Package pdftex.def Info: temp/images/panel_0066-0017.png  used on input line 12
+4.
+(pdftex.def)             Requested size: 209.9979pt x 67.9983pt.
+<temp/images/panel_0070-0000.png, id=89, 1284.8pt x 406.51875pt>
+File: temp/images/panel_0070-0000.png Graphic file (type png)
+<use temp/images/panel_0070-0000.png>
+Package pdftex.def Info: temp/images/panel_0070-0000.png  used on input line 12
+5.
+(pdftex.def)             Requested size: 479.99521pt x 152.99622pt.
+<temp/images/panel_0070-0016.png, id=90, 642.4pt x 180.675pt>
+File: temp/images/panel_0070-0016.png Graphic file (type png)
+<use temp/images/panel_0070-0016.png>
+Package pdftex.def Info: temp/images/panel_0070-0016.png  used on input line 12
+6.
+(pdftex.def)             Requested size: 239.9976pt x 67.9983pt.
+<temp/images/panel_0074-0016.png, id=91, 642.4pt x 225.84375pt>
+File: temp/images/panel_0074-0016.png Graphic file (type png)
+<use temp/images/panel_0074-0016.png>
+Package pdftex.def Info: temp/images/panel_0074-0016.png  used on input line 12
+7.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[4 <./temp/images/panel_0053-0000.png> <./temp/images/panel_0066-0000.png> <./t
+emp/images/panel_0066-0007.png> <./temp/images/panel_0066-0012.png> <./temp/ima
+ges/panel_0066-0017.png> <./temp/images/panel_0070-0000.png> <./temp/images/pan
+el_0070-0016.png> <./temp/images/panel_0074-0016.png>]
+<temp/images/panel_0080-0000.png, id=97, 1284.8pt x 361.35pt>
+File: temp/images/panel_0080-0000.png Graphic file (type png)
+<use temp/images/panel_0080-0000.png>
+Package pdftex.def Info: temp/images/panel_0080-0000.png  used on input line 13
+6.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0080-0016.png, id=98, 642.4pt x 135.50626pt>
+File: temp/images/panel_0080-0016.png Graphic file (type png)
+<use temp/images/panel_0080-0016.png>
+Package pdftex.def Info: temp/images/panel_0080-0016.png  used on input line 13
+7.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0083-0016.png, id=99, 642.4pt x 225.84375pt>
+File: temp/images/panel_0083-0016.png Graphic file (type png)
+<use temp/images/panel_0083-0016.png>
+Package pdftex.def Info: temp/images/panel_0083-0016.png  used on input line 13
+8.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+<temp/images/panel_0088-0000.png, id=100, 1284.8pt x 361.35pt>
+File: temp/images/panel_0088-0000.png Graphic file (type png)
+<use temp/images/panel_0088-0000.png>
+Package pdftex.def Info: temp/images/panel_0088-0000.png  used on input line 13
+9.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0088-0016.png, id=101, 642.4pt x 135.50626pt>
+File: temp/images/panel_0088-0016.png Graphic file (type png)
+<use temp/images/panel_0088-0016.png>
+Package pdftex.def Info: temp/images/panel_0088-0016.png  used on input line 14
+0.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0091-0016.png, id=102, 642.4pt x 225.84375pt>
+File: temp/images/panel_0091-0016.png Graphic file (type png)
+<use temp/images/panel_0091-0016.png>
+Package pdftex.def Info: temp/images/panel_0091-0016.png  used on input line 14
+1.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+<temp/images/panel_0096-0000.png, id=103, 1284.8pt x 361.35pt>
+File: temp/images/panel_0096-0000.png Graphic file (type png)
+<use temp/images/panel_0096-0000.png>
+Package pdftex.def Info: temp/images/panel_0096-0000.png  used on input line 14
+2.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0096-0016.png, id=104, 642.4pt x 135.50626pt>
+File: temp/images/panel_0096-0016.png Graphic file (type png)
+<use temp/images/panel_0096-0016.png>
+Package pdftex.def Info: temp/images/panel_0096-0016.png  used on input line 14
+3.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0099-0016.png, id=105, 642.4pt x 225.84375pt>
+File: temp/images/panel_0099-0016.png Graphic file (type png)
+<use temp/images/panel_0099-0016.png>
+Package pdftex.def Info: temp/images/panel_0099-0016.png  used on input line 14
+4.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[5 <./temp/images/panel_0080-0000.png> <./temp/images/panel_0080-0016.png> <./t
+emp/images/panel_0083-0016.png> <./temp/images/panel_0088-0000.png> <./temp/ima
+ges/panel_0088-0016.png> <./temp/images/panel_0091-0016.png> <./temp/images/pan
+el_0096-0000.png> <./temp/images/panel_0096-0016.png> <./temp/images/panel_0099
+-0016.png>]
+<temp/images/panel_0105-0000.png, id=111, 1284.8pt x 361.35pt>
+File: temp/images/panel_0105-0000.png Graphic file (type png)
+<use temp/images/panel_0105-0000.png>
+Package pdftex.def Info: temp/images/panel_0105-0000.png  used on input line 15
+3.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0105-0016.png, id=112, 642.4pt x 135.50626pt>
+File: temp/images/panel_0105-0016.png Graphic file (type png)
+<use temp/images/panel_0105-0016.png>
+Package pdftex.def Info: temp/images/panel_0105-0016.png  used on input line 15
+4.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0108-0016.png, id=113, 642.4pt x 225.84375pt>
+File: temp/images/panel_0108-0016.png Graphic file (type png)
+<use temp/images/panel_0108-0016.png>
+Package pdftex.def Info: temp/images/panel_0108-0016.png  used on input line 15
+5.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+<temp/images/panel_0113-0000.png, id=114, 1284.8pt x 361.35pt>
+File: temp/images/panel_0113-0000.png Graphic file (type png)
+<use temp/images/panel_0113-0000.png>
+Package pdftex.def Info: temp/images/panel_0113-0000.png  used on input line 15
+6.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0113-0016.png, id=115, 642.4pt x 135.50626pt>
+File: temp/images/panel_0113-0016.png Graphic file (type png)
+<use temp/images/panel_0113-0016.png>
+Package pdftex.def Info: temp/images/panel_0113-0016.png  used on input line 15
+7.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0116-0016.png, id=116, 642.4pt x 225.84375pt>
+File: temp/images/panel_0116-0016.png Graphic file (type png)
+<use temp/images/panel_0116-0016.png>
+Package pdftex.def Info: temp/images/panel_0116-0016.png  used on input line 15
+8.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+<temp/images/panel_0121-0000.png, id=117, 1284.8pt x 406.51875pt>
+File: temp/images/panel_0121-0000.png Graphic file (type png)
+<use temp/images/panel_0121-0000.png>
+Package pdftex.def Info: temp/images/panel_0121-0000.png  used on input line 15
+9.
+(pdftex.def)             Requested size: 479.99521pt x 152.99622pt.
+<temp/images/panel_0121-0016.png, id=118, 642.4pt x 406.51875pt>
+File: temp/images/panel_0121-0016.png Graphic file (type png)
+<use temp/images/panel_0121-0016.png>
+Package pdftex.def Info: temp/images/panel_0121-0016.png  used on input line 16
+0.
+(pdftex.def)             Requested size: 239.9976pt x 152.99622pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[6 <./temp/images/panel_0105-0000.png> <./temp/images/panel_0105-0016.png> <./t
+emp/images/panel_0108-0016.png> <./temp/images/panel_0113-0000.png> <./temp/ima
+ges/panel_0113-0016.png> <./temp/images/panel_0116-0016.png> <./temp/images/pan
+el_0121-0000.png> <./temp/images/panel_0121-0016.png>]
+<temp/images/panel_0130-0000.png, id=124, 1284.8pt x 361.35pt>
+File: temp/images/panel_0130-0000.png Graphic file (type png)
+<use temp/images/panel_0130-0000.png>
+Package pdftex.def Info: temp/images/panel_0130-0000.png  used on input line 16
+6.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0130-0016.png, id=125, 642.4pt x 135.50626pt>
+File: temp/images/panel_0130-0016.png Graphic file (type png)
+<use temp/images/panel_0130-0016.png>
+Package pdftex.def Info: temp/images/panel_0130-0016.png  used on input line 16
+7.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0133-0016.png, id=126, 642.4pt x 225.84375pt>
+File: temp/images/panel_0133-0016.png Graphic file (type png)
+<use temp/images/panel_0133-0016.png>
+Package pdftex.def Info: temp/images/panel_0133-0016.png  used on input line 16
+8.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[7 <./temp/images/panel_0130-0000.png> <./temp/images/panel_0130-0016.png> <./t
+emp/images/panel_0133-0016.png>]
+<temp/images/panel_0139-0000.png, id=133, 1284.8pt x 361.35pt>
+File: temp/images/panel_0139-0000.png Graphic file (type png)
+<use temp/images/panel_0139-0000.png>
+Package pdftex.def Info: temp/images/panel_0139-0000.png  used on input line 17
+7.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0139-0016.png, id=134, 642.4pt x 135.50626pt>
+File: temp/images/panel_0139-0016.png Graphic file (type png)
+<use temp/images/panel_0139-0016.png>
+Package pdftex.def Info: temp/images/panel_0139-0016.png  used on input line 17
+8.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0142-0016.png, id=135, 642.4pt x 225.84375pt>
+File: temp/images/panel_0142-0016.png Graphic file (type png)
+<use temp/images/panel_0142-0016.png>
+Package pdftex.def Info: temp/images/panel_0142-0016.png  used on input line 17
+9.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+<temp/images/panel_0147-0000.png, id=136, 1284.8pt x 361.35pt>
+File: temp/images/panel_0147-0000.png Graphic file (type png)
+<use temp/images/panel_0147-0000.png>
+Package pdftex.def Info: temp/images/panel_0147-0000.png  used on input line 18
+0.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0147-0016.png, id=137, 642.4pt x 135.50626pt>
+File: temp/images/panel_0147-0016.png Graphic file (type png)
+<use temp/images/panel_0147-0016.png>
+Package pdftex.def Info: temp/images/panel_0147-0016.png  used on input line 18
+1.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0150-0016.png, id=138, 642.4pt x 225.84375pt>
+File: temp/images/panel_0150-0016.png Graphic file (type png)
+<use temp/images/panel_0150-0016.png>
+Package pdftex.def Info: temp/images/panel_0150-0016.png  used on input line 18
+2.
+(pdftex.def)             Requested size: 239.9976pt x 85.00134pt.
+<temp/images/panel_0155-0000.png, id=139, 1284.8pt x 361.35pt>
+File: temp/images/panel_0155-0000.png Graphic file (type png)
+<use temp/images/panel_0155-0000.png>
+Package pdftex.def Info: temp/images/panel_0155-0000.png  used on input line 18
+3.
+(pdftex.def)             Requested size: 479.99521pt x 135.99664pt.
+<temp/images/panel_0155-0016.png, id=140, 642.4pt x 361.35pt>
+File: temp/images/panel_0155-0016.png Graphic file (type png)
+<use temp/images/panel_0155-0016.png>
+Package pdftex.def Info: temp/images/panel_0155-0016.png  used on input line 18
+4.
+(pdftex.def)             Requested size: 239.9976pt x 135.99664pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[8 <./temp/images/panel_0139-0000.png> <./temp/images/panel_0139-0016.png> <./t
+emp/images/panel_0142-0016.png> <./temp/images/panel_0147-0000.png> <./temp/ima
+ges/panel_0147-0016.png> <./temp/images/panel_0150-0016.png> <./temp/images/pan
+el_0155-0000.png> <./temp/images/panel_0155-0016.png>]
+<temp/images/panel_0163-0000.png, id=146, 1284.8pt x 496.85625pt>
+File: temp/images/panel_0163-0000.png Graphic file (type png)
+<use temp/images/panel_0163-0000.png>
+Package pdftex.def Info: temp/images/panel_0163-0000.png  used on input line 19
+0.
+(pdftex.def)             Requested size: 479.99521pt x 187.00296pt.
+<temp/images/panel_0163-0016.png, id=147, 642.4pt x 135.50626pt>
+File: temp/images/panel_0163-0016.png Graphic file (type png)
+<use temp/images/panel_0163-0016.png>
+Package pdftex.def Info: temp/images/panel_0163-0016.png  used on input line 19
+1.
+(pdftex.def)             Requested size: 239.9976pt x 50.99873pt.
+<temp/images/panel_0166-0016.png, id=148, 642.4pt x 361.35pt>
+File: temp/images/panel_0166-0016.png Graphic file (type png)
+<use temp/images/panel_0166-0016.png>
+Package pdftex.def Info: temp/images/panel_0166-0016.png  used on input line 19
+2.
+(pdftex.def)             Requested size: 239.9976pt x 135.99664pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[9 <./temp/images/panel_0163-0000.png> <./temp/images/panel_0163-0016.png> <./t
+emp/images/panel_0166-0016.png>]
+<temp/images/panel_0175-0000.png, id=154, 1284.8pt x 406.51875pt>
+File: temp/images/panel_0175-0000.png Graphic file (type png)
+<use temp/images/panel_0175-0000.png>
+Package pdftex.def Info: temp/images/panel_0175-0000.png  used on input line 20
+1.
+(pdftex.def)             Requested size: 479.99521pt x 152.99622pt.
+<temp/images/panel_0175-0016.png, id=155, 321.2pt x 135.50626pt>
+File: temp/images/panel_0175-0016.png Graphic file (type png)
+<use temp/images/panel_0175-0016.png>
+Package pdftex.def Info: temp/images/panel_0175-0016.png  used on input line 20
+2.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0175-0020.png, id=156, 321.2pt x 135.50626pt>
+File: temp/images/panel_0175-0020.png Graphic file (type png)
+<use temp/images/panel_0175-0020.png>
+Package pdftex.def Info: temp/images/panel_0175-0020.png  used on input line 20
+3.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0178-0016.png, id=157, 642.4pt x 271.0125pt>
+File: temp/images/panel_0178-0016.png Graphic file (type png)
+<use temp/images/panel_0178-0016.png>
+Package pdftex.def Info: temp/images/panel_0178-0016.png  used on input line 20
+4.
+(pdftex.def)             Requested size: 239.9976pt x 101.99747pt.
+<temp/images/panel_0184-0000.png, id=158, 1284.8pt x 406.51875pt>
+File: temp/images/panel_0184-0000.png Graphic file (type png)
+<use temp/images/panel_0184-0000.png>
+Package pdftex.def Info: temp/images/panel_0184-0000.png  used on input line 20
+5.
+(pdftex.def)             Requested size: 479.99521pt x 152.99622pt.
+<temp/images/panel_0184-0016.png, id=159, 321.2pt x 135.50626pt>
+File: temp/images/panel_0184-0016.png Graphic file (type png)
+<use temp/images/panel_0184-0016.png>
+Package pdftex.def Info: temp/images/panel_0184-0016.png  used on input line 20
+6.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0184-0020.png, id=160, 321.2pt x 135.50626pt>
+File: temp/images/panel_0184-0020.png Graphic file (type png)
+<use temp/images/panel_0184-0020.png>
+Package pdftex.def Info: temp/images/panel_0184-0020.png  used on input line 20
+7.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0187-0016.png, id=161, 642.4pt x 271.0125pt>
+File: temp/images/panel_0187-0016.png Graphic file (type png)
+<use temp/images/panel_0187-0016.png>
+Package pdftex.def Info: temp/images/panel_0187-0016.png  used on input line 20
+8.
+(pdftex.def)             Requested size: 239.9976pt x 101.99747pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[10 <./temp/images/panel_0175-0000.png> <./temp/images/panel_0175-0016.png> <./
+temp/images/panel_0175-0020.png> <./temp/images/panel_0178-0016.png> <./temp/im
+ages/panel_0184-0000.png> <./temp/images/panel_0184-0016.png> <./temp/images/pa
+nel_0184-0020.png> <./temp/images/panel_0187-0016.png>]
+<temp/images/panel_0193-0000.png, id=167, 1284.8pt x 406.51875pt>
+File: temp/images/panel_0193-0000.png Graphic file (type png)
+<use temp/images/panel_0193-0000.png>
+Package pdftex.def Info: temp/images/panel_0193-0000.png  used on input line 21
+4.
+(pdftex.def)             Requested size: 479.99521pt x 152.99622pt.
+<temp/images/panel_0193-0016.png, id=168, 321.2pt x 135.50626pt>
+File: temp/images/panel_0193-0016.png Graphic file (type png)
+<use temp/images/panel_0193-0016.png>
+Package pdftex.def Info: temp/images/panel_0193-0016.png  used on input line 21
+5.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0193-0020.png, id=169, 321.2pt x 135.50626pt>
+File: temp/images/panel_0193-0020.png Graphic file (type png)
+<use temp/images/panel_0193-0020.png>
+Package pdftex.def Info: temp/images/panel_0193-0020.png  used on input line 21
+6.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0196-0016.png, id=170, 642.4pt x 271.0125pt>
+File: temp/images/panel_0196-0016.png Graphic file (type png)
+<use temp/images/panel_0196-0016.png>
+Package pdftex.def Info: temp/images/panel_0196-0016.png  used on input line 21
+7.
+(pdftex.def)             Requested size: 239.9976pt x 101.99747pt.
+<temp/images/panel_0202-0000.png, id=171, 1284.8pt x 406.51875pt>
+File: temp/images/panel_0202-0000.png Graphic file (type png)
+<use temp/images/panel_0202-0000.png>
+Package pdftex.def Info: temp/images/panel_0202-0000.png  used on input line 21
+8.
+(pdftex.def)             Requested size: 479.99521pt x 152.99622pt.
+<temp/images/panel_0202-0016.png, id=172, 321.2pt x 135.50626pt>
+File: temp/images/panel_0202-0016.png Graphic file (type png)
+<use temp/images/panel_0202-0016.png>
+Package pdftex.def Info: temp/images/panel_0202-0016.png  used on input line 21
+9.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0202-0020.png, id=173, 321.2pt x 135.50626pt>
+File: temp/images/panel_0202-0020.png Graphic file (type png)
+<use temp/images/panel_0202-0020.png>
+Package pdftex.def Info: temp/images/panel_0202-0020.png  used on input line 22
+0.
+(pdftex.def)             Requested size: 119.9988pt x 50.99873pt.
+<temp/images/panel_0205-0016.png, id=174, 642.4pt x 271.0125pt>
+File: temp/images/panel_0205-0016.png Graphic file (type png)
+<use temp/images/panel_0205-0016.png>
+Package pdftex.def Info: temp/images/panel_0205-0016.png  used on input line 22
+1.
+(pdftex.def)             Requested size: 239.9976pt x 101.99747pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 32.84816pt, for example:
+(fancyhdr)                \setlength{\headheight}{32.84816pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-20.84816pt}.
+
+[11 <./temp/images/panel_0193-0000.png> <./temp/images/panel_0193-0016.png> <./
+temp/images/panel_0193-0020.png> <./temp/images/panel_0196-0016.png> <./temp/im
+ages/panel_0202-0000.png> <./temp/images/panel_0202-0016.png> <./temp/images/pa
+nel_0202-0020.png> <./temp/images/panel_0205-0016.png>]
 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (reports/reversy-kiln-overview.aux)
@@ -598,23 +1081,23 @@ L3 programming layer <2024-12-25>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `reversy-kiln-overview.out' has not changed.
-(rerunfilecheck)             Checksum: 051F0BB67DF9C1703F52ABA50734C4BC;129.
+(rerunfilecheck)             Checksum: 67EFE5B8C593C8412AB3DE6DEF2CE4E0;695.
  ) 
 Here is how much of TeX's memory you used:
- 10773 strings out of 475134
- 174819 string characters out of 5765568
- 568497 words of memory out of 5000000
- 33647 multiletter control sequences out of 15000+600000
+ 11234 strings out of 475134
+ 191684 string characters out of 5765568
+ 567510 words of memory out of 5000000
+ 34094 multiletter control sequences out of 15000+600000
  567837 words of font info for 44 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  75i,12n,79p,243b,466s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2024/texmf-dist/fonts/type1/google/roboto/Roboto-Bold.pfb><c:/tex
 live/2024/texmf-dist/fonts/type1/google/roboto/Roboto-Regular.pfb><c:/texlive/2
 024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on reports/reversy-kiln-overview.pdf (3 pages, 307970 bytes).
+Output written on reports/reversy-kiln-overview.pdf (11 pages, 2073483 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 37 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 202 PDF objects out of 1000 (max. 8388607)
+ 99 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 480 words of extra memory for PDF output out of 10000 (max. 10000000)
 
