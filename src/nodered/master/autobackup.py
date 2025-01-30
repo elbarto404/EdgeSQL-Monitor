@@ -5,6 +5,27 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def remove_all_files_from_folder_recursive(folder_path):
+    try:
+        # Check if the folder exists
+        if not os.path.exists(folder_path):
+            logging.warning(f"The folder '{folder_path}' does not exist.")
+            return
+
+        # Walk through the folder and its subfolders
+        for root, _, files in os.walk(folder_path):
+            for filename in files:
+                file_path = os.path.join(root, filename)
+                try:
+                    os.remove(file_path)  # Remove the file
+                    logging.info(f"Removed: {file_path}")
+                except Exception as e:
+                    logging.error(f"Failed to remove {file_path}: {e}")
+
+        logging.info("All files removed successfully.")
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
+
 def extract_and_save_scripts(input_folder, output_master_folder):
     input_file = os.path.join(input_folder, "flows.json")
     
@@ -61,4 +82,5 @@ def extract_and_save_scripts(input_folder, output_master_folder):
 if __name__ == "__main__":
     input_folder = r"C:\Users\matteo.bartoli\OneDrive - grupposet.it\04222-Industrial Edge Project\Software_beta\EdgeSQL-Monitor\docker_images\nodered\nodered_data"
     output_master_folder = r"C:\Users\matteo.bartoli\OneDrive - grupposet.it\04222-Industrial Edge Project\Software_beta\EdgeSQL-Monitor\src\nodered\master\app"
+    remove_all_files_from_folder_recursive(output_master_folder)
     extract_and_save_scripts(input_folder, output_master_folder)

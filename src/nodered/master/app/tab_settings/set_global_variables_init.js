@@ -6,9 +6,9 @@ const tz = "Europe/Rome";
 const protocol = [
     "S7",
     "ModBus",
-    "OPCUA",
+    "OPC-UA",
     "MQTT",
-    "API Rest"
+    "HTTP"
 ];
 const data_type = {
     "Bool": "BOOLEAN",
