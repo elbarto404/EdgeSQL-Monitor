@@ -1,0 +1,54 @@
+<template>
+  <v-container class="pa-0 ma-0" fluid>
+    <!-- Background Image -->
+    <v-sheet
+      class="d-flex align-center"
+      style="background-image: url('/img/plant.jpg'); background-size: cover; background-position: center; border-radius: 10px; height: 800px;"
+    >
+      <!-- Button Container -->
+      <v-row class="ml-5" align="center" dense>
+        <v-col cols="12" class="mb-4">
+          <v-btn
+            :href="'http://localhost:33000/d/reversyover1/reversy-klin-overview'"
+            target="_blank"
+            class="ma-0"
+            color="blue-darken-3"
+            dark
+          >
+            Kiln - Overview
+          </v-btn>
+        </v-col>
+
+        <v-col cols="12" class="mb-4">
+          <v-btn
+            :href="'http://localhost:33000/d/reversytable1/reversy-klin-table-view'"
+            target="_blank"
+            class="ma-0"
+            color="blue-darken-3"
+            dark
+          >
+            Kiln - Table View
+          </v-btn>
+        </v-col>
+
+        <v-col cols="12" class="mb-4">
+          <v-btn
+            :href="'http://localhost:33000/d/ee95strjzpn28b/lime-klin-cycle-details'"
+            target="_blank"
+            class="ma-0"
+            color="blue-darken-3"
+            dark
+          >
+            Kiln - Cycle Details
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-sheet>
+  </v-container>
+</template>
+
+<script>
+export default {
+  name: "ImageBackgroundWithButtons",
+};
+</script>

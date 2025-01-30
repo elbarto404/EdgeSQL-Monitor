@@ -1,0 +1,62 @@
+<template>
+  <v-container>
+    <v-row>
+      <!-- First Row -->
+      <v-col cols="4">
+        <v-text-field label="Field 1" outlined></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Field 2" outlined></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Field 3" outlined></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <!-- Second Row -->
+      <v-col cols="4">
+        <v-text-field label="Field 4" outlined></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Field 5" outlined></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Field 6" outlined></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <!-- Third Row -->
+      <v-col cols="4">
+        <v-text-field label="Field 7" outlined></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Field 8" outlined></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Field 9" outlined></v-text-field>
+      </v-col>
+    </v-row>
+
+    <!-- Submit Button -->
+    <v-row justify="center" class="mt-4">
+      <v-btn color="blue-darken-3" @click="submitForm">Submit</v-btn>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  methods: {
+    submitForm() {
+      // Handle form submission
+      console.log('Form submitted!');
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Add custom styles here if needed */
+</style>
