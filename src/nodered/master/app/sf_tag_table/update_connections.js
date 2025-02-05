@@ -16,18 +16,6 @@ function updateS7tags(endpoint) {
         logs.push(`Vartable not updated (no changes)`);
     }
 }
-/*
-[
-            {
-                "addr": "DB1,R0",
-                "name": "BellaLi"
-            },
-            {
-                "addr": "DB1,R4",
-                "name": "BellaRaga"
-            }
-        ]
-*/
 
 
 // _________________________Main_______________________________
@@ -38,7 +26,7 @@ const allNodes = msg.payload;   // Current nodes
 const endpoints = global.get('endpoints');
 
 if (!Array.isArray(tags) || !Array.isArray(allNodes)) {
-    return;
+    return [null, null];
 }
 
 // Filter out all "tab_connections" nodes to rigenerate them

@@ -8,6 +8,14 @@
         "env": []
     },
     {
+        "id": "tab_tag_tables",
+        "type": "tab",
+        "label": "Tag Tables",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "tab_database_sql",
         "type": "tab",
         "label": "Database",
@@ -24,17 +32,17 @@
         "env": []
     },
     {
-        "id": "2dbd8c6f774fdb61",
+        "id": "tab_triggers",
         "type": "tab",
-        "label": "Connections Demo",
+        "label": "Triggers",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "tab_triggers",
+        "id": "2dbd8c6f774fdb61",
         "type": "tab",
-        "label": "Triggers",
+        "label": "Connections Demo",
         "disabled": false,
         "info": "",
         "env": []
@@ -64,17 +72,17 @@
         "env": []
     },
     {
-        "id": "tab_status",
+        "id": "tab_errors",
         "type": "tab",
-        "label": "Status",
+        "label": "Errors",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "tab_errors",
+        "id": "tab_status",
         "type": "tab",
-        "label": "Errors",
+        "label": "Status",
         "disabled": false,
         "info": "",
         "env": []
@@ -93,6 +101,14 @@
         "label": "Download Grafana Image",
         "disabled": false,
         "info": ""
+    },
+    {
+        "id": "e80d3ea51136b92a",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
     },
     {
         "id": "sf_machines",
@@ -457,13 +473,13 @@
                 }
             },
             {
-                "name": "PROCESS_SCHEMA",
+                "name": "DATA_SCHEMA",
                 "type": "str",
                 "value": "public",
                 "ui": {
                     "icon": "font-awesome/fa-area-chart",
                     "label": {
-                        "en-US": "Process Data Schema"
+                        "en-US": "Data Schema"
                     },
                     "type": "input",
                     "opts": {
@@ -552,7 +568,7 @@
             {
                 "name": "SCHEMA",
                 "type": "str",
-                "value": "public",
+                "value": "",
                 "ui": {
                     "icon": "font-awesome/fa-diamond",
                     "label": {
@@ -570,7 +586,7 @@
             {
                 "name": "TABLE",
                 "type": "str",
-                "value": "tags_default",
+                "value": "",
                 "ui": {
                     "icon": "font-awesome/fa-table",
                     "label": {
@@ -588,7 +604,7 @@
             {
                 "name": "DATA_SCHEMA",
                 "type": "str",
-                "value": "public",
+                "value": "",
                 "ui": {
                     "icon": "font-awesome/fa-dot-circle-o",
                     "label": {
@@ -606,7 +622,7 @@
             {
                 "name": "DATA_TABLE",
                 "type": "str",
-                "value": "data_default",
+                "value": "",
                 "ui": {
                     "icon": "font-awesome/fa-area-chart",
                     "label": {
@@ -624,7 +640,7 @@
             {
                 "name": "PROTOCOL",
                 "type": "str",
-                "value": "OPCUA",
+                "value": "",
                 "ui": {
                     "icon": "font-awesome/fa-cog",
                     "label": {
@@ -671,18 +687,21 @@
         "in": [
             {
                 "x": 80,
-                "y": 180,
+                "y": 220,
                 "wires": [
                     {
                         "id": "1e02bad20c4678c8"
+                    },
+                    {
+                        "id": "0746e62dae658d4e"
                     }
                 ]
             }
         ],
         "out": [
             {
-                "x": 710,
-                "y": 180,
+                "x": 830,
+                "y": 220,
                 "wires": [
                     {
                         "id": "0f0a228ee2485f05",
@@ -740,8 +759,8 @@
         ],
         "icon": "font-awesome/fa-braille",
         "status": {
-            "x": 660,
-            "y": 300,
+            "x": 780,
+            "y": 340,
             "wires": [
                 {
                     "id": "414e445a894e624d",
@@ -1099,7 +1118,7 @@
         "width": "12",
         "height": "1",
         "order": 1,
-        "showTitle": true,
+        "showTitle": false,
         "className": "",
         "visible": "true",
         "disabled": "false",
@@ -1240,20 +1259,6 @@
         "className": "",
         "visible": true,
         "disabled": false
-    },
-    {
-        "id": "572ccdfe4fc75ef8",
-        "type": "ui-group",
-        "name": "Insert Quality Check",
-        "page": "37b363877270d9e5",
-        "width": "12",
-        "height": "1",
-        "order": 1,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
     },
     {
         "id": "169cdd00f95ae9ec",
@@ -1629,6 +1634,893 @@
         "showLogs": true
     },
     {
+        "id": "28dd6f2de8ecc7e2",
+        "type": "ui-group",
+        "name": "Limestone Parameters",
+        "page": "37b363877270d9e5",
+        "width": "12",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "S7endpoint_e20",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.48",
+        "port": 102,
+        "rack": 0,
+        "slot": 3,
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "0",
+        "timeout": "5000",
+        "name": "",
+        "vartable": [
+            {
+                "addr": "DB121,R0",
+                "name": "CY"
+            },
+            {
+                "addr": "DB121,R4",
+                "name": "S"
+            },
+            {
+                "addr": "DB121,R8",
+                "name": "TCY"
+            },
+            {
+                "addr": "DB121,R12",
+                "name": "TCO"
+            },
+            {
+                "addr": "DB121,R16",
+                "name": "TI"
+            },
+            {
+                "addr": "DB121,R20",
+                "name": "TStop"
+            },
+            {
+                "addr": "DB121,R24",
+                "name": "TFS"
+            },
+            {
+                "addr": "DB121,R28",
+                "name": "LSCYpv"
+            },
+            {
+                "addr": "DB121,R32",
+                "name": "LSCYsp"
+            },
+            {
+                "addr": "DB121,R36",
+                "name": "LCY"
+            },
+            {
+                "addr": "DB121,R40",
+                "name": "NP"
+            },
+            {
+                "addr": "DB121,R44",
+                "name": "HCpv"
+            },
+            {
+                "addr": "DB121,R48",
+                "name": "HCsp"
+            },
+            {
+                "addr": "DB121,R52",
+                "name": "FCYpv"
+            },
+            {
+                "addr": "DB121,R56",
+                "name": "FCYsp"
+            },
+            {
+                "addr": "DB121,R60",
+                "name": "FFpv"
+            },
+            {
+                "addr": "DB121,R64",
+                "name": "FFsp"
+            },
+            {
+                "addr": "DB121,R68",
+                "name": "LHV"
+            },
+            {
+                "addr": "DB121,R72",
+                "name": "SA"
+            },
+            {
+                "addr": "DB121,R76",
+                "name": "CAF"
+            },
+            {
+                "addr": "DB121,R80",
+                "name": "EANpv"
+            },
+            {
+                "addr": "DB121,R84",
+                "name": "EANsp"
+            },
+            {
+                "addr": "DB121,R88",
+                "name": "LCAF"
+            },
+            {
+                "addr": "DB121,R92",
+                "name": "ALCpv"
+            },
+            {
+                "addr": "DB121,R96",
+                "name": "ALCsp"
+            },
+            {
+                "addr": "DB121,R100",
+                "name": "TC1"
+            },
+            {
+                "addr": "DB121,R104",
+                "name": "TC2"
+            },
+            {
+                "addr": "DB121,R108",
+                "name": "TWG"
+            },
+            {
+                "addr": "DB121,R112",
+                "name": "TFLT"
+            },
+            {
+                "addr": "DB121,R116",
+                "name": "LT1"
+            },
+            {
+                "addr": "DB121,R120",
+                "name": "LT2"
+            },
+            {
+                "addr": "DB121,R124",
+                "name": "LT3"
+            },
+            {
+                "addr": "DB121,R128",
+                "name": "LT4"
+            },
+            {
+                "addr": "DB121,R132",
+                "name": "LT5"
+            },
+            {
+                "addr": "DB121,R136",
+                "name": "LT6"
+            },
+            {
+                "addr": "DB121,R140",
+                "name": "LT7"
+            },
+            {
+                "addr": "DB121,R144",
+                "name": "LT8"
+            },
+            {
+                "addr": "DB121,R148",
+                "name": "LT9"
+            },
+            {
+                "addr": "DB121,R152",
+                "name": "LT10"
+            },
+            {
+                "addr": "DB121,R156",
+                "name": "LT11"
+            },
+            {
+                "addr": "DB121,R160",
+                "name": "LT12"
+            },
+            {
+                "addr": "DB121,R164",
+                "name": "LT13"
+            },
+            {
+                "addr": "DB121,R168",
+                "name": "LT14"
+            },
+            {
+                "addr": "DB121,R172",
+                "name": "LT15"
+            },
+            {
+                "addr": "DB121,R176",
+                "name": "LT16"
+            },
+            {
+                "addr": "DB121,R180",
+                "name": "CBAP"
+            },
+            {
+                "addr": "DB121,R184",
+                "name": "CLAP"
+            },
+            {
+                "addr": "DB121,R188",
+                "name": "CHAP"
+            },
+            {
+                "addr": "DB121,R192",
+                "name": "CTAP"
+            },
+            {
+                "addr": "DB121,R196",
+                "name": "ATMP"
+            },
+            {
+                "addr": "DB121,R200",
+                "name": "LCAPS1"
+            },
+            {
+                "addr": "DB121,R204",
+                "name": "LCAPS2"
+            },
+            {
+                "addr": "DB121,R208",
+                "name": "S1tot"
+            },
+            {
+                "addr": "DB121,R212",
+                "name": "S1PS"
+            },
+            {
+                "addr": "DB121,R216",
+                "name": "S1SS"
+            },
+            {
+                "addr": "DB121,R220",
+                "name": "S2tot"
+            },
+            {
+                "addr": "DB121,R224",
+                "name": "S2PS"
+            },
+            {
+                "addr": "DB121,R228",
+                "name": "S2SS"
+            },
+            {
+                "addr": "DB121,R232",
+                "name": "DBLINE1"
+            },
+            {
+                "addr": "DB121,R236",
+                "name": "DBLINE2"
+            },
+            {
+                "addr": "DB121,R240",
+                "name": "DBLINE3"
+            },
+            {
+                "addr": "DB121,R244",
+                "name": "DBLINE4"
+            },
+            {
+                "addr": "DB121,R248",
+                "name": "DBLINE5"
+            },
+            {
+                "addr": "DB121,R252",
+                "name": "DBLINE6"
+            },
+            {
+                "addr": "DB121,R256",
+                "name": "DBLINE7"
+            },
+            {
+                "addr": "DB121,R260",
+                "name": "DBLINE8"
+            },
+            {
+                "addr": "DB121,R264",
+                "name": "DBLINE9"
+            },
+            {
+                "addr": "DB121,R268",
+                "name": "RATIOS1LN1"
+            },
+            {
+                "addr": "DB121,R272",
+                "name": "RATIOS1LN2"
+            },
+            {
+                "addr": "DB121,R276",
+                "name": "RATIOS1LN3"
+            },
+            {
+                "addr": "DB121,R280",
+                "name": "RATIOS1LN4"
+            },
+            {
+                "addr": "DB121,R284",
+                "name": "RATIOS1LN5"
+            },
+            {
+                "addr": "DB121,R288",
+                "name": "RATIOS1LN6"
+            },
+            {
+                "addr": "DB121,R292",
+                "name": "RATIOS1LN7"
+            },
+            {
+                "addr": "DB121,R296",
+                "name": "RATIOS1LN8"
+            },
+            {
+                "addr": "DB121,R300",
+                "name": "RATIOS1LN9"
+            },
+            {
+                "addr": "DB121,R304",
+                "name": "RATIOS2LN1"
+            },
+            {
+                "addr": "DB121,R308",
+                "name": "RATIOS2LN2"
+            },
+            {
+                "addr": "DB121,R312",
+                "name": "RATIOS2LN3"
+            },
+            {
+                "addr": "DB121,R316",
+                "name": "RATIOS2LN4"
+            },
+            {
+                "addr": "DB121,R320",
+                "name": "RATIOS2LN5"
+            },
+            {
+                "addr": "DB121,R324",
+                "name": "RATIOS2LN6"
+            },
+            {
+                "addr": "DB121,R328",
+                "name": "RATIOS2LN7"
+            },
+            {
+                "addr": "DB121,R332",
+                "name": "RATIOS2LN8"
+            },
+            {
+                "addr": "DB121,R336",
+                "name": "RATIOS2LN9"
+            },
+            {
+                "addr": "DB121,R340",
+                "name": "S1SPEEDL1"
+            },
+            {
+                "addr": "DB121,R344",
+                "name": "S1SPEEDL2"
+            },
+            {
+                "addr": "DB121,R348",
+                "name": "S1SPEEDL3"
+            },
+            {
+                "addr": "DB121,R352",
+                "name": "S1SPEEDL4"
+            },
+            {
+                "addr": "DB121,R356",
+                "name": "S1SPEEDL5"
+            },
+            {
+                "addr": "DB121,R360",
+                "name": "S1SPEEDL6"
+            },
+            {
+                "addr": "DB121,R364",
+                "name": "S1SPEEDL7"
+            },
+            {
+                "addr": "DB121,R368",
+                "name": "S1SPEEDL8"
+            },
+            {
+                "addr": "DB121,R372",
+                "name": "S1SPEEDL9"
+            },
+            {
+                "addr": "DB121,R376",
+                "name": "S2SPEEDL1"
+            },
+            {
+                "addr": "DB121,R380",
+                "name": "S2SPEEDL2"
+            },
+            {
+                "addr": "DB121,R384",
+                "name": "S2SPEEDL3"
+            },
+            {
+                "addr": "DB121,R388",
+                "name": "S2SPEEDL4"
+            },
+            {
+                "addr": "DB121,R392",
+                "name": "S2SPEEDL5"
+            },
+            {
+                "addr": "DB121,R396",
+                "name": "S2SPEEDL6"
+            },
+            {
+                "addr": "DB121,R400",
+                "name": "S2SPEEDL7"
+            },
+            {
+                "addr": "DB121,R404",
+                "name": "S2SPEEDL8"
+            },
+            {
+                "addr": "DB121,R408",
+                "name": "S2SPEEDL9"
+            },
+            {
+                "addr": "DB121,R412",
+                "name": "COALTANKP"
+            },
+            {
+                "addr": "DB121,R416",
+                "name": "COALTANKT"
+            },
+            {
+                "addr": "DB121,R420",
+                "name": "HYT"
+            },
+            {
+                "addr": "DB121,R424",
+                "name": "HYP"
+            },
+            {
+                "addr": "DB121,R428",
+                "name": "TWait"
+            },
+            {
+                "addr": "DB121,R432",
+                "name": "TOff"
+            },
+            {
+                "addr": "DB121,R436",
+                "name": "TWait1"
+            },
+            {
+                "addr": "DB121,R440",
+                "name": "TWait2"
+            },
+            {
+                "addr": "DB121,R444",
+                "name": "TWait3"
+            },
+            {
+                "addr": "DB121,R448",
+                "name": "TWait4"
+            },
+            {
+                "addr": "DB121,R452",
+                "name": "TWait5"
+            },
+            {
+                "addr": "DB121,R456",
+                "name": "TWait6"
+            },
+            {
+                "addr": "DB121,R460",
+                "name": "TWait7"
+            },
+            {
+                "addr": "DB121,R464",
+                "name": "TWait8"
+            },
+            {
+                "addr": "DB121,R468",
+                "name": "TWait9"
+            },
+            {
+                "addr": "DB121,R472",
+                "name": "TOff1"
+            },
+            {
+                "addr": "DB121,R476",
+                "name": "TOff2"
+            },
+            {
+                "addr": "DB121,R480",
+                "name": "TOff3"
+            },
+            {
+                "addr": "DB121,R484",
+                "name": "TOff4"
+            },
+            {
+                "addr": "DB121,R492",
+                "name": "SKIP_ULD1CHpv"
+            },
+            {
+                "addr": "DB121,R496",
+                "name": "PIPE_ULD1CHpv"
+            },
+            {
+                "addr": "DB121,R500",
+                "name": "ULD1CHsp"
+            },
+            {
+                "addr": "DB121,R504",
+                "name": "SKIP_ULD2CHpv"
+            },
+            {
+                "addr": "DB121,R508",
+                "name": "PIPE_ULD2CHpv"
+            },
+            {
+                "addr": "DB121,R512",
+                "name": "ULD2CHsp"
+            },
+            {
+                "addr": "DB121,R516",
+                "name": "SKIP_ULD3CHpv"
+            },
+            {
+                "addr": "DB121,R520",
+                "name": "PIPE_ULD3CHpv"
+            },
+            {
+                "addr": "DB121,R524",
+                "name": "ULD3CHsp"
+            },
+            {
+                "addr": "DB121,R528",
+                "name": "LSCY1pv"
+            },
+            {
+                "addr": "DB121,R532",
+                "name": "LSCY1sp"
+            },
+            {
+                "addr": "DB121,R536",
+                "name": "LSCY2pv"
+            },
+            {
+                "addr": "DB121,R540",
+                "name": "LSCY2sp"
+            },
+            {
+                "addr": "DB121,R544",
+                "name": "LSCY3pv"
+            },
+            {
+                "addr": "DB121,R548",
+                "name": "LSCY3sp"
+            },
+            {
+                "addr": "DB121,R552",
+                "name": "TCH1"
+            },
+            {
+                "addr": "DB121,R556",
+                "name": "TCH2"
+            },
+            {
+                "addr": "DB121,R560",
+                "name": "TCH3"
+            },
+            {
+                "addr": "DB121,R564",
+                "name": "LSTARCMB"
+            },
+            {
+                "addr": "DB121,R568",
+                "name": "LSTOPCMB"
+            },
+            {
+                "addr": "DB121,R572",
+                "name": "LSTARPRH"
+            },
+            {
+                "addr": "DB121,R576",
+                "name": "LSTOPPRH"
+            },
+            {
+                "addr": "DB121,R580",
+                "name": "LVLCMBsp"
+            },
+            {
+                "addr": "DB121,R584",
+                "name": "LVLPRHsp"
+            },
+            {
+                "addr": "DB121,R588",
+                "name": "EXTCMB"
+            },
+            {
+                "addr": "DB121,R592",
+                "name": "EXTPRH"
+            },
+            {
+                "addr": "DB121,R596",
+                "name": "S1EXTAUTO"
+            },
+            {
+                "addr": "DB121,R600",
+                "name": "S2EXTAUTO"
+            },
+            {
+                "addr": "DB121,R604",
+                "name": "S1MNRATIO"
+            },
+            {
+                "addr": "DB121,R608",
+                "name": "S1SCRATIO"
+            },
+            {
+                "addr": "DB121,R612",
+                "name": "S1FSTLVL"
+            },
+            {
+                "addr": "DB121,R616",
+                "name": "S1STROKsp"
+            },
+            {
+                "addr": "DB121,R620",
+                "name": "S1SDELAYsp"
+            },
+            {
+                "addr": "DB121,R624",
+                "name": "S1FSTSTRT"
+            },
+            {
+                "addr": "DB121,R628",
+                "name": "S2MNRATIO"
+            },
+            {
+                "addr": "DB121,R632",
+                "name": "S2SCRATIO"
+            },
+            {
+                "addr": "DB121,R636",
+                "name": "S2FSTLVL"
+            },
+            {
+                "addr": "DB121,R640",
+                "name": "S2STROKsp"
+            },
+            {
+                "addr": "DB121,R644",
+                "name": "S2SDELAYsp"
+            },
+            {
+                "addr": "DB121,R648",
+                "name": "S2FSTSTR"
+            },
+            {
+                "addr": "DB121,R652",
+                "name": "EANAUTO"
+            },
+            {
+                "addr": "DB121,R656",
+                "name": "ALCAUTO"
+            },
+            {
+                "addr": "DB121,R660",
+                "name": "FUELAUTO"
+            },
+            {
+                "addr": "DB121,R664",
+                "name": "FILTERAUTO"
+            },
+            {
+                "addr": "DB121,R668",
+                "name": "REDAUTO"
+            },
+            {
+                "addr": "DB121,R672",
+                "name": "CUTAUTO"
+            },
+            {
+                "addr": "DB121,R676",
+                "name": "TSTRREDsp"
+            },
+            {
+                "addr": "DB121,R680",
+                "name": "TSTPREDsp"
+            },
+            {
+                "addr": "DB121,R684",
+                "name": "PERCREDsp"
+            },
+            {
+                "addr": "DB121,R688",
+                "name": "TSTRCUTsp"
+            },
+            {
+                "addr": "DB121,R692",
+                "name": "TSTPCUTsp"
+            },
+            {
+                "addr": "DB121,R696",
+                "name": "REDENABL"
+            },
+            {
+                "addr": "DB121,R700",
+                "name": "REDTIMEpv"
+            },
+            {
+                "addr": "DB121,R704",
+                "name": "CUTENABL"
+            },
+            {
+                "addr": "DB121,R708",
+                "name": "CUTTIMEpv"
+            },
+            {
+                "addr": "DB121,R712",
+                "name": "PATM"
+            },
+            {
+                "addr": "DB121,R716",
+                "name": "FCVS1pv"
+            },
+            {
+                "addr": "DB121,R720",
+                "name": "FCVS1sp"
+            },
+            {
+                "addr": "DB121,R724",
+                "name": "FCVS1AUTO"
+            },
+            {
+                "addr": "DB121,R728",
+                "name": "FCVS2pv"
+            },
+            {
+                "addr": "DB121,R732",
+                "name": "FCVS2sp"
+            },
+            {
+                "addr": "DB121,R736",
+                "name": "FCVS2AUTO"
+            },
+            {
+                "addr": "DB121,R740",
+                "name": "CMB1pv"
+            },
+            {
+                "addr": "DB121,R744",
+                "name": "CMB1sp"
+            },
+            {
+                "addr": "DB121,R748",
+                "name": "CMB2pv"
+            },
+            {
+                "addr": "DB121,R752",
+                "name": "CMB2SP"
+            },
+            {
+                "addr": "DB121,R756",
+                "name": "CMB3pv"
+            },
+            {
+                "addr": "DB121,R760",
+                "name": "CMB3sp"
+            },
+            {
+                "addr": "DB121,R764",
+                "name": "LCB1pv"
+            },
+            {
+                "addr": "DB121,R768",
+                "name": "LCB1sp"
+            },
+            {
+                "addr": "DB121,R772",
+                "name": "LCB2pv"
+            },
+            {
+                "addr": "DB121,R776",
+                "name": "LCB2sp"
+            },
+            {
+                "addr": "DB121,R780",
+                "name": "FANpv"
+            },
+            {
+                "addr": "DB121,R784",
+                "name": "FANsp"
+            },
+            {
+                "addr": "DB121,R788",
+                "name": "S1CAPSPpv"
+            },
+            {
+                "addr": "DB121,R792",
+                "name": "S1CAPSPsp"
+            },
+            {
+                "addr": "DB121,R796",
+                "name": "S2CAPSPpv"
+            },
+            {
+                "addr": "DB121,R800",
+                "name": "S2CAPSPsp"
+            },
+            {
+                "addr": "DB121,R804",
+                "name": "CTBSPpv"
+            },
+            {
+                "addr": "DB121,R808",
+                "name": "CTBSPsp"
+            },
+            {
+                "addr": "DB121,R812",
+                "name": "CMB1CUR"
+            },
+            {
+                "addr": "DB121,R816",
+                "name": "CMB2CUR"
+            },
+            {
+                "addr": "DB121,R820",
+                "name": "CMB3CUR"
+            },
+            {
+                "addr": "DB121,R824",
+                "name": "LCB1CUR"
+            },
+            {
+                "addr": "DB121,R828",
+                "name": "LCB2CUR"
+            },
+            {
+                "addr": "DB121,R832",
+                "name": "FANCUR"
+            },
+            {
+                "addr": "DB121,R836",
+                "name": "S1CAPCUR"
+            },
+            {
+                "addr": "DB121,R840",
+                "name": "S2CAPCUR"
+            },
+            {
+                "addr": "DB121,R844",
+                "name": "CTBCURR"
+            },
+            {
+                "addr": "DB121,R848",
+                "name": "HYDP1CUR"
+            },
+            {
+                "addr": "DB121,R852",
+                "name": "HYDP2CUR"
+            }
+        ]
+    },
+    {
         "id": "cf35598e75a95852",
         "type": "debug",
         "z": "sf_machines",
@@ -1674,7 +2566,7 @@
         "page": "",
         "ui": "",
         "name": "table_machines",
-        "order": 4,
+        "order": 5,
         "width": 0,
         "height": 0,
         "head": "",
@@ -1972,7 +2864,7 @@
         "page": "",
         "ui": "",
         "name": "table_endpoints",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
         "head": "",
@@ -2178,7 +3070,7 @@
         "type": "function",
         "z": "sf_endpoints",
         "name": "status_filter",
-        "func": "if (msg.status){\n    msg.status.fill = msg.status.fill || \"green\";\n    msg.status.shape = msg.status.shape || \"dot\";\n    if (!msg.status.text){\n        const localTime = new Date().toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n        msg.status.text = `last update: ${localTime}`;\n    }\n    return msg;\n}\nreturn null\n",
+        "func": "if (msg.status){\n    msg.status.fill = msg.status.fill || \"green\";\n    msg.status.shape = msg.status.shape || \"dot\";\n    if (!msg.status.text || msg.status.text === \"0\"){\n        const localTime = new Date().toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n        msg.status.text = `last update: ${localTime}`;\n    }\n    if (msg.status.fill === \"blue\") {\n        msg.status.fill = \"green\"\n    }\n    return msg;\n}\nreturn null\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2254,7 +3146,7 @@
         "type": "function",
         "z": "sf_endpoints",
         "name": "update_connections",
-        "func": "// This code rewrite the configuration of all connection tabs in Node-RED:\n\n// ________________________Heplpers___________________________\n\n// Helper function to generate unique IDs\nfunction generateId(existingIds) {\n    function randomHex(size) {\n        const chars = \"0123456789abcdef\";\n        let id = \"\";\n        for (let i = 0; i < size; i++) {\n            id += chars[Math.floor(Math.random() * chars.length)];\n        }\n        return id;\n    }\n\n    let id;\n    do {\n        id = randomHex(16);\n    } while (existingIds.includes(id));\n\n    existingIds.push(id);\n    return id;\n}\n\n// Helper function to align x coo\nfunction alignX(targetX, name) {\n    const nodeWidth = 50 + 5 * name.length;\n    return targetX + nodeWidth / 2;\n}\n\n// Helper function to safely parse the endpoint address\nfunction parseEndpointAddress(endpoint) {\n    if (!endpoint || !endpoint.address) {\n        node.error(`Invalid endpoint object or missing address.`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Invalid endpoint object or missing address` });\n        return null;\n    }\n\n    // Match the address against the regex pattern\n    const match = endpoint.address.match(endpointRegex);\n    if (!match) {\n        node.error(`Endpoint ${endpoint.name} address is not in the correct format. Expected format: \"IP:PORT@RACK:SLOT\"`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Endpoint ${endpoint.name} address is not in the correct format` });\n        return null\n    }\n\n    // Extract matched values\n    const [, address, port, rack, slot] = match;\n\n    return {\n        address,\n        port: Number(port),\n        rack: Number(rack),\n        slot: Number(slot)\n    };\n}\n\n\n// ________________________Insert Prototypes___________________________\n\n// Function to generate the status and catch flows\nfunction generateStaticNodes() {\n    updatedNodes.push(...[\n        {\n            \"id\": \"nS_connections\",\n            \"type\": \"status\",\n            \"z\": \"tab_connections\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"x\": 120,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loS_connections\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loS_connections\",\n            \"type\": \"link out\",\n            \"z\": \"tab_connections\",\n            \"name\": \"status_connections\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_status\"\n            ],\n            \"x\": 235,\n            \"y\": 60,\n            \"wires\": []\n        },\n        {\n            \"id\": \"nC_connections\",\n            \"type\": \"catch\",\n            \"z\": \"tab_connections\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"uncaught\": false,\n            \"x\": 520,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loC_connections\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loC_connections\",\n            \"type\": \"link out\",\n            \"z\": \"tab_connections\",\n            \"name\": \"error_connections\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_errors\"\n            ],\n            \"x\": 635,\n            \"y\": 60,\n            \"wires\": []\n        }\n    ]);\n    startY += 150;\n}\n\n// Function to generate the nodes for a S7 endpoint with a custom trigger\nfunction generateS7triggered(endpoint, tag_tables) {\n    const S7endpointId = `S7endpoint_e${endpoint.id}`;\n    const S7inId = `s7in_e${endpoint.id}`;\n    const S7controlId = `s7control_e${endpoint.id}`;\n    const S7linkInId = `s7control_e${endpoint.id}_in`;\n    const S7linkOutId = `s7control_e${endpoint.id}_out`;\n    const endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n    if (!endpoint.enabled && endpointNode) {\n        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        deployNeeded = true;\n    }\n    if (!endpoint.enabled) {\n        return;\n    }\n    if (!tag_tables.length) {\n        return;\n    }\n    const parsedAddress = parseEndpointAddress(endpoint);\n    if (!parsedAddress) {\n        return;\n    }\n    const { address, port, rack, slot } = parsedAddress;\n    updatedNodes.push({\n        \"id\": `comment_e${endpoint.id}`,\n        \"type\": \"comment\",\n        \"z\": \"tab_connections\",\n        \"name\": `Endpoint ${endpoint.id}: ${endpoint.name}`,\n        \"info\": `README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md`,\n        \"x\": 200,\n        \"y\": startY,\n        \"wires\": []\n    });\n    startY += 50;\n\n    // Check if the endpoint node for this endpoint already exists\n    if (!endpointNode) {\n        deployNeeded = true;\n        updatedNodes.push({\n            \"id\": S7endpointId,\n            \"type\": \"s7 endpoint\",\n            \"transport\": \"iso-on-tcp\",\n            \"address\": address,\n            \"port\": port,\n            \"rack\": rack,\n            \"slot\": slot,\n            \"localtsaphi\": \"01\",\n            \"localtsaplo\": \"00\",\n            \"remotetsaphi\": \"01\",\n            \"remotetsaplo\": \"00\",\n            \"connmode\": \"rack-slot\",\n            \"adapter\": \"\",\n            \"busaddr\": \"2\",\n            \"cycletime\": \"0\",\n            \"timeout\": \"5000\",\n            \"name\": \"\",\n            \"vartable\": []\n        });\n    } else {\n        endpointNode.address = address;\n        endpointNode.port = port;\n        endpointNode.rack = rack;\n        endpointNode.slot = slot;\n    }\n\n    // Create the data handler flow for each table\n    let sf_data_handlerIds = [];\n    let dY = startY + 50;\n    for (let table of tag_tables) {\n        const triggerId = `trigger_e${endpoint.id}_t${table.id}_out`;\n        const sf_data_handlerId = `sf_data_handler_e${endpoint.id}_t${table.id}`;\n        const linkInId = `sf_data_handler_e${endpoint.id}_t${table.id}_in`;\n        const linkCallId = `sf_data_handler_e${endpoint.id}_t${table.id}_call`;\n        sf_data_handlerIds.push(sf_data_handlerId);\n        updatedNodes.push(...[\n            {\n                \"id\": sf_data_handlerId,\n                \"type\": \"subflow:sf_data_handler\",\n                \"z\": \"tab_connections\",\n                \"name\": `${table.name}@${endpoint.id}`,\n                \"env\": [\n                    {\n                        \"name\": \"ENDPOINT_ID\",\n                        \"value\": String(endpoint.id),\n                        \"type\": \"num\"\n                    },\n                    {\n                        \"name\": \"TAG_TABLE\",\n                        \"value\": table.name,\n                        \"type\": \"str\"\n                    }\n                ],\n                \"x\": 520,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        linkCallId\n                    ]\n                ]\n            },\n            {\n                \"id\": linkCallId,\n                \"type\": \"link call\",\n                \"z\": \"tab_connections\",\n                \"name\": \"dynamic\",\n                \"links\": [],\n                \"linkType\": \"dynamic\",\n                \"timeout\": \"30\",\n                \"x\": 820,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        sf_data_handlerId\n                    ]\n                ]\n            },\n            {\n                \"id\": linkInId,\n                \"type\": \"link in\",\n                \"z\": \"tab_connections\",\n                \"name\": linkInId,\n                \"links\": [\n                    triggerId\n                ],\n                \"x\": 220,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        sf_data_handlerId\n                    ]\n                ]\n            }\n        ]);\n        dY += 100;\n\n        // Check if the trigger node for this endpoint already exists\n        const triggerNode = updatedNodes.find(node => node.id === triggerId);\n        if (!triggerNode) {\n            deployNeeded = true;\n            updatedNodes.push({\n                \"id\": triggerId,\n                \"type\": \"link out\",\n                \"z\": \"tab_triggers\",\n                \"name\": triggerId,\n                \"mode\": \"link\",\n                \"links\": [\n                    sf_data_handlerId\n                ],\n                \"x\": 400,\n                \"y\": 100,\n                \"wires\": []\n            });\n        }\n    }\n\n    // Create the S7 in and S7 control nodes\n    sf_data_handlerIds.sort();\n    updatedNodes.push(...[{\n        \"id\": S7inId,\n        \"type\": \"s7 in\",\n        \"z\": \"tab_connections\",\n        \"endpoint\": S7endpointId,\n        \"mode\": \"all\",\n        \"variable\": \"\",\n        \"diff\": false,\n        \"name\": \"\",\n        \"x\": 220,\n        \"y\": startY,\n        \"wires\": [\n            sf_data_handlerIds\n        ]\n    },\n    {\n        \"id\": S7linkInId,\n        \"type\": \"link in\",\n        \"z\": \"tab_connections\",\n        \"name\": S7linkInId,\n        \"links\": [],\n        \"x\": 520,\n        \"y\": startY,\n        \"wires\": [\n            [\n                S7controlId\n            ]\n        ]\n    },\n    {\n        \"id\": S7controlId,\n        \"type\": \"s7 control\",\n        \"z\": \"tab_connections\",\n        \"endpoint\": S7endpointId,\n        \"function\": \"trigger\",\n        \"name\": \"\",\n        \"x\": 770,\n        \"y\": startY,\n        \"wires\": [\n            [\n                S7linkOutId\n            ]\n        ]\n    },\n    {\n        \"id\": S7linkOutId,\n        \"type\": \"link out\",\n        \"z\": \"tab_connections\",\n        \"name\": S7linkOutId,\n        \"mode\": \"return\",\n        \"links\": [],\n        \"x\": 1020,\n        \"y\": startY,\n        \"wires\": []\n    }]);\n\n    startY += (dY - startY);\n}\n\n\n// _________________________Main_______________________________\n\nconst endpoints = msg.data;  // Array of all endpoints\nconst history = msg.history; // Array of all history\nconst allNodes = msg.payload;   // Current nodes\nconst tag_tables = global.get('tag_tables');\nconst endpointRegex = /^([\\w\\-.]+):(\\d+)@(\\d+):(\\d+)$/; // Regex to match the endpoint address\n\nif (!Array.isArray(endpoints) || !Array.isArray(allNodes)) {\n    node.error(\"Input data or allNodes is not in the expected format.\");\n    return;\n}\n\n// Collect all currently existing IDs\nlet existingIds = allNodes.map(node => node.id);\n\n// Filter out all \"tab_connections\" nodes to rigenerate them\nlet updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== \"tab_connections\");\nlet deployNeeded = false;\nlet startY = 0;\n\n// Generate nodes\n\ngenerateStaticNodes();\n\nfor (let endpoint of endpoints) {\n    const trigger_tables = tag_tables.filter(table =>\n        endpoint.tag_tables.includes(table.name) &&\n        table.protocol === endpoint.protocol &&\n        [\"trigger\", \"trigger_custom\"].includes(table.sampling_mode)\n    );\n    const continuous_tables = tag_tables.filter(table =>\n        endpoint.tag_tables.includes(table.name) &&\n        table.protocol === endpoint.protocol &&\n        [\"continuous\", \"continuous_on_change\"].includes(table.sampling_mode)\n    );\n\n    switch (endpoint.protocol) {\n        case \"S7\": {\n            generateS7triggered(endpoint, trigger_tables);\n\n        }\n    }\n}\n\n// Remove nodes if the endpoint is deleted\nfor (let edit of history) {\n    if (edit.oldItem && !edit.newItem) {\n        deployNeeded = true;\n        const endpoint = edit.oldItem;\n        const S7endpointId = `S7endpoint_e${endpoint.id}`;\n        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        const tag_tables = global.get('tag_tables').filter(table => endpoint.tag_tables.includes(table.name));\n        for (let table of tag_tables) {\n            const triggerId = `trigger_e${endpoint.id}_t${table.id}_out`;\n            updatedNodes = updatedNodes.filter(node => node.id !== triggerId);\n        }\n    }\n}\n\n// Deploy needed check and return\nconst previousTabNodes = allNodes.filter(node => node.z === \"tab_connections\").sort((a, b) => a.id.localeCompare(b.id));\nconst updatedTabNodes = updatedNodes.filter(node => node.z === \"tab_connections\").sort((a, b) => a.id.localeCompare(b.id));\ndeployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);\nconst deploycount = global.get(\"dpc_connections\") + 1 || 1;\nglobal.set(\"dpc_connections\", deploycount);\n\nif (deployNeeded) {\n    msg.payload = updatedNodes\n    /*\n    msg.payload = {\n        flows: updatedNodes,\n        deploy: \"flows\"\n    };\n    */\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    return [msg, null];\n} else {\n    return [null, msg];\n}\n",
+        "func": "// This code rewrite the configuration of all connection tabs in Node-RED:\n\n// ________________________Heplpers___________________________\n\n// Helper function to generate unique IDs\nfunction generateId(existingIds) {\n    function randomHex(size) {\n        const chars = \"0123456789abcdef\";\n        let id = \"\";\n        for (let i = 0; i < size; i++) {\n            id += chars[Math.floor(Math.random() * chars.length)];\n        }\n        return id;\n    }\n\n    let id;\n    do {\n        id = randomHex(16);\n    } while (existingIds.includes(id));\n\n    existingIds.push(id);\n    return id;\n}\n\n// Helper function to align x coo\nfunction alignX(targetX, name) {\n    const nodeWidth = 50 + 5 * name.length;\n    return targetX + nodeWidth / 2;\n}\n\n// Helper function to safely parse the endpoint address\nfunction parseEndpointAddress(endpoint) {\n    if (!endpoint || !endpoint.address) {\n        node.error(`Invalid endpoint object or missing address.`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Invalid endpoint object or missing address` });\n        return null;\n    }\n\n    // Match the address against the regex pattern\n    const match = endpoint.address.match(endpointRegex);\n    if (!match) {\n        node.error(`Endpoint ${endpoint.name} address is not in the correct format. Expected format: \"IP:PORT@RACK:SLOT\"`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Endpoint ${endpoint.name} address is not in the correct format` });\n        return null\n    }\n\n    // Extract matched values\n    const [, address, port, rack, slot] = match;\n\n    return {\n        address,\n        port: Number(port),\n        rack: Number(rack),\n        slot: Number(slot)\n    };\n}\n\n\n// ________________________Insert Prototypes___________________________\n\n// Function to generate the status and catch flows\nfunction generateStaticNodes() {\n    updatedNodes.push(...[\n        {\n            \"id\": \"nS_connections\",\n            \"type\": \"status\",\n            \"z\": \"tab_connections\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"x\": 120,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loS_connections\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loS_connections\",\n            \"type\": \"link out\",\n            \"z\": \"tab_connections\",\n            \"name\": \"status_connections\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_status\"\n            ],\n            \"x\": 235,\n            \"y\": 60,\n            \"wires\": []\n        },\n        {\n            \"id\": \"nC_connections\",\n            \"type\": \"catch\",\n            \"z\": \"tab_connections\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"uncaught\": false,\n            \"x\": 520,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loC_connections\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loC_connections\",\n            \"type\": \"link out\",\n            \"z\": \"tab_connections\",\n            \"name\": \"error_connections\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_errors\"\n            ],\n            \"x\": 635,\n            \"y\": 60,\n            \"wires\": []\n        }\n    ]);\n    startY += 150;\n}\n\n// Function to generate the nodes for a S7 endpoint with a custom trigger\nfunction generateS7triggered(endpoint, tag_tables) {\n    const S7endpointId = `S7endpoint_e${endpoint.id}`;\n    const S7inId = `s7in_e${endpoint.id}`;\n    const S7controlId = `s7control_e${endpoint.id}`;\n    const S7linkInId = `s7control_e${endpoint.id}_in`;\n    const S7linkOutId = `s7control_e${endpoint.id}_out`;\n    const endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n    if (!endpoint.enabled && endpointNode) {\n        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        deployNeeded = true;\n    }\n    if (!endpoint.enabled) {\n        return;\n    }\n    if (!tag_tables.length) {\n        return;\n    }\n    const parsedAddress = parseEndpointAddress(endpoint);\n    if (!parsedAddress) {\n        return;\n    }\n    const { address, port, rack, slot } = parsedAddress;\n    updatedNodes.push({\n        \"id\": `comment_e${endpoint.id}`,\n        \"type\": \"comment\",\n        \"z\": \"tab_connections\",\n        \"name\": `Endpoint ${endpoint.id}: ${endpoint.name}`,\n        \"info\": `README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md`,\n        \"x\": 200,\n        \"y\": startY,\n        \"wires\": []\n    });\n    startY += 50;\n\n    // Check if the endpoint node for this endpoint already exists\n    if (!endpointNode) {\n        deployNeeded = true;\n        updatedNodes.push({\n            \"id\": S7endpointId,\n            \"type\": \"s7 endpoint\",\n            \"transport\": \"iso-on-tcp\",\n            \"address\": address,\n            \"port\": port,\n            \"rack\": rack,\n            \"slot\": slot,\n            \"localtsaphi\": \"01\",\n            \"localtsaplo\": \"00\",\n            \"remotetsaphi\": \"01\",\n            \"remotetsaplo\": \"00\",\n            \"connmode\": \"rack-slot\",\n            \"adapter\": \"\",\n            \"busaddr\": \"2\",\n            \"cycletime\": \"0\",\n            \"timeout\": \"5000\",\n            \"name\": \"\",\n            \"vartable\": []\n        });\n    } else {\n        endpointNode.address = address;\n        endpointNode.port = port;\n        endpointNode.rack = rack;\n        endpointNode.slot = slot;\n    }\n\n    // Create the data handler flow for each table\n    let sf_data_handlerIds = [];\n    let dY = startY + 50;\n    for (let table of tag_tables) {\n        const triggerId = `trigger_e${endpoint.id}_t${table.id}_out`;\n        const sf_data_handlerId = `sf_data_handler_e${endpoint.id}_t${table.id}`;\n        const linkInId = `sf_data_handler_e${endpoint.id}_t${table.id}_in`;\n        const linkCallId = `sf_data_handler_e${endpoint.id}_t${table.id}_call`;\n        sf_data_handlerIds.push(sf_data_handlerId);\n        updatedNodes.push(...[\n            {\n                \"id\": sf_data_handlerId,\n                \"type\": \"subflow:sf_data_handler\",\n                \"z\": \"tab_connections\",\n                \"name\": `${table.name}@${endpoint.id}`,\n                \"env\": [\n                    {\n                        \"name\": \"ENDPOINT_ID\",\n                        \"value\": String(endpoint.id),\n                        \"type\": \"num\"\n                    },\n                    {\n                        \"name\": \"TAG_TABLE\",\n                        \"value\": table.name,\n                        \"type\": \"str\"\n                    }\n                ],\n                \"x\": 520,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        linkCallId\n                    ]\n                ]\n            },\n            {\n                \"id\": linkCallId,\n                \"type\": \"link call\",\n                \"z\": \"tab_connections\",\n                \"name\": \"dynamic\",\n                \"links\": [],\n                \"linkType\": \"dynamic\",\n                \"timeout\": \"30\",\n                \"x\": 820,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        sf_data_handlerId\n                    ]\n                ]\n            },\n            {\n                \"id\": linkInId,\n                \"type\": \"link in\",\n                \"z\": \"tab_connections\",\n                \"name\": linkInId,\n                \"links\": [\n                    triggerId\n                ],\n                \"x\": 220,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        sf_data_handlerId\n                    ]\n                ]\n            }\n        ]);\n        dY += 100;\n\n        // Check if the trigger node for this endpoint already exists\n        const triggerNode = updatedNodes.find(node => node.id === triggerId);\n        if (!triggerNode) {\n            deployNeeded = true;\n            updatedNodes.push({\n                \"id\": triggerId,\n                \"type\": \"link out\",\n                \"z\": \"tab_triggers\",\n                \"name\": triggerId,\n                \"mode\": \"link\",\n                \"links\": [\n                    sf_data_handlerId\n                ],\n                \"x\": 400,\n                \"y\": 100,\n                \"wires\": []\n            });\n        }\n    }\n\n    // Create the S7 in and S7 control nodes\n    sf_data_handlerIds.sort();\n    updatedNodes.push(...[{\n        \"id\": S7inId,\n        \"type\": \"s7 in\",\n        \"z\": \"tab_connections\",\n        \"endpoint\": S7endpointId,\n        \"mode\": \"all\",\n        \"variable\": \"\",\n        \"diff\": false,\n        \"name\": \"\",\n        \"x\": 220,\n        \"y\": startY,\n        \"wires\": [\n            sf_data_handlerIds\n        ]\n    },\n    {\n        \"id\": S7linkInId,\n        \"type\": \"link in\",\n        \"z\": \"tab_connections\",\n        \"name\": S7linkInId,\n        \"links\": [],\n        \"x\": 520,\n        \"y\": startY,\n        \"wires\": [\n            [\n                S7controlId\n            ]\n        ]\n    },\n    {\n        \"id\": S7controlId,\n        \"type\": \"s7 control\",\n        \"z\": \"tab_connections\",\n        \"endpoint\": S7endpointId,\n        \"function\": \"trigger\",\n        \"name\": \"\",\n        \"x\": 770,\n        \"y\": startY,\n        \"wires\": [\n            [\n                S7linkOutId\n            ]\n        ]\n    },\n    {\n        \"id\": S7linkOutId,\n        \"type\": \"link out\",\n        \"z\": \"tab_connections\",\n        \"name\": S7linkOutId,\n        \"mode\": \"return\",\n        \"links\": [],\n        \"x\": 1020,\n        \"y\": startY,\n        \"wires\": []\n    }]);\n\n    startY += (dY - startY);\n}\n\n\n// _________________________Main_______________________________\n\nconst endpoints = msg.data;  // Array of all endpoints\nconst history = msg.history; // Array of all history\nconst allNodes = msg.payload;   // Current nodes\nconst tag_tables = global.get('tag_tables');\nconst endpointRegex = /^([\\w\\-.]+):(\\d+)@(\\d+):(\\d+)$/; // Regex to match the endpoint address\n\nif (!Array.isArray(endpoints) || !Array.isArray(allNodes)) {\n    node.error(\"Input data or allNodes is not in the expected format.\");\n    return;\n}\n\n// Collect all currently existing IDs\nlet existingIds = allNodes.map(node => node.id);\n\n// Filter out all \"tab_connections\" nodes to rigenerate them\nlet updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== \"tab_connections\");\nlet deployNeeded = false;\nlet startY = 0;\n\n// Generate nodes\n\ngenerateStaticNodes();\n\nfor (let endpoint of endpoints) {\n    const trigger_tables = tag_tables.filter(table =>\n        endpoint.tag_tables.includes(table.name) &&\n        table.protocol === endpoint.protocol &&\n        [\"trigger\", \"trigger_custom\"].includes(table.sampling_mode)\n    );\n    const continuous_tables = tag_tables.filter(table =>\n        endpoint.tag_tables.includes(table.name) &&\n        table.protocol === endpoint.protocol &&\n        [\"continuous\", \"continuous_on_change\"].includes(table.sampling_mode)\n    );\n\n    switch (endpoint.protocol) {\n        case \"S7\": {\n            generateS7triggered(endpoint, trigger_tables);\n\n        }\n    }\n}\n\n// Remove nodes if the endpoint is deleted\nfor (let edit of history) {\n    if (edit.oldItem && !edit.newItem) {\n        deployNeeded = true;\n        const endpoint = edit.oldItem;\n        const S7endpointId = `S7endpoint_e${endpoint.id}`;\n        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        const tag_tables = global.get('tag_tables').filter(table => endpoint.tag_tables.includes(table.name));\n        for (let table of tag_tables) {\n            const triggerId = `trigger_e${endpoint.id}_t${table.id}_out`;\n            updatedNodes = updatedNodes.filter(node => node.id !== triggerId);\n        }\n    }\n}\n\n// Deploy needed check and return\nconst previousTabNodes = allNodes.filter(node => node.z === \"tab_connections\").sort((a, b) => a.id.localeCompare(b.id));\nconst updatedTabNodes = updatedNodes.filter(node => node.z === \"tab_connections\").sort((a, b) => a.id.localeCompare(b.id));\ndeployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);\n\nif (deployNeeded) {\n    const deploycount = global.get(\"dpc_connections\") + 1 || 1;\n    global.set(\"dpc_connections\", deploycount);\n    msg.payload = updatedNodes\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    msg.log = msg.log || [];\n    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });\n    return [msg, null];\n} else {\n    return [null, msg];\n}\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -2313,8 +3205,8 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
         "x": 1090,
@@ -2368,7 +3260,7 @@
         "type": "function",
         "z": "sf_tag_tables_config",
         "name": "update_status",
-        "func": "// Function to replace underscores with spaces and capitalize words\nfunction capitalize(str) {\n    return str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n}\nfunction parseValue(value) {\n    if (typeof value === 'string') {\n        // Remove leading/trailing quotes and unescape inner quotes if present\n        if ((value.startsWith('\"[') && value.endsWith(']\"')) || (value.startsWith('\"{') && value.endsWith('}\"'))) {\n            value = value.slice(1, -1).replace(/\"\"/g, '\"');\n        }\n\n        // Parse value as JSON if it's a valid JSON string\n        if ((value.startsWith('[') && value.endsWith(']')) || (value.startsWith('{') && value.endsWith('}'))) {\n            try {\n                return JSON.parse(value);\n            } catch (error) {\n                return value;\n            }\n        }\n        // Return original value for non-JSON types\n        return value;\n    }\n    return value;\n}\n\n// GET DATA\n// Retrieve existing data or initialize\nlet columns = [];\nlet data = global.get(msg.database.table) || [];\n\n// Extract column names from PostgreSQL query\nif (msg.pgsql && msg.pgsql[0] && msg.pgsql[0].rows) {\n    columns = msg.pgsql[0].rows.map(col => col.column_name);\n}\n\n// Extract data rows from PostgreSQL query and parse them\nif (msg.pgsql && msg.pgsql[1] && msg.pgsql[1].rows) {\n    data = msg.pgsql[1].rows;\n    data.forEach((row, rowIndex) => {\n        Object.keys(row).forEach((key) => {\n            let originalValue = row[key];\n            row[key] = parseValue(originalValue)\n        });\n    });\n}\n\nlet tag_tables = [];\nif (msg.pgsql && msg.pgsql[2] && msg.pgsql[2].rows) {\n    tag_tables = msg.pgsql[2].rows.map(row => row.table_name);\n}\n\n// CHECK DATA\n// Check if all tag tables are present in the database\nlet deploy_needed = false;\ntag_tables.forEach(tableName => {\n    if (!data.some(row => row.name === tableName)) {\n        let newItem = {\n            name: tableName,\n            data_table: tableName + '_data',\n            protocol: null,\n            sampling_mode: 'static',\n            sampling_freq: 'none',\n            comment: 'auto-generated, modification needed for proper configuration',\n        }\n        let editAction = {\n            index: -1,\n            oldItem: null,\n            newItem: newItem,\n        }\n        msg.dashboard.history = msg.dashboard.history || [];\n        msg.dashboard.history.push(editAction);\n        deploy_needed = true;\n    }\n});\n\n// DASHBOARD MANAGEMENT\n// Build dynamic table headers\nconst baseHeaders = columns.length > 0\n    ? columns\n        .filter(key => !['actions', 'status', 'id'].includes(key)) // Exludes some columns\n        .map(key => ({\n            title: capitalize(key),\n            value: key,\n            headerProps: { style: 'font-weight: 700' },\n            sortable: true\n        }))\n    : [];\n\n\nlet snacktext = \"\";\nif (msg.topicMain === \"deploy\") {\n    snacktext = `${msg.title} Saved Successfully!`;\n} else if (msg.topicMain === \"update\") {\n    snacktext = `${msg.title} Updated Successfully!`;\n} else if (msg.topicMain === \"start\") {\n    snacktext = `${msg.title} Started Successfully!`;\n}\n\n// Assign table data to the message\nmsg.data = data;\n\nmsg.dashboard.table = {\n    title: msg.title,\n    headers: baseHeaders,\n};\nmsg.dashboard.form = {\n    protocol: global.get(\"protocol\"),\n    sampling_mode: global.get(\"sampling_mode\"),\n    sampling_freq: global.get(\"sampling_freq\"),\n};\n\nmsg.dashboard.history = msg.dashboard.history || [];\n\nmsg.dashboard.snackbar = {\n    show: true,\n    text: snacktext,\n    color: \"green-lighten-3\"\n}\n\nmsg.dashboard.loading = false;\n\n// SAVE, NOTIFY, SEND\n// Save data back to the global context\nglobal.set(msg.database.table, data);\n\n// Update status\nconst localTime = new Date().toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\nnode.status({ fill: \"green\", shape: \"dot\", text: `last update: ${localTime}` });\n\nif (deploy_needed) {\n    msg.topic = 'deploy';\n    return [null, msg];\n} else {\n    // Prapare the dynamic_insert history and resets the dashboard history\n    msg.history = [...msg.dashboard.history];\n    msg.dashboard.history = [];\n\n    msg.topic = 'update_status';\n    return [msg, null];\n}",
+        "func": "// Function to replace underscores with spaces and capitalize words\nfunction capitalize(str) {\n    const result = str\n        .replace(/_/g, ' ')\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n        .join(' ');\n    return result;\n}\n\nfunction parseValue(value) {\n    if (typeof value === 'string') {\n        // Remove leading/trailing quotes and unescape inner quotes if present\n        if ((value.startsWith('\"[') && value.endsWith(']\"')) || (value.startsWith('\"{') && value.endsWith('}\"'))) {\n            value = value.slice(1, -1).replace(/\"\"/g, '\"');\n        }\n\n        // Parse value as JSON if it's a valid JSON string\n        if ((value.startsWith('[') && value.endsWith(']')) || (value.startsWith('{') && value.endsWith('}'))) {\n            try {\n                const parsed = JSON.parse(value);\n                return parsed;\n            } catch (error) {\n                return value;\n            }\n        }\n        // Return original value for non-JSON types\n        return value;\n    }\n    return value;\n}\n\n// GET DATA\n// Retrieve existing data or initialize\nlet columns = [];\nlet data = global.get(msg.database.table) || [];\n\n// Extract column names from PostgreSQL query\nif (msg.pgsql && msg.pgsql[0] && msg.pgsql[0].rows) {\n    columns = msg.pgsql[0].rows.map(col => col.column_name);\n}\n\n// Extract data rows from PostgreSQL query and parse them\nif (msg.pgsql && msg.pgsql[1] && msg.pgsql[1].rows) {\n    data = msg.pgsql[1].rows;\n    data.forEach((row, rowIndex) => {\n        Object.keys(row).forEach((key) => {\n            let originalValue = row[key];\n            row[key] = parseValue(originalValue);\n        });\n    });\n}\n\n// Extract tag table names\nlet tag_tables = [];\nif (msg.pgsql && msg.pgsql[2] && msg.pgsql[2].rows) {\n    tag_tables = msg.pgsql[2].rows.map(row => row.table_name);\n}\n\n// CHECK DATA\n// Check if all tag tables are present in the database\nlet deploy_needed = false;\ntag_tables.forEach(tableName => {\n    if (!data.some(row => row.name === tableName)) {\n        let newItem = {\n            name: tableName,\n            data_table: tableName + '_data',\n            protocol: null,\n            sampling_mode: 'static',\n            sampling_freq: 'none',\n            comment: 'auto-generated, modification needed for proper configuration',\n        };\n        let editAction = {\n            index: -1,\n            oldItem: null,\n            newItem: newItem,\n        };\n        msg.dashboard.history = msg.dashboard.history || [];\n        msg.dashboard.history.push(editAction);\n        deploy_needed = true;\n    }\n});\n\n// DASHBOARD MANAGEMENT\n// Build dynamic table headers\nconst baseHeaders = columns.length > 0\n    ? columns\n        .filter(key => !['actions', 'status', 'id'].includes(key)) // Excludes some columns\n        .map(key => {\n            const header = {\n                title: capitalize(key),\n                value: key,\n                headerProps: { style: 'font-weight: 700' },\n                sortable: true\n            };\n            return header;\n        })\n    : [];\n\nlet snacktext = \"\";\nif (msg.topicMain === \"deploy\") {\n    snacktext = `${msg.title} Saved Successfully!`;\n} else if (msg.topicMain === \"update\") {\n    snacktext = `${msg.title} Updated Successfully!`;\n} else if (msg.topicMain === \"start\") {\n    snacktext = `${msg.title} Started Successfully!`;\n}\n\n// Assign table data to the message\nmsg.data = data;\nmsg.dashboard.table = {\n    title: msg.title,\n    headers: baseHeaders,\n};\nmsg.dashboard.form = {\n    protocol: global.get(\"protocol\"),\n    sampling_mode: global.get(\"sampling_mode\"),\n    sampling_freq: global.get(\"sampling_freq\"),\n};\nmsg.dashboard.history = msg.dashboard.history || [];\nmsg.dashboard.snackbar = {\n    show: true,\n    text: snacktext,\n    color: \"green-lighten-3\"\n};\nmsg.dashboard.loading = false;\n\n// SAVE, NOTIFY, SEND\n// Save data back to the global context\nglobal.set(msg.database.table, data);\n\n// Update status\nconst localTime = new Date().toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\nnode.status({ fill: \"green\", shape: \"dot\", text: `last update: ${localTime}` });\n\n// Determine the next step based on deploy_needed flag\nif (deploy_needed) {\n    msg.topic = 'deploy';\n    return [null, msg];\n} else {\n    // Prepare the dynamic_insert history and reset the dashboard history\n    msg.history = [...msg.dashboard.history];\n    msg.dashboard.history = [];\n    msg.topic = 'update_status';\n    return [msg, null];\n}\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2395,7 +3287,7 @@
         "page": "",
         "ui": "",
         "name": "table_tags_config",
-        "order": 3,
+        "order": 4,
         "width": 0,
         "height": 0,
         "head": "",
@@ -2520,7 +3412,7 @@
         "type": "function",
         "z": "sf_tag_tables_config",
         "name": "update_data",
-        "func": "function escapeValue(value) {\n    if (value === null || value === undefined) {\n        return 'NULL';\n    } else if (Array.isArray(value) || typeof value === 'object') {\n        const jsonString = JSON.stringify(value);\n        return `'${jsonString.replace(/'/g, \"''\")}'`; // Wrap JSON in single quotes\n    } else if (typeof value === 'string') {\n        return `'${value.replace(/'/g, \"''\")}'`; // Escape single quotes\n    } else if (typeof value === 'boolean') {\n        return value ? 'TRUE' : 'FALSE'; // PostgreSQL boolean\n    } else {\n        return value; // Numbers and others\n    }\n}\n\nfunction escapeIdentifier(identifier) {\n    return `\"${identifier.replace(/\"/g, '\"\"')}\"`; // Escape double quotes\n}\n\nlet commands = [];\nconst table = escapeIdentifier(msg.database.table);\nconst schema = escapeIdentifier(msg.database.schema);\nconst tagsSchema = escapeIdentifier(msg.database.tagsSchema);\nconst dataSchema = escapeIdentifier(msg.database.dataSchema);\n\nfor (const change of msg.dashboard.history) {\n    const { index, oldItem, newItem } = change;\n    const oldName = oldItem ? escapeIdentifier(oldItem.name) : null;\n    const oldDataTable = oldItem ? escapeIdentifier(oldItem.data_table) : null;\n\n    if (oldItem && !newItem) {\n        commands.push(`DELETE FROM ${schema}.${table} WHERE name = ${escapeValue(oldItem.name)};`);\n        commands.push(`DROP TABLE IF EXISTS ${tagsSchema}.${oldName};`);\n        commands.push(`DROP TABLE IF EXISTS ${dataSchema}.${oldDataTable};`);\n    } else if (!oldItem && newItem) {\n        const keys = Object.keys(newItem).map(escapeIdentifier);\n        const values = Object.values(newItem).map(escapeValue).join(', ');\n        commands.push(`INSERT INTO ${schema}.${table} (${keys.join(', ')}) VALUES (${values});`);\n    } else if (oldItem && newItem) {\n        const updates = Object.keys(newItem)\n            .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`)\n            .join(', ');\n        commands.push(`UPDATE ${schema}.${table} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);\n        if (oldItem.name !== newItem.name) {\n            commands.push(`ALTER TABLE IF EXISTS ${tagsSchema}.${oldName} RENAME TO ${escapeIdentifier(newItem.name)};`);\n        }\n        if (oldDataTable !== newItem.data_table) {\n            commands.push(`ALTER TABLE IF EXISTS ${dataSchema}.${oldDataTable} RENAME TO ${escapeIdentifier(newItem.data_table)};`);\n        }\n    }\n}\n\nmsg.query = `\nDO $$\nBEGIN\n    ${commands.join('\\n')}\nEND $$;\n`;\n\nmsg.target = msg.database.name;\nmsg.topic = 'deploy_changes';\nreturn msg;\n",
+        "func": "function escapeValue(value) {\n    if (value === null || value === undefined) {\n        return 'NULL';\n    } else if (Array.isArray(value) || typeof value === 'object') {\n        const jsonString = JSON.stringify(value);\n        return `'${jsonString.replace(/'/g, \"''\")}'`; // Wrap JSON in single quotes\n    } else if (typeof value === 'string') {\n        return `'${value.replace(/'/g, \"''\")}'`; // Escape single quotes\n    } else if (typeof value === 'boolean') {\n        return value ? 'TRUE' : 'FALSE'; // PostgreSQL boolean\n    } else {\n        return value; // Numbers and others\n    }\n}\n\nfunction escapeIdentifier(identifier) {\n    return `\"${identifier.replace(/\"/g, '\"\"')}\"`; // Escape double quotes\n}\n\nlet commands = [];\n\nconst table = escapeIdentifier(msg.database.table);\nconst schema = escapeIdentifier(msg.database.schema);\nconst tagsSchema = escapeIdentifier(msg.database.tagsSchema);\nconst dataSchema = escapeIdentifier(msg.database.dataSchema);\n\nfor (const change of msg.dashboard.history) {\n    const { index, oldItem, newItem } = change;\n    const oldName = oldItem ? escapeIdentifier(oldItem.name) : null;\n    const oldDataTable = oldItem ? escapeIdentifier(oldItem.data_table) : null;\n\n    if (oldItem && !newItem) {\n        commands.push(`DELETE FROM ${schema}.${table} WHERE name = ${escapeValue(oldItem.name)};`);\n        commands.push(`DROP TABLE IF EXISTS ${tagsSchema}.${oldName} CASCADE;`);\n        commands.push(`DROP TABLE IF EXISTS ${dataSchema}.${oldDataTable} CASCADE;`);\n    } else if (!oldItem && newItem) {\n        const keys = Object.keys(newItem).map(escapeIdentifier);\n        const values = Object.values(newItem).map(escapeValue).join(', ');\n        commands.push(`INSERT INTO ${schema}.${table} (${keys.join(', ')}) VALUES (${values});`);\n    } else if (oldItem && newItem) {\n        const updates = Object.keys(newItem)\n            .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`)\n            .join(', ');\n        commands.push(`UPDATE ${schema}.${table} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);\n\n        if (oldItem.name !== newItem.name) {\n            commands.push(`ALTER TABLE IF EXISTS ${tagsSchema}.${oldName} RENAME TO ${escapeIdentifier(newItem.name)};`);\n        }\n        if (oldDataTable !== newItem.data_table) {\n            commands.push(`ALTER TABLE IF EXISTS ${dataSchema}.${oldDataTable} RENAME TO ${escapeIdentifier(newItem.data_table)};`);\n        }\n    }\n}\n\nmsg.query = `\nDO $$\nBEGIN\n    ${commands.join('\\n')}\nEND $$;\n`;\n\nmsg.target = msg.database.name;\nmsg.topic = 'deploy_changes';\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2620,8 +3512,7 @@
         "y": 300,
         "wires": [
             [
-                "ee4fb0293f18f00a",
-                "9c8c8dc838a3539b"
+                "ee4fb0293f18f00a"
             ]
         ]
     },
@@ -2629,20 +3520,20 @@
         "id": "ee4fb0293f18f00a",
         "type": "function",
         "z": "sf_tag_tables_config",
-        "name": "update_settings",
-        "func": "// This code checks if each item in msg.data has a corresponding subflow in the allNodes (msg.payload) and:\n// 1. Adds the required nodes if they are missing.\n// 2. Removes nodes that no longer correspond to msg.data.\n\nconst inputData = msg.data; // Array of objects to verify\nconst inputHistory = msg.history; // Array of objects to verify\nlet allNodes = msg.payload;   // Current nodes\nlet deployNeded = false;    // Flag to indicate if a deploy is needed\n\nif (!Array.isArray(inputData) || !Array.isArray(inputHistory) || !Array.isArray(allNodes)) {\n    node.error(\"Input data or history or allNodes is not in the expected format.\");\n    return;\n}\n\n// Helper function to generate unique IDs\nfunction generateId(existingIds) {\n    function randomHex(size) {\n        const chars = \"0123456789abcdef\";\n        let id = \"\";\n        for (let i = 0; i < size; i++) {\n            id += chars[Math.floor(Math.random() * chars.length)];\n        }\n        return id;\n    }\n\n    let id;\n    do {\n        id = randomHex(16);\n    } while (existingIds.includes(id));\n    return id;\n}\n\n// Collect all currently existing IDs\nconst existingIds = allNodes.map(node => node.id);\nconst updatedNodes = [...allNodes];\n\n// Filter out the nodes that belong to the tab with ID \"tab_settings\" (Settings tab)\nconst tabNodes = allNodes.filter(node => node.z === \"tab_settings\");\n\n// Find the maximum Y coordinate in the tab\nlet maxY = 0;\nfor (let node of tabNodes) {\n    if (typeof node.y === 'number' && node.y > maxY) {\n        maxY = node.y;\n    }\n}\n\n// Function to create the required nodes for a specific name\nfunction createNodesForItem(item) {\n    const name = item.name;\n    const baseId = generateId(existingIds);\n    const linkCallId = generateId(existingIds);\n\n    return [\n        {\n            id: baseId,\n            type: \"subflow:sf_tag_table\",\n            z: \"tab_settings\",\n            name: name,\n            env: [\n                { name: \"SCHEMA\", value: \"tags\", type: \"str\" },\n                { name: \"TABLE\", value: name, type: \"str\" },\n                { name: \"PROCESS_SCHEMA\", value: msg.database.processSchema, type: \"str\" },\n                { name: \"DATA_TABLE\", value: item.data_table, type: \"str\" },\n                { name: \"PROTOCOL\", value: item.protocol, type: \"str\" }\n            ],\n            x: 350,\n            y: maxY + 100, // Position below the current maximum Y\n            wires: [[linkCallId]]\n        },\n        {\n            id: generateId(existingIds),\n            type: \"link in\",\n            z: \"tab_settings\",\n            name: name,\n            links: [\"bc31f07c227e2c67\"],\n            x: 105,\n            y: maxY + 100, // Match Y position\n            wires: [[baseId]]\n        },\n        {\n            id: linkCallId,\n            type: \"link call\",\n            z: \"tab_settings\",\n            name: \"to_database\",\n            links: [],\n            linkType: \"dynamic\",\n            timeout: \"30\",\n            x: 640,\n            y: maxY + 100, // Match Y position\n            wires: [[baseId]]\n        }\n    ];\n}\n\n// _________________________History Processing (edits)_______________________________\n\nfor (const action of inputHistory) {\n    if (action.newItem && action.oldItem &&\n        (action.newItem.name !== action.oldItem.name ||                     // Name change\n            action.newItem.data_table !== action.oldItem.data_table ||    // Process Table change\n            action.newItem.protocol !== action.oldItem.protocol)) {             // Protocol change\n        const oldName = action.oldItem.name;\n        const newName = action.newItem.name;\n        const newProcessTable = action.newItem.data_table;\n        const newProtocol = action.newItem.protocol;\n\n        // Check if the subflow for the old name exists\n        const oldSubflow = updatedNodes.find(node => node.name === oldName && node.type === \"subflow:sf_tag_table\");\n\n        if (oldSubflow) {\n            // Update the subflow name\n            oldSubflow.name = newName;\n            // Update the environment variables where the table name is stored (if present else add it)\n            let tableUpdated = false;\n            let processUpdated = false;\n            let protocolUpdated = false;\n            for (let env of oldSubflow.env) {\n                if (env.name === \"TABLE\") {\n                    env.value = newName;\n                    tableUpdated = true;\n                }\n                if (env.name === \"DATA_TABLE\") {\n                    env.value = newProcessTable;\n                    processUpdated = true;\n                }\n                if (env.name === \"PROTOCOL\") {\n                    env.value = newProtocol;\n                    protocolUpdated = true;\n                }\n            }\n            if (!tableUpdated) {\n                oldSubflow.env.push({ name: \"TABLE\", value: newName, type: \"str\" });\n            }\n            if (!processUpdated) {\n                oldSubflow.env.push({ name: \"DATA_TABLE\", value: newProcessTable, type: \"str\" });\n            }\n            if (!protocolUpdated) {\n                oldSubflow.env.push({ name: \"PROTOCOL\", value: newProtocol, type: \"str\" });\n            }\n            // Update the link in node name\n            const linkInNode = updatedNodes.find(node => node.type === \"link in\" && node.name === oldName);\n            if (linkInNode) {\n                linkInNode.name = newName;\n            }\n            deployNeded = true;\n        }\n    }\n\n}\n\n// ______________________Data Processing (new or delete)_____________________________\n\n// Add the required nodes for each table name in the inputData (new)\nfor (const item of inputData) {\n    // Check if the subflow for this name already exists\n    const isPresent = allNodes.some(node => node.name === item.name && node.type.startsWith(\"subflow\"));\n\n    if (!isPresent) {\n        // Add the required nodes for this name\n        const newNodes = createNodesForItem(item);\n        maxY += 100; // Increase the maximum Y coordinate\n        updatedNodes.push(...newNodes);\n        const settingsOut = updatedNodes.find(node => node.id === \"bc31f07c227e2c67\");\n        settingsOut.links.push(newNodes[1].id);\n        settingsOut.links.sort();\n        deployNeded = true;\n    }\n}\n\n// Remove nodes that not correspond to inputData (delete)\nconst namesInData = inputData.map(item => item.name);\nlet idsToRemove = [];\nfor (let node of updatedNodes) {\n    if (node.type === \"subflow:sf_tag_table\" && !namesInData.includes(node.name)) {\n        // Remove the subflow and its associated nodes\n        const subflowId = node.id;\n        idsToRemove.push(subflowId);\n        for (let n of updatedNodes) {\n            if (Object.keys(n).includes(\"wires\") && Array.isArray(n.wires)) {\n                for (let i = 0; i < n.wires.length; i++) {\n                    if (n.wires[i].includes(subflowId)) {\n                        idsToRemove.push(n.id);\n                    };\n                }\n            }\n        }\n        deployNeded = true;\n    }\n}\n\nconst finalNodes = updatedNodes.filter(node => !idsToRemove.includes(node.id));\nconst settingsOut = updatedNodes.find(node => node.id === \"bc31f07c227e2c67\");\nsettingsOut.links.filter(id => !idsToRemove.includes(id));\n\nmsg.payload = {\n    flows: finalNodes,\n    deploy: \"flows\"\n};\n\nif (deployNeded) { return [msg, null]; } else { return [null, msg]; }\n",
+        "name": "update_tag_tables",
+        "func": "// This code checks if each item in msg.data has a corresponding subflow in the allNodes (msg.payload)\n\n\n// ________________________Insert Prototypes___________________________\n\n// Function to generate the status and catch flows\nfunction generateStaticNodes() {\n    updatedNodes.push(...[\n        {\n            \"id\": \"nS_tag_tables\",\n            \"type\": \"status\",\n            \"z\": \"tab_tag_tables\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"x\": 120,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loS_tag_tables\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loS_tag_tables\",\n            \"type\": \"link out\",\n            \"z\": \"tab_tag_tables\",\n            \"name\": \"status_tag_tables\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_status\"\n            ],\n            \"x\": 235,\n            \"y\": 60,\n            \"wires\": []\n        },\n        {\n            \"id\": \"nC_tag_tables\",\n            \"type\": \"catch\",\n            \"z\": \"tab_tag_tables\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"uncaught\": false,\n            \"x\": 520,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loC_tag_tables\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loC_tag_tables\",\n            \"type\": \"link out\",\n            \"z\": \"tab_tag_tables\",\n            \"name\": \"error_tag_tables\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_errors\"\n            ],\n            \"x\": 635,\n            \"y\": 60,\n            \"wires\": []\n        }\n    ]);\n    startY += 160;\n}\n\n// Function to create the required nodes for a specific item\nfunction generateTagTables(item) {\n    const name = item.name;\n    const baseId = `sf_tag_table_t${item.id}`;\n    const linkInId = `sf_tag_table_t${item.id}_in`;\n    const linkCallId = `sf_tag_table_t${item.id}_call`;\n\n    updatedNodes.push(...[\n        {\n            id: baseId,\n            type: \"subflow:sf_tag_table\",\n            z: \"tab_tag_tables\",\n            name: name,\n            env: [\n                { name: \"SCHEMA\", value: \"tags\", type: \"str\" },\n                { name: \"TABLE\", value: name, type: \"str\" },\n                { name: \"DATA_SCHEMA\", value: msg.database.dataSchema, type: \"str\" },\n                { name: \"DATA_TABLE\", value: item.data_table, type: \"str\" },\n                { name: \"PROTOCOL\", value: item.protocol, type: \"str\" }\n            ],\n            x: 410,\n            y: startY, // Position below the current maximum Y\n            wires: [[linkCallId]]\n        },\n        {\n            id: linkInId,\n            type: \"link in\",\n            z: \"tab_tag_tables\",\n            name: name,\n            links: [\"lo_endpoints\"],\n            x: 180,\n            y: startY, // Match Y position\n            wires: [[baseId]]\n        },\n        {\n            id: linkCallId,\n            type: \"link call\",\n            z: \"tab_tag_tables\",\n            name: \"to_database\",\n            links: [],\n            linkType: \"dynamic\",\n            timeout: \"30\",\n            x: 700,\n            y: startY, // Match Y position\n            wires: [[baseId]]\n        }\n    ]);\n    startY += 100;\n    return linkInId;\n}\n\n\n\n// _________________________Main_______________________________\n\nconst tag_tables = msg.data; // Array of objects to verify\nlet allNodes = msg.payload;   // Current nodes\nlet deployNeded = false;    // Flag to indicate if a deploy is needed\n\nif (!Array.isArray(tag_tables) || !Array.isArray(allNodes)) {\n    node.error(\"Input data or allNodes is not in the expected format.\");\n    return;\n}\n\n// Collect all currently existing IDs\nlet existingIds = allNodes.map(node => node.id);\n\n// Filter out all \"tab_tag_tables\" nodes to rigenerate them\nlet updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== \"tab_tag_tables\");\nlet deployNeeded = false;\nlet startY = 0;\n\n// Generate nodes\n\ngenerateStaticNodes();\n\n\nlet links = [];\nfor (let table of tag_tables) {\n    links.push(generateTagTables(table));\n}\nlinks.sort();\n\n\n// Deploy needed check and return\nconst previousTabNodes = allNodes.filter(node => node.z === \"tab_tag_tables\").sort((a, b) => a.id.localeCompare(b.id));\nconst updatedTabNodes = updatedNodes.filter(node => node.z === \"tab_tag_tables\").sort((a, b) => a.id.localeCompare(b.id));\ndeployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);\n\nif (deployNeeded) {\n    const deploycount = global.get(\"dpc_tag_tables\") + 1 || 1;\n    global.set(\"dpc_tag_tables\", deploycount);\n    // Update link in\n    let loNode = updatedNodes.find(node => node.id === \"lo_endpoints\");\n    loNode.links = links;\n    // Return updated nodes\n    msg.log = msg.log || [];\n    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });\n    msg.payload = updatedNodes\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    return [msg, null];\n} else {\n    return [null, msg];\n}\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
+        "x": 810,
         "y": 360,
         "wires": [
             [
-                "ff18f2ac9c5ca151",
-                "9c8c8dc838a3539b"
+                "9c8c8dc838a3539b",
+                "ff18f2ac9c5ca151"
             ],
             [
                 "e7395bef25d1c1bf"
@@ -2687,8 +3578,8 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
         "x": 1080,
@@ -2705,6 +3596,7 @@
         "y": 420,
         "wires": [
             [
+                "4bb3e987e1175f3a",
                 "e7fded8890d93372"
             ]
         ]
@@ -2722,7 +3614,7 @@
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 420,
+        "y": 500,
         "wires": [
             []
         ]
@@ -2738,9 +3630,44 @@
         "y": 60,
         "wires": [
             [
-                "2eed54bb56e3675e"
+                "2eed54bb56e3675e",
+                "7b25a39f2c919154"
             ]
         ]
+    },
+    {
+        "id": "4bb3e987e1175f3a",
+        "type": "debug",
+        "z": "sf_tag_tables_config",
+        "name": "status",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "7b25a39f2c919154",
+        "type": "debug",
+        "z": "sf_tag_tables_config",
+        "name": "error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 20,
+        "wires": []
     },
     {
         "id": "5eec11117ed59706",
@@ -2808,7 +3735,7 @@
         "page": "",
         "ui": "",
         "name": "tag_table",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
         "head": "",
@@ -2934,7 +3861,7 @@
         "type": "function",
         "z": "sf_tag_table",
         "name": "update_data",
-        "func": "function escapeValue(value) {\n    if (value === null || value === undefined) {\n        // Handles NULL values\n        return 'NULL';\n    }\n    else if (Array.isArray(value) || typeof value === 'object') {\n        // Convert arrays and objects to JSON, then escape single quotes\n        const jsonString = JSON.stringify(value);\n        return `'${jsonString.replace(/'/g, \"''\")}'`;\n    }\n    else if (typeof value === 'string') {\n        // Escapes dangerous characters like single quotes ('), replacing them with double single quotes ('')\n        return `'${value.replace(/'/g, \"''\")}'`;\n    }\n    else if (typeof value === 'boolean') {\n        // PostgreSQL uses 'TRUE'/'FALSE' for boolean values\n        return value ? 'TRUE' : 'FALSE';\n    }\n    else {\n        // For numbers (and other primitive types), return the value directly\n        return value;\n    }\n}\n\nfunction escapeIdentifier(identifier) {\n    // Ensures proper escaping of column and table names using double quotes\n    return `\"${identifier.replace(/\"/g, '\"\"')}\"`;\n}\n\nlet commands = [];\nconst table = escapeIdentifier(msg.database.table);\nconst schema = escapeIdentifier(msg.database.schema);\nconst tagTable = `${schema}.${table}`;\nconst dataSchema = escapeIdentifier(msg.database.dataSchema);\nconst dataTableName = escapeIdentifier(msg.database.dataTable);\nconst dataTable = `${dataSchema}.${dataTableName}`;\nconst data_type_dict = global.get(\"data_type\");\n\nfor (const change of msg.dashboard.history) {\n    const { index, oldItem, newItem } = change;\n\n    if (oldItem && !newItem) {\n        // Case: deletion\n        const oldName = escapeIdentifier(oldItem.name);\n        commands.push(`DELETE FROM ${tagTable} WHERE name = ${escapeValue(oldItem.name)};`);\n        commands.push(`ALTER TABLE IF EXISTS ${dataTable} DROP COLUMN IF EXISTS ${oldName};`);\n\n    } else if (!oldItem && newItem) {\n        // Case: insertion\n        const keys = Object.keys(newItem).map(key => escapeIdentifier(key));\n        const values = Object.values(newItem)\n            .map(value => `${escapeValue(value)}`) // Escape values\n            .join(', ');\n        commands.push(`INSERT INTO ${tagTable} (${keys.join(', ')}) VALUES (${values});`);\n        const data_type = data_type_dict[newItem.data_type] ? data_type_dict[newItem.data_type] : 'TEXT';\n        commands.push(`ALTER TABLE IF EXISTS ${dataTable} ADD COLUMN IF NOT EXISTS ${escapeIdentifier(newItem.name)} ${data_type};`);\n\n    } else if (oldItem && newItem) {\n        // Case: update\n        const updates = Object.keys(newItem)\n            .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`) // Escape values and identifiers\n            .join(', ');\n        commands.push(`UPDATE ${tagTable} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);\n        if (oldItem.name !== newItem.name) {\n            commands.push(`ALTER TABLE IF EXISTS ${dataTable} RENAME COLUMN ${escapeIdentifier(oldItem.name)} TO ${escapeIdentifier(newItem.name)};`);\n        }\n        if (oldItem.data_type !== newItem.data_type) {\n            const data_type = data_type_dict[newItem.data_type] ? data_type_dict[newItem.data_type] : 'TEXT';\n            commands.push(`ALTER TABLE IF EXISTS ${dataTable} ALTER COLUMN ${escapeIdentifier(newItem.name)} TYPE ${data_type};`);\n        }\n    }\n}\n\n// Prototype for calling the PostgreSQL function `create_views_by_label`\n// CALL create_views_by_label(tag_table TEXT, data_table TEXT, view_prefix TEXT);\n\ncommands.push(`CALL create_views_by_label('${tagTable}', '${dataTable}', '${dataTableName}');`);\nmsg.database.replace_all_procedures = false\n\n\n// Constructs the PL/pgSQL block\nmsg.query = `\nDO $$ \nBEGIN\n    ${commands.join('\\n    ')}\nEND $$;\n`;\n\nmsg.target = msg.database.name;\nmsg.topic = 'deploy_changes';\nreturn msg;\n",
+        "func": "function escapeValue(value) {\n    if (value === null || value === undefined) {\n        // Handles NULL values\n        return 'NULL';\n    }\n    else if (Array.isArray(value) || typeof value === 'object') {\n        // Convert arrays and objects to JSON, then escape single quotes\n        const jsonString = JSON.stringify(value);\n        return `'${jsonString.replace(/'/g, \"''\")}'`;\n    }\n    else if (typeof value === 'string') {\n        // Escapes dangerous characters like single quotes ('), replacing them with double single quotes ('')\n        return `'${value.replace(/'/g, \"''\")}'`;\n    }\n    else if (typeof value === 'boolean') {\n        // PostgreSQL uses 'TRUE'/'FALSE' for boolean values\n        return value ? 'TRUE' : 'FALSE';\n    }\n    else {\n        // For numbers (and other primitive types), return the value directly\n        return value;\n    }\n}\n\nfunction escapeIdentifier(identifier) {\n    // Ensures proper escaping of column and table names using double quotes\n    return `\"${identifier.replace(/\"/g, '\"\"')}\"`;\n}\n\nlet commands = [];\nconst table = escapeIdentifier(msg.database.table);\nconst schema = escapeIdentifier(msg.database.schema);\nconst tagTable = `${schema}.${table}`;\nconst dataSchema = escapeIdentifier(msg.database.dataSchema);\nconst dataTableName = escapeIdentifier(msg.database.dataTable);\nconst dataTable = `${dataSchema}.${dataTableName}`;\nconst data_type_dict = global.get(\"data_type\");\n\nfor (const change of msg.dashboard.history) {\n    const { index, oldItem, newItem } = change;\n\n    if (oldItem && !newItem) {\n        // Case: deletion\n        const oldName = escapeIdentifier(oldItem.name);\n        commands.push(`DELETE FROM ${tagTable} WHERE name = ${escapeValue(oldItem.name)};`);\n        commands.push(`ALTER TABLE IF EXISTS ${dataTable} DROP COLUMN IF EXISTS ${oldName};`);\n\n    } else if (!oldItem && newItem) {\n        // Case: insertion\n        const keys = Object.keys(newItem).map(key => escapeIdentifier(key));\n        const values = Object.values(newItem)\n            .map(value => `${escapeValue(value)}`) // Escape values\n            .join(', ');\n        commands.push(`INSERT INTO ${tagTable} (${keys.join(', ')}) VALUES (${values});`);\n        const data_type = data_type_dict[newItem.data_type] ? data_type_dict[newItem.data_type] : 'TEXT';\n        commands.push(`ALTER TABLE IF EXISTS ${dataTable} ADD COLUMN IF NOT EXISTS ${escapeIdentifier(newItem.name)} ${data_type};`);\n\n    } else if (oldItem && newItem) {\n        // Case: update\n        const updates = Object.keys(newItem)\n            .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`) // Escape values and identifiers\n            .join(', ');\n        commands.push(`UPDATE ${tagTable} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);\n        if (oldItem.name !== newItem.name) {\n            commands.push(`ALTER TABLE IF EXISTS ${dataTable} RENAME COLUMN ${escapeIdentifier(oldItem.name)} TO ${escapeIdentifier(newItem.name)};`);\n        }\n        if (oldItem.data_type !== newItem.data_type) {\n            const data_type = data_type_dict[newItem.data_type] ? data_type_dict[newItem.data_type] : 'TEXT';\n            commands.push(`ALTER TABLE IF EXISTS ${dataTable} ALTER COLUMN ${escapeIdentifier(newItem.name)} TYPE ${data_type};`);\n        }\n    }\n}\n\n// Prototype for calling the PostgreSQL function `create_views_by_label`\n// CALL create_views_by_label(tag_table TEXT, data_table TEXT, view_prefix TEXT);\n\n// commands.push(`CALL create_views_by_label('${tagTable}', '${dataTable}', '${dataTableName}');`);\nmsg.database.replace_all_procedures = false\n\n\n// Constructs the PL/pgSQL block\nmsg.query = `\nDO $$ \nBEGIN\n    ${commands.join('\\n    ')}\nEND $$;\n`;\n\nmsg.target = msg.database.name;\nmsg.topic = 'deploy_changes';\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3073,7 +4000,7 @@
         "type": "function",
         "z": "sf_tag_table",
         "name": "update_connections",
-        "func": "// ___________________Insert Prototypes________________________\nfunction updateS7tags(endpoint) {\n    const S7endpointId = `S7endpoint_e${endpoint.id}`;\n    const S7endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n    if (!S7endpointNode) {\n        logs.push(`S7 endpoint NOT FOUND`);\n        return;\n    }\n    logs.push(`S7 endpoint found`);\n    const vartable = tags.map(tag => ({ addr: tag.address, name: tag.name }));\n    if (JSON.stringify(vartable) !== JSON.stringify(S7endpointNode.vartable)) {\n        logs.push(`Vartable updated`);\n        S7endpointNode.vartable = vartable;\n        deployNeeded = true;\n    } else {\n        logs.push(`Vartable not updated (no changes)`);\n    }\n}\n/*\n[\n            {\n                \"addr\": \"DB1,R0\",\n                \"name\": \"BellaLi\"\n            },\n            {\n                \"addr\": \"DB1,R4\",\n                \"name\": \"BellaRaga\"\n            }\n        ]\n*/\n\n\n// _________________________Main_______________________________\n\nconst tags = msg.data;  // Array of all tags\nconst table = msg.database.table;  // Table name\nconst allNodes = msg.payload;   // Current nodes\nconst endpoints = global.get('endpoints');\n\nif (!Array.isArray(tags) || !Array.isArray(allNodes)) {\n    return;\n}\n\n// Filter out all \"tab_connections\" nodes to rigenerate them\nlet updatedNodes = JSON.parse(JSON.stringify(allNodes));\nlet deployNeeded = false;\nlet logs = [];\n\n// Update endpoint nodes\nfor (let endpoint of endpoints) {\n    logs.push(`Endpoint: ${endpoint.name}`);\n    if (!endpoint.enabled || !endpoint.tag_tables.includes(table)) {\n        logs.push(`Endpoint disabled or not containing ${table}`);\n        continue;\n    }\n    switch (endpoint.protocol) {\n        case \"S7\": {\n            logs.push(`Updating S7 tags`);\n            updateS7tags(endpoint);\n        }\n        default:\n            logs.push(`Protocol not supported`);\n    }\n}\n\nlet msg2 = { payload: logs };\nif (deployNeeded) {\n    let deploycount = global.get(\"dpc_tags\") || 0;\n    deploycount++;\n    global.set(\"dpc_tags\", deploycount);\n    msg.payload = updatedNodes\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    return [msg, msg2];\n}\nreturn [null, msg2];",
+        "func": "// ___________________Insert Prototypes________________________\nfunction updateS7tags(endpoint) {\n    const S7endpointId = `S7endpoint_e${endpoint.id}`;\n    const S7endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n    if (!S7endpointNode) {\n        logs.push(`S7 endpoint NOT FOUND`);\n        return;\n    }\n    logs.push(`S7 endpoint found`);\n    const vartable = tags.map(tag => ({ addr: tag.address, name: tag.name }));\n    if (JSON.stringify(vartable) !== JSON.stringify(S7endpointNode.vartable)) {\n        logs.push(`Vartable updated`);\n        S7endpointNode.vartable = vartable;\n        deployNeeded = true;\n    } else {\n        logs.push(`Vartable not updated (no changes)`);\n    }\n}\n\n\n// _________________________Main_______________________________\n\nconst tags = msg.data;  // Array of all tags\nconst table = msg.database.table;  // Table name\nconst allNodes = msg.payload;   // Current nodes\nconst endpoints = global.get('endpoints');\n\nif (!Array.isArray(tags) || !Array.isArray(allNodes)) {\n    return [null, null];\n}\n\n// Filter out all \"tab_connections\" nodes to rigenerate them\nlet updatedNodes = JSON.parse(JSON.stringify(allNodes));\nlet deployNeeded = false;\nlet logs = [];\n\n// Update endpoint nodes\nfor (let endpoint of endpoints) {\n    logs.push(`Endpoint: ${endpoint.name}`);\n    if (!endpoint.enabled || !endpoint.tag_tables.includes(table)) {\n        logs.push(`Endpoint disabled or not containing ${table}`);\n        continue;\n    }\n    switch (endpoint.protocol) {\n        case \"S7\": {\n            logs.push(`Updating S7 tags`);\n            updateS7tags(endpoint);\n        }\n        default:\n            logs.push(`Protocol not supported`);\n    }\n}\n\nlet msg2 = { payload: logs };\nif (deployNeeded) {\n    let deploycount = global.get(\"dpc_tags\") || 0;\n    deploycount++;\n    global.set(\"dpc_tags\", deploycount);\n    msg.payload = updatedNodes\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    return [msg, msg2];\n}\nreturn [null, msg2];",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -3177,16 +4104,16 @@
         "id": "86615f513a209ccc",
         "type": "function",
         "z": "sf_data_handler",
-        "name": "check_and_parse",
-        "func": "const timeLast = flow.get('timeLast') || new Date();\nmsg.created_at = new Date();\n\nswitch (msg.endpoint.protocol) {\n    case 'S7': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time      \n        }\n    }\n    case 'Modbus': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('Modbus protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n    case 'OPC-UA': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('OPC-UA protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n    case 'MQTT': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('MQTT protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n    case 'HTTP': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('HTTP protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n}\n\n// Optimized code for filtering and updating msg.tag_table and msg.payload efficiently\n\nconst knownKeysSet = new Set(msg.tag_table.filter(t => t.enabled).map(t => t.name.toLowerCase()));\nconst validKeysSet = new Set(\n    Object.keys(msg.payload).filter(key => knownKeysSet.has(key.toLowerCase()))\n);\n\nmsg.tag_table.forEach(tag => {\n    tag.status = validKeysSet.has(tag.name.toLowerCase()) ? \"good\" : \"error\";\n});\n\nmsg.payload = Object.fromEntries(\n    Object.entries(msg.payload).filter(([key]) => validKeysSet.has(key.toLowerCase()))\n);\n\nflow.set('timeLast', msg.created_at);\nglobal.set('tag_table', msg.tag_table);\n\nreturn msg;\n",
+        "name": "check_and_parse_data",
+        "func": "const timeLast = flow.get('timeLast') || new Date();\nmsg.created_at = new Date();\n\nswitch (msg.endpoint.protocol) {\n    case 'S7': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time      \n        }\n        msg.data = JSON.parse(JSON.stringify(msg.payload));\n        break;\n    }\n    case 'Modbus': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('Modbus protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n    case 'OPC-UA': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('OPC-UA protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n    case 'MQTT': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('MQTT protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n    case 'HTTP': {\n        if (!msg.isTrigger) {\n            // check if is coherent with sample time\n        }\n        node.warn('HTTP protocol not implemented yet');\n        return null;\n        // put correct data in msg.payload\n    }\n}\n\n// Optimized code for filtering and updating msg.tag_table and msg.payload efficiently\n\nconst knownKeysSet = new Set(msg.tag_table.filter(t => t.enabled).map(t => t.name.toLowerCase()));\nconst validKeysSet = new Set(\n    Object.keys(msg.data).filter(key => knownKeysSet.has(key.toLowerCase()))\n);\n\nmsg.tag_table.forEach(tag => {\n    tag[msg.endpoint.name] = validKeysSet.has(tag.name) ? \"good\" : \"error\";\n});\n\nmsg.payload = Object.fromEntries(\n    Object.entries(msg.data).filter(([key]) => validKeysSet.has(key))\n);\n\nflow.set('timeLast', msg.created_at);\nglobal.set(msg.meta_table.name, msg.tag_table);\n\n// msg.knownSet = knownKeysSet;\nmsg.validSet = validKeysSet;\nmsg.unvalidSet = new Set(\n    Object.keys(msg.data).filter(key => !knownKeysSet.has(key.toLowerCase()))\n);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 80,
+        "x": 570,
+        "y": 120,
         "wires": [
             [
                 "0f0a228ee2485f05"
@@ -3197,16 +4124,16 @@
         "id": "e0b7b86e0fe972d0",
         "type": "function",
         "z": "sf_data_handler",
-        "name": "read_trigger",
-        "func": "\nreturn msg;",
+        "name": "endpoint_control",
+        "func": "switch (msg.endpoint.protocol) {\n    case 'S7': {\n        msg.target = `s7control_e${msg.endpoint.id}_in`;\n        msg.topic = `trigger_sent`;\n        break;\n    }\n    case 'Modbus': {\n        msg.target = `modbuscontrol_e${msg.endpoint.id}_in`;\n        msg.topic = `trigger_sent`;\n        break;\n    }\n    case 'OPC-UA': {\n        msg.target = `opcuacontrol_e${msg.endpoint.id}_in`;\n        msg.topic = `trigger_sent`;\n        break;\n    }\n    case 'MQTT': {\n        msg.target = `mqttcontrol_e${msg.endpoint.id}_in`;\n        msg.topic = `trigger_sent`;\n        break;\n    }\n    case 'HTTP': {\n        msg.target = `httpcontrol_e${msg.endpoint.id}_in`;\n        msg.topic = `trigger_sent`;\n        break;\n    }\n    default: {\n        node.error(`Invalid protocol - ${msg.endpoint.protocol}`);\n        msg.topic = `trigger_sent`;\n        return null;\n    }\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 200,
+        "x": 550,
+        "y": 240,
         "wires": [
             []
         ]
@@ -3216,14 +4143,14 @@
         "type": "function",
         "z": "sf_data_handler",
         "name": "switch",
-        "func": "\nif (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: msg.error.message });\n    return [null, null];\n}\n\nconst endpoint = global.get('endpoints').filter(e => e.id === env.get('ENDPOINT_ID'))[0];\nlet tag_table = global.get(env.get('TAG_TABLE'));\nlet meta_table = global.get('tag_tables').filter(t => t.name === env.get('TAG_TABLE'))[0];\nlet isData = false;\nlet isTrigger = false;\n\nif (msg.topic === `insert_${meta_table.name}`) {\n    return [null, null];\n}\n\n// In next versions checks must be made at tables level\nif (!endpoint || !endpoint.protocol) {\n    node.error(`Invalid endpoint - ${env.get('ENDPOINT_ID')}`);\n    return [null, null];\n}\n\nif (!meta_table || !meta_table.sampling_mode || !meta_table.sampling_freq || !meta_table.protocol) {\n    node.error(`Missing tag_table configuration - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n\nif (meta_table.protocol !== endpoint.protocol) {\n    node.error(`Different protocols - ${env.get('TAG_TABLE')}: ${meta_table.protocol} - ${endpoint.protocol}`);\n    return [null, null];\n}\n\nif (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {\n    node.error(`Invalid tag table - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n\nmsg.endpoint = endpoint;\nmsg.tag_table = tag_table;\nmsg.meta_table = meta_table;\nmsg.isTrigger = ['Trigger', 'Trigger Custom'].includes(meta_table.sampling_mode);\n\nswitch (endpoint.protocol) {\n    case 'S7': {\n        const allowedKeys = ['topic', 'payload', '_msgid'];\n        const msgKeys = Object.keys(msg);\n        isData = msgKeys.every(key => allowedKeys.includes(key)) &&\n            msgKeys.length === allowedKeys.length &&\n            Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));\n\n    }\n    case 'Modbus': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'Modbus protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'OPC-UA': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'OPC-UA protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'MQTT': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'MQTT protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'HTTP': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'HTTP protocol not implemented yet' });\n        return [null, null];\n    }\n    default: {\n        node.error(`Invalid protocol - ${endpoint.protocol}`);\n        return [null, null];\n    }\n}\n\nif (isData) {\n    return [msg, null];\n} else if (isTrigger) {\n    return [null, msg];\n} else {\n    node.error(`Invalid message format - ${endpoint.id}: ${endpoint.name} - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n",
+        "func": "\nif (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: msg.error.message });\n    return [null, null];\n}\n\nconst endpoint = global.get('endpoints').filter(e => e.id === env.get('ENDPOINT_ID'))[0];\nlet tag_table = global.get(env.get('TAG_TABLE'));\nlet meta_table = global.get('tag_tables').filter(t => t.name === env.get('TAG_TABLE'))[0];\nlet isData = false;\nlet isTrigger = false;\n\n// In next versions checks must be made at tables level\nif (!endpoint || !endpoint.protocol) {\n    node.error(`Invalid endpoint - ${env.get('ENDPOINT_ID')}`);\n    return [null, null];\n}\n\nif (!meta_table || !meta_table.sampling_mode || !meta_table.sampling_freq || !meta_table.protocol) {\n    node.error(`Missing tag_table configuration - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n\nif (meta_table.protocol !== endpoint.protocol) {\n    node.error(`Different protocols - ${env.get('TAG_TABLE')}: ${meta_table.protocol} - ${endpoint.protocol}`);\n    return [null, null];\n}\n\nif (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {\n    node.error(`Invalid tag table - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n\nmsg.endpoint = endpoint;\nmsg.tag_table = tag_table;\nmsg.meta_table = meta_table;\nmsg.isTrigger = ['Trigger', 'Trigger Custom', 'trigger', 'trigger_custom'].includes(meta_table.sampling_mode);\n\n// Topic Switch (for trigger messages)\nif (msg.topic === 'trigger') {\n    return [null, msg];\n} else if (msg.topic === 'trigger_sent') {\n    return [null, null];\n} else if (msg.topic === `insert_${msg.meta_table.name}` && msg.params && msg.params.length > 0) {\n    const localTime = msg.params[0].toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n    node.status({ fill: 'green', shape: 'dot', text: `Last Sample at ${localTime} - ${msg.params.length - 2} values` });\n    return [null, null];\n}\n\n// Protocol Switch (for other messages)\nlet test1 = undefined;\nlet test2 = undefined;\nlet test3 = undefined;\nlet test4 = undefined;\nswitch (endpoint.protocol) {\n    case 'S7': {\n        const allowedKeys = ['topic', 'payload', '_msgid'];\n        const msgKeys = Object.keys(msg);\n        test1 = msgKeys.every(key => allowedKeys.includes(key));\n        test2 = msgKeys.length === allowedKeys.length;\n        test3 = Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));\n        isData = test3;\n        break;\n\n    }\n    case 'Modbus': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'Modbus protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'OPC-UA': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'OPC-UA protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'MQTT': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'MQTT protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'HTTP': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'HTTP protocol not implemented yet' });\n        return [null, null];\n    }\n    default: {\n        node.error(`Invalid protocol - ${endpoint.protocol}`);\n        return [null, null];\n    }\n}\n\nif (isData) {\n    return [msg, null];\n} else {\n    node.error(`Invalid message format - ${endpoint.id}: ${endpoint.name} - ${env.get('TAG_TABLE')} - tests ${test1} ${test2} ${test3} ${test4}`);\n    return [null, null];\n}\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 210,
+        "x": 290,
         "y": 180,
         "wires": [
             [
@@ -3238,16 +4165,16 @@
         "id": "0f0a228ee2485f05",
         "type": "function",
         "z": "sf_data_handler",
-        "name": "store_data",
-        "func": "// SQL Insert Query \n\nmsg.query = `\n\nINSERT INTO ${msg.meta_table.name} (created_at, ${msg.tag_table.map(t => t.name).join(', ')}) VALUES ($1, ${msg.tag_table.map((t, i) => `$${i + 2}`).join(', ')})\n\n`;\n\nmsg.params = [msg.created_at, ...msg.tag_table.map(t => msg.payload[t.name])];\n\nmsg.topic = `insert_${msg.meta_table.name}`;\nreturn msg;",
+        "name": "database_insert",
+        "func": "// SQL Insert Query \n\nmsg.query = `\n\nINSERT INTO ${msg.meta_table.data_table} (created_at, endpoint, ${msg.tag_table.map(t => t.name).join(', ')}) VALUES ($1, $2, ${msg.tag_table.map((t, i) => `$${i + 3}`).join(', ')})\n\n`;\n\nmsg.params = [msg.created_at, msg.endpoint.id, ...msg.tag_table.map(t => msg.payload[t.name])];\n\nmsg.target = 'edge'\nmsg.topic = `insert_${msg.meta_table.name}`;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 140,
+        "x": 540,
+        "y": 180,
         "wires": [
             []
         ]
@@ -3258,8 +4185,8 @@
         "z": "sf_data_handler",
         "name": "",
         "scope": null,
-        "x": 220,
-        "y": 300,
+        "x": 300,
+        "y": 340,
         "wires": [
             [
                 "414e445a894e624d"
@@ -3277,7 +4204,8 @@
         "y": 80,
         "wires": [
             [
-                "1e02bad20c4678c8"
+                "1e02bad20c4678c8",
+                "7ec8f9fa6a551824"
             ]
         ]
     },
@@ -3293,11 +4221,45 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 300,
+        "x": 530,
+        "y": 340,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "0746e62dae658d4e",
+        "type": "debug",
+        "z": "sf_data_handler",
+        "name": "DH - Switch IN",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "7ec8f9fa6a551824",
+        "type": "debug",
+        "z": "sf_data_handler",
+        "name": "DH - Error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 80,
+        "wires": []
     },
     {
         "id": "ce7e8367bc04d90f",
@@ -3585,7 +4547,7 @@
         "initialize": "// Function node script to initialize global variables as column-based arrays\n\nconst tz = \"Europe/Rome\";\n\n// Data from the table\nconst protocol = [\n    \"S7\",\n    \"ModBus\",\n    \"OPC-UA\",\n    \"MQTT\",\n    \"HTTP\"\n];\nconst data_type = {\n    \"Bool\": \"BOOLEAN\",\n    \"Byte\": \"SMALLINT\",\n    \"Char\": \"CHAR(1)\",\n    \"Word\": \"SMALLINT\",\n    \"DWord\": \"INTEGER\",\n    \"LWord\": \"BIGINT\",\n    \"SInt\": \"SMALLINT\",\n    \"USInt\": \"SMALLINT\",\n    \"Int\": \"SMALLINT\",\n    \"UInt\": \"INTEGER\",\n    \"DInt\": \"INTEGER\",\n    \"UDInt\": \"BIGINT\",\n    \"LInt\": \"BIGINT\",\n    \"ULInt\": \"NUMERIC\",\n    \"Real\": \"REAL\",\n    \"LReal\": \"DOUBLE PRECISION\",\n    \"Time\": \"INTERVAL\",\n    \"Date\": \"DATE\",\n    \"TimeOfDay\": \"TIME\",\n    \"Date_And_Time\": \"TIMESTAMP\",\n    \"String\": \"VARCHAR(254)\",\n    \"WString\": \"TEXT\"\n};\nconst access = [\n    \"read\",\n    \"write\",\n    \"read/write\"\n];\nconst sampling_mode = [\n    \"static\",\n    \"continous\",\n    \"continous_on_change\",\n    \"trigger_custom\"\n];\nconst sampling_freq = [\n    \"none\",\n    \"500ms\",\n    \"1s\",\n    \"2s\",\n    \"5s\"\n];\nconst aggregations = [\n    \"none\",\n    \"1m\",\n    \"3m\",\n    \"5m\",\n    \"15m\",\n    \"30m\",\n    \"1h\",\n    \"12h\",\n    \"1g\",\n    \"1w\",\n    \"1M\",\n    [\"1m\", \"1h\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\", \"1M\"]\n];\nconst aggregation_type = [\n    \"none\",\n    \"sum\",\n    \"mean\"\n];\n\n\n// Initialize global variables\nglobal.set(\"tz\", tz);\nglobal.set(\"protocol\", protocol);\nglobal.set(\"data_type\", data_type);\nglobal.set(\"access\", access);\nglobal.set(\"sampling_mode\", sampling_mode);\nglobal.set(\"sampling_freq\", sampling_freq);\nglobal.set(\"aggregations\", aggregations);\nglobal.set(\"aggregation_type\", aggregation_type);\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Global variables initialized\" });",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 160,
         "y": 80,
         "wires": []
     },
@@ -3610,8 +4572,8 @@
         "once": false,
         "onceDelay": "10",
         "topic": "update",
-        "x": 170,
-        "y": 220,
+        "x": 210,
+        "y": 240,
         "wires": [
             [
                 "5bf67e2b2433103b"
@@ -3639,8 +4601,8 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "start",
-        "x": 170,
-        "y": 180,
+        "x": 210,
+        "y": 200,
         "wires": [
             [
                 "5bf67e2b2433103b"
@@ -3657,8 +4619,8 @@
         ],
         "linkType": "dynamic",
         "timeout": "30",
-        "x": 650,
-        "y": 200,
+        "x": 730,
+        "y": 240,
         "wires": [
             [
                 "5bf67e2b2433103b"
@@ -3677,8 +4639,8 @@
                 "type": "str"
             }
         ],
-        "x": 360,
-        "y": 200,
+        "x": 440,
+        "y": 240,
         "wires": [
             [
                 "ed1594514e826d82"
@@ -3698,8 +4660,8 @@
         ],
         "linkType": "dynamic",
         "timeout": "30",
-        "x": 650,
-        "y": 400,
+        "x": 730,
+        "y": 480,
         "wires": [
             [
                 "f6ae7a47c89c5b74"
@@ -3718,33 +4680,31 @@
                 "type": "str"
             }
         ],
-        "x": 360,
-        "y": 400,
+        "x": 440,
+        "y": 480,
         "wires": [
             [
                 "6720a64d617a6d73"
             ],
             [
-                "bc31f07c227e2c67"
+                "lo_endpoints"
             ]
         ]
     },
     {
-        "id": "bc31f07c227e2c67",
+        "id": "lo_endpoints",
         "type": "link out",
         "z": "tab_settings",
         "name": "to_tag_tables",
         "mode": "link",
         "links": [
-            "5c2f2a7b7550a646",
-            "71e17f3ed7587a1f",
-            "95870dcbab5450be",
-            "d2a3f9697fc2b0f7",
-            "d4eae2391238b4e1",
-            "d92e606b6b81db39"
+            "sf_tag_table_t17_in",
+            "sf_tag_table_t19_in",
+            "sf_tag_table_t3_in",
+            "sf_tag_table_t4_in"
         ],
         "x": 595,
-        "y": 480,
+        "y": 560,
         "wires": []
     },
     {
@@ -3757,33 +4717,13 @@
         ],
         "linkType": "dynamic",
         "timeout": "30",
-        "x": 650,
-        "y": 300,
+        "x": 730,
+        "y": 360,
         "wires": [
             [
                 "ae388e9bdc57b3c7"
             ]
         ]
-    },
-    {
-        "id": "e5fbfb78bbef766c",
-        "type": "comment",
-        "z": "tab_settings",
-        "name": "Main Configuration",
-        "info": "",
-        "x": 130,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "9d0afe0b64790f9a",
-        "type": "comment",
-        "z": "tab_settings",
-        "name": "Tag Tables",
-        "info": "",
-        "x": 100,
-        "y": 600,
-        "wires": []
     },
     {
         "id": "ae388e9bdc57b3c7",
@@ -3797,441 +4737,14 @@
                 "type": "str"
             }
         ],
-        "x": 390,
-        "y": 300,
+        "x": 470,
+        "y": 360,
         "wires": [
             [
                 "9740fa96b5bdecc7"
             ],
             [
                 "f6ae7a47c89c5b74"
-            ]
-        ]
-    },
-    {
-        "id": "c84d6af9a10c65cb",
-        "type": "subflow:sf_tag_table",
-        "z": "tab_settings",
-        "name": "tags_odr_s7",
-        "env": [
-            {
-                "name": "SCHEMA",
-                "value": "tags",
-                "type": "str"
-            },
-            {
-                "name": "TABLE",
-                "value": "tags_odr_s7",
-                "type": "str"
-            },
-            {
-                "name": "DATA_TABLE",
-                "value": "data_odr_s7",
-                "type": "str"
-            },
-            {
-                "name": "PROTOCOL",
-                "value": "S7",
-                "type": "str"
-            },
-            {
-                "name": "PROCESS_SCHEMA",
-                "value": "public",
-                "type": "str"
-            }
-        ],
-        "x": 350,
-        "y": 680,
-        "wires": [
-            [
-                "4381f22ec2468a1c"
-            ]
-        ]
-    },
-    {
-        "id": "d2a3f9697fc2b0f7",
-        "type": "link in",
-        "z": "tab_settings",
-        "name": "tags_odr_s7",
-        "links": [
-            "bc31f07c227e2c67"
-        ],
-        "x": 105,
-        "y": 680,
-        "wires": [
-            [
-                "c84d6af9a10c65cb"
-            ]
-        ]
-    },
-    {
-        "id": "4381f22ec2468a1c",
-        "type": "link call",
-        "z": "tab_settings",
-        "name": "to_database",
-        "links": [],
-        "linkType": "dynamic",
-        "timeout": "30",
-        "x": 640,
-        "y": 680,
-        "wires": [
-            [
-                "c84d6af9a10c65cb"
-            ]
-        ]
-    },
-    {
-        "id": "fd430bcddf4d3291",
-        "type": "subflow:sf_tag_table",
-        "z": "tab_settings",
-        "name": "tags_odr_opcua",
-        "env": [
-            {
-                "name": "SCHEMA",
-                "value": "tags",
-                "type": "str"
-            },
-            {
-                "name": "TABLE",
-                "value": "tags_odr_opcua",
-                "type": "str"
-            },
-            {
-                "name": "DATA_TABLE",
-                "value": "data_odr_opcua",
-                "type": "str"
-            },
-            {
-                "name": "PROCESS_SCHEMA",
-                "value": "public",
-                "type": "str"
-            }
-        ],
-        "x": 350,
-        "y": 780,
-        "wires": [
-            [
-                "919e5b302dfc72db"
-            ]
-        ]
-    },
-    {
-        "id": "71e17f3ed7587a1f",
-        "type": "link in",
-        "z": "tab_settings",
-        "name": "tags_odr_opcua",
-        "links": [
-            "bc31f07c227e2c67"
-        ],
-        "x": 105,
-        "y": 780,
-        "wires": [
-            [
-                "fd430bcddf4d3291"
-            ]
-        ]
-    },
-    {
-        "id": "919e5b302dfc72db",
-        "type": "link call",
-        "z": "tab_settings",
-        "name": "to_database",
-        "links": [],
-        "linkType": "dynamic",
-        "timeout": "30",
-        "x": 640,
-        "y": 780,
-        "wires": [
-            [
-                "fd430bcddf4d3291"
-            ]
-        ]
-    },
-    {
-        "id": "17793f9f0fdc3736",
-        "type": "subflow:sf_tag_table",
-        "z": "tab_settings",
-        "name": "tags_odr_modbus",
-        "env": [
-            {
-                "name": "SCHEMA",
-                "value": "tags",
-                "type": "str"
-            },
-            {
-                "name": "TABLE",
-                "value": "tags_odr_modbus",
-                "type": "str"
-            },
-            {
-                "name": "PROCESS_SCHEMA",
-                "value": "public",
-                "type": "str"
-            },
-            {
-                "name": "DATA_TABLE",
-                "value": "data_odr_modbus",
-                "type": "str"
-            },
-            {
-                "name": "PROTOCOL",
-                "value": "ModBus",
-                "type": "str"
-            }
-        ],
-        "x": 350,
-        "y": 880,
-        "wires": [
-            [
-                "d44a44cfa832ac52"
-            ]
-        ]
-    },
-    {
-        "id": "95870dcbab5450be",
-        "type": "link in",
-        "z": "tab_settings",
-        "name": "tags_odr_modbus",
-        "links": [
-            "bc31f07c227e2c67"
-        ],
-        "x": 105,
-        "y": 880,
-        "wires": [
-            [
-                "17793f9f0fdc3736"
-            ]
-        ]
-    },
-    {
-        "id": "d44a44cfa832ac52",
-        "type": "link call",
-        "z": "tab_settings",
-        "name": "to_database",
-        "links": [],
-        "linkType": "dynamic",
-        "timeout": "30",
-        "x": 640,
-        "y": 880,
-        "wires": [
-            [
-                "17793f9f0fdc3736"
-            ]
-        ]
-    },
-    {
-        "id": "2886a87bcdde89ff",
-        "type": "subflow:sf_tag_table",
-        "z": "tab_settings",
-        "name": "tags_live_s7",
-        "env": [
-            {
-                "name": "SCHEMA",
-                "value": "tags",
-                "type": "str"
-            },
-            {
-                "name": "TABLE",
-                "value": "tags_live_s7",
-                "type": "str"
-            },
-            {
-                "name": "DATA_TABLE",
-                "value": "data_live_s7",
-                "type": "str"
-            },
-            {
-                "name": "PROTOCOL",
-                "value": "S7",
-                "type": "str"
-            },
-            {
-                "name": "PROCESS_SCHEMA",
-                "value": "public",
-                "type": "str"
-            }
-        ],
-        "x": 350,
-        "y": 980,
-        "wires": [
-            [
-                "2c980e2246ecf932"
-            ]
-        ]
-    },
-    {
-        "id": "d92e606b6b81db39",
-        "type": "link in",
-        "z": "tab_settings",
-        "name": "tags_live_s7",
-        "links": [
-            "bc31f07c227e2c67"
-        ],
-        "x": 105,
-        "y": 980,
-        "wires": [
-            [
-                "2886a87bcdde89ff"
-            ]
-        ]
-    },
-    {
-        "id": "2c980e2246ecf932",
-        "type": "link call",
-        "z": "tab_settings",
-        "name": "to_database",
-        "links": [],
-        "linkType": "dynamic",
-        "timeout": "30",
-        "x": 640,
-        "y": 980,
-        "wires": [
-            [
-                "2886a87bcdde89ff"
-            ]
-        ]
-    },
-    {
-        "id": "729563b81308bac3",
-        "type": "subflow:sf_tag_table",
-        "z": "tab_settings",
-        "name": "tags_odr_reversy_s7",
-        "env": [
-            {
-                "name": "SCHEMA",
-                "value": "tags",
-                "type": "str"
-            },
-            {
-                "name": "TABLE",
-                "value": "tags_odr_reversy_s7",
-                "type": "str"
-            },
-            {
-                "name": "PROCESS_SCHEMA",
-                "value": "public",
-                "type": "str"
-            },
-            {
-                "name": "DATA_TABLE",
-                "value": "data_odr_reversy_s7",
-                "type": "str"
-            },
-            {
-                "name": "PROTOCOL",
-                "value": "S7",
-                "type": "str"
-            }
-        ],
-        "x": 350,
-        "y": 1080,
-        "wires": [
-            [
-                "85a5ff87b37e50f9"
-            ]
-        ]
-    },
-    {
-        "id": "d4eae2391238b4e1",
-        "type": "link in",
-        "z": "tab_settings",
-        "name": "tags_odr_reversy_s7",
-        "links": [
-            "bc31f07c227e2c67"
-        ],
-        "x": 105,
-        "y": 1080,
-        "wires": [
-            [
-                "729563b81308bac3"
-            ]
-        ]
-    },
-    {
-        "id": "85a5ff87b37e50f9",
-        "type": "link call",
-        "z": "tab_settings",
-        "name": "to_database",
-        "links": [],
-        "linkType": "dynamic",
-        "timeout": "30",
-        "x": 640,
-        "y": 1080,
-        "wires": [
-            [
-                "729563b81308bac3"
-            ]
-        ]
-    },
-    {
-        "id": "fa5878ce35a38891",
-        "type": "subflow:sf_tag_table",
-        "z": "tab_settings",
-        "name": "tags_odr_reversy_opcua",
-        "env": [
-            {
-                "name": "SCHEMA",
-                "value": "tags",
-                "type": "str"
-            },
-            {
-                "name": "TABLE",
-                "value": "tags_odr_reversy_opcua",
-                "type": "str"
-            },
-            {
-                "name": "PROCESS_SCHEMA",
-                "value": "public",
-                "type": "str"
-            },
-            {
-                "name": "DATA_TABLE",
-                "value": "data_odr_reversy_opcua",
-                "type": "str"
-            },
-            {
-                "name": "PROTOCOL",
-                "value": "OPCUA",
-                "type": "str"
-            }
-        ],
-        "x": 350,
-        "y": 1180,
-        "wires": [
-            [
-                "fc6869e6c194e606"
-            ]
-        ]
-    },
-    {
-        "id": "5c2f2a7b7550a646",
-        "type": "link in",
-        "z": "tab_settings",
-        "name": "tags_odr_reversy_opcua",
-        "links": [
-            "bc31f07c227e2c67"
-        ],
-        "x": 105,
-        "y": 1180,
-        "wires": [
-            [
-                "fa5878ce35a38891"
-            ]
-        ]
-    },
-    {
-        "id": "fc6869e6c194e606",
-        "type": "link call",
-        "z": "tab_settings",
-        "name": "to_database",
-        "links": [],
-        "linkType": "dynamic",
-        "timeout": "30",
-        "x": 640,
-        "y": 1180,
-        "wires": [
-            [
-                "fa5878ce35a38891"
             ]
         ]
     },
@@ -4257,10 +4770,10 @@
         "onceDelay": 0.1,
         "topic": "update",
         "x": 170,
-        "y": 480,
+        "y": 560,
         "wires": [
             [
-                "bc31f07c227e2c67"
+                "lo_endpoints"
             ]
         ]
     },
@@ -4270,7 +4783,7 @@
         "z": "tab_settings",
         "name": "",
         "scope": null,
-        "x": 660,
+        "x": 440,
         "y": 60,
         "wires": [
             [
@@ -4287,7 +4800,7 @@
         "links": [
             "liALL_status"
         ],
-        "x": 775,
+        "x": 565,
         "y": 60,
         "wires": []
     },
@@ -4298,7 +4811,7 @@
         "name": "",
         "scope": null,
         "uncaught": false,
-        "x": 660,
+        "x": 440,
         "y": 100,
         "wires": [
             [
@@ -4315,9 +4828,459 @@
         "links": [
             "liALL_errors"
         ],
-        "x": 775,
+        "x": 565,
         "y": 100,
         "wires": []
+    },
+    {
+        "id": "07d0449245179b7c",
+        "type": "ui-button",
+        "z": "tab_settings",
+        "group": "4290ffc4397af8c8",
+        "name": "btn_refresh_settings",
+        "label": "Refresh",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "refresh",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "date",
+        "topic": "update",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "5bf67e2b2433103b"
+            ]
+        ]
+    },
+    {
+        "id": "2e50c8e095cbc4fe",
+        "type": "ui-button",
+        "z": "tab_settings",
+        "group": "362ab153d16b0184",
+        "name": "btn_refresh_tags",
+        "label": "Refresh",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "refresh",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "date",
+        "topic": "update",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "5bf67e2b2433103b"
+            ]
+        ]
+    },
+    {
+        "id": "799b32fbff50d207",
+        "type": "inject",
+        "z": "tab_settings",
+        "name": "update",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "time",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "topic": "update",
+        "x": 210,
+        "y": 600,
+        "wires": [
+            [
+                "lo_endpoints"
+            ]
+        ]
+    },
+    {
+        "id": "nS_tag_tables",
+        "type": "status",
+        "z": "tab_tag_tables",
+        "name": "",
+        "scope": null,
+        "x": 120,
+        "y": 60,
+        "wires": [
+            [
+                "loS_tag_tables"
+            ]
+        ]
+    },
+    {
+        "id": "loS_tag_tables",
+        "type": "link out",
+        "z": "tab_tag_tables",
+        "name": "status_tag_tables",
+        "mode": "link",
+        "links": [
+            "liALL_status"
+        ],
+        "x": 235,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "nC_tag_tables",
+        "type": "catch",
+        "z": "tab_tag_tables",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 520,
+        "y": 60,
+        "wires": [
+            [
+                "loC_tag_tables"
+            ]
+        ]
+    },
+    {
+        "id": "loC_tag_tables",
+        "type": "link out",
+        "z": "tab_tag_tables",
+        "name": "error_tag_tables",
+        "mode": "link",
+        "links": [
+            "liALL_errors"
+        ],
+        "x": 635,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "sf_tag_table_t3",
+        "type": "subflow:sf_tag_table",
+        "z": "tab_tag_tables",
+        "name": "tags_odr_modbus",
+        "env": [
+            {
+                "name": "SCHEMA",
+                "value": "tags",
+                "type": "str"
+            },
+            {
+                "name": "TABLE",
+                "value": "tags_odr_modbus",
+                "type": "str"
+            },
+            {
+                "name": "DATA_SCHEMA",
+                "value": "public",
+                "type": "str"
+            },
+            {
+                "name": "DATA_TABLE",
+                "value": "data_odr_modbus",
+                "type": "str"
+            },
+            {
+                "name": "PROTOCOL",
+                "value": "ModBus",
+                "type": "str"
+            }
+        ],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "sf_tag_table_t3_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t3_in",
+        "type": "link in",
+        "z": "tab_tag_tables",
+        "name": "tags_odr_modbus",
+        "links": [
+            "lo_endpoints"
+        ],
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "sf_tag_table_t3"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t3_call",
+        "type": "link call",
+        "z": "tab_tag_tables",
+        "name": "to_database",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 700,
+        "y": 160,
+        "wires": [
+            [
+                "sf_tag_table_t3"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t4",
+        "type": "subflow:sf_tag_table",
+        "z": "tab_tag_tables",
+        "name": "tags_live_s7",
+        "env": [
+            {
+                "name": "SCHEMA",
+                "value": "tags",
+                "type": "str"
+            },
+            {
+                "name": "TABLE",
+                "value": "tags_live_s7",
+                "type": "str"
+            },
+            {
+                "name": "DATA_SCHEMA",
+                "value": "public",
+                "type": "str"
+            },
+            {
+                "name": "DATA_TABLE",
+                "value": "data_live_s7",
+                "type": "str"
+            },
+            {
+                "name": "PROTOCOL",
+                "value": "S7",
+                "type": "str"
+            }
+        ],
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "sf_tag_table_t4_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t4_in",
+        "type": "link in",
+        "z": "tab_tag_tables",
+        "name": "tags_live_s7",
+        "links": [
+            "lo_endpoints"
+        ],
+        "x": 180,
+        "y": 260,
+        "wires": [
+            [
+                "sf_tag_table_t4"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t4_call",
+        "type": "link call",
+        "z": "tab_tag_tables",
+        "name": "to_database",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 700,
+        "y": 260,
+        "wires": [
+            [
+                "sf_tag_table_t4"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t17",
+        "type": "subflow:sf_tag_table",
+        "z": "tab_tag_tables",
+        "name": "tags_odr_reversy_s7",
+        "env": [
+            {
+                "name": "SCHEMA",
+                "value": "tags",
+                "type": "str"
+            },
+            {
+                "name": "TABLE",
+                "value": "tags_odr_reversy_s7",
+                "type": "str"
+            },
+            {
+                "name": "DATA_SCHEMA",
+                "value": "public",
+                "type": "str"
+            },
+            {
+                "name": "DATA_TABLE",
+                "value": "data_odr_reversy_s7",
+                "type": "str"
+            },
+            {
+                "name": "PROTOCOL",
+                "value": "S7",
+                "type": "str"
+            }
+        ],
+        "x": 410,
+        "y": 360,
+        "wires": [
+            [
+                "sf_tag_table_t17_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t17_in",
+        "type": "link in",
+        "z": "tab_tag_tables",
+        "name": "tags_odr_reversy_s7",
+        "links": [
+            "lo_endpoints"
+        ],
+        "x": 180,
+        "y": 360,
+        "wires": [
+            [
+                "sf_tag_table_t17"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t17_call",
+        "type": "link call",
+        "z": "tab_tag_tables",
+        "name": "to_database",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 700,
+        "y": 360,
+        "wires": [
+            [
+                "sf_tag_table_t17"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t19",
+        "type": "subflow:sf_tag_table",
+        "z": "tab_tag_tables",
+        "name": "tags_odr_reversy_opcua",
+        "env": [
+            {
+                "name": "SCHEMA",
+                "value": "tags",
+                "type": "str"
+            },
+            {
+                "name": "TABLE",
+                "value": "tags_odr_reversy_opcua",
+                "type": "str"
+            },
+            {
+                "name": "DATA_SCHEMA",
+                "value": "public",
+                "type": "str"
+            },
+            {
+                "name": "DATA_TABLE",
+                "value": "data_odr_reversy_opcua",
+                "type": "str"
+            },
+            {
+                "name": "PROTOCOL",
+                "value": "OPCUA",
+                "type": "str"
+            }
+        ],
+        "x": 410,
+        "y": 460,
+        "wires": [
+            [
+                "sf_tag_table_t19_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t19_in",
+        "type": "link in",
+        "z": "tab_tag_tables",
+        "name": "tags_odr_reversy_opcua",
+        "links": [
+            "lo_endpoints"
+        ],
+        "x": 180,
+        "y": 460,
+        "wires": [
+            [
+                "sf_tag_table_t19"
+            ]
+        ]
+    },
+    {
+        "id": "sf_tag_table_t19_call",
+        "type": "link call",
+        "z": "tab_tag_tables",
+        "name": "to_database",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 700,
+        "y": 460,
+        "wires": [
+            [
+                "sf_tag_table_t19"
+            ]
+        ]
     },
     {
         "id": "21a0d91b198eb334",
@@ -4840,6 +5803,293 @@
         "x": 635,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "sf_data_handler_e20_t17",
+        "type": "subflow:sf_data_handler",
+        "z": "tab_connections",
+        "name": "tags_odr_reversy_s7@20",
+        "env": [
+            {
+                "name": "ENDPOINT_ID",
+                "value": "20",
+                "type": "num"
+            },
+            {
+                "name": "TAG_TABLE",
+                "value": "tags_odr_reversy_s7",
+                "type": "str"
+            }
+        ],
+        "x": 520,
+        "y": 250,
+        "wires": [
+            [
+                "sf_data_handler_e20_t17_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_data_handler_e20_t17_call",
+        "type": "link call",
+        "z": "tab_connections",
+        "name": "dynamic",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 820,
+        "y": 250,
+        "wires": [
+            [
+                "sf_data_handler_e20_t17"
+            ]
+        ]
+    },
+    {
+        "id": "sf_data_handler_e20_t17_in",
+        "type": "link in",
+        "z": "tab_connections",
+        "name": "sf_data_handler_e20_t17_in",
+        "links": [
+            "trigger_e20_t17_out"
+        ],
+        "x": 220,
+        "y": 250,
+        "wires": [
+            [
+                "sf_data_handler_e20_t17"
+            ]
+        ]
+    },
+    {
+        "id": "s7in_e20",
+        "type": "s7 in",
+        "z": "tab_connections",
+        "endpoint": "S7endpoint_e20",
+        "mode": "all",
+        "variable": "",
+        "diff": false,
+        "name": "",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "sf_data_handler_e20_t17"
+            ]
+        ]
+    },
+    {
+        "id": "s7control_e20_in",
+        "type": "link in",
+        "z": "tab_connections",
+        "name": "s7control_e20_in",
+        "links": [],
+        "x": 520,
+        "y": 200,
+        "wires": [
+            [
+                "s7control_e20"
+            ]
+        ]
+    },
+    {
+        "id": "s7control_e20",
+        "type": "s7 control",
+        "z": "tab_connections",
+        "endpoint": "S7endpoint_e20",
+        "function": "trigger",
+        "name": "",
+        "x": 770,
+        "y": 200,
+        "wires": [
+            [
+                "s7control_e20_out"
+            ]
+        ]
+    },
+    {
+        "id": "s7control_e20_out",
+        "type": "link out",
+        "z": "tab_connections",
+        "name": "s7control_e20_out",
+        "mode": "return",
+        "links": [],
+        "x": 1020,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "comment_e20",
+        "type": "comment",
+        "z": "tab_connections",
+        "name": "Endpoint 20: Reversy_S7_416",
+        "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
+        "x": 200,
+        "y": 150,
+        "wires": []
+    },
+    {
+        "id": "81cc571d658bc88e",
+        "type": "s7 in",
+        "z": "tab_triggers",
+        "endpoint": "",
+        "mode": "single",
+        "variable": "Triggerino",
+        "diff": true,
+        "name": "",
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "ba85142572ee4aa3",
+                "5ace1c6f7272369f"
+            ]
+        ]
+    },
+    {
+        "id": "ba85142572ee4aa3",
+        "type": "function",
+        "z": "tab_triggers",
+        "name": "trigger_logic",
+        "func": "let count = context.get('count') || 0;\nlet trigger = context.get('trigger') || false;\n\nif(msg.topic === \"Triggerino\" && (msg.payload === true || msg.payload === false)){  //Boolean Trigger\n    count += 1;\n    const localTime = new Date().toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n    node.status({ fill: \"green\", shape: \"ring\", text: `reading ok ${count} - at ${localTime}` });\n    context.set('count', count);\n    if (msg.payload !== trigger) {\n        node.status({ fill: \"green\", shape: \"ring\", text: `reading ok ${count} - value changed - at ${localTime}` });\n        context.set('trigger', msg.payload);\n        if (msg.payload) {\n            context.set('count', 0);\n            node.status({ fill: \"green\", shape: \"dot\", text: \"trigger sent\" });\n            return [{ topic: \"trigger\", payload: true, _msgid: msg._msgid }, null]\n        }\n    }\n} else {\n    node.status({fill:\"red\",shape:\"dot\",text:\"not_recognised\"});\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 160,
+        "wires": [
+            [
+                "53693af645fcd362",
+                "93a4ccf969cb6521"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "53693af645fcd362",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "ABC_2_PLC_trigger_out",
+        "mode": "link",
+        "links": [],
+        "x": 675,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "f553b1f241ae7c39",
+        "type": "comment",
+        "z": "tab_triggers",
+        "d": true,
+        "name": "Custom Trigger - S7",
+        "info": "1 - Read On Change only the trigger variable:\n    to do so a new endpoint s7 must be configured. \n    the reading cycle is always for all the configured variables.\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to write the trigger variable if needed \n    to ack the reading process ",
+        "x": 150,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "5ace1c6f7272369f",
+        "type": "debug",
+        "z": "tab_triggers",
+        "name": "debug 9",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "93a4ccf969cb6521",
+        "type": "debug",
+        "z": "tab_triggers",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "87f464ac6d1941b4",
+        "type": "status",
+        "z": "tab_triggers",
+        "name": "",
+        "scope": null,
+        "x": 960,
+        "y": 80,
+        "wires": [
+            [
+                "70375e0025c91081"
+            ]
+        ]
+    },
+    {
+        "id": "70375e0025c91081",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "status_triggers",
+        "mode": "link",
+        "links": [
+            "liALL_status"
+        ],
+        "x": 1075,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "trigger_e20_t17_out",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "trigger_e20_t17_out",
+        "mode": "link",
+        "links": [],
+        "x": 645,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "23190afb9f86f836",
+        "type": "inject",
+        "z": "tab_triggers",
+        "name": "Trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "trigger",
+        "payload": "",
+        "payloadType": "date",
+        "x": 520,
+        "y": 80,
+        "wires": [
+            [
+                "trigger_e20_t17_out"
+            ]
+        ]
     },
     {
         "id": "3ecc762e238ea08e",
@@ -5965,162 +7215,6 @@
         "wires": []
     },
     {
-        "id": "81cc571d658bc88e",
-        "type": "s7 in",
-        "z": "tab_triggers",
-        "endpoint": "",
-        "mode": "single",
-        "variable": "Triggerino",
-        "diff": true,
-        "name": "",
-        "x": 150,
-        "y": 160,
-        "wires": [
-            [
-                "ba85142572ee4aa3",
-                "5ace1c6f7272369f"
-            ]
-        ]
-    },
-    {
-        "id": "ba85142572ee4aa3",
-        "type": "function",
-        "z": "tab_triggers",
-        "name": "trigger_logic",
-        "func": "let count = context.get('count') || 0;\nlet trigger = context.get('trigger') || false;\n\nif(msg.topic === \"Triggerino\" && (msg.payload === true || msg.payload === false)){  //Boolean Trigger\n    count += 1;\n    const localTime = new Date().toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n    node.status({ fill: \"green\", shape: \"ring\", text: `reading ok ${count} - at ${localTime}` });\n    context.set('count', count);\n    if (msg.payload !== trigger) {\n        node.status({ fill: \"green\", shape: \"ring\", text: `reading ok ${count} - value changed - at ${localTime}` });\n        context.set('trigger', msg.payload);\n        if (msg.payload) {\n            context.set('count', 0);\n            node.status({ fill: \"green\", shape: \"dot\", text: \"trigger sent\" });\n            return [{ topic: \"trigger\", payload: true, _msgid: msg._msgid }, null]\n        }\n    }\n} else {\n    node.status({fill:\"red\",shape:\"dot\",text:\"not_recognised\"});\n}",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 160,
-        "wires": [
-            [
-                "53693af645fcd362",
-                "93a4ccf969cb6521"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "53693af645fcd362",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "ABC_2_PLC_trigger_out",
-        "mode": "link",
-        "links": [],
-        "x": 675,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "f553b1f241ae7c39",
-        "type": "comment",
-        "z": "tab_triggers",
-        "d": true,
-        "name": "Custom Trigger - S7",
-        "info": "1 - Read On Change only the trigger variable:\n    to do so a new endpoint s7 must be configured. \n    the reading cycle is always for all the configured variables.\n\n2 - Make a custom logic to handle the trigger event\n    OUT 1 - a message with topic 'trigger' \n    to the corresponding endpoint_data_handler (link out)\n    OUT 2 - a message to write the trigger variable if needed \n    to ack the reading process ",
-        "x": 150,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "5ace1c6f7272369f",
-        "type": "debug",
-        "z": "tab_triggers",
-        "name": "debug 9",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 440,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "93a4ccf969cb6521",
-        "type": "debug",
-        "z": "tab_triggers",
-        "name": "debug 10",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 720,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "87f464ac6d1941b4",
-        "type": "status",
-        "z": "tab_triggers",
-        "name": "",
-        "scope": null,
-        "x": 960,
-        "y": 80,
-        "wires": [
-            [
-                "70375e0025c91081"
-            ]
-        ]
-    },
-    {
-        "id": "70375e0025c91081",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "status_triggers",
-        "mode": "link",
-        "links": [
-            "liALL_status"
-        ],
-        "x": 1075,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "trigger_e18_t17_out",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "trigger_e18_t17_out",
-        "mode": "link",
-        "links": [],
-        "x": 685,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "trigger_e19_t17_out",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "trigger_e19_t17_out",
-        "mode": "link",
-        "links": [],
-        "x": 415,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "trigger_e12_t1_out",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "trigger_e12_t1_out",
-        "mode": "link",
-        "links": [],
-        "x": 505,
-        "y": 80,
-        "wires": []
-    },
-    {
         "id": "6a3b133f18ac42b5",
         "type": "s7 in",
         "z": "tab_triggers_demo",
@@ -7044,6 +8138,83 @@
         "wires": []
     },
     {
+        "id": "liALL_errors",
+        "type": "link in",
+        "z": "tab_errors",
+        "name": "error_global",
+        "links": [
+            "32defa6408e7fa1b"
+        ],
+        "x": 255,
+        "y": 160,
+        "wires": [
+            [
+                "74e123c8bfc3f837",
+                "af9f269af08f35f5"
+            ]
+        ]
+    },
+    {
+        "id": "74e123c8bfc3f837",
+        "type": "function",
+        "z": "tab_errors",
+        "name": "last_global_error",
+        "func": "if (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: msg.error.message });\n}\n",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "663563895fd26411",
+        "type": "status",
+        "z": "tab_errors",
+        "name": "",
+        "scope": null,
+        "x": 300,
+        "y": 240,
+        "wires": [
+            [
+                "4ffd59db47c35cad"
+            ]
+        ]
+    },
+    {
+        "id": "4ffd59db47c35cad",
+        "type": "link out",
+        "z": "tab_errors",
+        "name": "link out 8",
+        "mode": "link",
+        "links": [
+            "liALL_status"
+        ],
+        "x": 505,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "af9f269af08f35f5",
+        "type": "debug",
+        "z": "tab_errors",
+        "name": "ERROR",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 120,
+        "wires": []
+    },
+    {
         "id": "liALL_status",
         "type": "link in",
         "z": "tab_status",
@@ -7053,7 +8224,8 @@
             "b343a177e547c7ab",
             "d5b276223db7abb7",
             "d884dbabccd3725b",
-            "da6f72c390356126"
+            "da6f72c390356126",
+            "4ffd59db47c35cad"
         ],
         "x": 225,
         "y": 120,
@@ -7069,7 +8241,7 @@
         "z": "tab_status",
         "name": "status_track",
         "func": "// Monitor and classify the global status of the system\nlet bad_status = context.get(\"bad_status\") || 0;\nlet good_status = context.get(\"good_status\") || 0;\nlet warning_status = context.get(\"warning_status\") || 0;\nlet other_status = context.get(\"other_status\") || 0;\nlet unknown_status = context.get(\"unknown_status\") || 0;\nlet system_status = \"\";\n\nif (msg.status && msg.status.fill) {\n    switch (msg.status.fill) {\n        case \"red\":\n            bad_status++;\n            system_status = \"bad\";\n            break;\n        case \"green\":\n        case \"blue\":\n            good_status++;\n            system_status = \"good\";\n            break;\n        case \"yellow\":\n            warning_status++;\n            system_status = \"warning\";\n            break;\n        default:\n            other_status++;\n            system_status = \"other\";\n            break;\n    }\n\n    // Save updated values in context\n    context.set(\"bad_status\", bad_status);\n    context.set(\"good_status\", good_status);\n    context.set(\"warning_status\", warning_status);\n    context.set(\"other_status\", other_status);\n} else {\n    unknown_status++;\n    system_status = \"unknown\";\n    context.set(\"unknown_status\", unknown_status);\n}\n\n// Update Node-RED status\nnode.status({\n    fill: \"green\",\n    shape: \"ring\",\n    text: `Good: ${good_status} | Warning: ${warning_status} | Bad: ${bad_status} | Other: ${other_status} | Unknown: ${unknown_status}`\n});\n\nlet msg1 = { topic: system_status, payload: msg.status.text };\nreturn [msg, msg1];\n",
-        "outputs": 1,
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7080,7 +8252,8 @@
         "wires": [
             [
                 "4eace211b0539ebb"
-            ]
+            ],
+            []
         ]
     },
     {
@@ -7088,31 +8261,17 @@
         "type": "debug",
         "z": "tab_status",
         "name": "Status ",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
         "x": 570,
         "y": 120,
         "wires": []
-    },
-    {
-        "id": "liALL_errors",
-        "type": "link in",
-        "z": "tab_errors",
-        "name": "error_global",
-        "links": [
-            "32defa6408e7fa1b"
-        ],
-        "x": 265,
-        "y": 160,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "86482bdb10cb4bf0",
@@ -7489,21 +8648,21 @@
         "id": "df7fea999961d656",
         "type": "ui-template",
         "z": "tab_dashboard",
-        "group": "572ccdfe4fc75ef8",
+        "group": "28dd6f2de8ecc7e2",
         "page": "",
         "ui": "",
-        "name": "Quality check form",
+        "name": "Limestone Parameters",
         "order": 1,
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row>\n      <!-- First Row -->\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 1\" outlined></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 2\" outlined></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 3\" outlined></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Second Row -->\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 4\" outlined></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 5\" outlined></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 6\" outlined></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Third Row -->\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 7\" outlined></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 8\" outlined></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Field 9\" outlined></v-text-field>\n      </v-col>\n    </v-row>\n\n    <!-- Submit Button -->\n    <v-row justify=\"center\" class=\"mt-4\">\n      <v-btn color=\"blue-darken-3\" @click=\"submitForm\">Submit</v-btn>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  methods: {\n    submitForm() {\n      // Handle form submission\n      console.log('Form submitted!');\n    },\n  },\n};\n</script>\n\n<style scoped>\n/* Add custom styles here if needed */\n</style>\n",
+        "format": "<template>\n  <v-container>\n    <h1 class=\"mb-4\">Limestone Parameters</h1>\n    \n    <v-row>\n      <!-- First Row -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Date\"\n          outlined\n          v-model=\"formData.date\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Time\"\n          outlined\n          v-model=\"formData.hour\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Progressive Cycle Number\"\n          outlined\n          v-model=\"formData.cy\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Second Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Material Code\"\n          :items=\"materialCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.mtrCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Minimum Size (mm)\"\n          outlined\n          v-model=\"formData.minSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Size (mm)\"\n          outlined\n          v-model=\"formData.maxSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Third Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Cleaning Code\"\n          :items=\"cleaningCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.cleCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Dust Code\"\n          :items=\"dustCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.dustCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Humidity Code\"\n          :items=\"humidityCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.humCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n\n    <!-- Submit Button -->\n    <v-row justify=\"center\" class=\"mt-4\">\n      <v-btn\n        color=\"blue-darken-3\"\n        :disabled=\"!isFormValid\"\n        @click=\"submitForm\"\n      >\n        Submit\n      </v-btn>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        mtrCode: null,\n        minSize: null,\n        maxSize: null,\n        cleCode: null,\n        dustCode: null,\n        humCode: null,\n      },\n      materialCodes: [\n        { title: \"Limestone\", value: 2 },\n        { title: \"Dolostone\", value: 3 },\n      ],\n      cleaningCodes: [\n        { title: \"Cleaned\", value: 2 },\n        { title: \"Dirty\", value: 3 },\n      ],\n      dustCodes: [\n        { title: \"Dusty\", value: 2 },\n        { title: \"Not Dusty\", value: 3 },\n      ],\n      humidityCodes: [\n        { title: \"Wet\", value: 2 },\n        { title: \"Dry\", value: 3 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) =>\n          !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return (\n        this.$refs.form &&\n        this.$refs.form.validate()\n      );\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        console.log(\"Form submitted:\", this.formData);\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\nh3 {\n  margin-bottom: 20px;\n  font-weight: bold;\n}\n</style>\n",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 530,
+        "x": 540,
         "y": 460,
         "wires": [
             [
@@ -7594,7 +8753,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 950,
+        "x": 970,
         "y": 460,
         "wires": [
             [
@@ -7638,7 +8797,6 @@
         "id": "429861d4b85de762",
         "type": "inject",
         "z": "tab_dashboard",
-        "d": true,
         "name": "",
         "props": [
             {
@@ -7668,19 +8826,18 @@
         "id": "16068c89c0769746",
         "type": "ui-button",
         "z": "tab_dashboard",
-        "d": true,
         "group": "362ab153d16b0184",
         "name": "btn_sync_tags",
-        "label": "Sync",
-        "order": 1,
-        "width": 0,
-        "height": 0,
+        "label": "Full Sync",
+        "order": 2,
+        "width": "6",
+        "height": "1",
         "emulateClick": true,
         "tooltip": "",
         "color": "",
         "bgcolor": "",
         "className": "",
-        "icon": "",
+        "icon": "sync",
         "iconPosition": "left",
         "payload": "sync",
         "payloadType": "str",
@@ -7708,19 +8865,18 @@
         "id": "ad3cac1a4453265d",
         "type": "ui-button",
         "z": "tab_dashboard",
-        "d": true,
         "group": "4290ffc4397af8c8",
         "name": "btn_sync_settings",
-        "label": "Sync",
-        "order": 1,
-        "width": 0,
-        "height": 0,
+        "label": "Full Sync",
+        "order": 2,
+        "width": "6",
+        "height": "1",
         "emulateClick": true,
         "tooltip": "",
         "color": "",
         "bgcolor": "",
         "className": "",
-        "icon": "",
+        "icon": "sync",
         "iconPosition": "left",
         "payload": "sync",
         "payloadType": "str",
@@ -7748,7 +8904,6 @@
         "id": "25604b88d2a00a21",
         "type": "http request",
         "z": "tab_dashboard",
-        "d": true,
         "name": "GET current flows",
         "method": "GET",
         "ret": "obj",
@@ -7773,7 +8928,6 @@
         "id": "4527d6c13462e4a6",
         "type": "http request",
         "z": "tab_dashboard",
-        "d": true,
         "name": "POST current flows",
         "method": "POST",
         "ret": "obj",

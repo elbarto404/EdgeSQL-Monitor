@@ -74,7 +74,7 @@ for (const change of msg.dashboard.history) {
 // Prototype for calling the PostgreSQL function `create_views_by_label`
 // CALL create_views_by_label(tag_table TEXT, data_table TEXT, view_prefix TEXT);
 
-commands.push(`CALL create_views_by_label('${tagTable}', '${dataTable}', '${dataTableName}');`);
+// commands.push(`CALL create_views_by_label('${tagTable}', '${dataTable}', '${dataTableName}');`);
 msg.database.replace_all_procedures = false
 
 

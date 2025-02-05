@@ -6,6 +6,8 @@ switch (msg.endpoint.protocol) {
         if (!msg.isTrigger) {
             // check if is coherent with sample time      
         }
+        msg.data = JSON.parse(JSON.stringify(msg.payload));
+        break;
     }
     case 'Modbus': {
         if (!msg.isTrigger) {
@@ -45,18 +47,24 @@ switch (msg.endpoint.protocol) {
 
 const knownKeysSet = new Set(msg.tag_table.filter(t => t.enabled).map(t => t.name.toLowerCase()));
 const validKeysSet = new Set(
-    Object.keys(msg.payload).filter(key => knownKeysSet.has(key.toLowerCase()))
+    Object.keys(msg.data).filter(key => knownKeysSet.has(key.toLowerCase()))
 );
 
 msg.tag_table.forEach(tag => {
-    tag.status = validKeysSet.has(tag.name.toLowerCase()) ? "good" : "error";
+    tag[msg.endpoint.name] = validKeysSet.has(tag.name) ? "good" : "error";
 });
 
 msg.payload = Object.fromEntries(
-    Object.entries(msg.payload).filter(([key]) => validKeysSet.has(key.toLowerCase()))
+    Object.entries(msg.data).filter(([key]) => validKeysSet.has(key))
 );
 
 flow.set('timeLast', msg.created_at);
-global.set('tag_table', msg.tag_table);
+global.set(msg.meta_table.name, msg.tag_table);
+
+// msg.knownSet = knownKeysSet;
+msg.validSet = validKeysSet;
+msg.unvalidSet = new Set(
+    Object.keys(msg.data).filter(key => !knownKeysSet.has(key.toLowerCase()))
+);
 
 return msg;

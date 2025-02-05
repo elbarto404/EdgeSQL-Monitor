@@ -18,6 +18,7 @@ function escapeIdentifier(identifier) {
 }
 
 let commands = [];
+
 const table = escapeIdentifier(msg.database.table);
 const schema = escapeIdentifier(msg.database.schema);
 const tagsSchema = escapeIdentifier(msg.database.tagsSchema);
@@ -30,8 +31,8 @@ for (const change of msg.dashboard.history) {
 
     if (oldItem && !newItem) {
         commands.push(`DELETE FROM ${schema}.${table} WHERE name = ${escapeValue(oldItem.name)};`);
-        commands.push(`DROP TABLE IF EXISTS ${tagsSchema}.${oldName};`);
-        commands.push(`DROP TABLE IF EXISTS ${dataSchema}.${oldDataTable};`);
+        commands.push(`DROP TABLE IF EXISTS ${tagsSchema}.${oldName} CASCADE;`);
+        commands.push(`DROP TABLE IF EXISTS ${dataSchema}.${oldDataTable} CASCADE;`);
     } else if (!oldItem && newItem) {
         const keys = Object.keys(newItem).map(escapeIdentifier);
         const values = Object.values(newItem).map(escapeValue).join(', ');
@@ -41,6 +42,7 @@ for (const change of msg.dashboard.history) {
             .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`)
             .join(', ');
         commands.push(`UPDATE ${schema}.${table} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);
+
         if (oldItem.name !== newItem.name) {
             commands.push(`ALTER TABLE IF EXISTS ${tagsSchema}.${oldName} RENAME TO ${escapeIdentifier(newItem.name)};`);
         }
@@ -59,4 +61,5 @@ END $$;
 
 msg.target = msg.database.name;
 msg.topic = 'deploy_changes';
+
 return msg;

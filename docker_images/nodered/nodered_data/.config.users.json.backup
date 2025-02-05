@@ -18,12 +18,13 @@
             "dialog": {
                 "export": {
                     "pretty": true,
-                    "json-view": false
+                    "json-view": true
                 }
             }
         },
         "debug": {
-            "filter": "filterCurrent"
+            "filter": "filterCurrent",
+            "filteredNodes": []
         },
         "menu-menu-item-sidebar": true,
         "menu-deploymenu-item-node": false,

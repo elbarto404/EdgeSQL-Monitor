@@ -401,18 +401,14 @@ for (let edit of history) {
 const previousTabNodes = allNodes.filter(node => node.z === "tab_connections").sort((a, b) => a.id.localeCompare(b.id));
 const updatedTabNodes = updatedNodes.filter(node => node.z === "tab_connections").sort((a, b) => a.id.localeCompare(b.id));
 deployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);
-const deploycount = global.get("dpc_connections") + 1 || 1;
-global.set("dpc_connections", deploycount);
 
 if (deployNeeded) {
+    const deploycount = global.get("dpc_connections") + 1 || 1;
+    global.set("dpc_connections", deploycount);
     msg.payload = updatedNodes
-    /*
-    msg.payload = {
-        flows: updatedNodes,
-        deploy: "flows"
-    };
-    */
     node.status({ fill: "green", shape: "dot", text: `Deploy ${deploycount} sent` });
+    msg.log = msg.log || [];
+    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });
     return [msg, null];
 } else {
     return [null, msg];

@@ -10,10 +10,6 @@ let meta_table = global.get('tag_tables').filter(t => t.name === env.get('TAG_TA
 let isData = false;
 let isTrigger = false;
 
-if (msg.topic === `insert_${meta_table.name}`) {
-    return [null, null];
-}
-
 // In next versions checks must be made at tables level
 if (!endpoint || !endpoint.protocol) {
     node.error(`Invalid endpoint - ${env.get('ENDPOINT_ID')}`);
@@ -38,15 +34,33 @@ if (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {
 msg.endpoint = endpoint;
 msg.tag_table = tag_table;
 msg.meta_table = meta_table;
-msg.isTrigger = ['Trigger', 'Trigger Custom'].includes(meta_table.sampling_mode);
+msg.isTrigger = ['Trigger', 'Trigger Custom', 'trigger', 'trigger_custom'].includes(meta_table.sampling_mode);
 
+// Topic Switch (for trigger messages)
+if (msg.topic === 'trigger') {
+    return [null, msg];
+} else if (msg.topic === 'trigger_sent') {
+    return [null, null];
+} else if (msg.topic === `insert_${msg.meta_table.name}` && msg.params && msg.params.length > 0) {
+    const localTime = msg.params[0].toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
+    node.status({ fill: 'green', shape: 'dot', text: `Last Sample at ${localTime} - ${msg.params.length - 2} values` });
+    return [null, null];
+}
+
+// Protocol Switch (for other messages)
+let test1 = undefined;
+let test2 = undefined;
+let test3 = undefined;
+let test4 = undefined;
 switch (endpoint.protocol) {
     case 'S7': {
         const allowedKeys = ['topic', 'payload', '_msgid'];
         const msgKeys = Object.keys(msg);
-        isData = msgKeys.every(key => allowedKeys.includes(key)) &&
-            msgKeys.length === allowedKeys.length &&
-            Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));
+        test1 = msgKeys.every(key => allowedKeys.includes(key));
+        test2 = msgKeys.length === allowedKeys.length;
+        test3 = Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));
+        isData = test3;
+        break;
 
     }
     case 'Modbus': {
@@ -73,9 +87,7 @@ switch (endpoint.protocol) {
 
 if (isData) {
     return [msg, null];
-} else if (isTrigger) {
-    return [null, msg];
 } else {
-    node.error(`Invalid message format - ${endpoint.id}: ${endpoint.name} - ${env.get('TAG_TABLE')}`);
+    node.error(`Invalid message format - ${endpoint.id}: ${endpoint.name} - ${env.get('TAG_TABLE')} - tests ${test1} ${test2} ${test3} ${test4}`);
     return [null, null];
 }

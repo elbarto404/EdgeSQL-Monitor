@@ -1,0 +1,186 @@
+<template>
+  <v-container>
+    <h1 class="mb-4">Limestone Parameters</h1>
+    
+    <v-row>
+      <!-- First Row -->
+      <v-col cols="4">
+        <v-text-field
+          label="Cycle Date"
+          outlined
+          v-model="formData.date"
+          :rules="[rules.required]"
+          clearable
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          label="Cycle Time"
+          outlined
+          v-model="formData.hour"
+          :rules="[rules.required]"
+          clearable
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          label="Progressive Cycle Number"
+          outlined
+          v-model="formData.cy"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <!-- Second Row -->
+      <v-col cols="4">
+        <v-select
+          label="Material Code"
+          :items="materialCodes"
+          item-title="title"
+          item-value="value"
+          outlined
+          v-model="formData.mtrCode"
+          :rules="[rules.required]"
+          clearable
+        ></v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          label="Minimum Size (mm)"
+          outlined
+          v-model="formData.minSize"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          label="Maximum Size (mm)"
+          outlined
+          v-model="formData.maxSize"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <!-- Third Row -->
+      <v-col cols="4">
+        <v-select
+          label="Cleaning Code"
+          :items="cleaningCodes"
+          item-title="title"
+          item-value="value"
+          outlined
+          v-model="formData.cleCode"
+          :rules="[rules.required]"
+          clearable
+        ></v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select
+          label="Dust Code"
+          :items="dustCodes"
+          item-title="title"
+          item-value="value"
+          outlined
+          v-model="formData.dustCode"
+          :rules="[rules.required]"
+          clearable
+        ></v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select
+          label="Humidity Code"
+          :items="humidityCodes"
+          item-title="title"
+          item-value="value"
+          outlined
+          v-model="formData.humCode"
+          :rules="[rules.required]"
+          clearable
+        ></v-select>
+      </v-col>
+    </v-row>
+
+    <!-- Submit Button -->
+    <v-row justify="center" class="mt-4">
+      <v-btn
+        color="blue-darken-3"
+        :disabled="!isFormValid"
+        @click="submitForm"
+      >
+        Submit
+      </v-btn>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      formData: {
+        date: null,
+        hour: null,
+        cy: null,
+        mtrCode: null,
+        minSize: null,
+        maxSize: null,
+        cleCode: null,
+        dustCode: null,
+        humCode: null,
+      },
+      materialCodes: [
+        { title: "Limestone", value: 2 },
+        { title: "Dolostone", value: 3 },
+      ],
+      cleaningCodes: [
+        { title: "Cleaned", value: 2 },
+        { title: "Dirty", value: 3 },
+      ],
+      dustCodes: [
+        { title: "Dusty", value: 2 },
+        { title: "Not Dusty", value: 3 },
+      ],
+      humidityCodes: [
+        { title: "Wet", value: 2 },
+        { title: "Dry", value: 3 },
+      ],
+      rules: {
+        required: (value) => !!value || "This field is required",
+        numeric: (value) =>
+          !value || !isNaN(value) || "This field must be numeric",
+      },
+    };
+  },
+  computed: {
+    isFormValid() {
+      return (
+        this.$refs.form &&
+        this.$refs.form.validate()
+      );
+    },
+  },
+  methods: {
+    submitForm() {
+      if (this.isFormValid) {
+        console.log("Form submitted:", this.formData);
+      } else {
+        console.error("Form is invalid!");
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+h3 {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+</style>
