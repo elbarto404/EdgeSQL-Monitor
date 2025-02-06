@@ -23,7 +23,7 @@
             }
         },
         "debug": {
-            "filter": "filterCurrent",
+            "filter": "filterAll",
             "filteredNodes": []
         },
         "menu-menu-item-sidebar": true,
