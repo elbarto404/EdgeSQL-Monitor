@@ -41,8 +41,8 @@ for (const change of msg.dashboard.history) {
 
     if (oldItem && !newItem) {
         // Case: deletion
-        const oldName = escapeIdentifier(oldItem.name.toLowerCase());
-        commands.push(`DELETE FROM ${tagTable} WHERE name = ${escapeValue(oldItem.name.toLowerCase())};`);
+        const oldName = escapeIdentifier(oldItem.name);
+        commands.push(`DELETE FROM ${tagTable} WHERE name = ${escapeValue(oldItem.name)};`);
         commands.push(`ALTER TABLE IF EXISTS ${dataTable} DROP COLUMN IF EXISTS ${oldName};`);
 
     } else if (!oldItem && newItem) {
@@ -53,20 +53,20 @@ for (const change of msg.dashboard.history) {
             .join(', ');
         commands.push(`INSERT INTO ${tagTable} (${keys.join(', ')}) VALUES (${values});`);
         const data_type = data_type_dict[newItem.data_type] ? data_type_dict[newItem.data_type] : 'TEXT';
-        commands.push(`ALTER TABLE IF EXISTS ${dataTable} ADD COLUMN IF NOT EXISTS ${escapeIdentifier(newItem.name.toLowerCase())} ${data_type};`);
+        commands.push(`ALTER TABLE IF EXISTS ${dataTable} ADD COLUMN IF NOT EXISTS ${escapeIdentifier(newItem.name)} ${data_type};`);
 
     } else if (oldItem && newItem) {
         // Case: update
         const updates = Object.keys(newItem)
             .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`) // Escape values and identifiers
             .join(', ');
-        commands.push(`UPDATE ${tagTable} SET ${updates} WHERE name = ${escapeValue(oldItem.name.toLowerCase())};`);
-        if (oldItem.name.toLowerCase() !== newItem.name.toLowerCase()) {
-            commands.push(`ALTER TABLE IF EXISTS ${dataTable} RENAME COLUMN ${escapeIdentifier(oldItem.name.toLowerCase())} TO ${escapeIdentifier(newItem.name.toLowerCase())};`);
+        commands.push(`UPDATE ${tagTable} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);
+        if (oldItem.name !== newItem.name) {
+            commands.push(`ALTER TABLE IF EXISTS ${dataTable} RENAME COLUMN ${escapeIdentifier(oldItem.name)} TO ${escapeIdentifier(newItem.name)};`);
         }
         if (oldItem.data_type !== newItem.data_type) {
             const data_type = data_type_dict[newItem.data_type] ? data_type_dict[newItem.data_type] : 'TEXT';
-            commands.push(`ALTER TABLE IF EXISTS ${dataTable} ALTER COLUMN ${escapeIdentifier(newItem.name.toLowerCase())} TYPE ${data_type};`);
+            commands.push(`ALTER TABLE IF EXISTS ${dataTable} ALTER COLUMN ${escapeIdentifier(newItem.name)} TYPE ${data_type};`);
         }
     }
 }

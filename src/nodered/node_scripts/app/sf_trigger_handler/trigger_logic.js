@@ -3,6 +3,19 @@ let trigger = context.get('trigger');
 let lastVal = context.get('lastVal');
 let nowVal = undefined;
 
+if (msg.topic === 'trigger') {
+    const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
+    node.status({ fill: "green", shape: "dot", text: `${trigger.name} - Tiggered at ${localTime}` });
+    return { 
+        topic: 'trigger',
+        time: localTime,
+        trigger: trigger,
+        payload: 'manual_trigger',
+        _msgid: msg._msgid 
+    };
+}
+
+
 switch (endpoint.protocol) {
     case "S7":
         nowVal = msg.payload[trigger.name];

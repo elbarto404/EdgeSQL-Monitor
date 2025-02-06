@@ -1,6 +1,10 @@
 // ___________________Insert Prototypes________________________
-function updateS7tags(endpoint) {
-    const S7endpointId = `S7endpoint_e${endpoint.id}`;
+function updateS7tags(endpoint, meta_table) {
+    let suffix = '';
+    if (['continous', 'continous_on_change'].includes(meta_table.sampling_mode)) {
+        suffix = `_${meta_table.sampling_freq}`;
+    }
+    const S7endpointId = `S7endpoint_e${endpoint.id}${suffix}`;
     const S7endpointNode = updatedNodes.find(node => node.id === S7endpointId);
     if (!S7endpointNode) {
         logs.push(`S7 endpoint NOT FOUND`);
@@ -8,9 +12,14 @@ function updateS7tags(endpoint) {
     }
     logs.push(`S7 endpoint found`);
     const vartable = tags.map(tag => ({ addr: tag.address, name: tag.name }));
-    if (JSON.stringify(vartable) !== JSON.stringify(S7endpointNode.vartable)) {
+    const completeVartable = Array.from(
+        new Map(
+          [...JSON.parse(JSON.stringify(S7endpointNode.vartable)), ...vartable].map(item => [JSON.stringify(item), item])
+        ).values()
+      );      
+    if (JSON.stringify(completeVartable) !== JSON.stringify(S7endpointNode.vartable)) {
         logs.push(`Vartable updated`);
-        S7endpointNode.vartable = vartable;
+        S7endpointNode.vartable = completeVartable;
         deployNeeded = true;
     } else {
         logs.push(`Vartable not updated (no changes)`);
@@ -22,6 +31,7 @@ function updateS7tags(endpoint) {
 
 const tags = msg.data;  // Array of all tags
 const table = msg.database.table;  // Table name
+const meta_table = global.get('tag_tables').find(t => t.name === table);  // Table metadata
 const allNodes = msg.payload;   // Current nodes
 const endpoints = global.get('endpoints');
 
@@ -44,7 +54,7 @@ for (let endpoint of endpoints) {
     switch (endpoint.protocol) {
         case "S7": {
             logs.push(`Updating S7 tags`);
-            updateS7tags(endpoint);
+            updateS7tags(endpoint, meta_table);
         }
         default:
             logs.push(`Protocol not supported`);

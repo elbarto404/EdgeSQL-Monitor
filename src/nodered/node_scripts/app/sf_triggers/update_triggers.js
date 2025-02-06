@@ -49,9 +49,9 @@ function parseEndpointAddress(endpoint) {
 
     return {
         address,
-        port: Number(port),
-        rack: Number(rack),
-        slot: Number(slot)
+        port: String(port),
+        rack: String(rack),
+        slot: String(slot)
     };
 }
 
@@ -207,7 +207,7 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
                 "env": [
                     {
                         "name": "TRIGGER_ID",
-                        "value": trigger.id,
+                        "value": String(trigger.id),
                         "type": "num"
                     },
                     {
@@ -253,6 +253,7 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
                 "type": "link out",
                 "z": "tab_triggers",
                 "name": linkOutId,
+                "mode": "link",
                 "links": [
                     linkDataHandlerId
                 ],

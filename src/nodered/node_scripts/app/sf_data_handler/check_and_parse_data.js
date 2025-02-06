@@ -1,10 +1,14 @@
-const timeLast = flow.get('timeLast') || new Date();
 msg.created_at = new Date();
+const timeLast = flow.get('timeLast') || msg.created_at - msg.period;
+const min_interval = msg.period * 0.95;
 
 switch (msg.endpoint.protocol) {
     case 'S7': {
         if (!msg.isTrigger) {
-            // check if is coherent with sample time      
+            if (msg.created_at - timeLast < min_interval) {
+                msg.status = { fill: 'blue', shape: 'ring', text: 'Data received but not sent - min interval not passed' };
+                return null;
+            }    
         }
         msg.data = JSON.parse(JSON.stringify(msg.payload));
         break;

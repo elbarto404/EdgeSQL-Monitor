@@ -1,3 +1,28 @@
+// Helper function to convert time strings to milliseconds
+function timeToMilliseconds(timeStr) {
+    if (timeStr === undefined || timeStr === null || timeStr === '' || timeStr.toLowerCase() === 'none') {
+        return 0;
+    }
+    // Extract the numeric part and the unit part
+    const num = parseFloat(timeStr);
+    const unit = timeStr.replace(num, '').trim();
+
+    // Convert based on the unit
+    switch(unit) {
+        case 'ms':
+            return num; // Already in milliseconds
+        case 's':
+            return num * 1000; // Convert seconds to milliseconds
+        case 'm':
+            return num * 1000 * 60; // Convert minutes to milliseconds
+        case 'h':
+            return num * 1000 * 60 * 60; // Convert hours to milliseconds
+        case 'd':
+            return num * 1000 * 60 * 60 * 24; // Convert days to milliseconds
+        default:
+            node.error(`Invalid time unit - ${timeStr} - ${num} - ${unit}`);
+    }
+}
 
 if (msg.error) {
     node.status({ fill: 'red', shape: 'ring', text: msg.error.message });
@@ -31,6 +56,7 @@ if (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {
     return [null, null];
 }
 
+msg.period = timeToMilliseconds(meta_table.sampling_freq);
 msg.endpoint = endpoint;
 msg.tag_table = tag_table;
 msg.meta_table = meta_table;
@@ -54,14 +80,13 @@ let test3 = undefined;
 let test4 = undefined;
 switch (endpoint.protocol) {
     case 'S7': {
-        const allowedKeys = ['topic', 'payload', '_msgid'];
-        const msgKeys = Object.keys(msg);
-        test1 = msgKeys.every(key => allowedKeys.includes(key));
-        test2 = msgKeys.length === allowedKeys.length;
+        // const allowedKeys = ['topic', 'payload', '_msgid'];
+        // const msgKeys = Object.keys(msg);
+        // test1 = msgKeys.every(key => allowedKeys.includes(key));
+        // test2 = msgKeys.length === allowedKeys.length;
         test3 = Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));
         isData = test3;
         break;
-
     }
     case 'Modbus': {
         node.status({ fill: 'yellow', shape: 'ring', text: 'Modbus protocol not implemented yet' });
