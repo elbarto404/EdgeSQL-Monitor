@@ -109,7 +109,7 @@ function generateStaticNodes() {
             "name": "error_triggers",
             "mode": "link",
             "links": [
-                "liALL_trigrrors"
+                "liALL_errors"
             ],
             "x": 635,
             "y": 60,
@@ -203,7 +203,7 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
                 "id": sf_trigger_handlerId,
                 "type": "subflow:sf_trigger_handler",
                 "z": "tab_triggers",
-                "name": `${table.name} - trig${trigger.id}`,
+                "name": `trig${trigger.id} - ${table.name}`,
                 "env": [
                     {
                         "name": "TRIGGER_ID",
@@ -258,7 +258,7 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
                 ],
                 "x": 850,
                 "y": dY,
-                "wires": [[]]
+                "wires": []
             }
         ]);
         dY += 100;
