@@ -1,0 +1,170 @@
+<template>
+  <v-container>
+    <v-row class="align-self-center">
+      <v-col cols="8">
+        <h2 class="ma4">Others</h2>
+      </v-col>
+      <v-col cols="4" class="text-right">
+        <!-- Save and Reset Buttons (Visible in Edit Mode) -->
+        <div v-if="isEditMode">
+          <v-btn
+            color="primary"
+            @click="resetForm"
+            class="mx-1"
+          >
+            Reset
+          </v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!isFormValid"
+            @click="submitForm"
+            class="mx-1"
+          >
+            Save Step
+          </v-btn>
+        </div>
+
+        <!-- Edit Button (Visible when not in Edit Mode) -->
+        <v-btn
+          v-else
+          color="primary"
+          @click="enableEditMode"
+        >
+          Edit
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <!-- Form Fields -->
+      <v-col cols="4">
+        <v-text-field
+          label="Density (g/ml)"
+          outlined
+          v-model="formData.density"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          label="Maximum Humidity (%)"
+          outlined
+          v-model="formData.maxHumidity"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field
+          label="Mechanical Degradation (%)"
+          outlined
+          v-model="formData.mechanicalDegradation"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="4">
+        <v-text-field
+          label="Stress Index (g)"
+          outlined
+          v-model="formData.stressIndex"
+          :rules="[rules.required, rules.numeric]"
+          clearable
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-select
+          label="Shape Code"
+          :items="shapeCodes"
+          item-title="title"
+          item-value="value"
+          outlined
+          v-model="formData.shapeCode"
+          :rules="[rules.required]"
+          clearable
+        ></v-select>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isEditMode: true, // Start in edit mode
+      formData: {
+        density: null,
+        maxHumidity: null,
+        mechanicalDegradation: null,
+        stressIndex: null,
+        shapeCode: null,
+      },
+      shapeCodes: [
+        { title: "Equal", value: 2 },
+        { title: "Stretched to stick", value: 3 },
+        { title: "Stretched flat to stick", value: 4 },
+        { title: "Irregular", value: 5 },
+        { title: "Flat", value: 6 },
+        { title: "Uniform", value: 7 },
+      ],
+      rules: {
+        required: (value) => !!value || "This field is required",
+        numeric: (value) => !value || !isNaN(value) || "This field must be numeric",
+      },
+    };
+  },
+  computed: {
+    isFormValid() {
+      return Object.values(this.formData).every((value) => value !== null);
+    },
+  },
+  watch: {
+    msg: {
+      handler(newValue) {
+        if (newValue.reset && newValue.reset === true) {
+          this.resetForm(); // Reset the form when reset is true
+        }
+      },
+      deep: true, // Watch for nested changes
+    },
+  },
+  methods: {
+    submitForm() {
+      if (this.isFormValid) {
+        // Send the form data using Node-RED's send method
+        this.send({
+          topic: "limestone_others",
+          payload: this.formData,
+        });
+        this.isEditMode = false; // Disable edit mode
+      } else {
+        console.error("Form is invalid!");
+      }
+    },
+    enableEditMode() {
+      this.isEditMode = true; // Enable edit mode
+    },
+    resetForm() {
+      // Reset each field in formData to its default value
+      Object.keys(this.formData).forEach((key) => {
+        this.formData[key] = null;
+      });
+      this.isEditMode = true;
+      console.log("Form reset to default values.");
+    },
+  },
+};
+</script>
+
+<style scoped>
+h2 {
+  margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 20px;
+}
+</style>

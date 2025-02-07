@@ -37,22 +37,30 @@ let isTrigger = false;
 
 // In next versions checks must be made at tables level
 if (!endpoint || !endpoint.protocol) {
-    node.error(`Invalid endpoint - ${env.get('ENDPOINT_ID')}`);
+    const text = `Invalid endpoint - ${env.get('ENDPOINT_ID')}: ${!endpoint}, ${!endpoint.protocol}`
+    node.error(text);
+    node.status({ fill: 'red', shape: 'dot', text: text });
     return [null, null];
 }
 
 if (!meta_table || !meta_table.sampling_mode || !meta_table.sampling_freq || !meta_table.protocol) {
-    node.error(`Missing tag_table configuration - ${env.get('TAG_TABLE')}`);
+    const text = `Missing tag_table configuration - ${env.get('TAG_TABLE')}: ${!meta_table}, ${!meta_table.sampling_mode}, ${!meta_table.sampling_freq}, ${!meta_table.protocol}`;
+    node.error(text);
+    node.status({ fill: 'red', shape: 'dot', text: text });
     return [null, null];
 }
 
 if (meta_table.protocol !== endpoint.protocol) {
-    node.error(`Different protocols - ${env.get('TAG_TABLE')}: ${meta_table.protocol} - ${endpoint.protocol}`);
+    const text = `Different protocols - ${env.get('TAG_TABLE')}: ${meta_table.protocol} / ${endpoint.protocol}`;
+    node.error(text);
+    node.status({ fill: 'red', shape: 'dot', text: text });
     return [null, null];
 }
 
 if (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {
-    node.error(`Invalid tag table - ${env.get('TAG_TABLE')}`);
+    const text = `Invalid tag table - ${env.get('TAG_TABLE')}: ${!tag_table}, ${!Array.isArray(tag_table)}, ${tag_table.length}`;
+    node.error(text);
+    node.status({ fill: 'red', shape: 'dot', text: text });
     return [null, null];
 }
 

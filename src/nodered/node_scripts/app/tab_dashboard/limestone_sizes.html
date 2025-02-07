@@ -1,0 +1,148 @@
+<template>
+  <v-container>
+    <v-row class="align-self-center">
+      <v-col cols="8">
+        <h2 class="ma4">Sizes</h2>
+      </v-col>
+      <v-col cols="4" class="text-right">
+        <!-- Save and Reset Buttons (Visible in Edit Mode) -->
+        <div v-if="isEditMode">
+          <v-btn
+            color="primary"
+            @click="resetForm"
+            class="mx-1"
+          >
+            Reset
+          </v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!isFormValid"
+            @click="submitForm"
+            class="mx-1"
+          >
+            Save Step
+          </v-btn>
+        </div>
+
+        <!-- Edit Button (Visible when not in Edit Mode) -->
+        <v-btn
+          v-else
+          color="primary"
+          @click="enableEditMode"
+        >
+          Edit
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <!-- Generate a text field for each size range -->
+      <v-col cols="4" v-for="(size, index) in sizeVariables" :key="index">
+        <v-text-field
+          :label="size.label"
+          outlined
+          v-model="formData[size.key]"
+          :rules="[rules.required, rules.numeric]"
+          :disabled="!isEditMode"
+          clearable
+        ></v-text-field>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isEditMode: true, // Start in edit mode
+      sizeVariables: [
+        { key: "size1020", label: "Size percentage between 10 to 20 mm" },
+        { key: "size2030", label: "Size percentage between 20 to 30 mm" },
+        { key: "size3040", label: "Size percentage between 30 to 40 mm" },
+        { key: "size4050", label: "Size percentage between 40 to 50 mm" },
+        { key: "size5060", label: "Size percentage between 50 to 60 mm" },
+        { key: "size6070", label: "Size percentage between 60 to 70 mm" },
+        { key: "size7080", label: "Size percentage between 70 to 80 mm" },
+        { key: "size8090", label: "Size percentage between 80 to 90 mm" },
+        { key: "size90100", label: "Size percentage between 90 to 100 mm" },
+        { key: "size100110", label: "Size percentage between 100 to 110 mm" },
+        { key: "size110120", label: "Size percentage between 110 to 120 mm" },
+        { key: "size120130", label: "Size percentage between 120 to 130 mm" },
+        { key: "size130140", label: "Size percentage between 130 to 140 mm" },
+        { key: "size140150", label: "Size percentage between 140 to 150 mm" },
+        { key: "size150160", label: "Size percentage between 150 to 160 mm" },
+      ],
+      formData: {
+        size1020: null,
+        size2030: null,
+        size3040: null,
+        size4050: null,
+        size5060: null,
+        size6070: null,
+        size7080: null,
+        size8090: null,
+        size90100: null,
+        size100110: null,
+        size110120: null,
+        size120130: null,
+        size130140: null,
+        size140150: null,
+        size150160: null,
+      },
+      rules: {
+        required: (value) => !!value || "This field is required",
+        numeric: (value) => !value || !isNaN(value) || "This field must be numeric",
+      },
+    };
+  },
+  computed: {
+    isFormValid() {
+      return Object.values(this.formData).every((value) => value !== null);
+    },
+  },
+  watch: {
+    msg: {
+      handler(newValue) {
+        if (newValue.reset && newValue.reset === true) {
+          this.resetForm(); // Reset the form when reset is true
+        }
+      },
+      deep: true, // Watch for nested changes
+    },
+  },
+  methods: {
+    submitForm() {
+      if (this.isFormValid) {
+        // Send the form data using Node-RED's send method
+        this.send({
+          topic: "limestone_sizes",
+          payload: this.formData,
+        });
+        this.isEditMode = false; // Disable edit mode
+      } else {
+        console.error("Form is invalid!");
+      }
+    },
+    enableEditMode() {
+      this.isEditMode = true; // Enable edit mode
+    },
+    resetForm() {
+      // Reset each field in formData to its default value
+      Object.keys(this.formData).forEach((key) => {
+        this.formData[key] = null;
+      });
+      this.isEditMode = true;
+      console.log("Form reset to default values.");
+    },
+  },
+};
+</script>
+
+<style scoped>
+h2 {
+  margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 20px;
+}
+</style>

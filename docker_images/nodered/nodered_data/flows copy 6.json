@@ -1500,8 +1500,8 @@
         ],
         "order": 7,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "169cdd00f95ae9ec",
@@ -3660,97 +3660,6 @@
                 "name": "Triggerino"
             }
         ]
-    },
-    {
-        "id": "5ed4dbcacc17084e",
-        "type": "ui-group",
-        "name": "QuickLime Parameters",
-        "page": "37b363877270d9e5",
-        "width": "12",
-        "height": "1",
-        "order": 2,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
-        "id": "ea87129a7cf91f25",
-        "type": "ui-spacer",
-        "group": "28dd6f2de8ecc7e2",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 6,
-        "width": "4",
-        "height": "1",
-        "className": ""
-    },
-    {
-        "id": "8c6fa927005b03bb",
-        "type": "ui-link",
-        "name": "Link 9",
-        "ui": "d7cef5fd92f5328c",
-        "path": "/",
-        "icon": "home",
-        "order": 15,
-        "visible": "true",
-        "disabled": "false"
-    },
-    {
-        "id": "c660e2c1739b9434",
-        "type": "ui-spacer",
-        "group": "28dd6f2de8ecc7e2",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 5,
-        "width": "12",
-        "height": "1",
-        "className": ""
-    },
-    {
-        "id": "fbbd3fe510ead1e8",
-        "type": "ui-spacer",
-        "group": "28dd6f2de8ecc7e2",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 8,
-        "width": "12",
-        "height": "2",
-        "className": ""
-    },
-    {
-        "id": "9fce4a565b284984",
-        "type": "ui-spacer",
-        "group": "5ed4dbcacc17084e",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 7,
-        "width": "12",
-        "height": "1",
-        "className": ""
-    },
-    {
-        "id": "528ee4a0eb0ffd07",
-        "type": "ui-spacer",
-        "group": "5ed4dbcacc17084e",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 8,
-        "width": "4",
-        "height": "1",
-        "className": ""
-    },
-    {
-        "id": "b23b50c820f3fc9d",
-        "type": "ui-spacer",
-        "group": "5ed4dbcacc17084e",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 10,
-        "width": "12",
-        "height": "2",
-        "className": ""
     },
     {
         "id": "cf35598e75a95852",
@@ -10767,14 +10676,14 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<template>\n  <v-container>  \n    \n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Generalities</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- First Row -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Date\"\n          outlined\n          v-model=\"formData.date\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Time\"\n          outlined\n          v-model=\"formData.hour\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Progressive Cycle Number\"\n          outlined\n          v-model=\"formData.cy\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Second Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Material Code\"\n          :items=\"materialCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.mtrCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Minimum Size (mm)\"\n          outlined\n          v-model=\"formData.minSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Size (mm)\"\n          outlined\n          v-model=\"formData.maxSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Third Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Cleaning Code\"\n          :items=\"cleaningCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.cleCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Dust Code\"\n          :items=\"dustCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.dustCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Humidity Code\"\n          :items=\"humidityCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.humCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        mtrCode: null,\n        minSize: null,\n        maxSize: null,\n        cleCode: null,\n        dustCode: null,\n        humCode: null,\n      },\n      materialCodes: [\n        { title: \"Limestone\", value: 2 },\n        { title: \"Dolostone\", value: 3 },\n      ],\n      cleaningCodes: [\n        { title: \"Cleaned\", value: 2 },\n        { title: \"Dirty\", value: 3 },\n      ],\n      dustCodes: [\n        { title: \"Dusty\", value: 2 },\n        { title: \"Not Dusty\", value: 3 },\n      ],\n      humidityCodes: [\n        { title: \"Wet\", value: 2 },\n        { title: \"Dry\", value: 3 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) =>\n          !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_generalities\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "format": "<template>\n  <v-container>  \n    \n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Generalities</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- First Row -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Date\"\n          outlined\n          v-model=\"formData.date\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Time\"\n          outlined\n          v-model=\"formData.hour\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Progressive Cycle Number\"\n          outlined\n          v-model=\"formData.cy\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Second Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Material Code\"\n          :items=\"materialCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.mtrCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Minimum Size (mm)\"\n          outlined\n          v-model=\"formData.minSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Size (mm)\"\n          outlined\n          v-model=\"formData.maxSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Third Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Cleaning Code\"\n          :items=\"cleaningCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.cleCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Dust Code\"\n          :items=\"dustCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.dustCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Humidity Code\"\n          :items=\"humidityCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.humCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        mtrCode: null,\n        minSize: null,\n        maxSize: null,\n        cleCode: null,\n        dustCode: null,\n        humCode: null,\n      },\n      materialCodes: [\n        { title: \"Limestone\", value: 2 },\n        { title: \"Dolostone\", value: 3 },\n      ],\n      cleaningCodes: [\n        { title: \"Cleaned\", value: 2 },\n        { title: \"Dirty\", value: 3 },\n      ],\n      dustCodes: [\n        { title: \"Dusty\", value: 2 },\n        { title: \"Not Dusty\", value: 3 },\n      ],\n      humidityCodes: [\n        { title: \"Wet\", value: 2 },\n        { title: \"Dry\", value: 3 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) =>\n          !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_generalities\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 480,
-        "y": 800,
+        "x": 500,
+        "y": 460,
         "wires": [
             [
                 "ef06b9c6e7768aad"
@@ -10799,8 +10708,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 150,
-        "y": 440,
+        "x": 390,
+        "y": 700,
         "wires": [
             [
                 "51624227a4bca217"
@@ -10846,11 +10755,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
-        "y": 740,
+        "x": 770,
+        "y": 460,
         "wires": [
             [
-                "ed9b0f26028e52bf"
+                "d13622e19192a346"
             ]
         ]
     },
@@ -10864,11 +10773,11 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1010,
-        "y": 740,
+        "x": 970,
+        "y": 460,
         "wires": [
             [
-                "e80b28274ef1e3d1"
+                "df7fea999961d656"
             ]
         ]
     },
@@ -10879,8 +10788,8 @@
         "name": "",
         "ui": "d7cef5fd92f5328c",
         "events": "all",
-        "x": 320,
-        "y": 440,
+        "x": 560,
+        "y": 700,
         "wires": [
             [
                 "05319443a47b3e33"
@@ -10900,8 +10809,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
-        "y": 440,
+        "x": 730,
+        "y": 700,
         "wires": []
     },
     {
@@ -10926,7 +10835,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 520,
+        "y": 820,
         "wires": [
             [
                 "25604b88d2a00a21"
@@ -10965,7 +10874,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 200,
-        "y": 600,
+        "y": 900,
         "wires": [
             [
                 "25604b88d2a00a21"
@@ -11004,7 +10913,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 190,
-        "y": 560,
+        "y": 860,
         "wires": [
             [
                 "25604b88d2a00a21"
@@ -11028,7 +10937,7 @@
         "senderr": false,
         "headers": [],
         "x": 450,
-        "y": 560,
+        "y": 860,
         "wires": [
             [
                 "4527d6c13462e4a6"
@@ -11059,13 +10968,13 @@
             }
         ],
         "x": 690,
-        "y": 560,
+        "y": 860,
         "wires": [
             []
         ]
     },
     {
-        "id": "78d48342228cce47",
+        "id": "c096a1dbc950785a",
         "type": "ui-template",
         "z": "tab_dashboard",
         "group": "28dd6f2de8ecc7e2",
@@ -11076,22 +10985,20 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Sizes</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Generate a text field for each size range -->\n      <v-col cols=\"4\" v-for=\"(size, index) in sizeVariables\" :key=\"index\">\n        <v-text-field\n          :label=\"size.label\"\n          outlined\n          v-model=\"formData[size.key]\"\n          :rules=\"[rules.required, rules.numeric]\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      sizeVariables: [\n        { key: \"size1020\", label: \"Size percentage between 10 to 20 mm\" },\n        { key: \"size2030\", label: \"Size percentage between 20 to 30 mm\" },\n        { key: \"size3040\", label: \"Size percentage between 30 to 40 mm\" },\n        { key: \"size4050\", label: \"Size percentage between 40 to 50 mm\" },\n        { key: \"size5060\", label: \"Size percentage between 50 to 60 mm\" },\n        { key: \"size6070\", label: \"Size percentage between 60 to 70 mm\" },\n        { key: \"size7080\", label: \"Size percentage between 70 to 80 mm\" },\n        { key: \"size8090\", label: \"Size percentage between 80 to 90 mm\" },\n        { key: \"size90100\", label: \"Size percentage between 90 to 100 mm\" },\n        { key: \"size100110\", label: \"Size percentage between 100 to 110 mm\" },\n        { key: \"size110120\", label: \"Size percentage between 110 to 120 mm\" },\n        { key: \"size120130\", label: \"Size percentage between 120 to 130 mm\" },\n        { key: \"size130140\", label: \"Size percentage between 130 to 140 mm\" },\n        { key: \"size140150\", label: \"Size percentage between 140 to 150 mm\" },\n        { key: \"size150160\", label: \"Size percentage between 150 to 160 mm\" },\n      ],\n      formData: {\n        size1020: null,\n        size2030: null,\n        size3040: null,\n        size4050: null,\n        size5060: null,\n        size6070: null,\n        size7080: null,\n        size8090: null,\n        size90100: null,\n        size100110: null,\n        size110120: null,\n        size120130: null,\n        size130140: null,\n        size140150: null,\n        size150160: null,\n      },\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_sizes\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Sizes</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Generate a text field for each size range -->\n      <v-col cols=\"4\" v-for=\"(size, index) in sizeVariables\" :key=\"index\">\n        <v-text-field\n          :label=\"size.label\"\n          outlined\n          v-model=\"formData[size.key]\"\n          :rules=\"[rules.required, rules.numeric]\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      sizeVariables: [\n        { key: \"size1020\", label: \"Size percentage between 10 to 20 mm\" },\n        { key: \"size2030\", label: \"Size percentage between 20 to 30 mm\" },\n        { key: \"size3040\", label: \"Size percentage between 30 to 40 mm\" },\n        { key: \"size4050\", label: \"Size percentage between 40 to 50 mm\" },\n        { key: \"size5060\", label: \"Size percentage between 50 to 60 mm\" },\n        { key: \"size6070\", label: \"Size percentage between 60 to 70 mm\" },\n        { key: \"size7080\", label: \"Size percentage between 70 to 80 mm\" },\n        { key: \"size8090\", label: \"Size percentage between 80 to 90 mm\" },\n        { key: \"size90100\", label: \"Size percentage between 90 to 100 mm\" },\n        { key: \"size100110\", label: \"Size percentage between 100 to 110 mm\" },\n        { key: \"size110120\", label: \"Size percentage between 110 to 120 mm\" },\n        { key: \"size120130\", label: \"Size percentage between 120 to 130 mm\" },\n        { key: \"size130140\", label: \"Size percentage between 130 to 140 mm\" },\n        { key: \"size140150\", label: \"Size percentage between 140 to 150 mm\" },\n        { key: \"size150160\", label: \"Size percentage between 150 to 160 mm\" },\n      ],\n      formData: {\n        size1020: null,\n        size2030: null,\n        size3040: null,\n        size4050: null,\n        size5060: null,\n        size6070: null,\n        size7080: null,\n        size8090: null,\n        size90100: null,\n        size100110: null,\n        size110120: null,\n        size120130: null,\n        size130140: null,\n        size140150: null,\n        size150160: null,\n      },\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_sizes\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 460,
-        "y": 860,
+        "x": 480,
+        "y": 540,
         "wires": [
-            [
-                "ef06b9c6e7768aad"
-            ]
+            []
         ]
     },
     {
-        "id": "aff98e68532cccb1",
+        "id": "dbd3d627e92bdb38",
         "type": "ui-template",
         "z": "tab_dashboard",
         "group": "28dd6f2de8ecc7e2",
@@ -11102,456 +11009,16 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Chemicals</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col\n        cols=\"4\"\n        v-for=\"(field, index) in formFields\"\n        :key=\"index\"\n      >\n        <v-text-field\n          :label=\"field.label\"\n          outlined\n          v-model=\"formData[field.key]\"\n          :rules=\"field.rules\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n\n<script>\nexport default {\n  data() {\n    const rules = {\n      required: (value) => !!value || \"This field is required\",\n      numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\"\n    };\n\n    return {\n      isEditMode: true,\n      rules,\n      formFields: [\n        { key: \"lol\", label: \"Loss of Ignition (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"siO2\", label: \"Silicon Dioxide (SiO2) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"al2O3\", label: \"Aluminum Oxide (Al2O3) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"fe2O3\", label: \"Iron Oxide (Fe2O3) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"k2O\", label: \"Potassium Oxide (K2O) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"caO\", label: \"Calcium Oxide (CaO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"mgO\", label: \"Magnesium Oxide (MgO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"so3\", label: \"Sulfur Oxide (SO3) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"srO\", label: \"Strontium Oxide (SrO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"cuO\", label: \"Copper Oxide (CuO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"na2O\", label: \"Sodium Oxide (Na2O) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"tiO2\", label: \"Titanium Oxide (TiO2) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"other\", label: \"Other (%)\", rules: [rules.required, rules.numeric] }\n      ],\n      formData: {\n        lol: null, siO2: null, al2O3: null, fe2O3: null, k2O: null, caO: null,\n        mgO: null, so3: null, srO: null, cuO: null, na2O: null, tiO2: null, other: null\n      }\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every(value => value !== null);\n    }\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({ topic: \"limestone_chemicals\", payload: this.formData });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  }\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Chemicals</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"4\" v-for=\"(field, index) in formFields\" :key=\"index\" v-if=\"field.key !== 'shapeCode'\">\n        <v-text-field\n          :label=\"field.label\"\n          outlined\n          v-model=\"formData[field.key]\"\n          :rules=\"field.rules\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\" v-if=\"formFields.find(field => field.key === 'shapeCode')\">\n        <v-select\n          label=\"Shape Code\"\n          :items=\"shapeCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.shapeCode\"\n          :rules=\"rules.required\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      formFields: [\n        { key: \"lol\", label: \"Loss of Ignition (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"siO2\", label: \"Silicon Dioxide (SiO2) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"al2O3\", label: \"Aluminum Oxide (Al2O3) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"fe2O3\", label: \"Iron Oxide (Fe2O3) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"k2O\", label: \"Potassium Oxide (K2O) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"caO\", label: \"Calcium Oxide (CaO) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"mgO\", label: \"Magnesium Oxide (MgO) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"so3\", label: \"Sulfur Oxide (SO3) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"srO\", label: \"Strontium Oxide (SrO) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"cuO\", label: \"Copper Oxide (CuO) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"na2O\", label: \"Sodium Oxide (Na2O) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"tiO2\", label: \"Titanium Oxide (TiO2) (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"other\", label: \"Other (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"density\", label: \"Density (g/ml)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"maxHum\", label: \"Maximum Humidity (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"mecDegr\", label: \"Mechanical Degradation (%)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"tm31\", label: \"Stress Index (g)\", rules: [this.rules.required, this.rules.numeric] },\n        { key: \"shapeCode\", label: \"Shape Code (#)\", rules: [this.rules.required, this.rules.numeric] },\n      ],\n      formData: {\n        lol: null,\n        siO2: null,\n        al2O3: null,\n        fe2O3: null,\n        k2O: null,\n        caO: null,\n        mgO: null,\n        so3: null,\n        srO: null,\n        cuO: null,\n        na2O: null,\n        tiO2: null,\n        other: null,\n        density: null,\n        maxHum: null,\n        mecDegr: null,\n        tm31: null,\n        shapeCode: null,\n      },\n      shapeCodes: [\n        { title: \"Equal\", value: 2 },\n        { title: \"Stretched to stick\", value: 3 },\n        { title: \"Stretched flat to stick\", value: 4 },\n        { title: \"Irregular\", value: 5 },\n        { title: \"Flat\", value: 6 },\n        { title: \"Uniform\", value: 7 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"limestone_chemicals\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 480,
-        "y": 920,
+        "x": 500,
+        "y": 600,
         "wires": [
-            [
-                "ef06b9c6e7768aad"
-            ]
-        ]
-    },
-    {
-        "id": "1da1d9e573f0d0e4",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "28dd6f2de8ecc7e2",
-        "page": "",
-        "ui": "",
-        "name": "limestone_others",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Others</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Form Fields -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Density (g/ml)\"\n          outlined\n          v-model=\"formData.density\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Humidity (%)\"\n          outlined\n          v-model=\"formData.maxHumidity\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Mechanical Degradation (%)\"\n          outlined\n          v-model=\"formData.mechanicalDegradation\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Stress Index (g)\"\n          outlined\n          v-model=\"formData.stressIndex\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Shape Code\"\n          :items=\"shapeCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.shapeCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      formData: {\n        density: null,\n        maxHumidity: null,\n        mechanicalDegradation: null,\n        stressIndex: null,\n        shapeCode: null,\n      },\n      shapeCodes: [\n        { title: \"Equal\", value: 2 },\n        { title: \"Stretched to stick\", value: 3 },\n        { title: \"Stretched flat to stick\", value: 4 },\n        { title: \"Irregular\", value: 5 },\n        { title: \"Flat\", value: 6 },\n        { title: \"Uniform\", value: 7 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_others\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 470,
-        "y": 980,
-        "wires": [
-            [
-                "ef06b9c6e7768aad"
-            ]
-        ]
-    },
-    {
-        "id": "e80b28274ef1e3d1",
-        "type": "function",
-        "z": "tab_dashboard",
-        "name": "sync_data",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 170,
-        "y": 740,
-        "wires": [
-            [
-                "df7fea999961d656",
-                "78d48342228cce47",
-                "aff98e68532cccb1",
-                "1da1d9e573f0d0e4"
-            ]
-        ]
-    },
-    {
-        "id": "ed9b0f26028e52bf",
-        "type": "debug",
-        "z": "tab_dashboard",
-        "name": "debug 9",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1020,
-        "y": 840,
-        "wires": []
-    },
-    {
-        "id": "ec6c435b5bcfed0a",
-        "type": "inject",
-        "z": "tab_dashboard",
-        "name": "reset",
-        "props": [
-            {
-                "p": "reset",
-                "v": "true",
-                "vt": "bool"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 170,
-        "y": 880,
-        "wires": [
-            [
-                "df7fea999961d656",
-                "78d48342228cce47",
-                "aff98e68532cccb1",
-                "1da1d9e573f0d0e4"
-            ]
-        ]
-    },
-    {
-        "id": "a941c996c806de49",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "page": "",
-        "ui": "",
-        "name": "quicklime_generalities",
-        "order": 1,
-        "width": "12",
-        "height": "1",
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Generalities</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Cycle Date\" outlined v-model=\"formData.date\" :rules=\"[rules.required]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Cycle Time\" outlined v-model=\"formData.hour\" :rules=\"[rules.required]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Progressive Cycle Number\" outlined v-model=\"formData.cy\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-select label=\"Shaft 1 Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.s1AspectCode\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 Small Unburned\" outlined v-model=\"formData.s1SmallUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 Medium Unburned\" outlined v-model=\"formData.s1MedUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 Big Unburned\" outlined v-model=\"formData.s1BigUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.s1CO2Res\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.s1LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.s1CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.s1MechDeg\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.s1T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.s1T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.s1T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.s1T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-select label=\"Shaft 2 Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.s2AspectCode\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 Small Unburned\" outlined v-model=\"formData.s2SmallUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 Medium Unburned\" outlined v-model=\"formData.s2MedUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 Big Unburned\" outlined v-model=\"formData.s2BigUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.s2CO2Res\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.s2LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.s2CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.s2MechDeg\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.s2T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.s2T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.s2T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.s2T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        s1AspectCode: null,\n        s1SmallUn: null,\n        s1MedUn: null,\n        s1BigUn: null,\n        s2AspectCode: null,\n        s2SmallUn: null,\n        s2MedUn: null,\n        s2BigUn: null,\n\n        s1CO2Res: null,\n        s1LOI: null,\n        s1CO2A: null,\n        s1MechDeg: null,\n        s1T40M: null,\n        s1T40S: null,\n        s1T60M: null,\n        s1T60S: null,\n\n        s2CO2Res: null,\n        s2LOI: null,\n        s2CO2A: null,\n        s2MechDeg: null,\n        s2T40M: null,\n        s2T40S: null,\n        s2T60M: null,\n        s2T60S: null,\n\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_generalities\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 480,
-        "y": 1120,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
-        ]
-    },
-    {
-        "id": "2b6a3ced08cb0304",
-        "type": "ui-button",
-        "z": "tab_dashboard",
-        "group": "28dd6f2de8ecc7e2",
-        "name": "Submit Limestone Data",
-        "label": "Submit Limestone Data",
-        "order": 7,
-        "width": "4",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "center",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 490,
-        "y": 740,
-        "wires": [
-            [
-                "ef06b9c6e7768aad"
-            ]
-        ]
-    },
-    {
-        "id": "097ef16127dab363",
-        "type": "function",
-        "z": "tab_dashboard",
-        "name": "sync_data",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 170,
-        "y": 1060,
-        "wires": [
-            [
-                "a941c996c806de49",
-                "10a42839ae9e6777",
-                "7a63fe5ccc03ed6c",
-                "9a13d9b9f89bc3b3",
-                "384a0ab596654094",
-                "624ad965dedd866d"
-            ]
-        ]
-    },
-    {
-        "id": "a3cc70e53e13a7cf",
-        "type": "ui-button",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "name": "Submit QuickLime Data",
-        "label": "Submit Quicklime Data",
-        "order": 9,
-        "width": "4",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "center",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 490,
-        "y": 1060,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
-        ]
-    },
-    {
-        "id": "da620ff3a434d7f0",
-        "type": "function",
-        "z": "tab_dashboard",
-        "name": "store_query",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 790,
-        "y": 1060,
-        "wires": [
-            [
-                "6b4f70b236b447a5"
-            ]
-        ]
-    },
-    {
-        "id": "45378049064ed26a",
-        "type": "link call",
-        "z": "tab_dashboard",
-        "name": "",
-        "links": [
-            "b2366c0b7a520910"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 1010,
-        "y": 1060,
-        "wires": [
-            [
-                "097ef16127dab363"
-            ]
-        ]
-    },
-    {
-        "id": "6b4f70b236b447a5",
-        "type": "debug",
-        "z": "tab_dashboard",
-        "name": "debug 10",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1020,
-        "y": 1160,
-        "wires": []
-    },
-    {
-        "id": "76fe66e64ae83372",
-        "type": "inject",
-        "z": "tab_dashboard",
-        "name": "reset",
-        "props": [
-            {
-                "p": "reset",
-                "v": "true",
-                "vt": "bool"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 170,
-        "y": 1260,
-        "wires": [
-            [
-                "a941c996c806de49",
-                "10a42839ae9e6777",
-                "7a63fe5ccc03ed6c",
-                "9a13d9b9f89bc3b3",
-                "384a0ab596654094",
-                "624ad965dedd866d"
-            ]
-        ]
-    },
-    {
-        "id": "10a42839ae9e6777",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "page": "",
-        "ui": "",
-        "name": "quicklime_pipe1",
-        "order": 2,
-        "width": "12",
-        "height": "1",
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Pipe - Side 1</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1PIP1ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1PIP1CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1PIP1T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1PIP1T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1PIP1T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1PIP1T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1PIP1LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1PIP1CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1PIP1MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2PIP1ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2PIP1CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2PIP1T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2PIP1T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2PIP1T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2PIP1T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2PIP1LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2PIP1CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2PIP1MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1PIP1ASPCODE: null,\n        S1PIP1CO2RES: null,\n        S1PIP1T40M: null,\n        S1PIP1T40S: null,\n        S1PIP1T60M: null,\n        S1PIP1T60S: null,\n        S1PIP1LOI: null,\n        S1PIP1CO2A: null,\n        S1PIP1MECDEG: null,\n\n        S2PIP1ASPCODE: null,\n        S2PIP1CO2RES: null,\n        S2PIP1T40M: null,\n        S2PIP1T40S: null,\n        S2PIP1T60M: null,\n        S2PIP1T60S: null,\n        S2PIP1LOI: null,\n        S2PIP1CO2A: null,\n        S2PIP1MECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_pipe_side1\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 460,
-        "y": 1180,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
-        ]
-    },
-    {
-        "id": "7a63fe5ccc03ed6c",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "page": "",
-        "ui": "",
-        "name": "quicklime_pipe2",
-        "order": 3,
-        "width": "12",
-        "height": "1",
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Pipe - Side 2</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1PIP2ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1PIP2CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1PIP2T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1PIP2T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1PIP2T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1PIP2T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1PIP2LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1PIP2CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1PIP2MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2PIP2ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2PIP2CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2PIP2T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2PIP2T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2PIP2T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2PIP2T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2PIP2LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2PIP2CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2PIP2MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1PIP2ASPCODE: null,\n        S1PIP2CO2RES: null,\n        S1PIP2T40M: null,\n        S1PIP2T40S: null,\n        S1PIP2T60M: null,\n        S1PIP2T60S: null,\n        S1PIP2LOI: null,\n        S1PIP2CO2A: null,\n        S1PIP2MECDEG: null,\n\n        S2PIP2ASPCODE: null,\n        S2PIP2CO2RES: null,\n        S2PIP2T40M: null,\n        S2PIP2T40S: null,\n        S2PIP2T60M: null,\n        S2PIP2T60S: null,\n        S2PIP2LOI: null,\n        S2PIP2CO2A: null,\n        S2PIP2MECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_pipe_side2\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 460,
-        "y": 1240,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
-        ]
-    },
-    {
-        "id": "9a13d9b9f89bc3b3",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "page": "",
-        "ui": "",
-        "name": "quicklime_skip",
-        "order": 4,
-        "width": "12",
-        "height": "1",
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Skip</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1SKIASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1SKICO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1SKIT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1SKIT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1SKIT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1SKIT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1SKILOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1SKICO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1SKIMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2SKIASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2SKICO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2SKIT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2SKIT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2SKIT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2SKIT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2SKILOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2SKICO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2SKIMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1SKIASPCODE: null,\n        S1SKICO2RES: null,\n        S1SKIT40M: null,\n        S1SKIT40S: null,\n        S1SKIT60M: null,\n        S1SKIT60S: null,\n        S1SKILOI: null,\n        S1SKICO2A: null,\n        S1SKIMECDEG: null,\n\n        S2SKIASPCODE: null,\n        S2SKICO2RES: null,\n        S2SKIT40M: null,\n        S2SKIT40S: null,\n        S2SKIT60M: null,\n        S2SKIT60S: null,\n        S2SKILOI: null,\n        S2SKICO2A: null,\n        S2SKIMECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_skip\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 460,
-        "y": 1300,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
-        ]
-    },
-    {
-        "id": "384a0ab596654094",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "page": "",
-        "ui": "",
-        "name": "quicklime_internal",
-        "order": 5,
-        "width": "12",
-        "height": "1",
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Internal</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1INTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1INTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1INTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1INTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1INTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1INTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1INTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1INTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1INTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2INTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2INTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2INTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2INTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2INTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2INTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2INTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2INTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2INTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1INTASPCODE: null,\n        S1INTCO2RES: null,\n        S1INTT40M: null,\n        S1INTT40S: null,\n        S1INTT60M: null,\n        S1INTT60S: null,\n        S1INTLOI: null,\n        S1INTCO2A: null,\n        S1INTMECDEG: null,\n        \n        S2INTASPCODE: null,\n        S2INTCO2RES: null,\n        S2INTT40M: null,\n        S2INTT40S: null,\n        S2INTT60M: null,\n        S2INTT60S: null,\n        S2INTLOI: null,\n        S2INTCO2A: null,\n        S2INTMECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_internal\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 470,
-        "y": 1360,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
-        ]
-    },
-    {
-        "id": "624ad965dedd866d",
-        "type": "ui-template",
-        "z": "tab_dashboard",
-        "group": "5ed4dbcacc17084e",
-        "page": "",
-        "ui": "",
-        "name": "quicklime_external",
-        "order": 6,
-        "width": "12",
-        "height": "1",
-        "head": "",
-        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">External</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1EXTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1EXTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1EXTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1EXTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1EXTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1EXTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1EXTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1EXTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1EXTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2EXTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2EXTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2EXTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2EXTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2EXTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2EXTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2EXTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2EXTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2EXTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1EXTASPCODE: null,\n        S1EXTCO2RES: null,\n        S1EXTT40M: null,\n        S1EXTT40S: null,\n        S1EXTT60M: null,\n        S1EXTT60S: null,\n        S1EXTLOI: null,\n        S1EXTCO2A: null,\n        S1EXTMECDEG: null,\n        \n        S2EXTASPCODE: null,\n        S2EXTCO2RES: null,\n        S2EXTT40M: null,\n        S2EXTT40S: null,\n        S2EXTT60M: null,\n        S2EXTT60S: null,\n        S2EXTLOI: null,\n        S2EXTCO2A: null,\n        S2EXTMECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_external\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 470,
-        "y": 1420,
-        "wires": [
-            [
-                "da620ff3a434d7f0"
-            ]
+            []
         ]
     },
     {

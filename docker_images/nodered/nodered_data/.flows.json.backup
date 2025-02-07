@@ -1500,8 +1500,8 @@
         ],
         "order": 7,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "169cdd00f95ae9ec",
@@ -1802,7 +1802,7 @@
         ],
         "showPathInSidebar": false,
         "showPageTitle": true,
-        "navigationStyle": "icon",
+        "navigationStyle": "fixed",
         "titleBarStyle": "fixed",
         "showReconnectNotification": true,
         "notificationDisplayTime": "1",
@@ -1884,7 +1884,7 @@
         "width": "12",
         "height": "1",
         "order": 1,
-        "showTitle": false,
+        "showTitle": true,
         "className": "",
         "visible": "true",
         "disabled": "false",
@@ -3641,9 +3641,9 @@
         "type": "s7 endpoint",
         "transport": "iso-on-tcp",
         "address": "192.168.1.48",
-        "port": 102,
-        "rack": 0,
-        "slot": 3,
+        "port": "102",
+        "rack": "0",
+        "slot": "3",
         "localtsaphi": "01",
         "localtsaplo": "00",
         "remotetsaphi": "01",
@@ -3660,6 +3660,97 @@
                 "name": "Triggerino"
             }
         ]
+    },
+    {
+        "id": "5ed4dbcacc17084e",
+        "type": "ui-group",
+        "name": "QuickLime Parameters",
+        "page": "37b363877270d9e5",
+        "width": "12",
+        "height": "1",
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "ea87129a7cf91f25",
+        "type": "ui-spacer",
+        "group": "28dd6f2de8ecc7e2",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 6,
+        "width": "4",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "8c6fa927005b03bb",
+        "type": "ui-link",
+        "name": "Link 9",
+        "ui": "d7cef5fd92f5328c",
+        "path": "/",
+        "icon": "home",
+        "order": 15,
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "c660e2c1739b9434",
+        "type": "ui-spacer",
+        "group": "28dd6f2de8ecc7e2",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 5,
+        "width": "12",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "fbbd3fe510ead1e8",
+        "type": "ui-spacer",
+        "group": "28dd6f2de8ecc7e2",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 8,
+        "width": "12",
+        "height": "2",
+        "className": ""
+    },
+    {
+        "id": "9fce4a565b284984",
+        "type": "ui-spacer",
+        "group": "5ed4dbcacc17084e",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 7,
+        "width": "12",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "528ee4a0eb0ffd07",
+        "type": "ui-spacer",
+        "group": "5ed4dbcacc17084e",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 8,
+        "width": "4",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "b23b50c820f3fc9d",
+        "type": "ui-spacer",
+        "group": "5ed4dbcacc17084e",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 10,
+        "width": "12",
+        "height": "2",
+        "className": ""
     },
     {
         "id": "cf35598e75a95852",
@@ -4744,7 +4835,7 @@
         "type": "function",
         "z": "sf_triggers",
         "name": "update_triggers",
-        "func": "// This code rewrite the configuration of all connection tabs in Node-RED:\n\n// ________________________Heplpers___________________________\n\n// Helper function to generate unique IDs\nfunction generateId(existingIds) {\n    function randomHex(size) {\n        const chars = \"0123456789abcdef\";\n        let id = \"\";\n        for (let i = 0; i < size; i++) {\n            id += chars[Math.floor(Math.random() * chars.length)];\n        }\n        return id;\n    }\n\n    let id;\n    do {\n        id = randomHex(16);\n    } while (existingIds.includes(id));\n\n    existingIds.push(id);\n    return id;\n}\n\n// Helper function to align x coo\nfunction alignX(targetX, name) {\n    const nodeWidth = 50 + 5 * name.length;\n    return targetX + nodeWidth / 2;\n}\n\n// Helper function to safely parse the endpoint address\nfunction parseEndpointAddress(endpoint) {\n    if (!endpoint || !endpoint.address) {\n        node.error(`Invalid endpoint object or missing address.`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Invalid endpoint object or missing address` });\n        return null;\n    }\n\n    // Match the address against the regex pattern\n    const match = endpoint.address.match(addressRegex);\n    if (!match) {\n        node.error(`Endpoint ${endpoint.name} address is not in the correct format. Expected format: \"IP:PORT@RACK:SLOT\"`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Endpoint ${endpoint.name} address is not in the correct format` });\n        return null\n    }\n\n    // Extract matched values\n    const [, address, port, rack, slot] = match;\n\n    return {\n        address,\n        port: Number(port),\n        rack: Number(rack),\n        slot: Number(slot)\n    };\n}\n\n// ________________________Insert Prototypes___________________________\n\n// Function to generate the status and catch flows\nfunction generateStaticNodes() {\n    updatedNodes.push(...[\n        {\n            \"id\": \"nS_triggers\",\n            \"type\": \"status\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"x\": 120,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loS_triggers\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loS_triggers\",\n            \"type\": \"link out\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"status_triggers\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_status\"\n            ],\n            \"x\": 235,\n            \"y\": 60,\n            \"wires\": []\n        },\n        {\n            \"id\": \"nC_triggers\",\n            \"type\": \"catch\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"uncaught\": false,\n            \"x\": 520,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loC_triggers\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loC_triggers\",\n            \"type\": \"link out\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"error_triggers\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_errors\"\n            ],\n            \"x\": 635,\n            \"y\": 60,\n            \"wires\": []\n        }\n    ]);\n    startY += 150;\n}\n\n// Function to generate the nodes for a S7 trigger with a custom trigger\nfunction generateS7triggers(trigger, endpoint, tag_tables) {\n    const S7endpointId = `S7endpoint_e${endpoint.id}_trig`;\n    const S7inId = `s7in_trig${trigger.id}`;\n    const endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n    if (!trigger.enabled && endpointNode) {\n        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        deployNeeded = true;\n    }\n    if (!trigger.enabled) {\n        return;\n    }\n    if (!tag_tables.length) {\n        return;\n    }\n    const parsedAddress = parseEndpointAddress(endpoint);\n    if (!parsedAddress) {\n        return;\n    }\n    const { address, port, rack, slot } = parsedAddress;\n    updatedNodes.push({\n        \"id\": `comment_trig${trigger.id}`,\n        \"type\": \"comment\",\n        \"z\": \"tab_triggers\",\n        \"name\": `Trigger ${trigger.id}: ${trigger.name}`,\n        \"info\": \"\",\n        \"x\": 160,\n        \"y\": startY,\n        \"wires\": []\n    });\n    let commentY = startY;\n    startY += 50;\n\n    // Check if the trigger node for this trigger already exists\n    if (!endpointNode) {\n        deployNeeded = true;\n        updatedNodes.push({\n            \"id\": S7endpointId,\n            \"type\": \"s7 endpoint\",\n            \"transport\": \"iso-on-tcp\",\n            \"address\": address,\n            \"port\": port,\n            \"rack\": rack,\n            \"slot\": slot,\n            \"localtsaphi\": \"01\",\n            \"localtsaplo\": \"00\",\n            \"remotetsaphi\": \"01\",\n            \"remotetsaplo\": \"00\",\n            \"connmode\": \"rack-slot\",\n            \"adapter\": \"\",\n            \"busaddr\": \"2\",\n            \"cycletime\": \"1000\",\n            \"timeout\": \"5000\",\n            \"name\": \"\",\n            \"vartable\": [\n                { addr: trigger.tag_address, name: trigger.name }\n            ]\n        });\n    } else {\n        let varCheck = endpointNode.vartable.find(varNode => varNode.addr === trigger.tag_address && varNode.name === trigger.name);\n        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot || !varCheck;\n        endpointNode.address = address;\n        endpointNode.port = port;\n        endpointNode.rack = rack;\n        endpointNode.slot = slot;\n        if (!varCheck) {\n            endpointNode.vartable.push({ addr: trigger.tag_address, name: trigger.name });\n        }\n    }\n\n    // Create the data handler flow for each table\n    let sf_trigger_handlerIds = [];\n    let dY = startY + 50;\n    for (let table of tag_tables) {\n        const sf_trigger_handlerId = `sf_trigger_handler_trig${trigger.id}_t${table.id}`;\n        const manualInId = `manual_trig${trigger.id}_t${table.id}`;\n        const linkOutId = `trigger_e${endpoint.id}_t${table.id}_out`;\n        const linkDataHandlerId = `sf_data_handler_e${endpoint.id}_t${table.id}_in`\n        sf_trigger_handlerIds.push(sf_trigger_handlerId);\n        updatedNodes.push(...[\n            {\n                \"id\": sf_trigger_handlerId,\n                \"type\": \"subflow:sf_trigger_handler\",\n                \"z\": \"tab_triggers\",\n                \"name\": `trig${trigger.id} - ${table.name}`,\n                \"env\": [\n                    {\n                        \"name\": \"TRIGGER_ID\",\n                        \"value\": String(trigger.id),\n                        \"type\": \"num\"\n                    },\n                    {\n                        \"name\": \"TAG_TABLE\",\n                        \"value\": table.name,\n                        \"type\": \"str\"\n                    }\n                ],\n                \"x\": 620,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        linkOutId\n                    ]\n                ]\n            },\n            {\n                \"id\": manualInId,\n                \"type\": \"inject\",\n                \"z\": \"tab_triggers\",\n                \"name\": \"Manual Trigger\",\n                \"props\": [\n                    {\n                        \"p\": \"topic\",\n                        \"vt\": \"str\"\n                    }\n                ],\n                \"repeat\": \"\",\n                \"crontab\": \"\",\n                \"once\": false,\n                \"onceDelay\": 0.1,\n                \"topic\": \"trigger\",\n                \"x\": 220,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        sf_trigger_handlerId\n                    ]\n                ]\n            },\n            {\n                \"id\": linkOutId,\n                \"type\": \"link out\",\n                \"z\": \"tab_triggers\",\n                \"name\": linkOutId,\n                \"mode\": \"link\",\n                \"links\": [\n                    linkDataHandlerId\n                ],\n                \"x\": 850,\n                \"y\": dY,\n                \"wires\": []\n            }\n        ]);\n        dY += 100;\n    }\n\n    // Create the S7 in and S7 control nodes\n    sf_trigger_handlerIds.sort();\n    updatedNodes.push({\n        \"id\": S7inId,\n        \"type\": \"s7 in\",\n        \"z\": \"tab_triggers\",\n        \"endpoint\": S7endpointId,\n        \"mode\": \"all\",\n        \"variable\": \"\",\n        \"diff\": false,\n        \"name\": \"\",\n        \"x\": 220,\n        \"y\": startY,\n        \"wires\": [\n            sf_trigger_handlerIds\n        ]\n    });\n\n    msg.log.push({ sf_trigger_handlerIds: sf_trigger_handlerIds });\n}\n\n\n// _________________________Main_______________________________\n\nmsg.log = msg.log || [];\n\nconst triggers = msg.data;  // Array of all triggers\nmsg.log.push({ triggers: triggers });\nconst history = msg.history; // Array of all history\nconst allNodes = msg.payload;   // Current nodes\nconst tag_tables = global.get('tag_tables');\nconst endpoints = global.get('endpoints');\nconst addressRegex = /^([\\w\\-.]+):(\\d+)@(\\d+):(\\d+)$/; // Regex to match the trigger address\n\nif (!Array.isArray(triggers) || !Array.isArray(allNodes)) {\n    node.error(\"Input data or allNodes is not in the expected format.\");\n    return;\n}\n\n// Collect all currently existing IDs\nlet existingIds = allNodes.map(node => node.id);\n\n// Filter out all \"tab_triggers\" nodes to rigenerate them\nlet updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== \"tab_triggers\");\nlet deployNeeded = false;\nlet startY = 0;\n\n// Generate nodes\n\ngenerateStaticNodes();\n\nfor (let endpoint of endpoints) {\n    const endp_triggers = triggers.filter(trigger => trigger.endpoint === endpoint.name);\n    msg.log.push({ endpoint: endpoint, triggers: endp_triggers });\n    for (let trigger of endp_triggers) {\n        const trigger_tables = tag_tables.filter(table =>\n            trigger.tag_tables.includes(table.name) &&\n            table.protocol === endpoint.protocol &&\n            [\"trigger\", \"trigger_custom\"].includes(table.sampling_mode)\n        );\n        msg.log.push({ trigger: trigger, tables: trigger_tables });\n        switch (endpoint.protocol) {\n            case \"S7\": {\n                generateS7triggers(trigger, endpoint, trigger_tables);\n\n            }\n        }\n    }\n}\n\n\nfor (let edit of history) {\n    // Remove nodes if the trigger is deleted\n    if (edit.oldItem && !edit.newItem) {\n        const oldTrigger = edit.oldItem;\n        const endpoint_triggers = global.get(\"triggers\").filter(trigger => trigger.enabled && trigger.endpoint === oldTrigger.endpoint);\n        const endpoint = global.get(\"endpoints\").find(endpoint => endpoint.name === oldTrigger.endpoint);\n        const S7endpointId = `S7endpoint_e${endpoint.id}_trig`;\n        if (!endpoint_triggers.length && endpoint) {\n            deployNeeded = true;\n            updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        } else {\n            let endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n            if (endpointNode) {\n                let varCheck = endpointNode.vartable.find(varNode => varNode.addr === oldTrigger.tag_address && varNode.name === oldTrigger.name);\n                if (varCheck) {\n                    endpointNode.vartable = endpointNode.vartable.filter(varNode => varNode.addr !== oldTrigger.tag_address && varNode.name !== oldTrigger.name);\n                }\n            }\n        }\n    }\n    // Modify vartable if the trigger name or tag_address is modified\n    if (edit.oldItem && edit.newItem) {\n        const oldTrigger = edit.oldItem;\n        const newTrigger = edit.newItem;\n        if (oldTrigger.name !== newTrigger.name || oldTrigger.tag_address !== newTrigger.tag_address) {\n            const endpoint = global.get(\"endpoints\").find(endpoint => endpoint.name === newTrigger.endpoint);\n            const endpointNode = updatedNodes.find(node => node.id === `S7endpoint_e${endpoint.id}_trig`);\n            if (endpointNode) {\n                let varCheck = endpointNode.vartable.find(varNode => varNode.addr === oldTrigger.tag_address && varNode.name === oldTrigger.name);\n                if (varCheck) {\n                    varCheck.addr = newTrigger.tag_address;\n                    varCheck.name = newTrigger.name;\n                    deployNeeded = true;\n                }\n            }\n        }\n    }\n}\n\n// Deploy needed check and return\nconst previousTabNodes = allNodes.filter(node => node.z === \"tab_triggers\").sort((a, b) => a.id.localeCompare(b.id));\nconst updatedTabNodes = updatedNodes.filter(node => node.z === \"tab_triggers\").sort((a, b) => a.id.localeCompare(b.id));\ndeployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);\n\nif (deployNeeded) {\n    const deploycount = global.get(\"dpc_triggers\") + 1 || 1;\n    global.set(\"dpc_triggers\", deploycount);\n    msg.payload = updatedNodes\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });\n    return [msg, null];\n} else {\n    return [null, msg];\n}\n",
+        "func": "// This code rewrite the configuration of all connection tabs in Node-RED:\n\n// ________________________Heplpers___________________________\n\n// Helper function to generate unique IDs\nfunction generateId(existingIds) {\n    function randomHex(size) {\n        const chars = \"0123456789abcdef\";\n        let id = \"\";\n        for (let i = 0; i < size; i++) {\n            id += chars[Math.floor(Math.random() * chars.length)];\n        }\n        return id;\n    }\n\n    let id;\n    do {\n        id = randomHex(16);\n    } while (existingIds.includes(id));\n\n    existingIds.push(id);\n    return id;\n}\n\n// Helper function to align x coo\nfunction alignX(targetX, name) {\n    const nodeWidth = 50 + 5 * name.length;\n    return targetX + nodeWidth / 2;\n}\n\n// Helper function to safely parse the endpoint address\nfunction parseEndpointAddress(endpoint) {\n    if (!endpoint || !endpoint.address) {\n        node.error(`Invalid endpoint object or missing address.`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Invalid endpoint object or missing address` });\n        return null;\n    }\n\n    // Match the address against the regex pattern\n    const match = endpoint.address.match(addressRegex);\n    if (!match) {\n        node.error(`Endpoint ${endpoint.name} address is not in the correct format. Expected format: \"IP:PORT@RACK:SLOT\"`);\n        node.status({ fill: \"red\", shape: \"dot\", text: `Endpoint ${endpoint.name} address is not in the correct format` });\n        return null\n    }\n\n    // Extract matched values\n    const [, address, port, rack, slot] = match;\n\n    return {\n        address,\n        port: String(port),\n        rack: String(rack),\n        slot: String(slot)\n    };\n}\n\n// ________________________Insert Prototypes___________________________\n\n// Function to generate the status and catch flows\nfunction generateStaticNodes() {\n    updatedNodes.push(...[\n        {\n            \"id\": \"nS_triggers\",\n            \"type\": \"status\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"x\": 120,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loS_triggers\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loS_triggers\",\n            \"type\": \"link out\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"status_triggers\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_status\"\n            ],\n            \"x\": 235,\n            \"y\": 60,\n            \"wires\": []\n        },\n        {\n            \"id\": \"nC_triggers\",\n            \"type\": \"catch\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"\",\n            \"scope\": null,\n            \"uncaught\": false,\n            \"x\": 520,\n            \"y\": 60,\n            \"wires\": [\n                [\n                    \"loC_triggers\"\n                ]\n            ]\n        },\n        {\n            \"id\": \"loC_triggers\",\n            \"type\": \"link out\",\n            \"z\": \"tab_triggers\",\n            \"name\": \"error_triggers\",\n            \"mode\": \"link\",\n            \"links\": [\n                \"liALL_errors\"\n            ],\n            \"x\": 635,\n            \"y\": 60,\n            \"wires\": []\n        }\n    ]);\n    startY += 150;\n}\n\n// Function to generate the nodes for a S7 trigger with a custom trigger\nfunction generateS7triggers(trigger, endpoint, tag_tables) {\n    const S7endpointId = `S7endpoint_e${endpoint.id}_trig`;\n    const S7inId = `s7in_trig${trigger.id}`;\n    const endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n    if (!trigger.enabled && endpointNode) {\n        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        deployNeeded = true;\n    }\n    if (!trigger.enabled) {\n        return;\n    }\n    if (!tag_tables.length) {\n        return;\n    }\n    const parsedAddress = parseEndpointAddress(endpoint);\n    if (!parsedAddress) {\n        return;\n    }\n    const { address, port, rack, slot } = parsedAddress;\n    updatedNodes.push({\n        \"id\": `comment_trig${trigger.id}`,\n        \"type\": \"comment\",\n        \"z\": \"tab_triggers\",\n        \"name\": `Trigger ${trigger.id}: ${trigger.name}`,\n        \"info\": \"\",\n        \"x\": 160,\n        \"y\": startY,\n        \"wires\": []\n    });\n    let commentY = startY;\n    startY += 50;\n\n    // Check if the trigger node for this trigger already exists\n    if (!endpointNode) {\n        deployNeeded = true;\n        updatedNodes.push({\n            \"id\": S7endpointId,\n            \"type\": \"s7 endpoint\",\n            \"transport\": \"iso-on-tcp\",\n            \"address\": address,\n            \"port\": port,\n            \"rack\": rack,\n            \"slot\": slot,\n            \"localtsaphi\": \"01\",\n            \"localtsaplo\": \"00\",\n            \"remotetsaphi\": \"01\",\n            \"remotetsaplo\": \"00\",\n            \"connmode\": \"rack-slot\",\n            \"adapter\": \"\",\n            \"busaddr\": \"2\",\n            \"cycletime\": \"1000\",\n            \"timeout\": \"5000\",\n            \"name\": \"\",\n            \"vartable\": [\n                { addr: trigger.tag_address, name: trigger.name }\n            ]\n        });\n    } else {\n        let varCheck = endpointNode.vartable.find(varNode => varNode.addr === trigger.tag_address && varNode.name === trigger.name);\n        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot || !varCheck;\n        endpointNode.address = address;\n        endpointNode.port = port;\n        endpointNode.rack = rack;\n        endpointNode.slot = slot;\n        if (!varCheck) {\n            endpointNode.vartable.push({ addr: trigger.tag_address, name: trigger.name });\n        }\n    }\n\n    // Create the data handler flow for each table\n    let sf_trigger_handlerIds = [];\n    let dY = startY + 50;\n    for (let table of tag_tables) {\n        const sf_trigger_handlerId = `sf_trigger_handler_trig${trigger.id}_t${table.id}`;\n        const manualInId = `manual_trig${trigger.id}_t${table.id}`;\n        const linkOutId = `trigger_e${endpoint.id}_t${table.id}_out`;\n        const linkDataHandlerId = `sf_data_handler_e${endpoint.id}_t${table.id}_in`\n        sf_trigger_handlerIds.push(sf_trigger_handlerId);\n        updatedNodes.push(...[\n            {\n                \"id\": sf_trigger_handlerId,\n                \"type\": \"subflow:sf_trigger_handler\",\n                \"z\": \"tab_triggers\",\n                \"name\": `trig${trigger.id} - ${table.name}`,\n                \"env\": [\n                    {\n                        \"name\": \"TRIGGER_ID\",\n                        \"value\": String(trigger.id),\n                        \"type\": \"num\"\n                    },\n                    {\n                        \"name\": \"TAG_TABLE\",\n                        \"value\": table.name,\n                        \"type\": \"str\"\n                    }\n                ],\n                \"x\": 620,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        linkOutId\n                    ]\n                ]\n            },\n            {\n                \"id\": manualInId,\n                \"type\": \"inject\",\n                \"z\": \"tab_triggers\",\n                \"name\": \"Manual Trigger\",\n                \"props\": [\n                    {\n                        \"p\": \"topic\",\n                        \"vt\": \"str\"\n                    }\n                ],\n                \"repeat\": \"\",\n                \"crontab\": \"\",\n                \"once\": false,\n                \"onceDelay\": 0.1,\n                \"topic\": \"trigger\",\n                \"x\": 220,\n                \"y\": dY,\n                \"wires\": [\n                    [\n                        sf_trigger_handlerId\n                    ]\n                ]\n            },\n            {\n                \"id\": linkOutId,\n                \"type\": \"link out\",\n                \"z\": \"tab_triggers\",\n                \"name\": linkOutId,\n                \"mode\": \"link\",\n                \"links\": [\n                    linkDataHandlerId\n                ],\n                \"x\": 850,\n                \"y\": dY,\n                \"wires\": []\n            }\n        ]);\n        dY += 100;\n    }\n\n    // Create the S7 in and S7 control nodes\n    sf_trigger_handlerIds.sort();\n    updatedNodes.push({\n        \"id\": S7inId,\n        \"type\": \"s7 in\",\n        \"z\": \"tab_triggers\",\n        \"endpoint\": S7endpointId,\n        \"mode\": \"all\",\n        \"variable\": \"\",\n        \"diff\": false,\n        \"name\": \"\",\n        \"x\": 220,\n        \"y\": startY,\n        \"wires\": [\n            sf_trigger_handlerIds\n        ]\n    });\n\n    msg.log.push({ sf_trigger_handlerIds: sf_trigger_handlerIds });\n}\n\n\n// _________________________Main_______________________________\n\nmsg.log = msg.log || [];\n\nconst triggers = msg.data;  // Array of all triggers\nmsg.log.push({ triggers: triggers });\nconst history = msg.history; // Array of all history\nconst allNodes = msg.payload;   // Current nodes\nconst tag_tables = global.get('tag_tables');\nconst endpoints = global.get('endpoints');\nconst addressRegex = /^([\\w\\-.]+):(\\d+)@(\\d+):(\\d+)$/; // Regex to match the trigger address\n\nif (!Array.isArray(triggers) || !Array.isArray(allNodes)) {\n    node.error(\"Input data or allNodes is not in the expected format.\");\n    return;\n}\n\n// Collect all currently existing IDs\nlet existingIds = allNodes.map(node => node.id);\n\n// Filter out all \"tab_triggers\" nodes to rigenerate them\nlet updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== \"tab_triggers\");\nlet deployNeeded = false;\nlet startY = 0;\n\n// Generate nodes\n\ngenerateStaticNodes();\n\nfor (let endpoint of endpoints) {\n    const endp_triggers = triggers.filter(trigger => trigger.endpoint === endpoint.name);\n    msg.log.push({ endpoint: endpoint, triggers: endp_triggers });\n    for (let trigger of endp_triggers) {\n        const trigger_tables = tag_tables.filter(table =>\n            trigger.tag_tables.includes(table.name) &&\n            table.protocol === endpoint.protocol &&\n            [\"trigger\", \"trigger_custom\"].includes(table.sampling_mode)\n        );\n        msg.log.push({ trigger: trigger, tables: trigger_tables });\n        switch (endpoint.protocol) {\n            case \"S7\": {\n                generateS7triggers(trigger, endpoint, trigger_tables);\n\n            }\n        }\n    }\n}\n\n\nfor (let edit of history) {\n    // Remove nodes if the trigger is deleted\n    if (edit.oldItem && !edit.newItem) {\n        const oldTrigger = edit.oldItem;\n        const endpoint_triggers = global.get(\"triggers\").filter(trigger => trigger.enabled && trigger.endpoint === oldTrigger.endpoint);\n        const endpoint = global.get(\"endpoints\").find(endpoint => endpoint.name === oldTrigger.endpoint);\n        const S7endpointId = `S7endpoint_e${endpoint.id}_trig`;\n        if (!endpoint_triggers.length && endpoint) {\n            deployNeeded = true;\n            updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);\n        } else {\n            let endpointNode = updatedNodes.find(node => node.id === S7endpointId);\n            if (endpointNode) {\n                let varCheck = endpointNode.vartable.find(varNode => varNode.addr === oldTrigger.tag_address && varNode.name === oldTrigger.name);\n                if (varCheck) {\n                    endpointNode.vartable = endpointNode.vartable.filter(varNode => varNode.addr !== oldTrigger.tag_address && varNode.name !== oldTrigger.name);\n                }\n            }\n        }\n    }\n    // Modify vartable if the trigger name or tag_address is modified\n    if (edit.oldItem && edit.newItem) {\n        const oldTrigger = edit.oldItem;\n        const newTrigger = edit.newItem;\n        if (oldTrigger.name !== newTrigger.name || oldTrigger.tag_address !== newTrigger.tag_address) {\n            const endpoint = global.get(\"endpoints\").find(endpoint => endpoint.name === newTrigger.endpoint);\n            const endpointNode = updatedNodes.find(node => node.id === `S7endpoint_e${endpoint.id}_trig`);\n            if (endpointNode) {\n                let varCheck = endpointNode.vartable.find(varNode => varNode.addr === oldTrigger.tag_address && varNode.name === oldTrigger.name);\n                if (varCheck) {\n                    varCheck.addr = newTrigger.tag_address;\n                    varCheck.name = newTrigger.name;\n                    deployNeeded = true;\n                }\n            }\n        }\n    }\n}\n\n// Deploy needed check and return\nconst previousTabNodes = allNodes.filter(node => node.z === \"tab_triggers\").sort((a, b) => a.id.localeCompare(b.id));\nconst updatedTabNodes = updatedNodes.filter(node => node.z === \"tab_triggers\").sort((a, b) => a.id.localeCompare(b.id));\ndeployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);\n\nif (deployNeeded) {\n    const deploycount = global.get(\"dpc_triggers\") + 1 || 1;\n    global.set(\"dpc_triggers\", deploycount);\n    msg.payload = updatedNodes\n    node.status({ fill: \"green\", shape: \"dot\", text: `Deploy ${deploycount} sent` });\n    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });\n    return [msg, null];\n} else {\n    return [null, msg];\n}\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -5742,7 +5833,7 @@
         "type": "function",
         "z": "sf_data_handler",
         "name": "switch",
-        "func": "// Helper function to convert time strings to milliseconds\nfunction timeToMilliseconds(timeStr) {\n    if (timeStr === undefined || timeStr === null || timeStr === '' || timeStr.toLowerCase() === 'none') {\n        return 0;\n    }\n    // Extract the numeric part and the unit part\n    const num = parseFloat(timeStr);\n    const unit = timeStr.replace(num, '').trim();\n\n    // Convert based on the unit\n    switch(unit) {\n        case 'ms':\n            return num; // Already in milliseconds\n        case 's':\n            return num * 1000; // Convert seconds to milliseconds\n        case 'm':\n            return num * 1000 * 60; // Convert minutes to milliseconds\n        case 'h':\n            return num * 1000 * 60 * 60; // Convert hours to milliseconds\n        case 'd':\n            return num * 1000 * 60 * 60 * 24; // Convert days to milliseconds\n        default:\n            node.error(`Invalid time unit - ${timeStr} - ${num} - ${unit}`);\n    }\n}\n\nif (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: msg.error.message });\n    return [null, null];\n}\n\nconst endpoint = global.get('endpoints').filter(e => e.id === env.get('ENDPOINT_ID'))[0];\nlet tag_table = global.get(env.get('TAG_TABLE'));\nlet meta_table = global.get('tag_tables').filter(t => t.name === env.get('TAG_TABLE'))[0];\nlet isData = false;\nlet isTrigger = false;\n\n// In next versions checks must be made at tables level\nif (!endpoint || !endpoint.protocol) {\n    node.error(`Invalid endpoint - ${env.get('ENDPOINT_ID')}`);\n    return [null, null];\n}\n\nif (!meta_table || !meta_table.sampling_mode || !meta_table.sampling_freq || !meta_table.protocol) {\n    node.error(`Missing tag_table configuration - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n\nif (meta_table.protocol !== endpoint.protocol) {\n    node.error(`Different protocols - ${env.get('TAG_TABLE')}: ${meta_table.protocol} - ${endpoint.protocol}`);\n    return [null, null];\n}\n\nif (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {\n    node.error(`Invalid tag table - ${env.get('TAG_TABLE')}`);\n    return [null, null];\n}\n\nmsg.period = timeToMilliseconds(meta_table.sampling_freq);\nmsg.endpoint = endpoint;\nmsg.tag_table = tag_table;\nmsg.meta_table = meta_table;\nmsg.isTrigger = ['Trigger', 'Trigger Custom', 'trigger', 'trigger_custom'].includes(meta_table.sampling_mode);\n\n// Topic Switch (for trigger messages)\nif (msg.topic === 'trigger') {\n    return [null, msg];\n} else if (msg.topic === 'trigger_sent') {\n    return [null, null];\n} else if (msg.topic === `insert_${msg.meta_table.name}` && msg.params && msg.params.length > 0) {\n    const localTime = msg.params[0].toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n    node.status({ fill: 'green', shape: 'dot', text: `Last Sample at ${localTime} - ${msg.params.length - 2} values` });\n    return [null, null];\n}\n\n// Protocol Switch (for other messages)\nlet test1 = undefined;\nlet test2 = undefined;\nlet test3 = undefined;\nlet test4 = undefined;\nswitch (endpoint.protocol) {\n    case 'S7': {\n        // const allowedKeys = ['topic', 'payload', '_msgid'];\n        // const msgKeys = Object.keys(msg);\n        // test1 = msgKeys.every(key => allowedKeys.includes(key));\n        // test2 = msgKeys.length === allowedKeys.length;\n        test3 = Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));\n        isData = test3;\n        break;\n    }\n    case 'Modbus': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'Modbus protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'OPC-UA': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'OPC-UA protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'MQTT': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'MQTT protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'HTTP': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'HTTP protocol not implemented yet' });\n        return [null, null];\n    }\n    default: {\n        node.error(`Invalid protocol - ${endpoint.protocol}`);\n        return [null, null];\n    }\n}\n\nif (isData) {\n    return [msg, null];\n} else {\n    node.error(`Invalid message format - ${endpoint.id}: ${endpoint.name} - ${env.get('TAG_TABLE')} - tests ${test1} ${test2} ${test3} ${test4}`);\n    return [null, null];\n}\n",
+        "func": "// Helper function to convert time strings to milliseconds\nfunction timeToMilliseconds(timeStr) {\n    if (timeStr === undefined || timeStr === null || timeStr === '' || timeStr.toLowerCase() === 'none') {\n        return 0;\n    }\n    // Extract the numeric part and the unit part\n    const num = parseFloat(timeStr);\n    const unit = timeStr.replace(num, '').trim();\n\n    // Convert based on the unit\n    switch (unit) {\n        case 'ms':\n            return num; // Already in milliseconds\n        case 's':\n            return num * 1000; // Convert seconds to milliseconds\n        case 'm':\n            return num * 1000 * 60; // Convert minutes to milliseconds\n        case 'h':\n            return num * 1000 * 60 * 60; // Convert hours to milliseconds\n        case 'd':\n            return num * 1000 * 60 * 60 * 24; // Convert days to milliseconds\n        default:\n            node.error(`Invalid time unit - ${timeStr} - ${num} - ${unit}`);\n    }\n}\n\nif (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: msg.error.message });\n    return [null, null];\n}\n\nconst endpoint = global.get('endpoints').filter(e => e.id === env.get('ENDPOINT_ID'))[0];\nlet tag_table = global.get(env.get('TAG_TABLE'));\nlet meta_table = global.get('tag_tables').filter(t => t.name === env.get('TAG_TABLE'))[0];\nlet isData = false;\nlet isTrigger = false;\n\n// In next versions checks must be made at tables level\nif (!endpoint || !endpoint.protocol) {\n    const text = `Invalid endpoint - ${env.get('ENDPOINT_ID')}: ${!endpoint}, ${!endpoint.protocol}`\n    node.error(text);\n    node.status({ fill: 'red', shape: 'dot', text: text });\n    return [null, null];\n}\n\nif (!meta_table || !meta_table.sampling_mode || !meta_table.sampling_freq || !meta_table.protocol) {\n    const text = `Missing tag_table configuration - ${env.get('TAG_TABLE')}: ${!meta_table}, ${!meta_table.sampling_mode}, ${!meta_table.sampling_freq}, ${!meta_table.protocol}`;\n    node.error(text);\n    node.status({ fill: 'red', shape: 'dot', text: text });\n    return [null, null];\n}\n\nif (meta_table.protocol !== endpoint.protocol) {\n    const text = `Different protocols - ${env.get('TAG_TABLE')}: ${meta_table.protocol} / ${endpoint.protocol}`;\n    node.error(text);\n    node.status({ fill: 'red', shape: 'dot', text: text });\n    return [null, null];\n}\n\nif (!tag_table || !Array.isArray(tag_table) || tag_table.length === 0) {\n    const text = `Invalid tag table - ${env.get('TAG_TABLE')}: ${!tag_table}, ${!Array.isArray(tag_table)}, ${tag_table.length}`;\n    node.error(text);\n    node.status({ fill: 'red', shape: 'dot', text: text });\n    return [null, null];\n}\n\nmsg.period = timeToMilliseconds(meta_table.sampling_freq);\nmsg.endpoint = endpoint;\nmsg.tag_table = tag_table;\nmsg.meta_table = meta_table;\nmsg.isTrigger = ['Trigger', 'Trigger Custom', 'trigger', 'trigger_custom'].includes(meta_table.sampling_mode);\n\n// Topic Switch (for trigger messages)\nif (msg.topic === 'trigger') {\n    return [null, msg];\n} else if (msg.topic === 'trigger_sent') {\n    return [null, null];\n} else if (msg.topic === `insert_${msg.meta_table.name}` && msg.params && msg.params.length > 0) {\n    const localTime = msg.params[0].toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n    node.status({ fill: 'green', shape: 'dot', text: `Last Sample at ${localTime} - ${msg.params.length - 2} values` });\n    return [null, null];\n}\n\n// Protocol Switch (for other messages)\nlet test1 = undefined;\nlet test2 = undefined;\nlet test3 = undefined;\nlet test4 = undefined;\nswitch (endpoint.protocol) {\n    case 'S7': {\n        // const allowedKeys = ['topic', 'payload', '_msgid'];\n        // const msgKeys = Object.keys(msg);\n        // test1 = msgKeys.every(key => allowedKeys.includes(key));\n        // test2 = msgKeys.length === allowedKeys.length;\n        test3 = Object.keys(msg.payload).some(key => tag_table.map(t => t.name.toLowerCase()).includes(key.toLowerCase()));\n        isData = test3;\n        break;\n    }\n    case 'Modbus': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'Modbus protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'OPC-UA': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'OPC-UA protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'MQTT': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'MQTT protocol not implemented yet' });\n        return [null, null];\n    }\n    case 'HTTP': {\n        node.status({ fill: 'yellow', shape: 'ring', text: 'HTTP protocol not implemented yet' });\n        return [null, null];\n    }\n    default: {\n        node.error(`Invalid protocol - ${endpoint.protocol}`);\n        return [null, null];\n    }\n}\n\nif (isData) {\n    return [msg, null];\n} else {\n    node.error(`Invalid message format - ${endpoint.id}: ${endpoint.name} - ${env.get('TAG_TABLE')} - tests ${test1} ${test2} ${test3} ${test4}`);\n    return [null, null];\n}\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -7873,6 +7964,218 @@
         "wires": [
             [
                 "sf_data_handler_e20_t24"
+            ]
+        ]
+    },
+    {
+        "id": "comment_e20_1s_diff",
+        "type": "comment",
+        "z": "tab_connections",
+        "name": "Endpoint 20: Reversy_S7_416 - 1s - diff",
+        "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
+        "x": 220,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "sf_data_handler_e20_t25",
+        "type": "subflow:sf_data_handler",
+        "z": "tab_connections",
+        "name": "tags_odr_reversy_s7_coc@20",
+        "env": [
+            {
+                "name": "ENDPOINT_ID",
+                "value": "20",
+                "type": "num"
+            },
+            {
+                "name": "TAG_TABLE",
+                "value": "tags_odr_reversy_s7_coc",
+                "type": "str"
+            }
+        ],
+        "x": 540,
+        "y": 550,
+        "wires": [
+            [
+                "sf_data_handler_e20_t25_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_data_handler_e20_t25_call",
+        "type": "link call",
+        "z": "tab_connections",
+        "name": "dynamic",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 820,
+        "y": 550,
+        "wires": [
+            [
+                "sf_data_handler_e20_t25"
+            ]
+        ]
+    },
+    {
+        "id": "s7in_e20_1s_diff",
+        "type": "s7 in",
+        "z": "tab_connections",
+        "endpoint": "S7endpoint_e20_1s",
+        "mode": "all",
+        "variable": "",
+        "diff": true,
+        "name": "",
+        "x": 220,
+        "y": 550,
+        "wires": [
+            [
+                "sf_data_handler_e20_t25"
+            ]
+        ]
+    },
+    {
+        "id": "nS_triggers",
+        "type": "status",
+        "z": "tab_triggers",
+        "name": "",
+        "scope": null,
+        "x": 120,
+        "y": 60,
+        "wires": [
+            [
+                "loS_triggers"
+            ]
+        ]
+    },
+    {
+        "id": "loS_triggers",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "status_triggers",
+        "mode": "link",
+        "links": [
+            "liALL_status"
+        ],
+        "x": 235,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "nC_triggers",
+        "type": "catch",
+        "z": "tab_triggers",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 520,
+        "y": 60,
+        "wires": [
+            [
+                "loC_triggers"
+            ]
+        ]
+    },
+    {
+        "id": "loC_triggers",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "error_triggers",
+        "mode": "link",
+        "links": [
+            "liALL_errors"
+        ],
+        "x": 635,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "comment_trig1",
+        "type": "comment",
+        "z": "tab_triggers",
+        "name": "Trigger 1: Triggerino",
+        "info": "",
+        "x": 160,
+        "y": 150,
+        "wires": []
+    },
+    {
+        "id": "sf_trigger_handler_trig1_t17",
+        "type": "subflow:sf_trigger_handler",
+        "z": "tab_triggers",
+        "name": "trig1 - tags_odr_reversy_s7",
+        "env": [
+            {
+                "name": "TRIGGER_ID",
+                "value": "1",
+                "type": "num"
+            },
+            {
+                "name": "TAG_TABLE",
+                "value": "tags_odr_reversy_s7",
+                "type": "str"
+            }
+        ],
+        "x": 620,
+        "y": 250,
+        "wires": [
+            [
+                "trigger_e20_t17_out"
+            ]
+        ]
+    },
+    {
+        "id": "manual_trig1_t17",
+        "type": "inject",
+        "z": "tab_triggers",
+        "name": "Manual Trigger",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "trigger",
+        "x": 220,
+        "y": 250,
+        "wires": [
+            [
+                "sf_trigger_handler_trig1_t17"
+            ]
+        ]
+    },
+    {
+        "id": "trigger_e20_t17_out",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "trigger_e20_t17_out",
+        "mode": "link",
+        "links": [
+            "sf_data_handler_e20_t17_in"
+        ],
+        "x": 850,
+        "y": 250,
+        "wires": []
+    },
+    {
+        "id": "s7in_trig1",
+        "type": "s7 in",
+        "z": "tab_triggers",
+        "endpoint": "S7endpoint_e20_trig",
+        "mode": "all",
+        "variable": "",
+        "diff": false,
+        "name": "",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "sf_trigger_handler_trig1_t17"
             ]
         ]
     },
@@ -10459,19 +10762,19 @@
         "group": "28dd6f2de8ecc7e2",
         "page": "",
         "ui": "",
-        "name": "Limestone Parameters",
+        "name": "limestone_generalities",
         "order": 1,
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<template>\n  <v-container>\n    <h1 class=\"mb-4\">Limestone Parameters</h1>\n    \n    <v-row>\n      <!-- First Row -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Date\"\n          outlined\n          v-model=\"formData.date\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Time\"\n          outlined\n          v-model=\"formData.hour\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Progressive Cycle Number\"\n          outlined\n          v-model=\"formData.cy\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Second Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Material Code\"\n          :items=\"materialCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.mtrCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Minimum Size (mm)\"\n          outlined\n          v-model=\"formData.minSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Size (mm)\"\n          outlined\n          v-model=\"formData.maxSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Third Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Cleaning Code\"\n          :items=\"cleaningCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.cleCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Dust Code\"\n          :items=\"dustCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.dustCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Humidity Code\"\n          :items=\"humidityCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.humCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n\n    <!-- Submit Button -->\n    <v-row justify=\"center\" class=\"mt-4\">\n      <v-btn\n        color=\"blue-darken-3\"\n        :disabled=\"!isFormValid\"\n        @click=\"submitForm\"\n      >\n        Submit\n      </v-btn>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        mtrCode: null,\n        minSize: null,\n        maxSize: null,\n        cleCode: null,\n        dustCode: null,\n        humCode: null,\n      },\n      materialCodes: [\n        { title: \"Limestone\", value: 2 },\n        { title: \"Dolostone\", value: 3 },\n      ],\n      cleaningCodes: [\n        { title: \"Cleaned\", value: 2 },\n        { title: \"Dirty\", value: 3 },\n      ],\n      dustCodes: [\n        { title: \"Dusty\", value: 2 },\n        { title: \"Not Dusty\", value: 3 },\n      ],\n      humidityCodes: [\n        { title: \"Wet\", value: 2 },\n        { title: \"Dry\", value: 3 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) =>\n          !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return (\n        this.$refs.form &&\n        this.$refs.form.validate()\n      );\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        console.log(\"Form submitted:\", this.formData);\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\nh3 {\n  margin-bottom: 20px;\n  font-weight: bold;\n}\n</style>\n",
+        "format": "<template>\n  <v-container>  \n    \n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Generalities</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- First Row -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Date\"\n          outlined\n          v-model=\"formData.date\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Cycle Time\"\n          outlined\n          v-model=\"formData.hour\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Progressive Cycle Number\"\n          outlined\n          v-model=\"formData.cy\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Second Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Material Code\"\n          :items=\"materialCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.mtrCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Minimum Size (mm)\"\n          outlined\n          v-model=\"formData.minSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Size (mm)\"\n          outlined\n          v-model=\"formData.maxSize\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Third Row -->\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Cleaning Code\"\n          :items=\"cleaningCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.cleCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Dust Code\"\n          :items=\"dustCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.dustCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Humidity Code\"\n          :items=\"humidityCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.humCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        mtrCode: null,\n        minSize: null,\n        maxSize: null,\n        cleCode: null,\n        dustCode: null,\n        humCode: null,\n      },\n      materialCodes: [\n        { title: \"Limestone\", value: 2 },\n        { title: \"Dolostone\", value: 3 },\n      ],\n      cleaningCodes: [\n        { title: \"Cleaned\", value: 2 },\n        { title: \"Dirty\", value: 3 },\n      ],\n      dustCodes: [\n        { title: \"Dusty\", value: 2 },\n        { title: \"Not Dusty\", value: 3 },\n      ],\n      humidityCodes: [\n        { title: \"Wet\", value: 2 },\n        { title: \"Dry\", value: 3 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) =>\n          !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_generalities\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 540,
-        "y": 460,
+        "x": 480,
+        "y": 800,
         "wires": [
             [
                 "ef06b9c6e7768aad"
@@ -10496,8 +10799,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 390,
-        "y": 700,
+        "x": 150,
+        "y": 440,
         "wires": [
             [
                 "51624227a4bca217"
@@ -10543,11 +10846,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 460,
+        "x": 790,
+        "y": 740,
         "wires": [
             [
-                "d13622e19192a346"
+                "ed9b0f26028e52bf"
             ]
         ]
     },
@@ -10561,11 +10864,11 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 970,
-        "y": 460,
+        "x": 1010,
+        "y": 740,
         "wires": [
             [
-                "df7fea999961d656"
+                "e80b28274ef1e3d1"
             ]
         ]
     },
@@ -10576,8 +10879,8 @@
         "name": "",
         "ui": "d7cef5fd92f5328c",
         "events": "all",
-        "x": 560,
-        "y": 700,
+        "x": 320,
+        "y": 440,
         "wires": [
             [
                 "05319443a47b3e33"
@@ -10597,8 +10900,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 730,
-        "y": 700,
+        "x": 490,
+        "y": 440,
         "wires": []
     },
     {
@@ -10623,7 +10926,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 820,
+        "y": 520,
         "wires": [
             [
                 "25604b88d2a00a21"
@@ -10662,7 +10965,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 200,
-        "y": 900,
+        "y": 600,
         "wires": [
             [
                 "25604b88d2a00a21"
@@ -10701,7 +11004,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 190,
-        "y": 860,
+        "y": 560,
         "wires": [
             [
                 "25604b88d2a00a21"
@@ -10725,7 +11028,7 @@
         "senderr": false,
         "headers": [],
         "x": 450,
-        "y": 860,
+        "y": 560,
         "wires": [
             [
                 "4527d6c13462e4a6"
@@ -10756,9 +11059,499 @@
             }
         ],
         "x": 690,
-        "y": 860,
+        "y": 560,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "78d48342228cce47",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "28dd6f2de8ecc7e2",
+        "page": "",
+        "ui": "",
+        "name": "limestone_sizes",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Sizes</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Generate a text field for each size range -->\n      <v-col cols=\"4\" v-for=\"(size, index) in sizeVariables\" :key=\"index\">\n        <v-text-field\n          :label=\"size.label\"\n          outlined\n          v-model=\"formData[size.key]\"\n          :rules=\"[rules.required, rules.numeric]\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      sizeVariables: [\n        { key: \"size1020\", label: \"Size percentage between 10 to 20 mm\" },\n        { key: \"size2030\", label: \"Size percentage between 20 to 30 mm\" },\n        { key: \"size3040\", label: \"Size percentage between 30 to 40 mm\" },\n        { key: \"size4050\", label: \"Size percentage between 40 to 50 mm\" },\n        { key: \"size5060\", label: \"Size percentage between 50 to 60 mm\" },\n        { key: \"size6070\", label: \"Size percentage between 60 to 70 mm\" },\n        { key: \"size7080\", label: \"Size percentage between 70 to 80 mm\" },\n        { key: \"size8090\", label: \"Size percentage between 80 to 90 mm\" },\n        { key: \"size90100\", label: \"Size percentage between 90 to 100 mm\" },\n        { key: \"size100110\", label: \"Size percentage between 100 to 110 mm\" },\n        { key: \"size110120\", label: \"Size percentage between 110 to 120 mm\" },\n        { key: \"size120130\", label: \"Size percentage between 120 to 130 mm\" },\n        { key: \"size130140\", label: \"Size percentage between 130 to 140 mm\" },\n        { key: \"size140150\", label: \"Size percentage between 140 to 150 mm\" },\n        { key: \"size150160\", label: \"Size percentage between 150 to 160 mm\" },\n      ],\n      formData: {\n        size1020: null,\n        size2030: null,\n        size3040: null,\n        size4050: null,\n        size5060: null,\n        size6070: null,\n        size7080: null,\n        size8090: null,\n        size90100: null,\n        size100110: null,\n        size110120: null,\n        size120130: null,\n        size130140: null,\n        size140150: null,\n        size150160: null,\n      },\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_sizes\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 860,
+        "wires": [
+            [
+                "ef06b9c6e7768aad"
+            ]
+        ]
+    },
+    {
+        "id": "aff98e68532cccb1",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "28dd6f2de8ecc7e2",
+        "page": "",
+        "ui": "",
+        "name": "limestone_chemicals",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Chemicals</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col\n        cols=\"4\"\n        v-for=\"(field, index) in formFields\"\n        :key=\"index\"\n      >\n        <v-text-field\n          :label=\"field.label\"\n          outlined\n          v-model=\"formData[field.key]\"\n          :rules=\"field.rules\"\n          :disabled=\"!isEditMode\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n\n<script>\nexport default {\n  data() {\n    const rules = {\n      required: (value) => !!value || \"This field is required\",\n      numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\"\n    };\n\n    return {\n      isEditMode: true,\n      rules,\n      formFields: [\n        { key: \"lol\", label: \"Loss of Ignition (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"siO2\", label: \"Silicon Dioxide (SiO2) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"al2O3\", label: \"Aluminum Oxide (Al2O3) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"fe2O3\", label: \"Iron Oxide (Fe2O3) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"k2O\", label: \"Potassium Oxide (K2O) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"caO\", label: \"Calcium Oxide (CaO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"mgO\", label: \"Magnesium Oxide (MgO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"so3\", label: \"Sulfur Oxide (SO3) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"srO\", label: \"Strontium Oxide (SrO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"cuO\", label: \"Copper Oxide (CuO) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"na2O\", label: \"Sodium Oxide (Na2O) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"tiO2\", label: \"Titanium Oxide (TiO2) (%)\", rules: [rules.required, rules.numeric] },\n        { key: \"other\", label: \"Other (%)\", rules: [rules.required, rules.numeric] }\n      ],\n      formData: {\n        lol: null, siO2: null, al2O3: null, fe2O3: null, k2O: null, caO: null,\n        mgO: null, so3: null, srO: null, cuO: null, na2O: null, tiO2: null, other: null\n      }\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every(value => value !== null);\n    }\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({ topic: \"limestone_chemicals\", payload: this.formData });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  }\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 480,
+        "y": 920,
+        "wires": [
+            [
+                "ef06b9c6e7768aad"
+            ]
+        ]
+    },
+    {
+        "id": "1da1d9e573f0d0e4",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "28dd6f2de8ecc7e2",
+        "page": "",
+        "ui": "",
+        "name": "limestone_others",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Others</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <!-- Save and Reset Buttons (Visible in Edit Mode) -->\n        <div v-if=\"isEditMode\">\n          <v-btn\n            color=\"primary\"\n            @click=\"resetForm\"\n            class=\"mx-1\"\n          >\n            Reset\n          </v-btn>\n          <v-btn\n            color=\"primary\"\n            :disabled=\"!isFormValid\"\n            @click=\"submitForm\"\n            class=\"mx-1\"\n          >\n            Save Step\n          </v-btn>\n        </div>\n\n        <!-- Edit Button (Visible when not in Edit Mode) -->\n        <v-btn\n          v-else\n          color=\"primary\"\n          @click=\"enableEditMode\"\n        >\n          Edit\n        </v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <!-- Form Fields -->\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Density (g/ml)\"\n          outlined\n          v-model=\"formData.density\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Maximum Humidity (%)\"\n          outlined\n          v-model=\"formData.maxHumidity\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Mechanical Degradation (%)\"\n          outlined\n          v-model=\"formData.mechanicalDegradation\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"4\">\n        <v-text-field\n          label=\"Stress Index (g)\"\n          outlined\n          v-model=\"formData.stressIndex\"\n          :rules=\"[rules.required, rules.numeric]\"\n          clearable\n        ></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-select\n          label=\"Shape Code\"\n          :items=\"shapeCodes\"\n          item-title=\"title\"\n          item-value=\"value\"\n          outlined\n          v-model=\"formData.shapeCode\"\n          :rules=\"[rules.required]\"\n          clearable\n        ></v-select>\n      </v-col>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true, // Start in edit mode\n      formData: {\n        density: null,\n        maxHumidity: null,\n        mechanicalDegradation: null,\n        stressIndex: null,\n        shapeCode: null,\n      },\n      shapeCodes: [\n        { title: \"Equal\", value: 2 },\n        { title: \"Stretched to stick\", value: 3 },\n        { title: \"Stretched flat to stick\", value: 4 },\n        { title: \"Irregular\", value: 5 },\n        { title: \"Flat\", value: 6 },\n        { title: \"Uniform\", value: 7 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm(); // Reset the form when reset is true\n        }\n      },\n      deep: true, // Watch for nested changes\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        // Send the form data using Node-RED's send method\n        this.send({\n          topic: \"limestone_others\",\n          payload: this.formData,\n        });\n        this.isEditMode = false; // Disable edit mode\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true; // Enable edit mode\n    },\n    resetForm() {\n      // Reset each field in formData to its default value\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n      this.isEditMode = true;\n      console.log(\"Form reset to default values.\");\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 470,
+        "y": 980,
+        "wires": [
+            [
+                "ef06b9c6e7768aad"
+            ]
+        ]
+    },
+    {
+        "id": "e80b28274ef1e3d1",
+        "type": "function",
+        "z": "tab_dashboard",
+        "name": "sync_data",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 740,
+        "wires": [
+            [
+                "df7fea999961d656",
+                "78d48342228cce47",
+                "aff98e68532cccb1",
+                "1da1d9e573f0d0e4"
+            ]
+        ]
+    },
+    {
+        "id": "ed9b0f26028e52bf",
+        "type": "debug",
+        "z": "tab_dashboard",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "ec6c435b5bcfed0a",
+        "type": "inject",
+        "z": "tab_dashboard",
+        "name": "reset",
+        "props": [
+            {
+                "p": "reset",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 880,
+        "wires": [
+            [
+                "df7fea999961d656",
+                "78d48342228cce47",
+                "aff98e68532cccb1",
+                "1da1d9e573f0d0e4"
+            ]
+        ]
+    },
+    {
+        "id": "a941c996c806de49",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "page": "",
+        "ui": "",
+        "name": "quicklime_generalities",
+        "order": 1,
+        "width": "12",
+        "height": "1",
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Generalities</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Cycle Date\" outlined v-model=\"formData.date\" :rules=\"[rules.required]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Cycle Time\" outlined v-model=\"formData.hour\" :rules=\"[rules.required]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Progressive Cycle Number\" outlined v-model=\"formData.cy\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-select label=\"Shaft 1 Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.s1AspectCode\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 Small Unburned\" outlined v-model=\"formData.s1SmallUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 Medium Unburned\" outlined v-model=\"formData.s1MedUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 Big Unburned\" outlined v-model=\"formData.s1BigUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.s1CO2Res\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.s1LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.s1CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.s1MechDeg\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.s1T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.s1T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.s1T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.s1T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-select label=\"Shaft 2 Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.s2AspectCode\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 Small Unburned\" outlined v-model=\"formData.s2SmallUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 Medium Unburned\" outlined v-model=\"formData.s2MedUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 Big Unburned\" outlined v-model=\"formData.s2BigUn\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.s2CO2Res\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.s2LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.s2CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.s2MechDeg\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.s2T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.s2T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.s2T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.s2T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n    </v-row>\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        date: null,\n        hour: null,\n        cy: null,\n        s1AspectCode: null,\n        s1SmallUn: null,\n        s1MedUn: null,\n        s1BigUn: null,\n        s2AspectCode: null,\n        s2SmallUn: null,\n        s2MedUn: null,\n        s2BigUn: null,\n\n        s1CO2Res: null,\n        s1LOI: null,\n        s1CO2A: null,\n        s1MechDeg: null,\n        s1T40M: null,\n        s1T40S: null,\n        s1T60M: null,\n        s1T60S: null,\n\n        s2CO2Res: null,\n        s2LOI: null,\n        s2CO2A: null,\n        s2MechDeg: null,\n        s2T40M: null,\n        s2T40S: null,\n        s2T60M: null,\n        s2T60S: null,\n\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_generalities\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 480,
+        "y": 1120,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
+        ]
+    },
+    {
+        "id": "2b6a3ced08cb0304",
+        "type": "ui-button",
+        "z": "tab_dashboard",
+        "group": "28dd6f2de8ecc7e2",
+        "name": "Submit Limestone Data",
+        "label": "Submit Limestone Data",
+        "order": 7,
+        "width": "4",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "center",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 490,
+        "y": 740,
+        "wires": [
+            [
+                "ef06b9c6e7768aad"
+            ]
+        ]
+    },
+    {
+        "id": "097ef16127dab363",
+        "type": "function",
+        "z": "tab_dashboard",
+        "name": "sync_data",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 1060,
+        "wires": [
+            [
+                "a941c996c806de49",
+                "10a42839ae9e6777",
+                "7a63fe5ccc03ed6c",
+                "9a13d9b9f89bc3b3",
+                "384a0ab596654094",
+                "624ad965dedd866d"
+            ]
+        ]
+    },
+    {
+        "id": "a3cc70e53e13a7cf",
+        "type": "ui-button",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "name": "Submit QuickLime Data",
+        "label": "Submit Quicklime Data",
+        "order": 9,
+        "width": "4",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "center",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 490,
+        "y": 1060,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
+        ]
+    },
+    {
+        "id": "da620ff3a434d7f0",
+        "type": "function",
+        "z": "tab_dashboard",
+        "name": "store_query",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 1060,
+        "wires": [
+            [
+                "6b4f70b236b447a5"
+            ]
+        ]
+    },
+    {
+        "id": "45378049064ed26a",
+        "type": "link call",
+        "z": "tab_dashboard",
+        "name": "",
+        "links": [
+            "b2366c0b7a520910"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 1010,
+        "y": 1060,
+        "wires": [
+            [
+                "097ef16127dab363"
+            ]
+        ]
+    },
+    {
+        "id": "6b4f70b236b447a5",
+        "type": "debug",
+        "z": "tab_dashboard",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "76fe66e64ae83372",
+        "type": "inject",
+        "z": "tab_dashboard",
+        "name": "reset",
+        "props": [
+            {
+                "p": "reset",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 1260,
+        "wires": [
+            [
+                "a941c996c806de49",
+                "10a42839ae9e6777",
+                "7a63fe5ccc03ed6c",
+                "9a13d9b9f89bc3b3",
+                "384a0ab596654094",
+                "624ad965dedd866d"
+            ]
+        ]
+    },
+    {
+        "id": "10a42839ae9e6777",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "page": "",
+        "ui": "",
+        "name": "quicklime_pipe1",
+        "order": 2,
+        "width": "12",
+        "height": "1",
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Pipe - Side 1</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1PIP1ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1PIP1CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1PIP1T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1PIP1T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1PIP1T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1PIP1T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1PIP1LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1PIP1CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1PIP1MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2PIP1ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2PIP1CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2PIP1T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2PIP1T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2PIP1T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2PIP1T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2PIP1LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2PIP1CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2PIP1MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1PIP1ASPCODE: null,\n        S1PIP1CO2RES: null,\n        S1PIP1T40M: null,\n        S1PIP1T40S: null,\n        S1PIP1T60M: null,\n        S1PIP1T60S: null,\n        S1PIP1LOI: null,\n        S1PIP1CO2A: null,\n        S1PIP1MECDEG: null,\n\n        S2PIP1ASPCODE: null,\n        S2PIP1CO2RES: null,\n        S2PIP1T40M: null,\n        S2PIP1T40S: null,\n        S2PIP1T60M: null,\n        S2PIP1T60S: null,\n        S2PIP1LOI: null,\n        S2PIP1CO2A: null,\n        S2PIP1MECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_pipe_side1\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 1180,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
+        ]
+    },
+    {
+        "id": "7a63fe5ccc03ed6c",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "page": "",
+        "ui": "",
+        "name": "quicklime_pipe2",
+        "order": 3,
+        "width": "12",
+        "height": "1",
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Pipe - Side 2</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1PIP2ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1PIP2CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1PIP2T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1PIP2T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1PIP2T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1PIP2T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1PIP2LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1PIP2CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1PIP2MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2PIP2ASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2PIP2CO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2PIP2T40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2PIP2T40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2PIP2T60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2PIP2T60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2PIP2LOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2PIP2CO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2PIP2MECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1PIP2ASPCODE: null,\n        S1PIP2CO2RES: null,\n        S1PIP2T40M: null,\n        S1PIP2T40S: null,\n        S1PIP2T60M: null,\n        S1PIP2T60S: null,\n        S1PIP2LOI: null,\n        S1PIP2CO2A: null,\n        S1PIP2MECDEG: null,\n\n        S2PIP2ASPCODE: null,\n        S2PIP2CO2RES: null,\n        S2PIP2T40M: null,\n        S2PIP2T40S: null,\n        S2PIP2T60M: null,\n        S2PIP2T60S: null,\n        S2PIP2LOI: null,\n        S2PIP2CO2A: null,\n        S2PIP2MECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_pipe_side2\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 1240,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
+        ]
+    },
+    {
+        "id": "9a13d9b9f89bc3b3",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "page": "",
+        "ui": "",
+        "name": "quicklime_skip",
+        "order": 4,
+        "width": "12",
+        "height": "1",
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Skip</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1SKIASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1SKICO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1SKIT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1SKIT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1SKIT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1SKIT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1SKILOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1SKICO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1SKIMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2SKIASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2SKICO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2SKIT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2SKIT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2SKIT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2SKIT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2SKILOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2SKICO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2SKIMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1SKIASPCODE: null,\n        S1SKICO2RES: null,\n        S1SKIT40M: null,\n        S1SKIT40S: null,\n        S1SKIT60M: null,\n        S1SKIT60S: null,\n        S1SKILOI: null,\n        S1SKICO2A: null,\n        S1SKIMECDEG: null,\n\n        S2SKIASPCODE: null,\n        S2SKICO2RES: null,\n        S2SKIT40M: null,\n        S2SKIT40S: null,\n        S2SKIT60M: null,\n        S2SKIT60S: null,\n        S2SKILOI: null,\n        S2SKICO2A: null,\n        S2SKIMECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_skip\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 1300,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
+        ]
+    },
+    {
+        "id": "384a0ab596654094",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "page": "",
+        "ui": "",
+        "name": "quicklime_internal",
+        "order": 5,
+        "width": "12",
+        "height": "1",
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">Internal</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1INTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1INTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1INTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1INTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1INTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1INTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1INTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1INTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1INTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2INTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2INTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2INTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2INTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2INTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2INTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2INTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2INTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2INTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1INTASPCODE: null,\n        S1INTCO2RES: null,\n        S1INTT40M: null,\n        S1INTT40S: null,\n        S1INTT60M: null,\n        S1INTT60S: null,\n        S1INTLOI: null,\n        S1INTCO2A: null,\n        S1INTMECDEG: null,\n        \n        S2INTASPCODE: null,\n        S2INTCO2RES: null,\n        S2INTT40M: null,\n        S2INTT40S: null,\n        S2INTT60M: null,\n        S2INTT60S: null,\n        S2INTLOI: null,\n        S2INTCO2A: null,\n        S2INTMECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_internal\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 470,
+        "y": 1360,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
+        ]
+    },
+    {
+        "id": "624ad965dedd866d",
+        "type": "ui-template",
+        "z": "tab_dashboard",
+        "group": "5ed4dbcacc17084e",
+        "page": "",
+        "ui": "",
+        "name": "quicklime_external",
+        "order": 6,
+        "width": "12",
+        "height": "1",
+        "head": "",
+        "format": "<template>\n  <v-container>\n    <v-row class=\"align-self-center\">\n      <v-col cols=\"8\">\n        <h2 class=\"ma4\">External</h2>\n      </v-col>\n      <v-col cols=\"4\" class=\"text-right\">\n        <div v-if=\"isEditMode\">\n          <v-btn color=\"primary\" @click=\"resetForm\" class=\"mx-1\">Reset</v-btn>\n          <v-btn color=\"primary\" :disabled=\"!isFormValid\" @click=\"submitForm\" class=\"mx-1\">Save Step</v-btn>\n        </div>\n        <v-btn v-else color=\"primary\" @click=\"enableEditMode\">Edit</v-btn>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 1 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S1EXTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 1 - Residue CO2 (%)\" outlined v-model=\"formData.S1EXTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (min)\" outlined v-model=\"formData.S1EXTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T40 (sec)\" outlined v-model=\"formData.S1EXTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (min)\" outlined v-model=\"formData.S1EXTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 1 - Reactivity T60 (sec)\" outlined v-model=\"formData.S1EXTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - LOI (%)\" outlined v-model=\"formData.S1EXTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Available CO2 (%)\" outlined v-model=\"formData.S1EXTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 1 - Mechanical Degradation (%)\" outlined v-model=\"formData.S1EXTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n    <v-row>\n      <v-col cols=\"6\">\n        <v-select label=\"Shaft 2 - Aspect Code\" :items=\"aspectCodes\" item-title=\"title\" item-value=\"value\" outlined v-model=\"formData.S2EXTASPCODE\" :rules=\"[rules.required]\" clearable></v-select>\n      </v-col>\n      <v-col cols=\"6\">\n        <v-text-field label=\"Shaft 2 - Residue CO2 (%)\" outlined v-model=\"formData.S2EXTCO2RES\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (min)\" outlined v-model=\"formData.S2EXTT40M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T40 (sec)\" outlined v-model=\"formData.S2EXTT40S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (min)\" outlined v-model=\"formData.S2EXTT60M\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"3\">\n        <v-text-field label=\"Shaft 2 - Reactivity T60 (sec)\" outlined v-model=\"formData.S2EXTT60S\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - LOI (%)\" outlined v-model=\"formData.S2EXTLOI\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Available CO2 (%)\" outlined v-model=\"formData.S2EXTCO2A\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n      <v-col cols=\"4\">\n        <v-text-field label=\"Shaft 2 - Mechanical Degradation (%)\" outlined v-model=\"formData.S2EXTMECDEG\" :rules=\"[rules.required, rules.numeric]\" clearable></v-text-field>\n      </v-col>\n    </v-row>\n\n\n  </v-container>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      isEditMode: true,\n      formData: {\n        S1EXTASPCODE: null,\n        S1EXTCO2RES: null,\n        S1EXTT40M: null,\n        S1EXTT40S: null,\n        S1EXTT60M: null,\n        S1EXTT60S: null,\n        S1EXTLOI: null,\n        S1EXTCO2A: null,\n        S1EXTMECDEG: null,\n        \n        S2EXTASPCODE: null,\n        S2EXTCO2RES: null,\n        S2EXTT40M: null,\n        S2EXTT40S: null,\n        S2EXTT60M: null,\n        S2EXTT60S: null,\n        S2EXTLOI: null,\n        S2EXTCO2A: null,\n        S2EXTMECDEG: null,\n      },\n      aspectCodes: [\n        { title: \"Quite White\", value: 2 },\n        { title: \"Good\", value: 3 },\n        { title: \"Overburned\", value: 4 },\n        { title: \"Sticky\", value: 5 },\n      ],\n      rules: {\n        required: (value) => !!value || \"This field is required\",\n        numeric: (value) => !value || !isNaN(value) || \"This field must be numeric\",\n      },\n    };\n  },\n  computed: {\n    isFormValid() {\n      return Object.values(this.formData).every((value) => value !== null);\n    },\n  },\n  watch: {\n    msg: {\n      handler(newValue) {\n        if (newValue.reset && newValue.reset === true) {\n          this.resetForm();\n        }\n      },\n      deep: true,\n    },\n  },\n  methods: {\n    submitForm() {\n      if (this.isFormValid) {\n        this.send({\n          topic: \"quicklime_external\",\n          payload: this.formData,\n        });\n        this.isEditMode = false;\n      } else {\n        console.error(\"Form is invalid!\");\n      }\n    },\n    enableEditMode() {\n      this.isEditMode = true;\n    },\n    resetForm() {\n      Object.keys(this.formData).forEach((key) => {\n        this.formData[key] = null;\n      });\n    },\n  },\n};\n</script>\n\n<style scoped>\nh2 {\n  margin-bottom: 10px;\n  font-weight: normal;\n  font-size: 20px;\n}\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 470,
+        "y": 1420,
+        "wires": [
+            [
+                "da620ff3a434d7f0"
+            ]
         ]
     },
     {
@@ -11156,149 +11949,5 @@
         "x": 880,
         "y": 120,
         "wires": []
-    },
-    {
-        "id": "nS_triggers",
-        "type": "status",
-        "z": "tab_triggers",
-        "name": "",
-        "scope": null,
-        "x": 120,
-        "y": 60,
-        "wires": [
-            [
-                "loS_triggers"
-            ]
-        ]
-    },
-    {
-        "id": "loS_triggers",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "status_triggers",
-        "mode": "link",
-        "links": [
-            "liALL_status"
-        ],
-        "x": 235,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "nC_triggers",
-        "type": "catch",
-        "z": "tab_triggers",
-        "name": "",
-        "scope": null,
-        "uncaught": false,
-        "x": 520,
-        "y": 60,
-        "wires": [
-            [
-                "loC_triggers"
-            ]
-        ]
-    },
-    {
-        "id": "loC_triggers",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "error_triggers",
-        "mode": "link",
-        "links": [
-            "liALL_errors"
-        ],
-        "x": 635,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "comment_trig1",
-        "type": "comment",
-        "z": "tab_triggers",
-        "name": "Trigger 1: Triggerino",
-        "info": "",
-        "x": 160,
-        "y": 150,
-        "wires": []
-    },
-    {
-        "id": "sf_trigger_handler_trig1_t17",
-        "type": "subflow:sf_trigger_handler",
-        "z": "tab_triggers",
-        "name": "trig1 - tags_odr_reversy_s7",
-        "env": [
-            {
-                "name": "TRIGGER_ID",
-                "value": "1",
-                "type": "num"
-            },
-            {
-                "name": "TAG_TABLE",
-                "value": "tags_odr_reversy_s7",
-                "type": "str"
-            }
-        ],
-        "x": 620,
-        "y": 250,
-        "wires": [
-            [
-                "trigger_e20_t17_out"
-            ]
-        ]
-    },
-    {
-        "id": "manual_trig1_t17",
-        "type": "inject",
-        "z": "tab_triggers",
-        "name": "Manual Trigger",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "trigger",
-        "x": 220,
-        "y": 250,
-        "wires": [
-            [
-                "sf_trigger_handler_trig1_t17"
-            ]
-        ]
-    },
-    {
-        "id": "trigger_e20_t17_out",
-        "type": "link out",
-        "z": "tab_triggers",
-        "name": "trigger_e20_t17_out",
-        "mode": "link",
-        "links": [
-            "sf_data_handler_e20_t17_in"
-        ],
-        "x": 850,
-        "y": 250,
-        "wires": []
-    },
-    {
-        "id": "s7in_trig1",
-        "type": "s7 in",
-        "z": "tab_triggers",
-        "endpoint": "S7endpoint_e20_trig",
-        "mode": "all",
-        "variable": "",
-        "diff": false,
-        "name": "",
-        "x": 220,
-        "y": 200,
-        "wires": [
-            [
-                "sf_trigger_handler_trig1_t17"
-            ]
-        ]
     }
 ]
