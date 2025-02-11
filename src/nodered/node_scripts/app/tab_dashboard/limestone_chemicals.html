@@ -66,24 +66,36 @@ export default {
     return {
       isEditMode: true,
       rules,
+      formName: "limestone_chemicals",
       formFields: [
-        { key: "lol", label: "Loss of Ignition (%)", rules: [rules.required, rules.numeric] },
-        { key: "siO2", label: "Silicon Dioxide (SiO2) (%)", rules: [rules.required, rules.numeric] },
-        { key: "al2O3", label: "Aluminum Oxide (Al2O3) (%)", rules: [rules.required, rules.numeric] },
-        { key: "fe2O3", label: "Iron Oxide (Fe2O3) (%)", rules: [rules.required, rules.numeric] },
-        { key: "k2O", label: "Potassium Oxide (K2O) (%)", rules: [rules.required, rules.numeric] },
-        { key: "caO", label: "Calcium Oxide (CaO) (%)", rules: [rules.required, rules.numeric] },
-        { key: "mgO", label: "Magnesium Oxide (MgO) (%)", rules: [rules.required, rules.numeric] },
-        { key: "so3", label: "Sulfur Oxide (SO3) (%)", rules: [rules.required, rules.numeric] },
-        { key: "srO", label: "Strontium Oxide (SrO) (%)", rules: [rules.required, rules.numeric] },
-        { key: "cuO", label: "Copper Oxide (CuO) (%)", rules: [rules.required, rules.numeric] },
-        { key: "na2O", label: "Sodium Oxide (Na2O) (%)", rules: [rules.required, rules.numeric] },
-        { key: "tiO2", label: "Titanium Oxide (TiO2) (%)", rules: [rules.required, rules.numeric] },
-        { key: "other", label: "Other (%)", rules: [rules.required, rules.numeric] }
+        { key: "Lol", label: "Loss of Ignition (%)", rules: [rules.required, rules.numeric] },
+        { key: "SiO2", label: "Silicon Dioxide (SiO2) (%)", rules: [rules.required, rules.numeric] },
+        { key: "Al2O3", label: "Aluminum Oxide (Al2O3) (%)", rules: [rules.required, rules.numeric] },
+        { key: "Fe2O3", label: "Iron Oxide (Fe2O3) (%)", rules: [rules.required, rules.numeric] },
+        { key: "K2O", label: "Potassium Oxide (K2O) (%)", rules: [rules.required, rules.numeric] },
+        { key: "CaO", label: "Calcium Oxide (CaO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "MgO", label: "Magnesium Oxide (MgO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "SO3", label: "Sulfur Oxide (SO3) (%)", rules: [rules.required, rules.numeric] },
+        { key: "SrO", label: "Strontium Oxide (SrO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "CuO", label: "Copper Oxide (CuO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "Na2O", label: "Sodium Oxide (Na2O) (%)", rules: [rules.required, rules.numeric] },
+        { key: "TiO2", label: "Titanium Oxide (TiO2) (%)", rules: [rules.required, rules.numeric] },
+        { key: "OTHER", label: "Other (%)", rules: [rules.required, rules.numeric] }
       ],
       formData: {
-        lol: null, siO2: null, al2O3: null, fe2O3: null, k2O: null, caO: null,
-        mgO: null, so3: null, srO: null, cuO: null, na2O: null, tiO2: null, other: null
+        Lol : null,
+        SiO2: null,
+        Al2O3: null,
+        Fe2O3: null,
+        K2O: null,
+        CaO: null,
+        MgO: null,
+        SO3: null,
+        SrO: null,
+        CuO: null,
+        Na2O: null,
+        TiO2: null,
+        OTHER: null
       }
     };
   },
@@ -95,8 +107,17 @@ export default {
   watch: {
     msg: {
       handler(newValue) {
-        if (newValue.reset && newValue.reset === true) {
-          this.resetForm(); // Reset the form when reset is true
+        if (newValue.topic) {
+          switch (newValue.topic) {
+            case "reset":
+              this.resetForm();;
+              break;
+            case "submit":
+              this.submitForm();
+              break;
+            default:
+              break;
+          }
         }
       },
       deep: true, // Watch for nested changes
@@ -104,12 +125,12 @@ export default {
   },
   methods: {
     submitForm() {
-      if (this.isFormValid) {
-        this.send({ topic: "limestone_chemicals", payload: this.formData });
-        this.isEditMode = false;
-      } else {
-        console.error("Form is invalid!");
-      }
+      this.send({
+        topic: "store",
+        form: this.formName,
+        payload: this.formData,
+      });
+      this.isEditMode = false; // Disable edit mode
     },
     enableEditMode() {
       this.isEditMode = true;

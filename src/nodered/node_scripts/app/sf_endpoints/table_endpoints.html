@@ -133,15 +133,15 @@
         ></v-switch>
       </template>      
 
-      <!-- Display Machines as Chips -->
-      <template v-slot:item.machine="{ item }">
+      <!-- Display Endpoints as Chips -->
+      <template v-slot:item.name="{ item }">
         <div>
           <v-chip
             class="ma-1"
-            :color="getListColor(msg.dashboard.form.machine, item.machine, item)"
+            :color="getSwitchColor(item)"
             dark
           >
-            {{ item.machine }}
+            {{ item.name }}
           </v-chip>
         </div>
       </template>

@@ -42,7 +42,7 @@ for (const change of msg.dashboard.history) {
     if (oldItem && !newItem) {
         // Case: deletion
         const oldName = escapeIdentifier(oldItem.name.toLowerCase());
-        commands.push(`DELETE FROM ${tagTable} WHERE name = ${escapeValue(oldItem.name.toLowerCase())};`);
+        commands.push(`DELETE FROM ${tagTable} WHERE name = ${escapeValue(oldItem.name)};`);
         commands.push(`ALTER TABLE IF EXISTS ${dataTable} DROP COLUMN IF EXISTS ${oldName};`);
 
     } else if (!oldItem && newItem) {
@@ -60,7 +60,7 @@ for (const change of msg.dashboard.history) {
         const updates = Object.keys(newItem)
             .map(key => `${escapeIdentifier(key)} = ${escapeValue(newItem[key])}`) // Escape values and identifiers
             .join(', ');
-        commands.push(`UPDATE ${tagTable} SET ${updates} WHERE name = ${escapeValue(oldItem.name.toLowerCase())};`);
+        commands.push(`UPDATE ${tagTable} SET ${updates} WHERE name = ${escapeValue(oldItem.name)};`);
         if (oldItem.name.toLowerCase() !== newItem.name.toLowerCase()) {
             commands.push(`ALTER TABLE IF EXISTS ${dataTable} RENAME COLUMN ${escapeIdentifier(oldItem.name.toLowerCase())} TO ${escapeIdentifier(newItem.name.toLowerCase())};`);
         }

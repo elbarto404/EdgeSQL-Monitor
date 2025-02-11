@@ -82,6 +82,7 @@ export default {
   data() {
     return {
       isEditMode: true,
+      formName: "quicklime_skip",
       formData: {
         S1SKIASPCODE: null,
         S1SKICO2RES: null,
@@ -123,24 +124,30 @@ export default {
   watch: {
     msg: {
       handler(newValue) {
-        if (newValue.reset && newValue.reset === true) {
-          this.resetForm();
+        if (newValue.topic) {
+          switch (newValue.topic) {
+            case "reset":
+              this.resetForm();;
+              break;
+            case "submit":
+              this.submitForm();
+              break;
+            default:
+              break;
+          }
         }
       },
-      deep: true,
+      deep: true, // Watch for nested changes
     },
   },
   methods: {
     submitForm() {
-      if (this.isFormValid) {
-        this.send({
-          topic: "quicklime_skip",
-          payload: this.formData,
-        });
-        this.isEditMode = false;
-      } else {
-        console.error("Form is invalid!");
-      }
+      this.send({
+        topic: "store",
+        form: this.formName,
+        payload: this.formData,
+      });
+      this.isEditMode = false; // Disable edit mode
     },
     enableEditMode() {
       this.isEditMode = true;
