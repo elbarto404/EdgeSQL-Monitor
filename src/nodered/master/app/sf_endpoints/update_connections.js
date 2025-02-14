@@ -22,14 +22,34 @@ function generateId(existingIds) {
     return id;
 }
 
-// Helper function to align x coo
-function alignX(targetX, name) {
-    const nodeWidth = 50 + 5 * name.length;
-    return targetX + nodeWidth / 2;
+// Helper function to convert time to milliseconds
+function timeToMilliseconds(timeStr) {
+    if (timeStr === undefined || timeStr === null || timeStr === '' || timeStr.toLowerCase() === 'none') {
+        return 0;
+    }
+    // Extract the numeric part and the unit part
+    const num = parseFloat(timeStr);
+    const unit = timeStr.replace(num, '').trim();
+
+    // Convert based on the unit
+    switch(unit) {
+        case 'ms':
+            return num; // Already in milliseconds
+        case 's':
+            return num * 1000; // Convert seconds to milliseconds
+        case 'm':
+            return num * 1000 * 60; // Convert minutes to milliseconds
+        case 'h':
+            return num * 1000 * 60 * 60; // Convert hours to milliseconds
+        case 'd':
+            return num * 1000 * 60 * 60 * 24; // Convert days to milliseconds
+        default:
+            node.error(`Invalid time unit - ${timeStr} - ${num} - ${unit}`);
+    }
 }
 
 // Helper function to safely parse the endpoint address
-function parseEndpointAddress(endpoint) {
+function parseEndpointAddress(endpoint, endpointRegex) {
     if (!endpoint || !endpoint.address) {
         node.error(`Invalid endpoint object or missing address.`);
         node.status({ fill: "red", shape: "dot", text: `Invalid endpoint object or missing address` });
@@ -49,9 +69,9 @@ function parseEndpointAddress(endpoint) {
 
     return {
         address,
-        port: Number(port),
-        rack: Number(rack),
-        slot: Number(slot)
+        port: String(port),
+        rack: String(rack),
+        slot: String(slot)
     };
 }
 
@@ -122,6 +142,7 @@ function generateStaticNodes() {
 
 // Function to generate the nodes for a S7 endpoint with a custom trigger
 function generateS7triggered(endpoint, tag_tables) {
+    const endpointRegex = /^([\w\-.]+):(\d+)@(\d+):(\d+)$/; // Regex to match the endpoint address
     const S7endpointId = `S7endpoint_e${endpoint.id}`;
     const S7inId = `s7in_e${endpoint.id}`;
     const S7controlId = `s7control_e${endpoint.id}`;
@@ -138,7 +159,7 @@ function generateS7triggered(endpoint, tag_tables) {
     if (!tag_tables.length) {
         return;
     }
-    const parsedAddress = parseEndpointAddress(endpoint);
+    const parsedAddress = parseEndpointAddress(endpoint, endpointRegex);
     if (!parsedAddress) {
         return;
     }
@@ -147,9 +168,9 @@ function generateS7triggered(endpoint, tag_tables) {
         "id": `comment_e${endpoint.id}`,
         "type": "comment",
         "z": "tab_connections",
-        "name": `Endpoint ${endpoint.id}: ${endpoint.name}`,
+        "name": `Endpoint ${endpoint.id}: ${endpoint.name} - triggered`,
         "info": `README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md`,
-        "x": 200,
+        "x": 220,
         "y": startY,
         "wires": []
     });
@@ -179,10 +200,13 @@ function generateS7triggered(endpoint, tag_tables) {
             "vartable": []
         });
     } else {
-        endpointNode.address = address;
-        endpointNode.port = port;
-        endpointNode.rack = rack;
-        endpointNode.slot = slot;
+        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot;
+        if (deployNeeded) {
+            endpointNode.address = address;
+            endpointNode.port = port;
+            endpointNode.rack = rack;
+            endpointNode.slot = slot;
+        }
     }
 
     // Create the data handler flow for each table
@@ -338,6 +362,147 @@ function generateS7triggered(endpoint, tag_tables) {
     startY += (dY - startY);
 }
 
+// Function to generate the nodes for a S7 endpoint with a custom trigger
+function generateS7continous(endpoint, tag_tables, period, diff) {
+    const endpointRegex = /^([\w\-.]+):(\d+)@(\d+):(\d+)$/; // Regex to match the endpoint address
+    const S7endpointId = `S7endpoint_e${endpoint.id}_${period}`;
+    const suffix = diff ? "diff" : "ever";
+    const S7inId = `s7in_e${endpoint.id}_${period}_${suffix}`;
+    const endpointNode = updatedNodes.find(node => node.id === S7endpointId);
+    if (!endpoint.enabled && endpointNode) {
+        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
+        deployNeeded = true;
+    }
+    if (!endpoint.enabled) {
+        return;
+    }
+    if (!tag_tables.length) {
+        return;
+    }
+    const parsedAddress = parseEndpointAddress(endpoint, endpointRegex);
+    if (!parsedAddress) {
+        return;
+    }
+    const { address, port, rack, slot } = parsedAddress;
+    updatedNodes.push({
+        "id": `comment_e${endpoint.id}_${period}_${suffix}`,
+        "type": "comment",
+        "z": "tab_connections",
+        "name": `Endpoint ${endpoint.id}: ${endpoint.name} - ${period} - ${suffix}`,
+        "info": `README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md`,
+        "x": 220,
+        "y": startY,
+        "wires": []
+    });
+    startY += 50;
+
+    // Check if the endpoint node for this endpoint already exists
+    if (!endpointNode) {
+        deployNeeded = true;
+        updatedNodes.push({
+            "id": S7endpointId,
+            "type": "s7 endpoint",
+            "transport": "iso-on-tcp",
+            "address": address,
+            "port": port,
+            "rack": rack,
+            "slot": slot,
+            "localtsaphi": "01",
+            "localtsaplo": "00",
+            "remotetsaphi": "01",
+            "remotetsaplo": "00",
+            "connmode": "rack-slot",
+            "adapter": "",
+            "busaddr": "2",
+            "cycletime": String(timeToMilliseconds(period)),
+            "timeout": "5000",
+            "name": "",
+            "vartable": []
+        });
+    } else {
+        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot;
+        if (deployNeeded) {
+            endpointNode.address = address;
+            endpointNode.port = port;
+            endpointNode.rack = rack;
+            endpointNode.slot = slot;
+        }
+    }
+
+    // Create the data handler flow for each table
+    let sf_data_handlerIds = [];
+    let dY = startY;
+    for (let table of tag_tables) {
+        const sf_data_handlerId = `sf_data_handler_e${endpoint.id}_t${table.id}`;
+        const linkCallId = `sf_data_handler_e${endpoint.id}_t${table.id}_call`;
+        sf_data_handlerIds.push(sf_data_handlerId);
+        updatedNodes.push(...[
+            {
+                "id": sf_data_handlerId,
+                "type": "subflow:sf_data_handler",
+                "z": "tab_connections",
+                "name": `${table.name}@${endpoint.id}`,
+                "env": [
+                    {
+                        "name": "ENDPOINT_ID",
+                        "value": String(endpoint.id),
+                        "type": "num"
+                    },
+                    {
+                        "name": "TAG_TABLE",
+                        "value": table.name,
+                        "type": "str"
+                    }
+                ],
+                "x": 540,
+                "y": dY,
+                "wires": [
+                    [
+                        linkCallId
+                    ]
+                ]
+            },
+            {
+                "id": linkCallId,
+                "type": "link call",
+                "z": "tab_connections",
+                "name": "dynamic",
+                "links": [],
+                "linkType": "dynamic",
+                "timeout": "30",
+                "x": 820,
+                "y": dY,
+                "wires": [
+                    [
+                        sf_data_handlerId
+                    ]
+                ]
+            },
+        ]);
+        dY += 100;
+    }
+
+    // Create the S7 in and S7 control nodes
+    sf_data_handlerIds.sort();
+    updatedNodes.push({
+        "id": S7inId,
+        "type": "s7 in",
+        "z": "tab_connections",
+        "endpoint": S7endpointId,
+        "mode": "all",
+        "variable": "",
+        "diff": diff,
+        "name": "",
+        "x": 220,
+        "y": startY,
+        "wires": [
+            sf_data_handlerIds
+        ]
+    });
+
+    startY += (dY - startY);
+}
+
 
 // _________________________Main_______________________________
 
@@ -345,7 +510,6 @@ const endpoints = msg.data;  // Array of all endpoints
 const history = msg.history; // Array of all history
 const allNodes = msg.payload;   // Current nodes
 const tag_tables = global.get('tag_tables');
-const endpointRegex = /^([\w\-.]+):(\d+)@(\d+):(\d+)$/; // Regex to match the endpoint address
 
 if (!Array.isArray(endpoints) || !Array.isArray(allNodes)) {
     node.error("Input data or allNodes is not in the expected format.");
@@ -368,18 +532,31 @@ for (let endpoint of endpoints) {
     const trigger_tables = tag_tables.filter(table =>
         endpoint.tag_tables.includes(table.name) &&
         table.protocol === endpoint.protocol &&
-        ["trigger", "trigger_custom"].includes(table.sampling_mode)
+        table.sampling_mode === "Trigger"
     );
-    const continuous_tables = tag_tables.filter(table =>
+    const c_tables = tag_tables.filter(table =>
         endpoint.tag_tables.includes(table.name) &&
         table.protocol === endpoint.protocol &&
-        ["continuous", "continuous_on_change"].includes(table.sampling_mode)
+        table.sampling_mode === "Continous"
+    );
+    const coc_tables = tag_tables.filter(table =>
+        endpoint.tag_tables.includes(table.name) &&
+        table.protocol === endpoint.protocol &&
+        table.sampling_mode === "ContinousOnChange"
     );
 
     switch (endpoint.protocol) {
         case "S7": {
             generateS7triggered(endpoint, trigger_tables);
-
+            let sampling_periods_set = new Set(c_tables.map(table => table.sampling_freq));
+            for (let period of sampling_periods_set) {
+                const tables = c_tables.filter(table => table.sampling_freq === period);
+                generateS7continous(endpoint, tables, period, false);
+            }
+            for (let period of sampling_periods_set) {
+                const tables = coc_tables.filter(table => table.sampling_freq === period);
+                generateS7continous(endpoint, tables, period, true);
+            }
         }
     }
 }
@@ -392,12 +569,6 @@ for (let edit of history) {
         const S7endpointId = `S7endpoint_e${endpoint.id}`;
         updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
         const tag_tables = global.get('tag_tables').filter(table => endpoint.tag_tables.includes(table.name));
-        /*
-        for (let table of tag_tables) {
-            const triggerId = `trigger_e${endpoint.id}_t${table.id}_out`;
-            updatedNodes = updatedNodes.filter(node => node.id !== triggerId);
-        }
-        */
     }
 }
 

@@ -46,7 +46,7 @@ for (const change of msg.dashboard.history) {
         if (oldItem.name !== newItem.name) {
             commands.push(`ALTER TABLE IF EXISTS ${tagsSchema}.${oldName} RENAME TO ${escapeIdentifier(newItem.name)};`);
         }
-        if (oldDataTable !== newItem.data_table) {
+        if (oldItem.data_table !== newItem.data_table) {
             commands.push(`ALTER TABLE IF EXISTS ${dataSchema}.${oldDataTable} RENAME TO ${escapeIdentifier(newItem.data_table)};`);
         }
     }

@@ -8,7 +8,7 @@ function timeToMilliseconds(timeStr) {
     const unit = timeStr.replace(num, '').trim();
 
     // Convert based on the unit
-    switch(unit) {
+    switch (unit) {
         case 'ms':
             return num; // Already in milliseconds
         case 's':
@@ -68,7 +68,7 @@ msg.period = timeToMilliseconds(meta_table.sampling_freq);
 msg.endpoint = endpoint;
 msg.tag_table = tag_table;
 msg.meta_table = meta_table;
-msg.isTrigger = ['Trigger', 'Trigger Custom', 'trigger', 'trigger_custom'].includes(meta_table.sampling_mode);
+msg.isTrigger = ['Trigger'].includes(meta_table.sampling_mode);
 
 // Topic Switch (for trigger messages)
 if (msg.topic === 'trigger') {

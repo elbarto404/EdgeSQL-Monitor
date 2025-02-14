@@ -49,9 +49,9 @@ function parseEndpointAddress(endpoint) {
 
     return {
         address,
-        port: Number(port),
-        rack: Number(rack),
-        slot: Number(slot)
+        port: String(port),
+        rack: String(rack),
+        slot: String(slot)
     };
 }
 
@@ -109,7 +109,7 @@ function generateStaticNodes() {
             "name": "error_triggers",
             "mode": "link",
             "links": [
-                "liALL_trigrrors"
+                "liALL_errors"
             ],
             "x": 635,
             "y": 60,
@@ -203,11 +203,11 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
                 "id": sf_trigger_handlerId,
                 "type": "subflow:sf_trigger_handler",
                 "z": "tab_triggers",
-                "name": `${table.name} - trig${trigger.id}`,
+                "name": `trig${trigger.id} - ${table.name}`,
                 "env": [
                     {
                         "name": "TRIGGER_ID",
-                        "value": trigger.id,
+                        "value": String(trigger.id),
                         "type": "num"
                     },
                     {
@@ -253,12 +253,13 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
                 "type": "link out",
                 "z": "tab_triggers",
                 "name": linkOutId,
+                "mode": "link",
                 "links": [
                     linkDataHandlerId
                 ],
                 "x": 850,
                 "y": dY,
-                "wires": [[]]
+                "wires": []
             }
         ]);
         dY += 100;
@@ -283,6 +284,7 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
     });
 
     msg.log.push({ sf_trigger_handlerIds: sf_trigger_handlerIds });
+    startY += 120;
 }
 
 
@@ -322,7 +324,7 @@ for (let endpoint of endpoints) {
         const trigger_tables = tag_tables.filter(table =>
             trigger.tag_tables.includes(table.name) &&
             table.protocol === endpoint.protocol &&
-            ["trigger", "trigger_custom"].includes(table.sampling_mode)
+            ["trigger", "Trigger"].includes(table.sampling_mode)
         );
         msg.log.push({ trigger: trigger, tables: trigger_tables });
         switch (endpoint.protocol) {

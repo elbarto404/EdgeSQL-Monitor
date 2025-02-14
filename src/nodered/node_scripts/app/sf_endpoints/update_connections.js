@@ -532,17 +532,17 @@ for (let endpoint of endpoints) {
     const trigger_tables = tag_tables.filter(table =>
         endpoint.tag_tables.includes(table.name) &&
         table.protocol === endpoint.protocol &&
-        ["trigger", "trigger_custom"].includes(table.sampling_mode)
+        table.sampling_mode === "Trigger"
     );
     const c_tables = tag_tables.filter(table =>
         endpoint.tag_tables.includes(table.name) &&
         table.protocol === endpoint.protocol &&
-        table.sampling_mode === "continous"
+        table.sampling_mode === "Continous"
     );
     const coc_tables = tag_tables.filter(table =>
         endpoint.tag_tables.includes(table.name) &&
         table.protocol === endpoint.protocol &&
-        table.sampling_mode === "continous_on_change"
+        table.sampling_mode === "ContinousOnChange"
     );
 
     switch (endpoint.protocol) {
@@ -569,12 +569,6 @@ for (let edit of history) {
         const S7endpointId = `S7endpoint_e${endpoint.id}`;
         updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
         const tag_tables = global.get('tag_tables').filter(table => endpoint.tag_tables.includes(table.name));
-        /*
-        for (let table of tag_tables) {
-            const triggerId = `trigger_e${endpoint.id}_t${table.id}_out`;
-            updatedNodes = updatedNodes.filter(node => node.id !== triggerId);
-        }
-        */
     }
 }
 

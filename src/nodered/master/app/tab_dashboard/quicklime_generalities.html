@@ -1,0 +1,219 @@
+<template>
+  <v-container>
+    <v-row class="align-self-center">
+      <v-col cols="8">
+        <h2 class="ma4">Generalities</h2>
+      </v-col>
+      <v-col cols="4" class="text-right">
+        <div v-if="isEditMode">
+          <v-btn color="primary" @click="resetForm" class="mx-1">Reset</v-btn>
+          <v-btn color="primary" :disabled="!isFormValid" @click="submitForm" class="mx-1">Save Step</v-btn>
+        </div>
+        <v-btn v-else color="primary" @click="enableEditMode">Edit</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="4">
+        <v-text-field label="Cycle Date" outlined v-model="formData.Date" :rules="[rules.required]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Cycle Time" outlined v-model="formData.Hour" :rules="[rules.required]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-text-field label="Progressive Cycle Number" outlined v-model="formData.CY" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="3">
+        <v-select label="Shaft 1 Aspect Code" :items="aspectCodes" item-title="title" item-value="value" outlined v-model="formData.S1ASPCODE" :rules="[rules.required]" clearable></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 Small Unburned" outlined v-model="formData.S1SMALLUN" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 Medium Unburned" outlined v-model="formData.S1MEDUN" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 Big Unburned" outlined v-model="formData.S1BIGUN" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Residue CO2 (%)" outlined v-model="formData.S1CO2RES" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - LOI (%)" outlined v-model="formData.S1LOI" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Available CO2 (%)" outlined v-model="formData.S1CO2A" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Mechanical Degradation (%)" outlined v-model="formData.S1MECDEG" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Reactivity T40 (min)" outlined v-model="formData.S1T40M" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Reactivity T40 (sec)" outlined v-model="formData.S1T40S" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Reactivity T60 (min)" outlined v-model="formData.S1T60M" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 1 - Reactivity T60 (sec)" outlined v-model="formData.S1T60S" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="3">
+        <v-select label="Shaft 2 Aspect Code" :items="aspectCodes" item-title="title" item-value="value" outlined v-model="formData.S2ASPCODE" :rules="[rules.required]" clearable></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 Small Unburned" outlined v-model="formData.S2SMALLUN" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 Medium Unburned" outlined v-model="formData.S2MEDUN" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 Big Unburned" outlined v-model="formData.S2BIGUN" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Residue CO2 (%)" outlined v-model="formData.S2CO2RES" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - LOI (%)" outlined v-model="formData.S2LOI" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Available CO2 (%)" outlined v-model="formData.S2CO2A" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Mechanical Degradation (%)" outlined v-model="formData.S2MECDEG" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Reactivity T40 (min)" outlined v-model="formData.S2T40M" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Reactivity T40 (sec)" outlined v-model="formData.S2T40S" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Reactivity T60 (min)" outlined v-model="formData.S2T60M" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field label="Shaft 2 - Reactivity T60 (sec)" outlined v-model="formData.S2T60S" :rules="[rules.required, rules.numeric]" clearable></v-text-field>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isEditMode: true,
+      formName: "quicklime_generalities",
+      formData: {
+        Date: null,
+        Hour: null,
+        CY: null,
+
+        S1ASPCODE: null,
+        S1SMALLUN: null,
+        S1MEDUN: null,
+        S1BIGUN: null,
+        S1CO2RES: null,
+        S1LOI: null,
+        S1CO2A: null,
+        S1MECDEG: null,
+        S1T40M: null,
+        S1T40S: null,
+        S1T60M: null,
+        S1T60S: null,
+
+        S2ASPCODE: null,
+        S2SMALLUN: null,
+        S2MEDUN: null,
+        S2BIGUN: null,
+        S2CO2RES: null,
+        S2LOI: null,
+        S2CO2A: null,
+        S2MECDEG: null,
+        S2T40M: null,
+        S2T40S: null,
+        S2T60M: null,
+        S2T60S: null,
+      },
+      aspectCodes: [
+        { title: "Quite White", value: 2 },
+        { title: "Good", value: 3 },
+        { title: "Overburned", value: 4 },
+        { title: "Sticky", value: 5 },
+      ],
+      rules: {
+        required: (value) => !!value || "This field is required",
+        numeric: (value) => !value || !isNaN(value) || "This field must be numeric",
+      },
+    };
+  },
+  computed: {
+    isFormValid() {
+      return Object.values(this.formData).every((value) => value !== null);
+    },
+  },
+  watch: {
+    msg: {
+      handler(newValue) {
+        if (newValue.topic) {
+          switch (newValue.topic) {
+            case "reset":
+              this.resetForm();;
+              break;
+            case "submit":
+              this.submitForm();
+              break;
+            default:
+              break;
+          }
+        }
+      },
+      deep: true, // Watch for nested changes
+    },
+  },
+  methods: {
+    submitForm() {
+      this.send({
+        topic: "store",
+        form: this.formName,
+        payload: this.formData,
+      });
+      this.isEditMode = false; // Disable edit mode
+    },
+    enableEditMode() {
+      this.isEditMode = true;
+    },
+    resetForm() {
+      Object.keys(this.formData).forEach((key) => {
+        this.formData[key] = null;
+      });
+    },
+  },
+};
+</script>
+
+<style scoped>
+h2 {
+  margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 20px;
+}
+</style>

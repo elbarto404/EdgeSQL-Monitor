@@ -284,6 +284,7 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
     });
 
     msg.log.push({ sf_trigger_handlerIds: sf_trigger_handlerIds });
+    startY += 120;
 }
 
 
@@ -323,7 +324,7 @@ for (let endpoint of endpoints) {
         const trigger_tables = tag_tables.filter(table =>
             trigger.tag_tables.includes(table.name) &&
             table.protocol === endpoint.protocol &&
-            ["trigger", "trigger_custom"].includes(table.sampling_mode)
+            ["trigger", "Trigger"].includes(table.sampling_mode)
         );
         msg.log.push({ trigger: trigger, tables: trigger_tables });
         switch (endpoint.protocol) {

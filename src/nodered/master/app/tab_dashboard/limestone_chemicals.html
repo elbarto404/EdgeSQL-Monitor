@@ -1,0 +1,156 @@
+<template>
+  <v-container>
+    <v-row class="align-self-center">
+      <v-col cols="8">
+        <h2 class="ma4">Chemicals</h2>
+      </v-col>
+      <v-col cols="4" class="text-right">
+        <!-- Save and Reset Buttons (Visible in Edit Mode) -->
+        <div v-if="isEditMode">
+          <v-btn
+            color="primary"
+            @click="resetForm"
+            class="mx-1"
+          >
+            Reset
+          </v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!isFormValid"
+            @click="submitForm"
+            class="mx-1"
+          >
+            Save Step
+          </v-btn>
+        </div>
+
+        <!-- Edit Button (Visible when not in Edit Mode) -->
+        <v-btn
+          v-else
+          color="primary"
+          @click="enableEditMode"
+        >
+          Edit
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col
+        cols="4"
+        v-for="(field, index) in formFields"
+        :key="index"
+      >
+        <v-text-field
+          :label="field.label"
+          outlined
+          v-model="formData[field.key]"
+          :rules="field.rules"
+          :disabled="!isEditMode"
+          clearable
+        ></v-text-field>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+
+<script>
+export default {
+  data() {
+    const rules = {
+      required: (value) => !!value || "This field is required",
+      numeric: (value) => !value || !isNaN(value) || "This field must be numeric"
+    };
+
+    return {
+      isEditMode: true,
+      rules,
+      formName: "limestone_chemicals",
+      formFields: [
+        { key: "Lol", label: "Loss of Ignition (%)", rules: [rules.required, rules.numeric] },
+        { key: "SiO2", label: "Silicon Dioxide (SiO2) (%)", rules: [rules.required, rules.numeric] },
+        { key: "Al2O3", label: "Aluminum Oxide (Al2O3) (%)", rules: [rules.required, rules.numeric] },
+        { key: "Fe2O3", label: "Iron Oxide (Fe2O3) (%)", rules: [rules.required, rules.numeric] },
+        { key: "K2O", label: "Potassium Oxide (K2O) (%)", rules: [rules.required, rules.numeric] },
+        { key: "CaO", label: "Calcium Oxide (CaO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "MgO", label: "Magnesium Oxide (MgO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "SO3", label: "Sulfur Oxide (SO3) (%)", rules: [rules.required, rules.numeric] },
+        { key: "SrO", label: "Strontium Oxide (SrO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "CuO", label: "Copper Oxide (CuO) (%)", rules: [rules.required, rules.numeric] },
+        { key: "Na2O", label: "Sodium Oxide (Na2O) (%)", rules: [rules.required, rules.numeric] },
+        { key: "TiO2", label: "Titanium Oxide (TiO2) (%)", rules: [rules.required, rules.numeric] },
+        { key: "OTHER", label: "Other (%)", rules: [rules.required, rules.numeric] }
+      ],
+      formData: {
+        Lol : null,
+        SiO2: null,
+        Al2O3: null,
+        Fe2O3: null,
+        K2O: null,
+        CaO: null,
+        MgO: null,
+        SO3: null,
+        SrO: null,
+        CuO: null,
+        Na2O: null,
+        TiO2: null,
+        OTHER: null
+      }
+    };
+  },
+  computed: {
+    isFormValid() {
+      return Object.values(this.formData).every(value => value !== null);
+    }
+  },
+  watch: {
+    msg: {
+      handler(newValue) {
+        if (newValue.topic) {
+          switch (newValue.topic) {
+            case "reset":
+              this.resetForm();;
+              break;
+            case "submit":
+              this.submitForm();
+              break;
+            default:
+              break;
+          }
+        }
+      },
+      deep: true, // Watch for nested changes
+    },
+  },
+  methods: {
+    submitForm() {
+      this.send({
+        topic: "store",
+        form: this.formName,
+        payload: this.formData,
+      });
+      this.isEditMode = false; // Disable edit mode
+    },
+    enableEditMode() {
+      this.isEditMode = true;
+    },
+    resetForm() {
+      // Reset each field in formData to its default value
+      Object.keys(this.formData).forEach((key) => {
+        this.formData[key] = null;
+      });
+      this.isEditMode = true;
+      console.log("Form reset to default values.");
+    },
+  }
+};
+</script>
+
+<style scoped>
+h2 {
+  margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 20px;
+}
+</style>

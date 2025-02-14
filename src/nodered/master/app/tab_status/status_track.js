@@ -1,3 +1,13 @@
+if (msg.topic === 'reset_counters') {
+    context.set("bad_status", 0);
+    context.set("good_status", 0);
+    context.set("warning_status", 0);
+    context.set("other_status", 0);
+    context.set("unknown_status", 0);
+    msg.payload = 'done'
+    return [msg, msg];
+}
+
 // Monitor and classify the global status of the system
 let bad_status = context.get("bad_status") || 0;
 let good_status = context.get("good_status") || 0;
@@ -45,5 +55,5 @@ node.status({
     text: `Good: ${good_status} | Warning: ${warning_status} | Bad: ${bad_status} | Other: ${other_status} | Unknown: ${unknown_status}`
 });
 
-let msg1 = { topic: system_status, payload: msg.status.text };
-return [msg, msg1];
+msg = { type: system_status, ...msg }
+return [msg, system_status === 'good' ? null : msg];

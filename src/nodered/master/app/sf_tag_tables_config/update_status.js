@@ -66,7 +66,7 @@ tag_tables.forEach(tableName => {
             name: tableName,
             data_table: tableName + '_data',
             protocol: null,
-            sampling_mode: 'static',
+            sampling_mode: 'Manual',
             sampling_freq: 'none',
             comment: 'auto-generated, modification needed for proper configuration',
         };

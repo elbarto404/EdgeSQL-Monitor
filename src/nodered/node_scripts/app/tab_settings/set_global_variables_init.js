@@ -8,7 +8,8 @@ const protocol = [
     "ModBus",
     "OPC-UA",
     "MQTT",
-    "HTTP"
+    "HTTP",
+    "Manual"
 ];
 const data_type = {
     "Bool": "BOOLEAN",
@@ -30,30 +31,30 @@ const data_type = {
     "Time": "INTERVAL",
     "Date": "DATE",
     "TimeOfDay": "TIME",
-    "Date_And_Time": "TIMESTAMP",
+    "DateTime": "TIMESTAMP",
     "String": "VARCHAR(254)",
     "WString": "TEXT"
 };
 const access = [
-    "read",
-    "write",
-    "read/write"
+    "Read",
+    "Write",
+    "Read/Write"
 ];
 const sampling_mode = [
-    "static",
-    "continous",
-    "continous_on_change",
-    "trigger_custom"
+    "Continous",
+    "ContinousOnChange",
+    "Trigger",
+    "Manual"
 ];
 const sampling_freq = [
-    "none",
+    "None",
     "500ms",
     "1s",
     "2s",
     "5s"
 ];
 const aggregations = [
-    "none",
+    "None",
     "1m",
     "3m",
     "5m",
@@ -69,9 +70,9 @@ const aggregations = [
     ["1m", "1h", "1g", "1w", "1M"]
 ];
 const aggregation_type = [
-    "none",
-    "sum",
-    "mean"
+    "None",
+    "Sum",
+    "Mean"
 ];
 
 

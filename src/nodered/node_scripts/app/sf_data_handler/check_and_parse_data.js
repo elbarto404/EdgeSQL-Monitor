@@ -49,29 +49,26 @@ switch (msg.endpoint.protocol) {
 
 // Optimized code for filtering and updating msg.tag_table and msg.payload efficiently
 
-const knownKeysArray = msg.tag_table
-    .filter(t => t.enabled)
-    .map(t => t.name.toLowerCase());
-
-const validKeysArray = Object.keys(msg.data).filter(key => 
-    knownKeysArray.includes(key.toLowerCase())
+const knownKeysSet = new Set(msg.tag_table.filter(t => t.enabled).map(t => t.name.toLowerCase()));
+const validKeysSet = new Set(
+    Object.keys(msg.data).filter(key => knownKeysSet.has(key.toLowerCase()))
 );
 
 msg.tag_table.forEach(tag => {
-    tag[msg.endpoint.name] = validKeysArray.includes(tag.name) ? "good" : "error";
+    tag[msg.endpoint.name] = validKeysSet.has(tag.name) ? "good" : "error";
 });
 
 msg.payload = Object.fromEntries(
-    Object.entries(msg.data).filter(([key]) => validKeysArray.includes(key))
+    Object.entries(msg.data).filter(([key]) => validKeysSet.has(key))
 );
 
 flow.set('timeLast', msg.created_at);
 global.set(msg.meta_table.name, msg.tag_table);
 
-// msg.knownArray = knownKeysArray;
-msg.validArray = validKeysArray;
-msg.unvalidArray = Object.keys(msg.data).filter(key => 
-    !knownKeysArray.includes(key.toLowerCase())
+// msg.knownSet = knownKeysSet;
+msg.validSet = validKeysSet;
+msg.unvalidSet = new Set(
+    Object.keys(msg.data).filter(key => !knownKeysSet.has(key.toLowerCase()))
 );
 
 return msg;

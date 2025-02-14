@@ -1,7 +1,7 @@
 // ___________________Insert Prototypes________________________
 function updateS7tags(endpoint, meta_table) {
     let suffix = '';
-    if (['continous', 'continous_on_change'].includes(meta_table.sampling_mode)) {
+    if (['Continous', 'ContinousOnChange'].includes(meta_table.sampling_mode)) {
         suffix = `_${meta_table.sampling_freq}`;
     }
     const S7endpointId = `S7endpoint_e${endpoint.id}${suffix}`;

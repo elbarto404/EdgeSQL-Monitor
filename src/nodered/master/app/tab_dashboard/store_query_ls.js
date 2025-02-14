@@ -10,8 +10,8 @@ switch (msg.topic) {
         context.set('endpoint_id', msg.endpoint_id);
         break;
     case 'submit':
-        if (!data){
-            node.status({fill: 'red', shape: 'ring', text: `No values to submit`});
+        if (!data) {
+            node.status({ fill: 'red', shape: 'ring', text: `No values to submit` });
             break;
         }
         const database = context.get('database');
@@ -25,11 +25,11 @@ switch (msg.topic) {
             .filter(t => t.enabled)
             .map(t => t.name.toLowerCase());
 
-        const validKeysArray = Object.keys(data).filter(key => 
+        const validKeysArray = Object.keys(data).filter(key =>
             knownKeysArray.includes(key.toLowerCase())
         );
         if (validKeysArray.length === 0) {
-            node.status({fill: 'red', shape: 'ring', text: `No valid columns found for insertion.`});
+            node.status({ fill: 'red', shape: 'ring', text: `No valid columns found for insertion.` });
             return null;
         }
         const data_schema = context.get('data_schema');
@@ -49,22 +49,22 @@ switch (msg.topic) {
             msg.topic = 'store';
             return msg;
         }
-        node.status({fill: 'red', shape: 'ring', text: `Error during submit - ${database}, ${tag_schema}, ${tag_table_name}, ${data_schema}, ${data_table_name}, ${endpoint_id}`});
+        node.status({ fill: 'red', shape: 'ring', text: `Error during submit - ${database}, ${tag_schema}, ${tag_table_name}, ${data_schema}, ${data_table_name}, ${endpoint_id}` });
     case 'reset':
         data = {};
         context.set('data', data);
-        node.status({fill: 'green', shape: 'ring', text: `Temp values has been reset`});
+        node.status({ fill: 'green', shape: 'ring', text: `Temp values has been reset` });
         break;
     default:
-        if (msg.payload){
+        if (msg.payload) {
             for (let key in msg.payload) {
                 data[key] = msg.payload[key];
             }
             context.set('data', data);
-            node.status({fill: 'green', shape: 'dot', text: `${Object.keys(data).length} temp values saved`});
+            node.status({ fill: 'green', shape: 'dot', text: `${Object.keys(data).length} temp values saved` });
             break;
         }
-        node.status({fill: 'red', shape: 'dot', text: `No temp values to save - ${msg.topic}`});
+        node.status({ fill: 'red', shape: 'dot', text: `No temp values to save - ${msg.topic}` });
         break;
 }
 

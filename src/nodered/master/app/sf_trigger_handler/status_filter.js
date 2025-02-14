@@ -5,6 +5,7 @@ if (msg.status) {
         const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
         msg.status.text = `last update: ${localTime}`;
     }
+    flow.set('lastStatus', msg.status);
     return msg;
 }
 return null
