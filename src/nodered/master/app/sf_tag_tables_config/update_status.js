@@ -131,7 +131,7 @@ global.set(msg.database.table, data);
 
 // Update status
 const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
-node.status({ fill: "green", shape: "dot", text: `last update: ${localTime}` });
+node.status({ fill: "blue", shape: "dot", text: `last update: ${localTime}` });
 
 // Determine the next step based on deploy_needed flag
 if (deploy_needed) {

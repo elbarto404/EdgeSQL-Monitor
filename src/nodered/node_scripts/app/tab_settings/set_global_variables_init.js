@@ -86,4 +86,4 @@ global.set("sampling_freq", sampling_freq);
 global.set("aggregations", aggregations);
 global.set("aggregation_type", aggregation_type);
 
-node.status({ fill: "green", shape: "dot", text: "Global variables initialized" });
+node.status({ fill: "blue", shape: "dot", text: "Global variables initialized" });

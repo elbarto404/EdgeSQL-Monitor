@@ -120,6 +120,19 @@
     >
 <!-- MODIFY DISPLAY HERE -->
 
+      <!-- Display Endpoints as Chips -->
+      <template v-slot:item.name="{ item }">
+        <div>
+          <v-chip
+            class="ma-1"
+            color="blue"
+            dark
+          >
+          <!-- "item.sampling_mode === 'Manual' ? 'blue' : 'green'" -->
+            {{ item.name }}
+          </v-chip>
+        </div>
+      </template>
 
 <!-- END MODIFY -->
       <!-- Actions Column with Edit and Delete Icons -->
@@ -672,10 +685,13 @@ export default {
         "unknown": 'blue',
         "connecting": 'amber',
         "connected": 'green',
-        "error": 'red'
+        "error": 'red',
+        "blue": 'blue',
+        "yellow": 'amber',
+        "green": 'green',
+        "red": 'red'
       };
-      if (colors[value]) return colors[value];
-      return 'purple';
+      return colors[value] || 'purple';
     },
     getSwitchColor(item) {
       return item.enabled ? this.getStatusColor(item.status)

@@ -31,6 +31,7 @@ function parseValue(value) {
 // Retrieve existing data or initialize
 let columns = [];
 let data = global.get(msg.database.table) || [];
+let dataOld = global.get(msg.database.table) || [];
 
 const endpoints = (global.get("endpoints") || [])
     .filter(ep => Array.isArray(ep.tag_tables) && ep.tag_tables.some(tag => tag === msg.database.table));
@@ -78,21 +79,15 @@ const endpointsHeader = {
     headerProps: { style: 'font-weight: 700' },
 };
 
-// Define possible states for endpoints
-const states = ["unknown", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connecting", "error"];
-const lengthItems = states.length;
-
-// Ensure random states are assigned to endpoints if not already set
-for (let datum of data) { // Explicitly declare loop variables
+for (let datum of data) { 
     for (let endpoint of endpoints) {
         // Check if the datum does not already have a value for the endpoint name
         if (!datum[endpoint.name]) {
-            if (endpoint.status === "connected") {
-                // Ensure lengthItems is the length of states
-                let randomIndex = Math.floor(Math.random() * states.length);
-                datum[endpoint.name] = states[randomIndex];
+            const oldItem = dataOld.find(item => item.id === datum.id);
+            if (oldItem && oldItem[endpoint.name]) {
+                datum[endpoint.name] = oldItem[endpoint.name]; 
             } else {
-                datum[endpoint.name] = endpoint.status;
+                datum[endpoint.name] = endpoint.status; 
             }
         }
     }
@@ -140,7 +135,7 @@ global.set(msg.database.table, data);
 
 // Node State Update
 const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
-node.status({ fill: "green", shape: "dot", text: `last update: ${localTime}` });
+node.status({ fill: "blue", shape: "dot", text: `last update: ${localTime}` });
 
 
 if (deploy_needed) {

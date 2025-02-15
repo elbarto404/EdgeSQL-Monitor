@@ -32,7 +32,7 @@ function timeToMilliseconds(timeStr) {
     const unit = timeStr.replace(num, '').trim();
 
     // Convert based on the unit
-    switch(unit) {
+    switch (unit) {
         case 'ms':
             return num; // Already in milliseconds
         case 's':
@@ -143,16 +143,12 @@ function generateStaticNodes() {
 // Function to generate the nodes for a S7 endpoint with a custom trigger
 function generateS7triggered(endpoint, tag_tables) {
     const endpointRegex = /^([\w\-.]+):(\d+)@(\d+):(\d+)$/; // Regex to match the endpoint address
-    const S7endpointId = `S7endpoint_e${endpoint.id}`;
+    const S7endpointId = `s7edt_e${endpoint.id}`;
     const S7inId = `s7in_e${endpoint.id}`;
     const S7controlId = `s7control_e${endpoint.id}`;
     const S7linkInId = `s7control_e${endpoint.id}_in`;
     const S7linkOutId = `s7control_e${endpoint.id}_out`;
     const endpointNode = updatedNodes.find(node => node.id === S7endpointId);
-    if (!endpoint.enabled && endpointNode) {
-        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
-        deployNeeded = true;
-    }
     if (!endpoint.enabled) {
         return;
     }
@@ -176,9 +172,28 @@ function generateS7triggered(endpoint, tag_tables) {
     });
     startY += 50;
 
-    // Check if the endpoint node for this endpoint already exists
+    // Prepare vartable
+    let completeVartable = [];
+
+    for (let table of tag_tables) {
+        let tags = global.get(table.name);
+        if (!tags) {
+            node.error(`Tag table ${table.name} not found in global context.`);
+            continue;
+        }
+
+        let vartable = tags.map(tag => ({ addr: tag.address, name: tag.name }));
+
+        // Add the new vartable to the complete vartable avoiding duplicates
+        completeVartable = Array.from(
+            new Map(
+                [...completeVartable, ...vartable].map(item => [`${item.addr}-${item.name}`, item])
+            ).values()
+        ).sort((a, b) => `${a.addr}-${a.name}`.localeCompare(`${b.addr}-${b.name}`));
+    }
+
+    // Create the endpoint node if it does not exist
     if (!endpointNode) {
-        deployNeeded = true;
         updatedNodes.push({
             "id": S7endpointId,
             "type": "s7 endpoint",
@@ -197,16 +212,15 @@ function generateS7triggered(endpoint, tag_tables) {
             "cycletime": "0",
             "timeout": "5000",
             "name": "",
-            "vartable": []
+            "vartable": completeVartable
         });
     } else {
-        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot;
-        if (deployNeeded) {
-            endpointNode.address = address;
-            endpointNode.port = port;
-            endpointNode.rack = rack;
-            endpointNode.slot = slot;
-        }
+        completeVartable = Array.from(
+            new Map(
+                [...endpointNode.vartable, completeVartable].map(item => [`${item.addr}-${item.name}`, item])
+            ).values()
+        ).sort((a, b) => `${a.addr}-${a.name}`.localeCompare(`${b.addr}-${b.name}`));
+        endpointNode.vartable = completeVartable;
     }
 
     // Create the data handler flow for each table
@@ -278,27 +292,6 @@ function generateS7triggered(endpoint, tag_tables) {
             }
         ]);
         dY += 100;
-
-        // Check if the trigger node for this endpoint already exists
-        /*
-        const triggerNode = updatedNodes.find(node => node.id === triggerId);
-        if (!triggerNode) {
-            deployNeeded = true;
-            updatedNodes.push({
-                "id": triggerId,
-                "type": "link out",
-                "z": "tab_triggers",
-                "name": triggerId,
-                "mode": "link",
-                "links": [
-                    sf_data_handlerId
-                ],
-                "x": 400,
-                "y": 100,
-                "wires": []
-            });
-        }
-        */
     }
 
     // Create the S7 in and S7 control nodes
@@ -362,25 +355,25 @@ function generateS7triggered(endpoint, tag_tables) {
     startY += (dY - startY);
 }
 
-// Function to generate the nodes for a S7 endpoint with a custom trigger
+// Function to generate the nodes for a S7 endpoint with continous sampling
 function generateS7continous(endpoint, tag_tables, period, diff) {
+    logs.push(`Generating S7 continous nodes for endpoint ${endpoint.name} with period ${period} and diff ${diff}. Tag tables: ${tag_tables.map(table => table.name).join(", ")}`);
     const endpointRegex = /^([\w\-.]+):(\d+)@(\d+):(\d+)$/; // Regex to match the endpoint address
-    const S7endpointId = `S7endpoint_e${endpoint.id}_${period}`;
+    const S7endpointId = `s7edc_e${endpoint.id}_${period}`;
     const suffix = diff ? "diff" : "ever";
     const S7inId = `s7in_e${endpoint.id}_${period}_${suffix}`;
     const endpointNode = updatedNodes.find(node => node.id === S7endpointId);
-    if (!endpoint.enabled && endpointNode) {
-        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
-        deployNeeded = true;
-    }
     if (!endpoint.enabled) {
+        logs.push(`Endpoint ${endpoint.name} is disabled.`);
         return;
     }
     if (!tag_tables.length) {
+        logs.push(`Endpoint ${endpoint.name} does not have any tag tables.`);
         return;
     }
     const parsedAddress = parseEndpointAddress(endpoint, endpointRegex);
     if (!parsedAddress) {
+        logs.push(`Endpoint ${endpoint.name} address is not in the correct format.`);
         return;
     }
     const { address, port, rack, slot } = parsedAddress;
@@ -396,9 +389,28 @@ function generateS7continous(endpoint, tag_tables, period, diff) {
     });
     startY += 50;
 
-    // Check if the endpoint node for this endpoint already exists
+    // Prepare vartable
+    let completeVartable = [];
+
+    for (let table of tag_tables) {
+        let tags = global.get(table.name);
+        if (!tags) {
+            node.error(`Tag table ${table.name} not found in global context.`);
+            continue;
+        }
+
+        let vartable = tags.map(tag => ({ addr: tag.address, name: tag.name }));
+
+        // Add the new vartable to the complete vartable avoiding duplicates
+        completeVartable = Array.from(
+            new Map(
+                [...completeVartable, ...vartable].map(item => [`${item.addr}-${item.name}`, item])
+            ).values()
+        ).sort((a, b) => `${a.addr}-${a.name}`.localeCompare(`${b.addr}-${b.name}`));
+    }
+
+    // Create the endpoint node if it does not exist
     if (!endpointNode) {
-        deployNeeded = true;
         updatedNodes.push({
             "id": S7endpointId,
             "type": "s7 endpoint",
@@ -417,16 +429,15 @@ function generateS7continous(endpoint, tag_tables, period, diff) {
             "cycletime": String(timeToMilliseconds(period)),
             "timeout": "5000",
             "name": "",
-            "vartable": []
+            "vartable": completeVartable
         });
     } else {
-        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot;
-        if (deployNeeded) {
-            endpointNode.address = address;
-            endpointNode.port = port;
-            endpointNode.rack = rack;
-            endpointNode.slot = slot;
-        }
+        completeVartable = Array.from(
+            new Map(
+                [...endpointNode.vartable, completeVartable].map(item => [`${item.addr}-${item.name}`, item])
+            ).values()
+        ).sort((a, b) => `${a.addr}-${a.name}`.localeCompare(`${b.addr}-${b.name}`));
+        endpointNode.vartable = completeVartable;
     }
 
     // Create the data handler flow for each table
@@ -482,7 +493,7 @@ function generateS7continous(endpoint, tag_tables, period, diff) {
         dY += 100;
     }
 
-    // Create the S7 in and S7 control nodes
+    // Create the S7 in node
     sf_data_handlerIds.sort();
     updatedNodes.push({
         "id": S7inId,
@@ -506,6 +517,8 @@ function generateS7continous(endpoint, tag_tables, period, diff) {
 
 // _________________________Main_______________________________
 
+const logs = msg.logs || [];
+
 const endpoints = msg.data;  // Array of all endpoints
 const history = msg.history; // Array of all history
 const allNodes = msg.payload;   // Current nodes
@@ -520,7 +533,9 @@ if (!Array.isArray(endpoints) || !Array.isArray(allNodes)) {
 let existingIds = allNodes.map(node => node.id);
 
 // Filter out all "tab_connections" nodes to rigenerate them
-let updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== "tab_connections");
+let updatedNodes = (JSON.parse(JSON.stringify(allNodes)))
+    .filter(node => node.z !== "tab_connections") // Remove previous connections
+    .filter(node => !node.id.startsWith("s7edt") && !node.id.startsWith("s7edc")); // Remove endpoint nodes
 let deployNeeded = false;
 let startY = 0;
 
@@ -544,47 +559,52 @@ for (let endpoint of endpoints) {
         table.protocol === endpoint.protocol &&
         table.sampling_mode === "ContinousOnChange"
     );
+    logs.push({
+        endpoint: endpoint,
+        trigger_tables: trigger_tables.map(table => table.name),
+        c_tables: c_tables.map(table => table.name),
+        coc_tables: coc_tables.map(table => table.name)
+    });
 
     switch (endpoint.protocol) {
         case "S7": {
-            generateS7triggered(endpoint, trigger_tables);
-            let sampling_periods_set = new Set(c_tables.map(table => table.sampling_freq));
-            for (let period of sampling_periods_set) {
-                const tables = c_tables.filter(table => table.sampling_freq === period);
-                generateS7continous(endpoint, tables, period, false);
+            if (trigger_tables.length) {
+                generateS7triggered(endpoint, trigger_tables);
             }
-            for (let period of sampling_periods_set) {
-                const tables = coc_tables.filter(table => table.sampling_freq === period);
-                generateS7continous(endpoint, tables, period, true);
+            if (c_tables.length) {
+                const sampling_periods_set = new Set(c_tables.map(table => table.sampling_freq));
+                for (let period of sampling_periods_set) {
+                    const tables = c_tables.filter(table => table.sampling_freq === period);
+                    logs.push({ period, tables: tables.map(table => table.name) });
+                    generateS7continous(endpoint, tables, period, false);
+                }
             }
+            if (coc_tables.length) {
+                const sampling_periods_set = new Set(coc_tables.map(table => table.sampling_freq));
+                for (let period of sampling_periods_set) {
+                    const tables = coc_tables.filter(table => table.sampling_freq === period);
+                    logs.push({ period, tables: tables.map(table => table.name) });
+                    generateS7continous(endpoint, tables, period, true);
+                }
+            }
+            break;
         }
     }
 }
 
-// Remove nodes if the endpoint is deleted
-for (let edit of history) {
-    if (edit.oldItem && !edit.newItem) {
-        deployNeeded = true;
-        const endpoint = edit.oldItem;
-        const S7endpointId = `S7endpoint_e${endpoint.id}`;
-        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
-        const tag_tables = global.get('tag_tables').filter(table => endpoint.tag_tables.includes(table.name));
-    }
-}
-
 // Deploy needed check and return
-const previousTabNodes = allNodes.filter(node => node.z === "tab_connections").sort((a, b) => a.id.localeCompare(b.id));
-const updatedTabNodes = updatedNodes.filter(node => node.z === "tab_connections").sort((a, b) => a.id.localeCompare(b.id));
-deployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);
+const sortedAllNodes = [...allNodes].sort((a, b) => a.id.localeCompare(b.id));
+const sortedUpdatedNodes = [...updatedNodes].sort((a, b) => a.id.localeCompare(b.id));
+deployNeeded = deployNeeded || JSON.stringify(sortedAllNodes) !== JSON.stringify(sortedUpdatedNodes);
 
 if (deployNeeded) {
     const deploycount = global.get("dpc_connections") + 1 || 1;
     global.set("dpc_connections", deploycount);
     msg.payload = updatedNodes
     node.status({ fill: "green", shape: "dot", text: `Deploy ${deploycount} sent` });
-    msg.log = msg.log || [];
-    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });
+    msg.logs = logs;
     return [msg, null];
 } else {
+    msg.logs = logs;
     return [null, msg];
 }

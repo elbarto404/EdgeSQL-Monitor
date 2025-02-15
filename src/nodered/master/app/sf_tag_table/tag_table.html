@@ -136,7 +136,8 @@
           v-model="item.enabled"
           :model-value="item.enabled"
           :disabled="!editMode"
-          color="blue-darken-2"
+          :color="item.enabled ? 'blue-darken-2' : 'grey-lighten-2'"
+          :base-color="item.enabled ? 'blue-darken-2' : 'grey-lighten-2'"
           hide-details
           @click="handleEnabled(item)"
         ></v-switch>
@@ -753,10 +754,13 @@ export default {
         "unknown": 'blue',
         "connecting": 'amber',
         "connected": 'green',
-        "error": 'red'
+        "error": 'red',
+        "blue": 'blue',
+        "yellow": 'amber',
+        "green": 'green',
+        "red": 'red'
       };
-      if (colors[value]) return colors[value];
-      return 'purple';
+      return colors[value] || 'purple';
     },
     getSwitchColor(item) {
       return item.enabled ? this.getStatusColor(item.status)

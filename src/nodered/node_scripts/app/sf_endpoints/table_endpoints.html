@@ -718,10 +718,13 @@ export default {
         "unknown": 'blue',
         "connecting": 'amber',
         "connected": 'green',
-        "error": 'red'
+        "error": 'red',
+        "blue": 'blue',
+        "yellow": 'amber',
+        "green": 'green',
+        "red": 'red'
       };
-      if (colors[value]) return colors[value];
-      return 'purple';
+      return colors[value] || 'purple';
     },
     getSwitchColor(item) {
       return item.enabled ? this.getStatusColor(item.status)

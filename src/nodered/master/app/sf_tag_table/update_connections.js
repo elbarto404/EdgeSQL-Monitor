@@ -1,22 +1,26 @@
 // ___________________Insert Prototypes________________________
 function updateS7tags(endpoint, meta_table) {
     let suffix = '';
+    let prefix = 's7edt';
     if (['Continous', 'ContinousOnChange'].includes(meta_table.sampling_mode)) {
         suffix = `_${meta_table.sampling_freq}`;
+        prefix = 's7edc';
     }
-    const S7endpointId = `S7endpoint_e${endpoint.id}${suffix}`;
+    const S7endpointId = `${prefix}_e${endpoint.id}${suffix}`;
     const S7endpointNode = updatedNodes.find(node => node.id === S7endpointId);
     if (!S7endpointNode) {
         logs.push(`S7 endpoint NOT FOUND`);
         return;
     }
     logs.push(`S7 endpoint found`);
+    
     const vartable = tags.map(tag => ({ addr: tag.address, name: tag.name }));
     const completeVartable = Array.from(
         new Map(
-          [...JSON.parse(JSON.stringify(S7endpointNode.vartable)), ...vartable].map(item => [JSON.stringify(item), item])
+            [...S7endpointNode.vartable, ...vartable].map(item => [`${item.addr}-${item.name}`, item])
         ).values()
-      );      
+    ).sort((a, b) => `${a.addr}-${a.name}`.localeCompare(`${b.addr}-${b.name}`));
+
     if (JSON.stringify(completeVartable) !== JSON.stringify(S7endpointNode.vartable)) {
         logs.push(`Vartable updated`);
         S7endpointNode.vartable = completeVartable;

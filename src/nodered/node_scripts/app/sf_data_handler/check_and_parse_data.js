@@ -8,7 +8,7 @@ switch (msg.endpoint.protocol) {
             if (msg.created_at - timeLast < min_interval) {
                 msg.status = { fill: 'blue', shape: 'ring', text: 'Data received but not sent - min interval not passed' };
                 return null;
-            }    
+            }
         }
         msg.data = JSON.parse(JSON.stringify(msg.payload));
         break;
@@ -55,7 +55,7 @@ const validKeysSet = new Set(
 );
 
 msg.tag_table.forEach(tag => {
-    tag[msg.endpoint.name] = validKeysSet.has(tag.name) ? "good" : "error";
+    tag[msg.endpoint.name] = validKeysSet.has(tag.name) ? "green" : "red";
 });
 
 msg.payload = Object.fromEntries(

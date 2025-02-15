@@ -121,13 +121,9 @@ function generateStaticNodes() {
 
 // Function to generate the nodes for a S7 trigger with a custom trigger
 function generateS7triggers(trigger, endpoint, tag_tables) {
-    const S7endpointId = `S7endpoint_e${endpoint.id}_trig`;
+    const S7endpointId = `s7et_e${endpoint.id}`;
     const S7inId = `s7in_trig${trigger.id}`;
     const endpointNode = updatedNodes.find(node => node.id === S7endpointId);
-    if (!trigger.enabled && endpointNode) {
-        updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
-        deployNeeded = true;
-    }
     if (!trigger.enabled) {
         return;
     }
@@ -149,12 +145,13 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
         "y": startY,
         "wires": []
     });
-    let commentY = startY;
     startY += 50;
 
-    // Check if the trigger node for this trigger already exists
+    // Prepare vartable
+    let completeVartable = [{ addr: trigger.tag_address, name: trigger.name }];
+
+    // Create the endpoint node if it does not exist
     if (!endpointNode) {
-        deployNeeded = true;
         updatedNodes.push({
             "id": S7endpointId,
             "type": "s7 endpoint",
@@ -173,20 +170,15 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
             "cycletime": "1000",
             "timeout": "5000",
             "name": "",
-            "vartable": [
-                { addr: trigger.tag_address, name: trigger.name }
-            ]
+            "vartable": completeVartable
         });
     } else {
-        let varCheck = endpointNode.vartable.find(varNode => varNode.addr === trigger.tag_address && varNode.name === trigger.name);
-        deployNeeded = endpointNode.address !== address || endpointNode.port !== port || endpointNode.rack !== rack || endpointNode.slot !== slot || !varCheck;
-        endpointNode.address = address;
-        endpointNode.port = port;
-        endpointNode.rack = rack;
-        endpointNode.slot = slot;
-        if (!varCheck) {
-            endpointNode.vartable.push({ addr: trigger.tag_address, name: trigger.name });
-        }
+        completeVartable = Array.from(
+            new Map(
+                [...endpointNode.vartable, completeVartable].map(item => [`${item.addr}-${item.name}`, item])
+            ).values()
+        ).sort((a, b) => `${a.addr}-${a.name}`.localeCompare(`${b.addr}-${b.name}`));
+        endpointNode.vartable = completeVartable;
     }
 
     // Create the data handler flow for each table
@@ -283,17 +275,17 @@ function generateS7triggers(trigger, endpoint, tag_tables) {
         ]
     });
 
-    msg.log.push({ sf_trigger_handlerIds: sf_trigger_handlerIds });
+    logs.push({ sf_trigger_handlerIds: sf_trigger_handlerIds });
     startY += 120;
 }
 
 
 // _________________________Main_______________________________
 
-msg.log = msg.log || [];
+const logs = msg.logs || [];
 
 const triggers = msg.data;  // Array of all triggers
-msg.log.push({ triggers: triggers });
+logs.push({ triggers: triggers });
 const history = msg.history; // Array of all history
 const allNodes = msg.payload;   // Current nodes
 const tag_tables = global.get('tag_tables');
@@ -309,7 +301,9 @@ if (!Array.isArray(triggers) || !Array.isArray(allNodes)) {
 let existingIds = allNodes.map(node => node.id);
 
 // Filter out all "tab_triggers" nodes to rigenerate them
-let updatedNodes = (JSON.parse(JSON.stringify(allNodes))).filter(node => node.z !== "tab_triggers");
+let updatedNodes = (JSON.parse(JSON.stringify(allNodes)))
+    .filter(node => node.z !== "tab_triggers") // Remove tab_triggers nodes
+    .filter(node => !node.id.startsWith("s7et")); // Remove endpoint nodes
 let deployNeeded = false;
 let startY = 0;
 
@@ -319,14 +313,14 @@ generateStaticNodes();
 
 for (let endpoint of endpoints) {
     const endp_triggers = triggers.filter(trigger => trigger.endpoint === endpoint.name);
-    msg.log.push({ endpoint: endpoint, triggers: endp_triggers });
+    logs.push({ endpoint: endpoint, triggers: endp_triggers });
     for (let trigger of endp_triggers) {
         const trigger_tables = tag_tables.filter(table =>
             trigger.tag_tables.includes(table.name) &&
             table.protocol === endpoint.protocol &&
-            ["trigger", "Trigger"].includes(table.sampling_mode)
+            table.sampling_mode === "Trigger"
         );
-        msg.log.push({ trigger: trigger, tables: trigger_tables });
+        logs.push({ trigger: trigger, tables: trigger_tables });
         switch (endpoint.protocol) {
             case "S7": {
                 generateS7triggers(trigger, endpoint, trigger_tables);
@@ -336,58 +330,19 @@ for (let endpoint of endpoints) {
     }
 }
 
-
-for (let edit of history) {
-    // Remove nodes if the trigger is deleted
-    if (edit.oldItem && !edit.newItem) {
-        const oldTrigger = edit.oldItem;
-        const endpoint_triggers = global.get("triggers").filter(trigger => trigger.enabled && trigger.endpoint === oldTrigger.endpoint);
-        const endpoint = global.get("endpoints").find(endpoint => endpoint.name === oldTrigger.endpoint);
-        const S7endpointId = `S7endpoint_e${endpoint.id}_trig`;
-        if (!endpoint_triggers.length && endpoint) {
-            deployNeeded = true;
-            updatedNodes = updatedNodes.filter(node => node.id !== S7endpointId);
-        } else {
-            let endpointNode = updatedNodes.find(node => node.id === S7endpointId);
-            if (endpointNode) {
-                let varCheck = endpointNode.vartable.find(varNode => varNode.addr === oldTrigger.tag_address && varNode.name === oldTrigger.name);
-                if (varCheck) {
-                    endpointNode.vartable = endpointNode.vartable.filter(varNode => varNode.addr !== oldTrigger.tag_address && varNode.name !== oldTrigger.name);
-                }
-            }
-        }
-    }
-    // Modify vartable if the trigger name or tag_address is modified
-    if (edit.oldItem && edit.newItem) {
-        const oldTrigger = edit.oldItem;
-        const newTrigger = edit.newItem;
-        if (oldTrigger.name !== newTrigger.name || oldTrigger.tag_address !== newTrigger.tag_address) {
-            const endpoint = global.get("endpoints").find(endpoint => endpoint.name === newTrigger.endpoint);
-            const endpointNode = updatedNodes.find(node => node.id === `S7endpoint_e${endpoint.id}_trig`);
-            if (endpointNode) {
-                let varCheck = endpointNode.vartable.find(varNode => varNode.addr === oldTrigger.tag_address && varNode.name === oldTrigger.name);
-                if (varCheck) {
-                    varCheck.addr = newTrigger.tag_address;
-                    varCheck.name = newTrigger.name;
-                    deployNeeded = true;
-                }
-            }
-        }
-    }
-}
-
 // Deploy needed check and return
-const previousTabNodes = allNodes.filter(node => node.z === "tab_triggers").sort((a, b) => a.id.localeCompare(b.id));
-const updatedTabNodes = updatedNodes.filter(node => node.z === "tab_triggers").sort((a, b) => a.id.localeCompare(b.id));
-deployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringify(updatedTabNodes);
+const sortedAllNodes = [...allNodes].sort((a, b) => a.id.localeCompare(b.id));
+const sortedUpdatedNodes = [...updatedNodes].sort((a, b) => a.id.localeCompare(b.id));
+deployNeeded = deployNeeded || JSON.stringify(sortedAllNodes) !== JSON.stringify(sortedUpdatedNodes);
 
 if (deployNeeded) {
     const deploycount = global.get("dpc_triggers") + 1 || 1;
     global.set("dpc_triggers", deploycount);
     msg.payload = updatedNodes
     node.status({ fill: "green", shape: "dot", text: `Deploy ${deploycount} sent` });
-    msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });
+    msg.logs = logs;
     return [msg, null];
 } else {
+    msg.logs = logs;
     return [null, msg];
 }

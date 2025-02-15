@@ -30,6 +30,7 @@ function parseValue(value) {
 // Retrieve existing data or initialize
 let columns = [];
 let data = global.get(msg.database.table) || [];
+let dataOld = global.get(msg.database.table) || [];
 
 // Extract column names from PostgreSQL query
 if (msg.pgsql && msg.pgsql[0] && msg.pgsql[0].rows) {
@@ -60,16 +61,11 @@ const baseHeaders = columns.length > 0
         }))
     : [];
 
-
-// Define possible states for endpoints
-const states = ["unknown", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connected", "connecting", "error"];
-const lengthItems = states.length;
-
 // Assign random states to endpoints if not already set
 for (let i = 0; i < data.length; i++) {
-    let randomIndex = Math.floor(Math.random() * lengthItems);
     if (!data[i].status) {
-        data[i].status = states[randomIndex];
+        const oldItem = dataOld.find(item => item.name === data[i].name);
+        data[i].status = oldItem ? oldItem.status : 'blue';
     }
     if (typeof data[i].enabled === 'string') {
         let enabledLower = data[i].enabled.toLowerCase();
@@ -118,7 +114,7 @@ global.set(msg.database.table, data);
 
 // Update status
 const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
-node.status({ fill: "green", shape: "dot", text: `last update: ${localTime}` });
+node.status({ fill: "blue", shape: "dot", text: `last update: ${localTime}` });
 
 msg.topic = 'update_status';
 return msg;
