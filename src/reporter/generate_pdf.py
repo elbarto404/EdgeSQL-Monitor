@@ -144,9 +144,9 @@ def generate_tex(working_dir, latex_content, dashboard, config):
                     height = panel['gridPos']['h'] * yf
 
                     # Add the image at the calculated position
+                    img_path = str(img).replace('\\', '/')
                     document += (
-                        f"\\put({posx},-{posy}){{\\includegraphics[width={width}pt,height={height}pt]{{"
-                        f"{str(img).replace('\\', '/')}}}}}\n"
+                        f"\\put({posx},-{posy}){{\\includegraphics[width={width}pt,height={height}pt]{{{img_path}}}}}\n"
                     )
                     ipc += 1
 

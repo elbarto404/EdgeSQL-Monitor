@@ -234,7 +234,8 @@ def generate_report():
         return send_file(
             pdf_content,
             as_attachment=False,  # Force download if True, inline preview if False
-            download_name=f"{dashboard['meta']['provisionedExternalId'].replace(".json", "")}.pdf",  # Name for the downloaded file
+            download_name=f"{dashboard['meta']['provisionedExternalId'].replace('.json', '')}.pdf"
+,  # Name for the downloaded file
             mimetype='application/pdf'
         )
         

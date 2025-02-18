@@ -40,7 +40,7 @@ services:
     image: grafana/grafana-image-renderer:latest
     container_name: renderer
     ports:
-      - "8081:8081"  # Porta di accesso al renderer
+      - "8087:8081"  # Porta di accesso al renderer
     mem_limit: 1g
     depends_on:
       - grafana
@@ -49,17 +49,21 @@ services:
     volumes:
      - ./custom/renderer_config.json:/usr/src/app/config.json
 
-  # reporter:
-  #   image: my-reporter:0.0.1
-  #   container_name: reporter
-  #   # mem_limit: 512m
-  #   ports:
-  #     - "8680:8688" # Expose the Reporter on port 8686
-  #   command: "-ip grafana:3000"
-  #   depends_on:
-  #     - renderer 
-  #   networks:
-  #     - proxy-redirect
+  reporter:
+    image: my-reporter:0.0.1
+    container_name: reporter
+    # mem_limit: 512m
+    ports:
+      - "8088:8088" # Expose the Reporter on port 8088
+    command: "--grafana-url http://grafana:3000 --generate  --render"
+    mem_limit: 256m
+    depends_on:
+      - renderer 
+    networks:
+      - proxy-redirect
+    volumes:
+     - ./custom/reporter/templates:/app/templates
+     - ./custom/reporter/reports:/app/reports
 
   # reporter:
   #   image: izakmarais/grafana-reporter:latest
@@ -84,6 +88,8 @@ services:
       - "8080:80"
     environment:
       - TZ=Europe/Rome
+    depends_on:
+      - reporter
     networks:
       - proxy-redirect
     volumes:
