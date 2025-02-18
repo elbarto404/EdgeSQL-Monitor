@@ -51,3 +51,6 @@ EXPOSE 8088
 
 # Set the entrypoint to run the application
 ENTRYPOINT ["python", "app.py"]
+
+
+

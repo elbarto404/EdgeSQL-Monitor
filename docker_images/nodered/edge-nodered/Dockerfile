@@ -1,6 +1,4 @@
 ARG NODE_VERSION=23  
-# 20
-
 
 FROM node:${NODE_VERSION}
 
