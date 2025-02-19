@@ -20,8 +20,9 @@ COPY settings.js /data/settings.js
 
 RUN npm install
 
-# User configuration directory volume
+# Expose the listening port of Node-RED
 EXPOSE 1880
+EXPOSE 502
 
 # Environment variable holding file path for flows configuration
 ENV FLOWS=flows.json

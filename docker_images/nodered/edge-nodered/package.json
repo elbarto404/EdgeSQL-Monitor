@@ -24,7 +24,6 @@
         "node-red-contrib-prometheus-exporter": "1.0.5",
         "node-red-contrib-s7": "3.1.0",
         "node-red-contrib-s7comm": "1.1.6",
-        "node-red-dashboard": "3.6.5",
         "node-red-docker": "file:",
         "node-red-node-email": "3.0.2"
     },

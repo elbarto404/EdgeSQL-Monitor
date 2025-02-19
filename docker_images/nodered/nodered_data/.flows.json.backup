@@ -1605,7 +1605,7 @@
         "path": "/user",
         "icon": "account",
         "layout": "grid",
-        "theme": "d2000f3a4bb37e26",
+        "theme": "70ee3095f0c0fa3d",
         "breakpoints": [
             {
                 "name": "Default",
@@ -1630,8 +1630,8 @@
         ],
         "order": 1,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "ddcd364324b986d4",
@@ -1836,36 +1836,6 @@
         }
     },
     {
-        "id": "ece6c13378a449d4",
-        "type": "modbus-client",
-        "name": "",
-        "clienttype": "tcp",
-        "bufferCommands": true,
-        "stateLogEnabled": false,
-        "queueLogEnabled": false,
-        "failureLogEnabled": true,
-        "tcpHost": "127.0.0.1",
-        "tcpPort": "502",
-        "tcpType": "DEFAULT",
-        "serialPort": "/dev/ttyUSB",
-        "serialType": "RTU-BUFFERD",
-        "serialBaudrate": "9600",
-        "serialDatabits": "8",
-        "serialStopbits": "1",
-        "serialParity": "none",
-        "serialConnectionDelay": "100",
-        "serialAsciiResponseStartDelimiter": "0x3A",
-        "unit_id": "1",
-        "commandDelay": "1",
-        "clientTimeout": "1000",
-        "reconnectOnTimeout": true,
-        "reconnectTimeout": "2000",
-        "parallelUnitIdsAllowed": true,
-        "showErrors": false,
-        "showWarnings": true,
-        "showLogs": true
-    },
-    {
         "id": "28dd6f2de8ecc7e2",
         "type": "ui-group",
         "name": "Limestone Parameters",
@@ -1958,6 +1928,1781 @@
         "width": "12",
         "height": "2",
         "className": ""
+    },
+    {
+        "id": "s7et_e10",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.60",
+        "port": "102",
+        "rack": "0",
+        "slot": "3",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "1000",
+        "timeout": "5000",
+        "name": "",
+        "vartable": [
+            {
+                "addr": "DB121,R0",
+                "name": "Odr_Cycle_Change"
+            }
+        ]
+    },
+    {
+        "id": "s7edt_e10",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.60",
+        "port": "102",
+        "rack": "0",
+        "slot": "3",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "0",
+        "timeout": "5000",
+        "name": "",
+        "vartable": [
+            {
+                "addr": "DB121,R0",
+                "name": "CY"
+            },
+            {
+                "addr": "DB121,R100",
+                "name": "TC1"
+            },
+            {
+                "addr": "DB121,R104",
+                "name": "TC2"
+            },
+            {
+                "addr": "DB121,R108",
+                "name": "TWG"
+            },
+            {
+                "addr": "DB121,R112",
+                "name": "TFLT"
+            },
+            {
+                "addr": "DB121,R116",
+                "name": "LT1"
+            },
+            {
+                "addr": "DB121,R12",
+                "name": "TCO"
+            },
+            {
+                "addr": "DB121,R120",
+                "name": "LT2"
+            },
+            {
+                "addr": "DB121,R124",
+                "name": "LT3"
+            },
+            {
+                "addr": "DB121,R128",
+                "name": "LT4"
+            },
+            {
+                "addr": "DB121,R132",
+                "name": "LT5"
+            },
+            {
+                "addr": "DB121,R136",
+                "name": "LT6"
+            },
+            {
+                "addr": "DB121,R140",
+                "name": "LT7"
+            },
+            {
+                "addr": "DB121,R144",
+                "name": "LT8"
+            },
+            {
+                "addr": "DB121,R148",
+                "name": "LT9"
+            },
+            {
+                "addr": "DB121,R152",
+                "name": "LT10"
+            },
+            {
+                "addr": "DB121,R156",
+                "name": "LT11"
+            },
+            {
+                "addr": "DB121,R16",
+                "name": "TI"
+            },
+            {
+                "addr": "DB121,R160",
+                "name": "LT12"
+            },
+            {
+                "addr": "DB121,R164",
+                "name": "LT13"
+            },
+            {
+                "addr": "DB121,R168",
+                "name": "LT14"
+            },
+            {
+                "addr": "DB121,R172",
+                "name": "LT15"
+            },
+            {
+                "addr": "DB121,R176",
+                "name": "LT16"
+            },
+            {
+                "addr": "DB121,R180",
+                "name": "CBAP"
+            },
+            {
+                "addr": "DB121,R184",
+                "name": "CLAP"
+            },
+            {
+                "addr": "DB121,R188",
+                "name": "CHAP"
+            },
+            {
+                "addr": "DB121,R192",
+                "name": "CTAP"
+            },
+            {
+                "addr": "DB121,R196",
+                "name": "ATMP"
+            },
+            {
+                "addr": "DB121,R20",
+                "name": "TStop"
+            },
+            {
+                "addr": "DB121,R200",
+                "name": "LCAPS1"
+            },
+            {
+                "addr": "DB121,R204",
+                "name": "LCAPS2"
+            },
+            {
+                "addr": "DB121,R208",
+                "name": "S1tot"
+            },
+            {
+                "addr": "DB121,R212",
+                "name": "S1PS"
+            },
+            {
+                "addr": "DB121,R216",
+                "name": "S1SS"
+            },
+            {
+                "addr": "DB121,R220",
+                "name": "S2tot"
+            },
+            {
+                "addr": "DB121,R224",
+                "name": "S2PS"
+            },
+            {
+                "addr": "DB121,R228",
+                "name": "S2SS"
+            },
+            {
+                "addr": "DB121,R232",
+                "name": "DBLINE1"
+            },
+            {
+                "addr": "DB121,R236",
+                "name": "DBLINE2"
+            },
+            {
+                "addr": "DB121,R24",
+                "name": "TFS"
+            },
+            {
+                "addr": "DB121,R240",
+                "name": "DBLINE3"
+            },
+            {
+                "addr": "DB121,R244",
+                "name": "DBLINE4"
+            },
+            {
+                "addr": "DB121,R248",
+                "name": "DBLINE5"
+            },
+            {
+                "addr": "DB121,R252",
+                "name": "DBLINE6"
+            },
+            {
+                "addr": "DB121,R256",
+                "name": "DBLINE7"
+            },
+            {
+                "addr": "DB121,R260",
+                "name": "DBLINE8"
+            },
+            {
+                "addr": "DB121,R264",
+                "name": "DBLINE9"
+            },
+            {
+                "addr": "DB121,R268",
+                "name": "RATIOS1LN1"
+            },
+            {
+                "addr": "DB121,R272",
+                "name": "RATIOS1LN2"
+            },
+            {
+                "addr": "DB121,R276",
+                "name": "RATIOS1LN3"
+            },
+            {
+                "addr": "DB121,R28",
+                "name": "LSCYpv"
+            },
+            {
+                "addr": "DB121,R280",
+                "name": "RATIOS1LN4"
+            },
+            {
+                "addr": "DB121,R284",
+                "name": "RATIOS1LN5"
+            },
+            {
+                "addr": "DB121,R288",
+                "name": "RATIOS1LN6"
+            },
+            {
+                "addr": "DB121,R292",
+                "name": "RATIOS1LN7"
+            },
+            {
+                "addr": "DB121,R296",
+                "name": "RATIOS1LN8"
+            },
+            {
+                "addr": "DB121,R300",
+                "name": "RATIOS1LN9"
+            },
+            {
+                "addr": "DB121,R304",
+                "name": "RATIOS2LN1"
+            },
+            {
+                "addr": "DB121,R308",
+                "name": "RATIOS2LN2"
+            },
+            {
+                "addr": "DB121,R312",
+                "name": "RATIOS2LN3"
+            },
+            {
+                "addr": "DB121,R316",
+                "name": "RATIOS2LN4"
+            },
+            {
+                "addr": "DB121,R32",
+                "name": "LSCYsp"
+            },
+            {
+                "addr": "DB121,R320",
+                "name": "RATIOS2LN5"
+            },
+            {
+                "addr": "DB121,R324",
+                "name": "RATIOS2LN6"
+            },
+            {
+                "addr": "DB121,R328",
+                "name": "RATIOS2LN7"
+            },
+            {
+                "addr": "DB121,R332",
+                "name": "RATIOS2LN8"
+            },
+            {
+                "addr": "DB121,R336",
+                "name": "RATIOS2LN9"
+            },
+            {
+                "addr": "DB121,R340",
+                "name": "S1SPEEDL1"
+            },
+            {
+                "addr": "DB121,R344",
+                "name": "S1SPEEDL2"
+            },
+            {
+                "addr": "DB121,R348",
+                "name": "S1SPEEDL3"
+            },
+            {
+                "addr": "DB121,R352",
+                "name": "S1SPEEDL4"
+            },
+            {
+                "addr": "DB121,R356",
+                "name": "S1SPEEDL5"
+            },
+            {
+                "addr": "DB121,R36",
+                "name": "LCY"
+            },
+            {
+                "addr": "DB121,R360",
+                "name": "S1SPEEDL6"
+            },
+            {
+                "addr": "DB121,R364",
+                "name": "S1SPEEDL7"
+            },
+            {
+                "addr": "DB121,R368",
+                "name": "S1SPEEDL8"
+            },
+            {
+                "addr": "DB121,R372",
+                "name": "S1SPEEDL9"
+            },
+            {
+                "addr": "DB121,R376",
+                "name": "S2SPEEDL1"
+            },
+            {
+                "addr": "DB121,R380",
+                "name": "S2SPEEDL2"
+            },
+            {
+                "addr": "DB121,R384",
+                "name": "S2SPEEDL3"
+            },
+            {
+                "addr": "DB121,R388",
+                "name": "S2SPEEDL4"
+            },
+            {
+                "addr": "DB121,R392",
+                "name": "S2SPEEDL5"
+            },
+            {
+                "addr": "DB121,R396",
+                "name": "S2SPEEDL6"
+            },
+            {
+                "addr": "DB121,R4",
+                "name": "S"
+            },
+            {
+                "addr": "DB121,R40",
+                "name": "NP"
+            },
+            {
+                "addr": "DB121,R400",
+                "name": "S2SPEEDL7"
+            },
+            {
+                "addr": "DB121,R404",
+                "name": "S2SPEEDL8"
+            },
+            {
+                "addr": "DB121,R408",
+                "name": "S2SPEEDL9"
+            },
+            {
+                "addr": "DB121,R412",
+                "name": "COALTANKP"
+            },
+            {
+                "addr": "DB121,R416",
+                "name": "COALTANKT"
+            },
+            {
+                "addr": "DB121,R420",
+                "name": "HYT"
+            },
+            {
+                "addr": "DB121,R424",
+                "name": "HYP"
+            },
+            {
+                "addr": "DB121,R428",
+                "name": "TWait"
+            },
+            {
+                "addr": "DB121,R432",
+                "name": "TOff"
+            },
+            {
+                "addr": "DB121,R436",
+                "name": "TWait1"
+            },
+            {
+                "addr": "DB121,R44",
+                "name": "HCpv"
+            },
+            {
+                "addr": "DB121,R440",
+                "name": "TWait2"
+            },
+            {
+                "addr": "DB121,R444",
+                "name": "TWait3"
+            },
+            {
+                "addr": "DB121,R448",
+                "name": "TWait4"
+            },
+            {
+                "addr": "DB121,R452",
+                "name": "TWait5"
+            },
+            {
+                "addr": "DB121,R456",
+                "name": "TWait6"
+            },
+            {
+                "addr": "DB121,R460",
+                "name": "TWait7"
+            },
+            {
+                "addr": "DB121,R464",
+                "name": "TWait8"
+            },
+            {
+                "addr": "DB121,R468",
+                "name": "TWait9"
+            },
+            {
+                "addr": "DB121,R472",
+                "name": "TOff1"
+            },
+            {
+                "addr": "DB121,R476",
+                "name": "TOff2"
+            },
+            {
+                "addr": "DB121,R48",
+                "name": "HCsp"
+            },
+            {
+                "addr": "DB121,R480",
+                "name": "TOff3"
+            },
+            {
+                "addr": "DB121,R484",
+                "name": "TOff4"
+            },
+            {
+                "addr": "DB121,R492",
+                "name": "SKIP_ULD1CHpv"
+            },
+            {
+                "addr": "DB121,R496",
+                "name": "PIPE_ULD1CHpv"
+            },
+            {
+                "addr": "DB121,R500",
+                "name": "ULD1CHsp"
+            },
+            {
+                "addr": "DB121,R504",
+                "name": "SKIP_ULD2CHpv"
+            },
+            {
+                "addr": "DB121,R508",
+                "name": "PIPE_ULD2CHpv"
+            },
+            {
+                "addr": "DB121,R512",
+                "name": "ULD2CHsp"
+            },
+            {
+                "addr": "DB121,R516",
+                "name": "SKIP_ULD3CHpv"
+            },
+            {
+                "addr": "DB121,R52",
+                "name": "FCYpv"
+            },
+            {
+                "addr": "DB121,R520",
+                "name": "PIPE_ULD3CHpv"
+            },
+            {
+                "addr": "DB121,R524",
+                "name": "ULD3CHsp"
+            },
+            {
+                "addr": "DB121,R528",
+                "name": "LSCY1pv"
+            },
+            {
+                "addr": "DB121,R532",
+                "name": "LSCY1sp"
+            },
+            {
+                "addr": "DB121,R536",
+                "name": "LSCY2pv"
+            },
+            {
+                "addr": "DB121,R540",
+                "name": "LSCY2sp"
+            },
+            {
+                "addr": "DB121,R544",
+                "name": "LSCY3pv"
+            },
+            {
+                "addr": "DB121,R548",
+                "name": "LSCY3sp"
+            },
+            {
+                "addr": "DB121,R552",
+                "name": "TCH1"
+            },
+            {
+                "addr": "DB121,R556",
+                "name": "TCH2"
+            },
+            {
+                "addr": "DB121,R56",
+                "name": "FCYsp"
+            },
+            {
+                "addr": "DB121,R560",
+                "name": "TCH3"
+            },
+            {
+                "addr": "DB121,R564",
+                "name": "LSTARCMB"
+            },
+            {
+                "addr": "DB121,R568",
+                "name": "LSTOPCMB"
+            },
+            {
+                "addr": "DB121,R572",
+                "name": "LSTARPRH"
+            },
+            {
+                "addr": "DB121,R576",
+                "name": "LSTOPPRH"
+            },
+            {
+                "addr": "DB121,R580",
+                "name": "LVLCMBsp"
+            },
+            {
+                "addr": "DB121,R584",
+                "name": "LVLPRHsp"
+            },
+            {
+                "addr": "DB121,R588",
+                "name": "EXTCMB"
+            },
+            {
+                "addr": "DB121,R592",
+                "name": "EXTPRH"
+            },
+            {
+                "addr": "DB121,R596",
+                "name": "S1EXTAUTO"
+            },
+            {
+                "addr": "DB121,R60",
+                "name": "FFpv"
+            },
+            {
+                "addr": "DB121,R600",
+                "name": "S2EXTAUTO"
+            },
+            {
+                "addr": "DB121,R604",
+                "name": "S1MNRATIO"
+            },
+            {
+                "addr": "DB121,R608",
+                "name": "S1SCRATIO"
+            },
+            {
+                "addr": "DB121,R612",
+                "name": "S1FSTLVL"
+            },
+            {
+                "addr": "DB121,R616",
+                "name": "S1STROKsp"
+            },
+            {
+                "addr": "DB121,R620",
+                "name": "S1SDELAYsp"
+            },
+            {
+                "addr": "DB121,R624",
+                "name": "S1FSTSTRT"
+            },
+            {
+                "addr": "DB121,R628",
+                "name": "S2MNRATIO"
+            },
+            {
+                "addr": "DB121,R632",
+                "name": "S2SCRATIO"
+            },
+            {
+                "addr": "DB121,R636",
+                "name": "S2FSTLVL"
+            },
+            {
+                "addr": "DB121,R64",
+                "name": "FFsp"
+            },
+            {
+                "addr": "DB121,R640",
+                "name": "S2STROKsp"
+            },
+            {
+                "addr": "DB121,R644",
+                "name": "S2SDELAYsp"
+            },
+            {
+                "addr": "DB121,R648",
+                "name": "S2FSTSTR"
+            },
+            {
+                "addr": "DB121,R652",
+                "name": "EANAUTO"
+            },
+            {
+                "addr": "DB121,R656",
+                "name": "ALCAUTO"
+            },
+            {
+                "addr": "DB121,R660",
+                "name": "FUELAUTO"
+            },
+            {
+                "addr": "DB121,R664",
+                "name": "FILTERAUTO"
+            },
+            {
+                "addr": "DB121,R668",
+                "name": "REDAUTO"
+            },
+            {
+                "addr": "DB121,R672",
+                "name": "CUTAUTO"
+            },
+            {
+                "addr": "DB121,R676",
+                "name": "TSTRREDsp"
+            },
+            {
+                "addr": "DB121,R68",
+                "name": "LHV"
+            },
+            {
+                "addr": "DB121,R680",
+                "name": "TSTPREDsp"
+            },
+            {
+                "addr": "DB121,R684",
+                "name": "PERCREDsp"
+            },
+            {
+                "addr": "DB121,R688",
+                "name": "TSTRCUTsp"
+            },
+            {
+                "addr": "DB121,R692",
+                "name": "TSTPCUTsp"
+            },
+            {
+                "addr": "DB121,R696",
+                "name": "REDENABL"
+            },
+            {
+                "addr": "DB121,R700",
+                "name": "REDTIMEpv"
+            },
+            {
+                "addr": "DB121,R704",
+                "name": "CUTENABL"
+            },
+            {
+                "addr": "DB121,R708",
+                "name": "CUTTIMEpv"
+            },
+            {
+                "addr": "DB121,R712",
+                "name": "PATM"
+            },
+            {
+                "addr": "DB121,R716",
+                "name": "FCVS1pv"
+            },
+            {
+                "addr": "DB121,R72",
+                "name": "SA"
+            },
+            {
+                "addr": "DB121,R720",
+                "name": "FCVS1sp"
+            },
+            {
+                "addr": "DB121,R724",
+                "name": "FCVS1AUTO"
+            },
+            {
+                "addr": "DB121,R728",
+                "name": "FCVS2pv"
+            },
+            {
+                "addr": "DB121,R732",
+                "name": "FCVS2sp"
+            },
+            {
+                "addr": "DB121,R736",
+                "name": "FCVS2AUTO"
+            },
+            {
+                "addr": "DB121,R740",
+                "name": "CMB1pv"
+            },
+            {
+                "addr": "DB121,R744",
+                "name": "CMB1sp"
+            },
+            {
+                "addr": "DB121,R748",
+                "name": "CMB2pv"
+            },
+            {
+                "addr": "DB121,R752",
+                "name": "CMB2SP"
+            },
+            {
+                "addr": "DB121,R756",
+                "name": "CMB3pv"
+            },
+            {
+                "addr": "DB121,R76",
+                "name": "CAF"
+            },
+            {
+                "addr": "DB121,R760",
+                "name": "CMB3sp"
+            },
+            {
+                "addr": "DB121,R764",
+                "name": "LCB1pv"
+            },
+            {
+                "addr": "DB121,R768",
+                "name": "LCB1sp"
+            },
+            {
+                "addr": "DB121,R772",
+                "name": "LCB2pv"
+            },
+            {
+                "addr": "DB121,R776",
+                "name": "LCB2sp"
+            },
+            {
+                "addr": "DB121,R780",
+                "name": "FANpv"
+            },
+            {
+                "addr": "DB121,R784",
+                "name": "FANsp"
+            },
+            {
+                "addr": "DB121,R788",
+                "name": "S1CAPSPpv"
+            },
+            {
+                "addr": "DB121,R792",
+                "name": "S1CAPSPsp"
+            },
+            {
+                "addr": "DB121,R796",
+                "name": "S2CAPSPpv"
+            },
+            {
+                "addr": "DB121,R8",
+                "name": "TCY"
+            },
+            {
+                "addr": "DB121,R80",
+                "name": "EANpv"
+            },
+            {
+                "addr": "DB121,R800",
+                "name": "S2CAPSPsp"
+            },
+            {
+                "addr": "DB121,R804",
+                "name": "CTBSPpv"
+            },
+            {
+                "addr": "DB121,R808",
+                "name": "CTBSPsp"
+            },
+            {
+                "addr": "DB121,R812",
+                "name": "CMB1CUR"
+            },
+            {
+                "addr": "DB121,R816",
+                "name": "CMB2CUR"
+            },
+            {
+                "addr": "DB121,R820",
+                "name": "CMB3CUR"
+            },
+            {
+                "addr": "DB121,R824",
+                "name": "LCB1CUR"
+            },
+            {
+                "addr": "DB121,R828",
+                "name": "LCB2CUR"
+            },
+            {
+                "addr": "DB121,R832",
+                "name": "FANCUR"
+            },
+            {
+                "addr": "DB121,R836",
+                "name": "S1CAPCUR"
+            },
+            {
+                "addr": "DB121,R84",
+                "name": "EANsp"
+            },
+            {
+                "addr": "DB121,R840",
+                "name": "S2CAPCUR"
+            },
+            {
+                "addr": "DB121,R844",
+                "name": "CTBCURR"
+            },
+            {
+                "addr": "DB121,R848",
+                "name": "HYDP1CUR"
+            },
+            {
+                "addr": "DB121,R852",
+                "name": "HYDP2CUR"
+            },
+            {
+                "addr": "DB121,R88",
+                "name": "LCAF"
+            },
+            {
+                "addr": "DB121,R92",
+                "name": "ALCpv"
+            },
+            {
+                "addr": "DB121,R96",
+                "name": "ALCsp"
+            }
+        ]
+    },
+    {
+        "id": "s7edc_e10_1s",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.1.60",
+        "port": "102",
+        "rack": "0",
+        "slot": "3",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "1000",
+        "timeout": "5000",
+        "name": "",
+        "vartable": [
+            {
+                "addr": "DB106,R52",
+                "name": "LSCYS1pv"
+            },
+            {
+                "addr": "DB106,R56",
+                "name": "LSCYS2pv"
+            },
+            {
+                "addr": "DB113,R386",
+                "name": "RW"
+            },
+            {
+                "addr": "DB120,R296",
+                "name": "CY"
+            },
+            {
+                "addr": "DB120,R8",
+                "name": "TCO"
+            },
+            {
+                "addr": "DB121,R100",
+                "name": "TC1"
+            },
+            {
+                "addr": "DB121,R104",
+                "name": "TC2"
+            },
+            {
+                "addr": "DB121,R108",
+                "name": "TWG"
+            },
+            {
+                "addr": "DB121,R112",
+                "name": "TFLT"
+            },
+            {
+                "addr": "DB121,R116",
+                "name": "LT1"
+            },
+            {
+                "addr": "DB121,R120",
+                "name": "LT2"
+            },
+            {
+                "addr": "DB121,R124",
+                "name": "LT3"
+            },
+            {
+                "addr": "DB121,R128",
+                "name": "LT4"
+            },
+            {
+                "addr": "DB121,R132",
+                "name": "LT5"
+            },
+            {
+                "addr": "DB121,R136",
+                "name": "LT6"
+            },
+            {
+                "addr": "DB121,R140",
+                "name": "LT7"
+            },
+            {
+                "addr": "DB121,R144",
+                "name": "LT8"
+            },
+            {
+                "addr": "DB121,R148",
+                "name": "LT9"
+            },
+            {
+                "addr": "DB121,R152",
+                "name": "LT10"
+            },
+            {
+                "addr": "DB121,R156",
+                "name": "LT11"
+            },
+            {
+                "addr": "DB121,R160",
+                "name": "LT12"
+            },
+            {
+                "addr": "DB121,R164",
+                "name": "LT13"
+            },
+            {
+                "addr": "DB121,R168",
+                "name": "LT14"
+            },
+            {
+                "addr": "DB121,R172",
+                "name": "LT15"
+            },
+            {
+                "addr": "DB121,R176",
+                "name": "LT16"
+            },
+            {
+                "addr": "DB121,R180",
+                "name": "CBAP"
+            },
+            {
+                "addr": "DB121,R184",
+                "name": "CLAP"
+            },
+            {
+                "addr": "DB121,R188",
+                "name": "CHAP"
+            },
+            {
+                "addr": "DB121,R192",
+                "name": "CTAP"
+            },
+            {
+                "addr": "DB121,R196",
+                "name": "ATMP"
+            },
+            {
+                "addr": "DB121,R20",
+                "name": "TStop"
+            },
+            {
+                "addr": "DB121,R200",
+                "name": "LCAPS1"
+            },
+            {
+                "addr": "DB121,R204",
+                "name": "LCAPS2"
+            },
+            {
+                "addr": "DB121,R208",
+                "name": "S1tot"
+            },
+            {
+                "addr": "DB121,R212",
+                "name": "S1PS"
+            },
+            {
+                "addr": "DB121,R216",
+                "name": "S1SS"
+            },
+            {
+                "addr": "DB121,R220",
+                "name": "S2tot"
+            },
+            {
+                "addr": "DB121,R224",
+                "name": "S2PS"
+            },
+            {
+                "addr": "DB121,R228",
+                "name": "S2SS"
+            },
+            {
+                "addr": "DB121,R232",
+                "name": "DBLINE1"
+            },
+            {
+                "addr": "DB121,R236",
+                "name": "DBLINE2"
+            },
+            {
+                "addr": "DB121,R240",
+                "name": "DBLINE3"
+            },
+            {
+                "addr": "DB121,R244",
+                "name": "DBLINE4"
+            },
+            {
+                "addr": "DB121,R248",
+                "name": "DBLINE5"
+            },
+            {
+                "addr": "DB121,R252",
+                "name": "DBLINE6"
+            },
+            {
+                "addr": "DB121,R256",
+                "name": "DBLINE7"
+            },
+            {
+                "addr": "DB121,R260",
+                "name": "DBLINE8"
+            },
+            {
+                "addr": "DB121,R264",
+                "name": "DBLINE9"
+            },
+            {
+                "addr": "DB121,R268",
+                "name": "RATIOS1LN1"
+            },
+            {
+                "addr": "DB121,R272",
+                "name": "RATIOS1LN2"
+            },
+            {
+                "addr": "DB121,R276",
+                "name": "RATIOS1LN3"
+            },
+            {
+                "addr": "DB121,R280",
+                "name": "RATIOS1LN4"
+            },
+            {
+                "addr": "DB121,R284",
+                "name": "RATIOS1LN5"
+            },
+            {
+                "addr": "DB121,R288",
+                "name": "RATIOS1LN6"
+            },
+            {
+                "addr": "DB121,R292",
+                "name": "RATIOS1LN7"
+            },
+            {
+                "addr": "DB121,R296",
+                "name": "RATIOS1LN8"
+            },
+            {
+                "addr": "DB121,R300",
+                "name": "RATIOS1LN9"
+            },
+            {
+                "addr": "DB121,R304",
+                "name": "RATIOS2LN1"
+            },
+            {
+                "addr": "DB121,R308",
+                "name": "RATIOS2LN2"
+            },
+            {
+                "addr": "DB121,R312",
+                "name": "RATIOS2LN3"
+            },
+            {
+                "addr": "DB121,R316",
+                "name": "RATIOS2LN4"
+            },
+            {
+                "addr": "DB121,R320",
+                "name": "RATIOS2LN5"
+            },
+            {
+                "addr": "DB121,R324",
+                "name": "RATIOS2LN6"
+            },
+            {
+                "addr": "DB121,R328",
+                "name": "RATIOS2LN7"
+            },
+            {
+                "addr": "DB121,R332",
+                "name": "RATIOS2LN8"
+            },
+            {
+                "addr": "DB121,R336",
+                "name": "RATIOS2LN9"
+            },
+            {
+                "addr": "DB121,R340",
+                "name": "S1SPEEDL1"
+            },
+            {
+                "addr": "DB121,R344",
+                "name": "S1SPEEDL2"
+            },
+            {
+                "addr": "DB121,R348",
+                "name": "S1SPEEDL3"
+            },
+            {
+                "addr": "DB121,R352",
+                "name": "S1SPEEDL4"
+            },
+            {
+                "addr": "DB121,R356",
+                "name": "S1SPEEDL5"
+            },
+            {
+                "addr": "DB121,R360",
+                "name": "S1SPEEDL6"
+            },
+            {
+                "addr": "DB121,R364",
+                "name": "S1SPEEDL7"
+            },
+            {
+                "addr": "DB121,R368",
+                "name": "S1SPEEDL8"
+            },
+            {
+                "addr": "DB121,R372",
+                "name": "S1SPEEDL9"
+            },
+            {
+                "addr": "DB121,R376",
+                "name": "S2SPEEDL1"
+            },
+            {
+                "addr": "DB121,R380",
+                "name": "S2SPEEDL2"
+            },
+            {
+                "addr": "DB121,R384",
+                "name": "S2SPEEDL3"
+            },
+            {
+                "addr": "DB121,R388",
+                "name": "S2SPEEDL4"
+            },
+            {
+                "addr": "DB121,R392",
+                "name": "S2SPEEDL5"
+            },
+            {
+                "addr": "DB121,R396",
+                "name": "S2SPEEDL6"
+            },
+            {
+                "addr": "DB121,R40",
+                "name": "NP"
+            },
+            {
+                "addr": "DB121,R400",
+                "name": "S2SPEEDL7"
+            },
+            {
+                "addr": "DB121,R404",
+                "name": "S2SPEEDL8"
+            },
+            {
+                "addr": "DB121,R408",
+                "name": "S2SPEEDL9"
+            },
+            {
+                "addr": "DB121,R412",
+                "name": "COALTANKP"
+            },
+            {
+                "addr": "DB121,R416",
+                "name": "COALTANKT"
+            },
+            {
+                "addr": "DB121,R420",
+                "name": "HYT"
+            },
+            {
+                "addr": "DB121,R424",
+                "name": "HYP"
+            },
+            {
+                "addr": "DB121,R428",
+                "name": "TWait"
+            },
+            {
+                "addr": "DB121,R432",
+                "name": "TOff"
+            },
+            {
+                "addr": "DB121,R436",
+                "name": "TWait1"
+            },
+            {
+                "addr": "DB121,R44",
+                "name": "HCpv"
+            },
+            {
+                "addr": "DB121,R440",
+                "name": "TWait2"
+            },
+            {
+                "addr": "DB121,R444",
+                "name": "TWait3"
+            },
+            {
+                "addr": "DB121,R448",
+                "name": "TWait4"
+            },
+            {
+                "addr": "DB121,R452",
+                "name": "TWait5"
+            },
+            {
+                "addr": "DB121,R456",
+                "name": "TWait6"
+            },
+            {
+                "addr": "DB121,R460",
+                "name": "TWait7"
+            },
+            {
+                "addr": "DB121,R464",
+                "name": "TWait8"
+            },
+            {
+                "addr": "DB121,R468",
+                "name": "TWait9"
+            },
+            {
+                "addr": "DB121,R472",
+                "name": "TOff1"
+            },
+            {
+                "addr": "DB121,R476",
+                "name": "TOff2"
+            },
+            {
+                "addr": "DB121,R48",
+                "name": "HCsp"
+            },
+            {
+                "addr": "DB121,R480",
+                "name": "TOff3"
+            },
+            {
+                "addr": "DB121,R484",
+                "name": "TOff4"
+            },
+            {
+                "addr": "DB121,R492",
+                "name": "SKIP_ULD1CHpv"
+            },
+            {
+                "addr": "DB121,R496",
+                "name": "PIPE_ULD1CHpv"
+            },
+            {
+                "addr": "DB121,R500",
+                "name": "ULD1CHsp"
+            },
+            {
+                "addr": "DB121,R504",
+                "name": "SKIP_ULD2CHpv"
+            },
+            {
+                "addr": "DB121,R508",
+                "name": "PIPE_ULD2CHpv"
+            },
+            {
+                "addr": "DB121,R512",
+                "name": "ULD2CHsp"
+            },
+            {
+                "addr": "DB121,R516",
+                "name": "SKIP_ULD3CHpv"
+            },
+            {
+                "addr": "DB121,R52",
+                "name": "FCYpv"
+            },
+            {
+                "addr": "DB121,R520",
+                "name": "PIPE_ULD3CHpv"
+            },
+            {
+                "addr": "DB121,R524",
+                "name": "ULD3CHsp"
+            },
+            {
+                "addr": "DB121,R528",
+                "name": "LSCY1pv"
+            },
+            {
+                "addr": "DB121,R532",
+                "name": "LSCY1sp"
+            },
+            {
+                "addr": "DB121,R536",
+                "name": "LSCY2pv"
+            },
+            {
+                "addr": "DB121,R540",
+                "name": "LSCY2sp"
+            },
+            {
+                "addr": "DB121,R544",
+                "name": "LSCY3pv"
+            },
+            {
+                "addr": "DB121,R548",
+                "name": "LSCY3sp"
+            },
+            {
+                "addr": "DB121,R552",
+                "name": "TCH1"
+            },
+            {
+                "addr": "DB121,R556",
+                "name": "TCH2"
+            },
+            {
+                "addr": "DB121,R56",
+                "name": "FCYsp"
+            },
+            {
+                "addr": "DB121,R560",
+                "name": "TCH3"
+            },
+            {
+                "addr": "DB121,R564",
+                "name": "LSTARCMB"
+            },
+            {
+                "addr": "DB121,R568",
+                "name": "LSTOPCMB"
+            },
+            {
+                "addr": "DB121,R572",
+                "name": "LSTARPRH"
+            },
+            {
+                "addr": "DB121,R576",
+                "name": "LSTOPPRH"
+            },
+            {
+                "addr": "DB121,R580",
+                "name": "LVLCMBsp"
+            },
+            {
+                "addr": "DB121,R584",
+                "name": "LVLPRHsp"
+            },
+            {
+                "addr": "DB121,R588",
+                "name": "EXTCMB"
+            },
+            {
+                "addr": "DB121,R592",
+                "name": "EXTPRH"
+            },
+            {
+                "addr": "DB121,R596",
+                "name": "S1EXTAUTO"
+            },
+            {
+                "addr": "DB121,R60",
+                "name": "FFpv"
+            },
+            {
+                "addr": "DB121,R600",
+                "name": "S2EXTAUTO"
+            },
+            {
+                "addr": "DB121,R604",
+                "name": "S1MNRATIO"
+            },
+            {
+                "addr": "DB121,R608",
+                "name": "S1SCRATIO"
+            },
+            {
+                "addr": "DB121,R612",
+                "name": "S1FSTLVL"
+            },
+            {
+                "addr": "DB121,R616",
+                "name": "S1STROKsp"
+            },
+            {
+                "addr": "DB121,R620",
+                "name": "S1SDELAYsp"
+            },
+            {
+                "addr": "DB121,R624",
+                "name": "S1FSTSTRT"
+            },
+            {
+                "addr": "DB121,R628",
+                "name": "S2MNRATIO"
+            },
+            {
+                "addr": "DB121,R632",
+                "name": "S2SCRATIO"
+            },
+            {
+                "addr": "DB121,R636",
+                "name": "S2FSTLVL"
+            },
+            {
+                "addr": "DB121,R64",
+                "name": "FFsp"
+            },
+            {
+                "addr": "DB121,R640",
+                "name": "S2STROKsp"
+            },
+            {
+                "addr": "DB121,R644",
+                "name": "S2SDELAYsp"
+            },
+            {
+                "addr": "DB121,R648",
+                "name": "S2FSTSTR"
+            },
+            {
+                "addr": "DB121,R652",
+                "name": "EANAUTO"
+            },
+            {
+                "addr": "DB121,R656",
+                "name": "ALCAUTO"
+            },
+            {
+                "addr": "DB121,R660",
+                "name": "FUELAUTO"
+            },
+            {
+                "addr": "DB121,R664",
+                "name": "FILTERAUTO"
+            },
+            {
+                "addr": "DB121,R668",
+                "name": "REDAUTO"
+            },
+            {
+                "addr": "DB121,R672",
+                "name": "CUTAUTO"
+            },
+            {
+                "addr": "DB121,R676",
+                "name": "TSTRREDsp"
+            },
+            {
+                "addr": "DB121,R68",
+                "name": "LHV"
+            },
+            {
+                "addr": "DB121,R680",
+                "name": "TSTPREDsp"
+            },
+            {
+                "addr": "DB121,R684",
+                "name": "PERCREDsp"
+            },
+            {
+                "addr": "DB121,R688",
+                "name": "TSTRCUTsp"
+            },
+            {
+                "addr": "DB121,R692",
+                "name": "TSTPCUTsp"
+            },
+            {
+                "addr": "DB121,R696",
+                "name": "REDENABL"
+            },
+            {
+                "addr": "DB121,R700",
+                "name": "REDTIMEpv"
+            },
+            {
+                "addr": "DB121,R704",
+                "name": "CUTENABL"
+            },
+            {
+                "addr": "DB121,R708",
+                "name": "CUTTIMEpv"
+            },
+            {
+                "addr": "DB121,R712",
+                "name": "PATM"
+            },
+            {
+                "addr": "DB121,R716",
+                "name": "FCVS1pv"
+            },
+            {
+                "addr": "DB121,R72",
+                "name": "SA"
+            },
+            {
+                "addr": "DB121,R720",
+                "name": "FCVS1sp"
+            },
+            {
+                "addr": "DB121,R724",
+                "name": "FCVS1AUTO"
+            },
+            {
+                "addr": "DB121,R728",
+                "name": "FCVS2pv"
+            },
+            {
+                "addr": "DB121,R732",
+                "name": "FCVS2sp"
+            },
+            {
+                "addr": "DB121,R736",
+                "name": "FCVS2AUTO"
+            },
+            {
+                "addr": "DB121,R740",
+                "name": "CMB1pv"
+            },
+            {
+                "addr": "DB121,R744",
+                "name": "CMB1sp"
+            },
+            {
+                "addr": "DB121,R748",
+                "name": "CMB2pv"
+            },
+            {
+                "addr": "DB121,R752",
+                "name": "CMB2SP"
+            },
+            {
+                "addr": "DB121,R756",
+                "name": "CMB3pv"
+            },
+            {
+                "addr": "DB121,R76",
+                "name": "CAF"
+            },
+            {
+                "addr": "DB121,R760",
+                "name": "CMB3sp"
+            },
+            {
+                "addr": "DB121,R764",
+                "name": "LCB1pv"
+            },
+            {
+                "addr": "DB121,R768",
+                "name": "LCB1sp"
+            },
+            {
+                "addr": "DB121,R772",
+                "name": "LCB2pv"
+            },
+            {
+                "addr": "DB121,R776",
+                "name": "LCB2sp"
+            },
+            {
+                "addr": "DB121,R780",
+                "name": "FANpv"
+            },
+            {
+                "addr": "DB121,R784",
+                "name": "FANsp"
+            },
+            {
+                "addr": "DB121,R788",
+                "name": "S1CAPSPpv"
+            },
+            {
+                "addr": "DB121,R792",
+                "name": "S1CAPSPsp"
+            },
+            {
+                "addr": "DB121,R796",
+                "name": "S2CAPSPpv"
+            },
+            {
+                "addr": "DB121,R80",
+                "name": "EANpv"
+            },
+            {
+                "addr": "DB121,R800",
+                "name": "S2CAPSPsp"
+            },
+            {
+                "addr": "DB121,R804",
+                "name": "CTBSPpv"
+            },
+            {
+                "addr": "DB121,R808",
+                "name": "CTBSPsp"
+            },
+            {
+                "addr": "DB121,R812",
+                "name": "CMB1CUR"
+            },
+            {
+                "addr": "DB121,R816",
+                "name": "CMB2CUR"
+            },
+            {
+                "addr": "DB121,R820",
+                "name": "CMB3CUR"
+            },
+            {
+                "addr": "DB121,R824",
+                "name": "LCB1CUR"
+            },
+            {
+                "addr": "DB121,R828",
+                "name": "LCB2CUR"
+            },
+            {
+                "addr": "DB121,R832",
+                "name": "FANCUR"
+            },
+            {
+                "addr": "DB121,R836",
+                "name": "S1CAPCUR"
+            },
+            {
+                "addr": "DB121,R84",
+                "name": "EANsp"
+            },
+            {
+                "addr": "DB121,R840",
+                "name": "S2CAPCUR"
+            },
+            {
+                "addr": "DB121,R844",
+                "name": "CTBCURR"
+            },
+            {
+                "addr": "DB121,R848",
+                "name": "HYDP1CUR"
+            },
+            {
+                "addr": "DB121,R852",
+                "name": "HYDP2CUR"
+            },
+            {
+                "addr": "DB121,R88",
+                "name": "LCAF"
+            },
+            {
+                "addr": "DB121,R92",
+                "name": "ALCpv"
+            },
+            {
+                "addr": "DB121,R96",
+                "name": "ALCsp"
+            },
+            {
+                "addr": "DB122,R24",
+                "name": "TFS"
+            },
+            {
+                "addr": "DB122,R8",
+                "name": "TCY"
+            },
+            {
+                "addr": "DB360,R194",
+                "name": "LSCYsp"
+            },
+            {
+                "addr": "DB4,X3.4",
+                "name": "S1"
+            },
+            {
+                "addr": "DB4,X3.5",
+                "name": "S2"
+            }
+        ]
     },
     {
         "id": "s7edc_e11_1s",
@@ -2261,6 +4006,36 @@
                 "name": "Bool8"
             }
         ]
+    },
+    {
+        "id": "89a674c784678c6c",
+        "type": "modbus-client",
+        "name": "",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": true,
+        "queueLogEnabled": true,
+        "failureLogEnabled": true,
+        "tcpHost": "192.168.1.61",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true,
+        "showErrors": true,
+        "showWarnings": true,
+        "showLogs": true
     },
     {
         "id": "cf35598e75a95852",
@@ -2612,7 +4387,7 @@
         "wires": [
             [
                 "931179e7bf82fd62",
-                "6b49bb402c49a762"
+                "2c18819cc0f040f4"
             ]
         ]
     },
@@ -2894,7 +4669,7 @@
         "senderr": false,
         "headers": [],
         "x": 810,
-        "y": 320,
+        "y": 280,
         "wires": [
             [
                 "b03cedf686672073"
@@ -2914,7 +4689,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
                 "9d2a1ef00e8cfc14",
@@ -2949,10 +4724,10 @@
             }
         ],
         "x": 1100,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
-                "2174b79660ae402d"
+                "6b49bb402c49a762"
             ]
         ]
     },
@@ -2970,7 +4745,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1090,
-        "y": 340,
+        "y": 300,
         "wires": []
     },
     {
@@ -3007,11 +4782,11 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 780,
-        "y": 260,
+        "x": 1060,
+        "y": 380,
         "wires": [
             [
-                "2c18819cc0f040f4"
+                "2174b79660ae402d"
             ]
         ]
     },
@@ -3049,7 +4824,7 @@
         "wires": [
             [
                 "b04b2a27a423ecac",
-                "cb6fc57786d97ac1"
+                "1523391ae435432c"
             ]
         ]
     },
@@ -3331,7 +5106,7 @@
         "senderr": false,
         "headers": [],
         "x": 810,
-        "y": 320,
+        "y": 280,
         "wires": [
             [
                 "f3a97782cff61a33"
@@ -3351,7 +5126,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
                 "8203af89e8d9c684",
@@ -3386,10 +5161,10 @@
             }
         ],
         "x": 1100,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
-                "961965a0055fb1bd"
+                "ca01d6daaeb039dc"
             ]
         ]
     },
@@ -3407,7 +5182,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1080,
-        "y": 340,
+        "y": 300,
         "wires": []
     },
     {
@@ -3428,7 +5203,7 @@
         "wires": []
     },
     {
-        "id": "cb6fc57786d97ac1",
+        "id": "ca01d6daaeb039dc",
         "type": "delay",
         "z": "sf_triggers",
         "name": "",
@@ -3444,11 +5219,11 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 780,
-        "y": 260,
+        "x": 1060,
+        "y": 380,
         "wires": [
             [
-                "1523391ae435432c"
+                "961965a0055fb1bd"
             ]
         ]
     },
@@ -3799,7 +5574,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1080,
-        "y": 320,
+        "y": 340,
         "wires": []
     },
     {
@@ -6211,13 +7986,205 @@
         "wires": []
     },
     {
+        "id": "comment_e10",
+        "type": "comment",
+        "z": "tab_connections",
+        "name": "Endpoint 10: Reversy1 S7-416 - triggered",
+        "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
+        "x": 220,
+        "y": 150,
+        "wires": []
+    },
+    {
+        "id": "sf_data_handler_e10_t17",
+        "type": "subflow:sf_data_handler",
+        "z": "tab_connections",
+        "name": "tags_odr_reversy_s7@10",
+        "env": [
+            {
+                "name": "ENDPOINT_ID",
+                "value": "10",
+                "type": "num"
+            },
+            {
+                "name": "TAG_TABLE",
+                "value": "tags_odr_reversy_s7",
+                "type": "str"
+            }
+        ],
+        "x": 520,
+        "y": 250,
+        "wires": [
+            [
+                "sf_data_handler_e10_t17_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_data_handler_e10_t17_call",
+        "type": "link call",
+        "z": "tab_connections",
+        "name": "dynamic",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 820,
+        "y": 250,
+        "wires": [
+            [
+                "sf_data_handler_e10_t17"
+            ]
+        ]
+    },
+    {
+        "id": "sf_data_handler_e10_t17_in",
+        "type": "link in",
+        "z": "tab_connections",
+        "name": "sf_data_handler_e10_t17_in",
+        "links": [
+            "trigger_e10_t17_out"
+        ],
+        "x": 220,
+        "y": 250,
+        "wires": [
+            [
+                "sf_data_handler_e10_t17"
+            ]
+        ]
+    },
+    {
+        "id": "s7in_e10",
+        "type": "s7 in",
+        "z": "tab_connections",
+        "endpoint": "s7edt_e10",
+        "mode": "all",
+        "variable": "",
+        "diff": false,
+        "name": "",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "sf_data_handler_e10_t17"
+            ]
+        ]
+    },
+    {
+        "id": "s7control_e10_in",
+        "type": "link in",
+        "z": "tab_connections",
+        "name": "s7control_e10_in",
+        "links": [],
+        "x": 520,
+        "y": 200,
+        "wires": [
+            [
+                "s7control_e10"
+            ]
+        ]
+    },
+    {
+        "id": "s7control_e10",
+        "type": "s7 control",
+        "z": "tab_connections",
+        "endpoint": "s7edt_e10",
+        "function": "trigger",
+        "name": "",
+        "x": 770,
+        "y": 200,
+        "wires": [
+            [
+                "s7control_e10_out"
+            ]
+        ]
+    },
+    {
+        "id": "s7control_e10_out",
+        "type": "link out",
+        "z": "tab_connections",
+        "name": "s7control_e10_out",
+        "mode": "return",
+        "links": [],
+        "x": 1020,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "comment_e10_1s_ever",
+        "type": "comment",
+        "z": "tab_connections",
+        "name": "Endpoint 10: Reversy1 S7-416 - 1s - ever",
+        "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
+        "x": 220,
+        "y": 350,
+        "wires": []
+    },
+    {
+        "id": "sf_data_handler_e10_t28",
+        "type": "subflow:sf_data_handler",
+        "z": "tab_connections",
+        "name": "tags_live_reversy_s7@10",
+        "env": [
+            {
+                "name": "ENDPOINT_ID",
+                "value": "10",
+                "type": "num"
+            },
+            {
+                "name": "TAG_TABLE",
+                "value": "tags_live_reversy_s7",
+                "type": "str"
+            }
+        ],
+        "x": 540,
+        "y": 400,
+        "wires": [
+            [
+                "sf_data_handler_e10_t28_call"
+            ]
+        ]
+    },
+    {
+        "id": "sf_data_handler_e10_t28_call",
+        "type": "link call",
+        "z": "tab_connections",
+        "name": "dynamic",
+        "links": [],
+        "linkType": "dynamic",
+        "timeout": "30",
+        "x": 820,
+        "y": 400,
+        "wires": [
+            [
+                "sf_data_handler_e10_t28"
+            ]
+        ]
+    },
+    {
+        "id": "s7in_e10_1s_ever",
+        "type": "s7 in",
+        "z": "tab_connections",
+        "endpoint": "s7edc_e10_1s",
+        "mode": "all",
+        "variable": "",
+        "diff": false,
+        "name": "",
+        "x": 220,
+        "y": 400,
+        "wires": [
+            [
+                "sf_data_handler_e10_t28"
+            ]
+        ]
+    },
+    {
         "id": "comment_e11_1s_diff",
         "type": "comment",
         "z": "tab_connections",
         "name": "Endpoint 11: Vanguard1 S7-1513 - 1s - diff",
         "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
         "x": 220,
-        "y": 150,
+        "y": 500,
         "wires": []
     },
     {
@@ -6238,7 +8205,7 @@
             }
         ],
         "x": 540,
-        "y": 200,
+        "y": 550,
         "wires": [
             [
                 "sf_data_handler_e11_t29_call"
@@ -6254,7 +8221,7 @@
         "linkType": "dynamic",
         "timeout": "30",
         "x": 820,
-        "y": 200,
+        "y": 550,
         "wires": [
             [
                 "sf_data_handler_e11_t29"
@@ -6271,7 +8238,7 @@
         "diff": true,
         "name": "",
         "x": 220,
-        "y": 200,
+        "y": 550,
         "wires": [
             [
                 "sf_data_handler_e11_t29"
@@ -6285,7 +8252,7 @@
         "name": "Endpoint 12: TwinD S7-1214C - 1s - diff",
         "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
         "x": 220,
-        "y": 300,
+        "y": 650,
         "wires": []
     },
     {
@@ -6306,7 +8273,7 @@
             }
         ],
         "x": 540,
-        "y": 350,
+        "y": 700,
         "wires": [
             [
                 "sf_data_handler_e12_t29_call"
@@ -6322,7 +8289,7 @@
         "linkType": "dynamic",
         "timeout": "30",
         "x": 820,
-        "y": 350,
+        "y": 700,
         "wires": [
             [
                 "sf_data_handler_e12_t29"
@@ -6339,7 +8306,7 @@
         "diff": true,
         "name": "",
         "x": 220,
-        "y": 350,
+        "y": 700,
         "wires": [
             [
                 "sf_data_handler_e12_t29"
@@ -6353,7 +8320,7 @@
         "name": "Endpoint 13: ABC S7-315F - 1s - diff",
         "info": "README: https://github.com/st-one-io/node-red-contrib-s7/blob/master/README.md",
         "x": 220,
-        "y": 450,
+        "y": 800,
         "wires": []
     },
     {
@@ -6374,7 +8341,7 @@
             }
         ],
         "x": 540,
-        "y": 500,
+        "y": 850,
         "wires": [
             [
                 "sf_data_handler_e13_t29_call"
@@ -6390,7 +8357,7 @@
         "linkType": "dynamic",
         "timeout": "30",
         "x": 820,
-        "y": 500,
+        "y": 850,
         "wires": [
             [
                 "sf_data_handler_e13_t29"
@@ -6407,7 +8374,7 @@
         "diff": true,
         "name": "",
         "x": 220,
-        "y": 500,
+        "y": 850,
         "wires": [
             [
                 "sf_data_handler_e13_t29"
@@ -6468,6 +8435,95 @@
         "x": 635,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "comment_trig3",
+        "type": "comment",
+        "z": "tab_triggers",
+        "name": "Trigger 3: Odr_Cycle_Change",
+        "info": "",
+        "x": 160,
+        "y": 150,
+        "wires": []
+    },
+    {
+        "id": "sf_trigger_handler_trig3_t17",
+        "type": "subflow:sf_trigger_handler",
+        "z": "tab_triggers",
+        "name": "trig3 - tags_odr_reversy_s7",
+        "env": [
+            {
+                "name": "TRIGGER_ID",
+                "value": "3",
+                "type": "num"
+            },
+            {
+                "name": "TAG_TABLE",
+                "value": "tags_odr_reversy_s7",
+                "type": "str"
+            }
+        ],
+        "x": 620,
+        "y": 250,
+        "wires": [
+            [
+                "trigger_e10_t17_out"
+            ]
+        ]
+    },
+    {
+        "id": "manual_trig3_t17",
+        "type": "inject",
+        "z": "tab_triggers",
+        "name": "Manual Trigger",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "trigger",
+        "x": 220,
+        "y": 250,
+        "wires": [
+            [
+                "sf_trigger_handler_trig3_t17"
+            ]
+        ]
+    },
+    {
+        "id": "trigger_e10_t17_out",
+        "type": "link out",
+        "z": "tab_triggers",
+        "name": "trigger_e10_t17_out",
+        "mode": "link",
+        "links": [
+            "sf_data_handler_e10_t17_in"
+        ],
+        "x": 850,
+        "y": 250,
+        "wires": []
+    },
+    {
+        "id": "s7in_trig3",
+        "type": "s7 in",
+        "z": "tab_triggers",
+        "endpoint": "s7et_e10",
+        "mode": "all",
+        "variable": "",
+        "diff": false,
+        "name": "",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "sf_trigger_handler_trig3_t17"
+            ]
+        ]
     },
     {
         "id": "86482bdb10cb4bf0",
@@ -8737,7 +10793,6 @@
         "id": "7aa53ce4aca3cb95",
         "type": "link call",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "",
         "links": [],
         "linkType": "dynamic",
@@ -8754,7 +10809,6 @@
         "id": "76203f45daf5e0ab",
         "type": "subflow:sf_data_handler",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "",
         "x": 550,
         "y": 740,
@@ -8768,13 +10822,12 @@
         "id": "2852a215e2725329",
         "type": "modbus-flex-getter",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "Modbus Endpoint 1",
         "showStatusActivities": false,
         "showErrors": true,
         "showWarnings": true,
         "logIOActivities": false,
-        "server": "ece6c13378a449d4",
+        "server": "89a674c784678c6c",
         "useIOFile": false,
         "ioFile": "",
         "useIOForPayload": false,
@@ -8786,7 +10839,8 @@
         "y": 660,
         "wires": [
             [
-                "9479eca4e5d63b0c"
+                "9479eca4e5d63b0c",
+                "a42550177f150683"
             ],
             []
         ]
@@ -9053,7 +11107,6 @@
         "id": "e44bcab12e3b48e9",
         "type": "comment",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "Modbus Continous / Modbus Continous on change",
         "info": "### Main Behaviour  ###\n\n    The cyclic trigger is managed by the Endpoint Data Handler\n    The read trigger is sent from the OUT 2 of data handler to the Modbus flex getter\n    The data handler manage also the 'on_change' method by storing a temporary reading data\n\n\n###  Modbus-Flex-Getter ###\n\nModbus flexible input triggered read node with connection input parameters.\n\nConnects to a Modbus TCP or serial to read coils/inputs/registers at the rate of the incoming msg.\n\n\nFunction codes (1:4) currently supported include:\nFC 1: Read Coil Status\nFC 2: Read Input Status\nFC 3: Read Holding Registers\nFC 4: Read Input Registers\nInput parameter for connecting Modbus - in msg.payload:\n\nunitid (0..255 tcp | 0..247 serial) - overrides default Unit-ID\nfc (1..4)\nstart address (0:65535)\nquantity (1:65535) of coils/inputs/registers to be read from the start address\nOutput 1: data Array (PDU), modbus response Buffer, input message\n\nOutput 2: modbus response Buffer, data Array (PDU), input message\n\nFunction node code example for single input:\n\nmsg.payload = { value: msg.payload, 'fc': 1, 'unitid': 1, 'address': 0 , 'quantity': 1 } return msg\nFunction node code example for multiple inputs:\n\nmsg.payload = { value: msg.payload, 'fc': 3, 'unitid': 1, 'address': 0 , 'quantity': 10 } return msg\nThe status of the Flex-Getter-Node is \"active\" if the operating system opens up the dev with no error. Connection issues with your ethernet connection won't affect this status. Warnings and notifications about ethernet connection issues will be displayed in the Debug-window.\n\nTo use the Flex-Getter-Node with \"split\"- and \"join\"-nodes, please make sure to enable \"Keep Msg Properties\" in the nodes' \"Optionals\" properties.\n\n\n### Source code ###\n\n    node.prepareMsg = function (msg) {\n      if (typeof msg.payload === 'string') {\n        msg.payload = JSON.parse(msg.payload)\n      }\n\n      msg.payload.fc = parseInt(msg.payload.fc) || 3\n      msg.payload.unitid = parseInt(msg.payload.unitid)\n      msg.payload.address = parseInt(msg.payload.address) || 0\n      msg.payload.quantity = parseInt(msg.payload.quantity) || 1\n\n      return msg\n    }\n\n    node.isValidModbusMsg = function (msg) {\n      let isValid = true\n\n      if (!(Number.isInteger(msg.payload.fc) &&\n        msg.payload.fc >= 1 &&\n        msg.payload.fc <= 4)) {\n        node.error('FC Not Valid', msg)\n        isValid &= false\n      }\n\n      if (isValid &&\n        !(Number.isInteger(msg.payload.address) &&\n          msg.payload.address >= 0 &&\n          msg.payload.address <= 65535)) {\n        node.error('Address Not Valid', msg)\n        isValid &= false\n      }\n\n      if (isValid &&\n        !(Number.isInteger(msg.payload.quantity) &&\n          msg.payload.quantity >= 1 &&\n          msg.payload.quantity <= 65535)) {\n        node.error('Quantity Not Valid', msg)\n        isValid &= false\n      }\n\n      return isValid\n    }\n\n\n### Repository ###\nhttps://github.com/BiancoRoyal/node-red-contrib-modbus/tree/master",
         "x": 250,
@@ -9134,7 +11187,7 @@
         "showErrors": false,
         "showWarnings": true,
         "logIOActivities": false,
-        "server": "ece6c13378a449d4",
+        "server": "",
         "useIOFile": false,
         "ioFile": "",
         "useIOForPayload": false,
@@ -9490,7 +11543,6 @@
         "id": "466717ed33b0a9eb",
         "type": "link call",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "",
         "links": [],
         "linkType": "dynamic",
@@ -9507,7 +11559,6 @@
         "id": "791ad47733f4c7f6",
         "type": "subflow:sf_data_handler",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "",
         "x": 550,
         "y": 820,
@@ -9681,7 +11732,6 @@
         "id": "03a888d51b9c8cc6",
         "type": "link in",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "Modbus Endpoint 2 Trigger Table 1",
         "links": [],
         "x": 225,
@@ -9696,7 +11746,6 @@
         "id": "89ef2b7ef7428912",
         "type": "link in",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "Modbus Endpoint 2 Trigger Table 2",
         "links": [],
         "x": 225,
@@ -9711,7 +11760,6 @@
         "id": "51bf9497870c01f6",
         "type": "link in",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "Modbus Endpoint 2 Command",
         "links": [],
         "x": 225,
@@ -9890,12 +11938,127 @@
         "id": "9479eca4e5d63b0c",
         "type": "link out",
         "z": "2dbd8c6f774fdb61",
-        "d": true,
         "name": "link out 12",
         "mode": "link",
         "links": [],
         "x": 875,
         "y": 660,
+        "wires": []
+    },
+    {
+        "id": "6b957b14f666b0c9",
+        "type": "inject",
+        "z": "2dbd8c6f774fdb61",
+        "name": "test",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "read",
+        "payload": "trigger",
+        "payloadType": "str",
+        "x": 170,
+        "y": 620,
+        "wires": [
+            [
+                "f82af955bd7de7fd"
+            ]
+        ]
+    },
+    {
+        "id": "a42550177f150683",
+        "type": "debug",
+        "z": "2dbd8c6f774fdb61",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "f82af955bd7de7fd",
+        "type": "function",
+        "z": "2dbd8c6f774fdb61",
+        "name": "test",
+        "func": "msg.payload = { value: msg.payload, 'fc': 3, 'unitid': 1, 'address': 0, 'quantity': 10 };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 620,
+        "wires": [
+            [
+                "2852a215e2725329",
+                "a42550177f150683"
+            ]
+        ]
+    },
+    {
+        "id": "d0ef0145af60b2f0",
+        "type": "modbus-read",
+        "z": "2dbd8c6f774fdb61",
+        "name": "",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "unitid": "1",
+        "dataType": "HoldingRegister",
+        "adr": "0",
+        "quantity": "1",
+        "rate": "1000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "89a674c784678c6c",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": true,
+        "x": 410,
+        "y": 920,
+        "wires": [
+            [
+                "37f6606f167ccd9d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "37f6606f167ccd9d",
+        "type": "debug",
+        "z": "2dbd8c6f774fdb61",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 920,
         "wires": []
     },
     {
