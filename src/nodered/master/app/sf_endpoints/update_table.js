@@ -61,7 +61,7 @@ const baseHeaders = columns.length > 0
         }))
     : [];
 
-// Assign states to triggers if not already set
+// Assign random states to endpoints if not already set
 for (let i = 0; i < data.length; i++) {
     if (!data[i].status) {
         const oldItem = dataOld.find(item => item.name === data[i].name);
@@ -77,12 +77,13 @@ for (let i = 0; i < data.length; i++) {
 }
 
 let snacktext = "";
-if (msg.topicMain === "deploy") {
-    snacktext = `${msg.title} Saved Successfully!`;
-} else if (msg.topicMain === "update") {
-    snacktext = `${msg.title} Updated Successfully!`;
-} else if (msg.topicMain === "start") {
-    snacktext = `${msg.title} Started Successfully!`;
+switch (msg.topicMain) {
+    case "save":
+        snacktext = `${msg.title} Saved Successfully!`;
+        break;
+    case "start":
+        snacktext = `${msg.title} Started Successfully!`;
+        break;
 }
 
 // Assign table data to the message
@@ -93,7 +94,8 @@ msg.dashboard.table = {
     headers: baseHeaders
 };
 msg.dashboard.form = {
-    endpoint: global.get("endpoints").map(endp => endp.name),
+    machine: global.get("machines").map(mch => mch.name),
+    protocol: global.get("protocol"),
     tag_tables: global.get("tag_tables"),
 };
 
@@ -101,7 +103,7 @@ msg.history = msg.dashboard.history || [];
 msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
-    show: true,
+    show: snacktext.length > 0,
     text: snacktext,
     color: "green-lighten-3"
 }
@@ -115,5 +117,5 @@ global.set(msg.database.table, data);
 const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
 node.status({ fill: "blue", shape: "dot", text: `last update: ${localTime}` });
 
-msg.topic = 'update_status';
+msg.topic = 'update_table';
 return msg;

@@ -31,13 +31,13 @@ const indexMap = {
 
     // Previous Action (postgres response)
     check_table: 2,
-    deploy_changes: 2,
+    database_updated: 2,
     select_data: 3,
 
     // Next Action
     start: 1,
     update: 2,
-    deploy: 4,
+    update_database: 4,
 };
 
 const outputs = [null, null, null, null, null];

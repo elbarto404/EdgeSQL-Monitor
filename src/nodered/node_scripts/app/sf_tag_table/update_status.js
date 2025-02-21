@@ -93,16 +93,16 @@ for (let datum of data) {
     }
 }
 
-let snacktext = "";
-if (msg.topicMain === "deploy") {
-    snacktext = `${msg.title} Saved Successfully!`;
-} else if (msg.topicMain === "update") {
-    snacktext = `${msg.title} Updated Successfully!`;
-} else if (msg.topicMain === "start") {
-    snacktext = `${msg.title} Started Successfully!`;
+switch (msg.topicMain) {
+    case "update_database":
+        snacktext = `${msg.title} Saved Successfully!`;
+        break;
+    case "start":
+        snacktext = `${msg.title} Started Successfully!`;
+        break;
 }
 
-// Assign data to the message
+// Assign message properties
 msg.data = data;
 msg.endpoints = endpoints;
 
@@ -122,7 +122,7 @@ msg.dashboard.form = {
 msg.dashboard.history = msg.dashboard.history || [];
 
 msg.dashboard.snackbar = {
-    show: true,
+    show: snacktext.length > 0,
     text: snacktext,
     color: "green-lighten-3"
 }
@@ -139,7 +139,7 @@ node.status({ fill: "blue", shape: "dot", text: `last update: ${localTime}` });
 
 
 if (deploy_needed) {
-    msg.topic = 'deploy';
+    msg.topic = 'update_database';
     return [null, msg];
 } else {
     // Prapare the dynamic_insert history and resets the dashboard history

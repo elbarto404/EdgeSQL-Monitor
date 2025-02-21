@@ -27,9 +27,15 @@ function parseValue(value) {
     return value;
 }
 
+// GET DATA
 // Retrieve existing data or initialize
 let columns = [];
 let data = global.get(msg.database.table) || [];
+let dataOld = global.get(msg.database.table) || [];
+
+const endpoints = (global.get("endpoints") || [])
+    .filter(ep => Array.isArray(ep.tag_tables) && ep.tag_tables.some(tag => tag === msg.database.table));
+const endpointNames = endpoints.map(ep => ep.name);
 
 // Extract column names from PostgreSQL query
 if (msg.pgsql && msg.pgsql[0] && msg.pgsql[0].rows) {
@@ -47,6 +53,7 @@ if (msg.pgsql && msg.pgsql[1] && msg.pgsql[1].rows) {
     });
 }
 
+// DASHBOARD MANAGEMENT
 // Build dynamic table headers
 const baseHeaders = columns.length > 0
     ? columns
@@ -59,27 +66,59 @@ const baseHeaders = columns.length > 0
         }))
     : [];
 
-let snacktext = "";
-if (msg.topicMain === "deploy") {
-    snacktext = `${msg.title} Saved Successfully!`;
-} else if (msg.topicMain === "update") {
-    snacktext = `${msg.title} Updated Successfully!`;
-} else if (msg.topicMain === "start") {
-    snacktext = `${msg.title} Started Successfully!`;
+// Build table header for endpoints
+const endpointsHeader = {
+    title: "Endpoints",
+    value: "endpoints",
+    headerProps: { style: 'font-weight: 700' },
+};
+
+for (let datum of data) { 
+    for (let endpoint of endpoints) {
+        // Check if the datum does not already have a value for the endpoint name
+        if (!datum[endpoint.name]) {
+            const oldItem = dataOld.find(item => item.id === datum.id);
+            if (oldItem && oldItem[endpoint.name]) {
+                datum[endpoint.name] = oldItem[endpoint.name]; 
+            } else {
+                datum[endpoint.name] = endpoint.status; 
+            }
+        }
+    }
 }
 
-// Assign table data to the message
+let snacktext = "";
+switch (msg.topicMain) {
+    case "save":
+        snacktext = `${msg.title} Saved Successfully!`;
+        break;
+    case "start":
+        snacktext = `${msg.title} Started Successfully!`;
+        break;
+}
+
+// Assign data to the message
 msg.data = data;
+msg.endpoints = endpoints;
 
 msg.dashboard.table = {
     title: msg.title,
-    headers: baseHeaders
+    headers: [...baseHeaders, endpointsHeader],
+    baseHeaders: baseHeaders,
+    otherHeaders: [endpointsHeader]
 };
-msg.dashboard.form = {};
+msg.dashboard.form = {
+    data_type: Object.keys(global.get("data_type")),
+    access: global.get("access"),
+    aggregation_type: global.get("aggregation_type"),
+    protocol: env.get("PROTOCOL")
+};
+
+msg.history = msg.dashboard.history || [];
 msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
-    show: true,
+    show: snacktext.length > 0,
     text: snacktext,
     color: "green-lighten-3"
 }
@@ -93,5 +132,5 @@ global.set(msg.database.table, data);
 const localTime = new Date().toLocaleString("it-IT", { timeZone: global.get('tz') }).replace(',', '');
 node.status({ fill: "blue", shape: "dot", text: `last update: ${localTime}` });
 
-msg.topic = 'update_status';
+msg.topic = 'update_table';
 return msg;

@@ -21,30 +21,34 @@ msg.dashboard = msg.dashboard || {};
 msg.dashboard.info = msg.dashboard.info || flow.get("info");
 
 if (msg.database.table !== tabName) {
-    msg.error = "Message with wrong table";
+    node.error("Message with wrong table");
 }
-
-// Topic switch
-const indexMap = {
-    // Previous Error
-    error: 0,
-
-    // Previous Action (postgres response)
-    check_table: 2,
-    deploy_changes: 2,
-    select_data: 3,
-
-    // Next Action
-    start: 1,
-    update: 2,
-    deploy: 4,
-};
 
 const outputs = [null, null, null, null, null];
 
-if (msg.error) outputs[0] = msg;
-else if (indexMap[msg.topic] !== undefined) outputs[indexMap[msg.topic]] = msg;
+if (msg.error) {
+    outputs[4] = msg;
+} else {
+    switch (msg.topic) {
+        case "start":
+            outputs[0] = msg;
+            break;
+        case "save":
+            outputs[1] = msg;
+            break;
+        case "update":
+        case "check_table":
+        case "update_database":
+            outputs[2] = msg;
+            break;
+        case "select_data":
+            outputs[3] = msg;
+            break;
+        default:
+            node.status({ fill: "yellow", shape: "dot", text: "Input message not recognised" });
+            break;
+    }
+}
 
 return outputs;
-
 

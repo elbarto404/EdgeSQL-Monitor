@@ -27,17 +27,17 @@ if (msg.database.table !== tabName) {
 // Topic switch
 const indexMap = {
     // Previous Error
-    error: 0,
+    error: 4,
 
     // Previous Action (postgres response)
-    check_table: 2,
-    deploy_changes: 2,
-    select_data: 4,
+    check_table: 1,
+    database_updated: 1,
+    select_data: 3,
 
     // Next Action
-    start: 1,
-    update: 2,
-    deploy: 3,
+    start: 0,
+    update: 1,
+    update_database: 2,
 };
 
 const outputs = [null, null, null, null, null];

@@ -35,7 +35,7 @@ const indexMap = {
 
     // Previous Action (postgres response)
     check_table:    2,
-    deploy_changes: 2,
+    database_updated: 2,
     select_data:    3,
 
     // Next Action

@@ -75,7 +75,6 @@ for (const change of msg.dashboard.history) {
 // CALL create_views_by_label(tag_table TEXT, data_table TEXT, view_prefix TEXT);
 
 // commands.push(`CALL create_views_by_label('${tagTable}', '${dataTable}', '${dataTableName}');`);
-msg.database.replace_all_procedures = false
 
 
 // Constructs the PL/pgSQL block
@@ -87,5 +86,5 @@ END $$;
 `;
 
 msg.target = msg.database.name;
-msg.topic = 'deploy_changes';
+msg.topic = 'update_database';
 return msg;

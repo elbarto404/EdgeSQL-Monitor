@@ -61,5 +61,5 @@ END $$;
 `;
 
 msg.target = msg.database.name;
-msg.topic = 'deploy_changes';
+msg.topic = 'database_updated';
 return msg;

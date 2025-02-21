@@ -60,15 +60,16 @@ const baseHeaders = columns.length > 0
     : [];
 
 let snacktext = "";
-if (msg.topicMain === "deploy") {
-    snacktext = `${msg.title} Saved Successfully!`;
-} else if (msg.topicMain === "update") {
-    snacktext = `${msg.title} Updated Successfully!`;
-} else if (msg.topicMain === "start") {
-    snacktext = `${msg.title} Started Successfully!`;
+switch (msg.topicMain) {
+    case "update_database":
+        snacktext = `${msg.title} Saved Successfully!`;
+        break;
+    case "start":
+        snacktext = `${msg.title} Started Successfully!`;
+        break;
 }
 
-// Assign table data to the message
+// Assign message properties
 msg.data = data;
 
 msg.dashboard.table = {
@@ -79,7 +80,7 @@ msg.dashboard.form = {};
 msg.dashboard.history = [];
 
 msg.dashboard.snackbar = {
-    show: true,
+    show: snacktext.length > 0,
     text: snacktext,
     color: "green-lighten-3"
 }

@@ -85,7 +85,7 @@
           <v-btn
             class="mx-2 align-self-center"
             v-show="editMode"
-            @click="deploy"
+            @click="updateDatabase"
             variant="tonal"
           >
             <v-icon class="mx-1 align-self-center" left>mdi-floppy</v-icon>
@@ -445,11 +445,11 @@ export default {
       this.msg.payload = null;
       this.msgSend();
     },
-    deploy() {
+    updateDatabase() {
       this.msg.dashboard.loading = true;
       this.disableEdit();
-      this.msg.topic = "deploy";
-      this.msg.topicMain = "deploy";
+      this.msg.topic = "update_database";
+      this.msg.topicMain = "update_database";
       this.msgSend();
       // this.showSnackbar('Deploy action triggered!', 'info');
     },

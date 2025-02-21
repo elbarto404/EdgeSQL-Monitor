@@ -40,7 +40,7 @@ const allNodes = msg.payload;   // Current nodes
 const endpoints = global.get('endpoints');
 
 if (!Array.isArray(tags) || !Array.isArray(allNodes)) {
-    return [null, null];
+    return;
 }
 
 // Filter out all "tab_connections" nodes to rigenerate them
@@ -72,6 +72,6 @@ if (deployNeeded) {
     global.set("dpc_tags", deploycount);
     msg.payload = updatedNodes
     node.status({ fill: "green", shape: "dot", text: `Deploy ${deploycount} sent` });
-    return [msg, msg2];
+    return msg;
 }
-return [null, msg2];
+return;

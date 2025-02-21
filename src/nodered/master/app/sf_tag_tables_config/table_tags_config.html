@@ -1,7 +1,7 @@
 <template>
   <!-- Main Card Container -->
   <v-card>
-    <!-- Card Header with Title, Reload Button, Search Bar, and Action Buttons -->
+    <!-- Card Header with Title, Refresh Button, Search Bar, and Action Buttons -->
     <v-card-item class="bg-primary">
       <v-row class="my-2 align-self-center" no-gutters>
         
@@ -39,7 +39,7 @@
             variant="tonal"
           >
             <v-icon class="mx-1 align-self-center" left>mdi-reload</v-icon>
-            <span class="mx-1 align-self-center font-weight-bold">Reload</span>
+            <span class="mx-1 align-self-center font-weight-bold">Refresh</span>
           </v-btn>
           <v-btn
             class="mx-2 align-self-center"
@@ -85,7 +85,7 @@
           <v-btn
             class="mx-2 align-self-center"
             v-show="editMode"
-            @click="deploy"
+            @click="save"
             variant="tonal"
           >
             <v-icon class="mx-1 align-self-center" left>mdi-floppy</v-icon>
@@ -409,20 +409,20 @@ export default {
       this.editMode = false;
     },
     
-    // Message Outputs: Update, Deploy and discard edits 
+    // Message Outputs: Update, save and discard edits 
     updateTable() {
       this.msg.topic = "update";
       this.msg.topicMain = "update";
       this.msg.payload = null;
       this.msgSend();
     },
-    deploy() {
+    save() {
       this.msg.dashboard.loading = true;
       this.disableEdit();
-      this.msg.topic = "deploy";
-      this.msg.topicMain = "deploy";
+      this.msg.topic = "save";
+      this.msg.topicMain = "save";
       this.msgSend();
-      // this.showSnackbar('Deploy action triggered!', 'info');
+      // this.showSnackbar('save action triggered!', 'info');
     },
     discardEdit() {
       this.disableEdit();

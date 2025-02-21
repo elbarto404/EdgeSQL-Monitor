@@ -60,6 +60,6 @@ END $$;
 `;
 
 msg.target = msg.database.name;
-msg.topic = 'deploy_changes';
+msg.topic = 'update_database';
 
 return msg;
