@@ -74,7 +74,7 @@
     {
         "id": "tab_grafana_api",
         "type": "tab",
-        "label": "Download Grafana Image",
+        "label": "Grafana API",
         "disabled": false,
         "info": ""
     },
@@ -99,6 +99,14 @@
         "type": "tab",
         "label": "Publishers",
         "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3d22a65f67d95fb2",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
         "info": "",
         "env": []
     },
@@ -6441,7 +6449,7 @@
         "type": "function",
         "z": "sf_simulator",
         "name": "simulation_trigger",
-        "func": "// Get flow context values\nlet last_time = new Date(flow.get('last_time')) || new Date();\nlet last_CY = flow.get('CY') || 0;\nlet last_TCY = flow.get('TCY') || 0;\nlet last_TOff = flow.get('TOff') || 0;\nlet last_TWait = flow.get('TWait') || 0;\n\n// Calculate the next cycle time\nlet new_time = last_time.getTime() + (last_TCY + last_TOff + last_TWait) * 1000;\nlet waitTime = new_time - Date.now();\n\n// START - STOP simulation\nif (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: `${msg.error.message}` });\n    return null;\n}\nif (msg.topic === 'run') {\n    msg = { topic: 'simulation_trigger' };\n    if (context.get('simulationRunning')) {\n        node.status({ fill: 'green', shape: 'ring', text: 'Simulation already running' });\n        return null;  // Prevent starting a new simulation if already running\n    }\n    context.set('simulationRunning', true);\n    node.status({ fill: 'blue', shape: 'ring', text: `Starting ...` });\n    if (waitTime <= 0) {\n        msg.time = new_time;\n        node.status({ fill: 'blue', shape: 'dot', text: 'Starting New Cycle ...' });\n        context.set('simulationRunning', false);\n        return msg;\n    }\n    let interval = setInterval(() => {\n        waitTime -= 1000;\n        if (waitTime <= 0 && context.get('simulationRunning')) {\n            clearInterval(interval);\n            msg.time = new_time;\n            node.status({ fill: 'blue', shape: 'dot', text: `Starting New Cycle ...` });\n            context.set('simulationRunning', false);\n            node.send(msg);\n        } else if (!context.get('simulationRunning')) {\n            clearInterval(interval);\n            node.status({ fill: 'yellow', shape: 'ring', text: 'Simulation stopped' });\n        } else {\n            const localTime = last_time.toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n            node.status({\n                fill: 'green', shape: 'dot', text: ` \n                Last Cycle: ${last_CY}, \n                Created at: ${localTime}, \n                Waiting ${Math.ceil(waitTime / 1000)} sec\n            ` });\n        }\n    }, 1000);\n    return null;\n}\nelse if (msg.topic === 'stop') {\n    if (!context.get('simulationRunning')) {\n        node.status({ fill: 'red', shape: 'ring', text: 'No simulation running' });\n        return null;  // Prevent stopping if no simulation is running\n    }\n    context.set('simulationRunning', false);\n    node.status({ fill: 'yellow', shape: 'dot', text: 'Simulation stopped' });\n    return null;\n}\nelse {\n    node.status({ fill: 'red', shape: 'ring', text: 'Invalid topic' });\n    return null;\n}\n",
+        "func": "// Get flow context values\nlet storedTime = flow.get('last_time');\nlet parsedDate = new Date(storedTime);\nlet last_time = (storedTime && !isNaN(parsedDate.getTime())) ? parsedDate : new Date();\n\nlet last_CY = flow.get('CY') || 0;\nlet last_TCY = flow.get('TCY') || 0;\nlet last_TOff = flow.get('TOff') || 0;\nlet last_TWait = flow.get('TWait') || 0;\n\n// Calculate the next cycle time\nlet new_time = last_time.getTime() + (last_TCY + last_TOff + last_TWait) * 1000;\nlet waitTime = new_time - Date.now();\n\n// START - STOP simulation\nif (msg.error) {\n    node.status({ fill: 'red', shape: 'ring', text: `${msg.error.message}` });\n    return null;\n}\nif (msg.topic === 'run') {\n    msg = { topic: 'simulation_trigger' };\n    if (context.get('simulationRunning')) {\n        node.status({ fill: 'green', shape: 'ring', text: 'Simulation already running' });\n        return null;  // Prevent starting a new simulation if already running\n    }\n    context.set('simulationRunning', true);\n    node.status({ fill: 'blue', shape: 'ring', text: `Starting ...` });\n    if (waitTime <= 0) {\n        msg.time = new_time;\n        node.status({ fill: 'blue', shape: 'dot', text: 'Starting New Cycle ...' });\n        context.set('simulationRunning', false);\n        return msg;\n    }\n    let interval = setInterval(() => {\n        waitTime -= 1000;\n        if (waitTime <= 0 && context.get('simulationRunning')) {\n            clearInterval(interval);\n            msg.time = new_time;\n            node.status({ fill: 'blue', shape: 'dot', text: `Starting New Cycle ...` });\n            context.set('simulationRunning', false);\n            node.send(msg);\n        } else if (!context.get('simulationRunning')) {\n            clearInterval(interval);\n            node.status({ fill: 'yellow', shape: 'ring', text: 'Simulation stopped' });\n        } else {\n            const localTime = last_time.toLocaleString(\"it-IT\", { timeZone: global.get('tz') }).replace(',', '');\n            node.status({\n                fill: 'green', shape: 'dot', text: ` \n                Last Cycle: ${last_CY}, \n                Created at: ${localTime}, \n                Waiting ${Math.ceil(waitTime / 1000)} sec\n            ` });\n        }\n    }, 1000);\n    return null;\n}\nelse if (msg.topic === 'stop') {\n    if (!context.get('simulationRunning')) {\n        node.status({ fill: 'red', shape: 'ring', text: 'No simulation running' });\n        return null;  // Prevent stopping if no simulation is running\n    }\n    context.set('simulationRunning', false);\n    node.status({ fill: 'yellow', shape: 'dot', text: 'Simulation stopped' });\n    return null;\n}\nelse {\n    node.status({ fill: 'red', shape: 'ring', text: 'Invalid topic' });\n    return null;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6635,8 +6643,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1000,
-        "y": 100,
+        "x": 780,
+        "y": 160,
         "wires": []
     },
     {
@@ -6648,7 +6656,7 @@
         "outputs": 0,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Function node script to initialize global variables as column-based arrays\n\nconst tz = \"Europe/Rome\";\n\n// Data from the table\nconst protocol = [\n    \"S7\",\n    \"ModBus\",\n    \"OPC-UA\",\n    \"MQTT\",\n    \"HTTP\",\n    \"Manual\"\n];\nconst data_type = {\n    \"Bool\": \"BOOLEAN\",\n    \"Byte\": \"SMALLINT\",\n    \"Char\": \"CHAR(1)\",\n    \"Word\": \"SMALLINT\",\n    \"DWord\": \"INTEGER\",\n    \"LWord\": \"BIGINT\",\n    \"SInt\": \"SMALLINT\",\n    \"USInt\": \"SMALLINT\",\n    \"Int\": \"SMALLINT\",\n    \"UInt\": \"INTEGER\",\n    \"DInt\": \"INTEGER\",\n    \"UDInt\": \"BIGINT\",\n    \"LInt\": \"BIGINT\",\n    \"ULInt\": \"NUMERIC\",\n    \"Real\": \"REAL\",\n    \"LReal\": \"DOUBLE PRECISION\",\n    \"Time\": \"INTERVAL\",\n    \"Date\": \"DATE\",\n    \"TimeOfDay\": \"TIME\",\n    \"DateTime\": \"TIMESTAMP\",\n    \"String\": \"VARCHAR(254)\",\n    \"WString\": \"TEXT\"\n};\nconst access = [\n    \"Read\",\n    \"Write\",\n    \"Read/Write\"\n];\nconst sampling_mode = [\n    \"Continous\",\n    \"ContinousOnChange\",\n    \"Trigger\",\n    \"Manual\"\n];\nconst sampling_freq = [\n    \"None\",\n    \"500ms\",\n    \"1s\",\n    \"2s\",\n    \"5s\"\n];\nconst aggregations = [\n    \"None\",\n    \"1m\",\n    \"3m\",\n    \"5m\",\n    \"15m\",\n    \"30m\",\n    \"1h\",\n    \"12h\",\n    \"1g\",\n    \"1w\",\n    \"1M\",\n    [\"1m\", \"1h\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\", \"1M\"]\n];\nconst aggregation_type = [\n    \"None\",\n    \"Sum\",\n    \"Mean\"\n];\n\n\n// Initialize global variables\nglobal.set(\"tz\", tz);\nglobal.set(\"protocol\", protocol);\nglobal.set(\"data_type\", data_type);\nglobal.set(\"access\", access);\nglobal.set(\"sampling_mode\", sampling_mode);\nglobal.set(\"sampling_freq\", sampling_freq);\nglobal.set(\"aggregations\", aggregations);\nglobal.set(\"aggregation_type\", aggregation_type);\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Global variables initialized\" });",
+        "initialize": "// Function node script to initialize global variables\n\nconst tz = \"Europe/Rome\";\n\n// Data from the table\nconst protocol = [\n    \"S7\",\n    \"ModBus\",\n    \"OPC-UA\",\n    \"MQTT\",\n    \"HTTP\",\n    \"Manual\"\n];\nconst data_type = {\n    \"Bool\": \"BOOLEAN\",\n    \"Byte\": \"SMALLINT\",\n    \"Char\": \"CHAR(1)\",\n    \"Word\": \"SMALLINT\",\n    \"DWord\": \"INTEGER\",\n    \"LWord\": \"BIGINT\",\n    \"SInt\": \"SMALLINT\",\n    \"USInt\": \"SMALLINT\",\n    \"Int\": \"SMALLINT\",\n    \"UInt\": \"INTEGER\",\n    \"DInt\": \"INTEGER\",\n    \"UDInt\": \"BIGINT\",\n    \"LInt\": \"BIGINT\",\n    \"ULInt\": \"NUMERIC\",\n    \"Real\": \"REAL\",\n    \"LReal\": \"DOUBLE PRECISION\",\n    \"Time\": \"INTERVAL\",\n    \"Date\": \"DATE\",\n    \"TimeOfDay\": \"TIME\",\n    \"DateTime\": \"TIMESTAMP\",\n    \"String\": \"VARCHAR(254)\",\n    \"WString\": \"TEXT\"\n};\nconst access = [\n    \"Read\",\n    \"Write\",\n    \"Read/Write\"\n];\nconst sampling_mode = [\n    \"Continous\",\n    \"ContinousOnChange\",\n    \"Trigger\",\n    \"Manual\"\n];\nconst sampling_freq = [\n    \"None\",\n    \"500ms\",\n    \"1s\",\n    \"2s\",\n    \"5s\"\n];\nconst aggregations = [\n    \"None\",\n    \"1m\",\n    \"3m\",\n    \"5m\",\n    \"15m\",\n    \"30m\",\n    \"1h\",\n    \"12h\",\n    \"1g\",\n    \"1w\",\n    \"1M\",\n    [\"1m\", \"1h\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\", \"1M\"]\n];\nconst aggregation_type = [\n    \"None\",\n    \"Sum\",\n    \"Mean\"\n];\n\n\n// Initialize global variables\nglobal.set(\"tz\", tz);\nglobal.set(\"protocol\", protocol);\nglobal.set(\"data_type\", data_type);\nglobal.set(\"access\", access);\nglobal.set(\"sampling_mode\", sampling_mode);\nglobal.set(\"sampling_freq\", sampling_freq);\nglobal.set(\"aggregations\", aggregations);\nglobal.set(\"aggregation_type\", aggregation_type);\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Global variables initialized\" });",
         "finalize": "",
         "libs": [],
         "x": 160,
@@ -8566,7 +8574,7 @@
         "height": 0,
         "content": "# Industrial Edge Developer Guide\n\n**Doc. No.:** 04222-rtc01r00  \n**Date:** 15 November 2024  \n**Location:** Cinisello B. (MI) - Italia  \n\n---\n\n## Table of Contents\n\n1. **Generalities**\n   - Purpose of the Developer Guide\n2. **Overview of Industrial Edge**\n   - What is Industrial Edge?\n   - Convergence of OT and IT\n3. **Industrial Edge Platform**\n   - Architecture Overview\n   - Industrial Edge Hub (IEH)\n   - Industrial Edge Management (IEM)\n   - Industrial Edge Device (IED)\n   - Official Edge Apps\n4. **Docker Essentials**\n   - Introduction to Docker\n   - Key Docker Concepts\n   - Essential Docker Commands\n5. **App Development Environment**\n6. **Creating Custom Docker Images**\n7. **Docker Compose**\n8. **Using the Industrial Edge App Publisher**\n9. **Example: Monitoring App using Grafana and PostgreSQL**\n10. **Appendices**\n    - Glossary of Terms\n    - Reference Materials and Further Reading\n\n---\n\n## Generalities\n\nThe guide aims to provide a comprehensive understanding of Siemens' Industrial Edge Platform, focusing on its architecture, app development, and Docker integration. It introduces custom configurations using tools like Grafana and PostgreSQL.\n\n---\n\n## Overview of Industrial Edge\n\n### What is Industrial Edge?\nA platform leveraging cloud computing for industrial environments, enabling:\n- Local data processing and analysis.\n- Secure runtime environments for applications.\n- Integration with automation and cloud systems.\n\n### Convergence of OT and IT\n- **OT (Operational Technology):** Hardware/software for physical processes (e.g., PLCs, SCADA).\n- **IT (Information Technology):** Data management and analysis systems.\n- Siemens bridges the gap between OT and IT for real-time insights and enhanced security.\n\n---\n\n## Industrial Edge Platform\n\n### Architecture Overview\n1. **Industrial Edge Hub (IEH):** Cloud gateway for managing licenses, apps, and resources.\n2. **Industrial Edge Management (IEM):** On-premises solution for managing devices and applications.\n3. **Industrial Edge Device (IED):** Field-level devices for data collection and local processing.\n\n### Industrial Edge Apps\nApplications for specific tasks like data analysis, visualization, and control.\n\n---\n\n## Docker Essentials\n\n### Introduction to Docker\n- **Containerized Applications:** Portable units encapsulating app code, dependencies, and configurations.\n- **Benefits:** Portability, efficiency, scalability, and isolation.\n\n### Key Docker Concepts\n- **Images:** Pre-configured templates for containers.\n- **Containers:** Running instances of images.\n- **Volumes & Networks:** Persistent data storage and communication mechanisms.\n\n---\n\n## Development and Deployment\n\n### App Development Environment\n- Prerequisites and setup instructions for developing edge applications.\n\n### Creating Custom Docker Images\n- Steps to create Dockerfiles, manage image versions, and store/share images.\n\n### Using Docker Compose\n- YAML file structure for managing multi-container applications.\n- Best practices for data persistence.\n\n---\n\n## Example Application: Grafana & PostgreSQL\n1. **Setup Development Environment**\n2. **Configure PostgreSQL Database**\n3. **Grafana Datasource and Dashboards**\n4. **Deploy via Edge App Publisher**\n\n---\n\n## Appendices\n- **Glossary:** Key terms related to Industrial Edge.\n- **References:**\n  - [Siemens Industrial Edge Overview](https://www.siemens.com/global/en/products/automation/topic-areas/industrial-edge.html)\n  - [Siemens Documentation](https://docs.eu1.edge.siemens.cloud/)\n\n---\n\n**SET sviluppo e tecnologia s.r.l.**  \nHeadquarters: 25043 Breno (BS), Via A. Moro, 28  \nWebsite: [www.grupposet.it](http://www.grupposet.it)\n",
         "className": "",
-        "x": 150,
+        "x": 350,
         "y": 100,
         "wires": [
             []
@@ -8590,8 +8598,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 150,
-        "y": 260,
+        "x": 350,
+        "y": 160,
         "wires": [
             []
         ]
@@ -8615,7 +8623,7 @@
         "templateScope": "local",
         "className": "",
         "x": 150,
-        "y": 220,
+        "y": 160,
         "wires": [
             []
         ]
@@ -8638,8 +8646,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 150,
-        "y": 300,
+        "x": 590,
+        "y": 160,
         "wires": [
             []
         ]
@@ -8682,7 +8690,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "",
-        "x": 960,
+        "x": 600,
         "y": 220,
         "wires": []
     },
@@ -8698,7 +8706,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
+        "x": 380,
         "y": 220,
         "wires": [
             [
@@ -8722,7 +8730,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 570,
+        "x": 190,
         "y": 220,
         "wires": [
             [
@@ -8768,7 +8776,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "",
-        "x": 970,
+        "x": 610,
         "y": 280,
         "wires": []
     },
@@ -8784,7 +8792,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
+        "x": 380,
         "y": 280,
         "wires": [
             [
@@ -8808,7 +8816,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 570,
+        "x": 190,
         "y": 280,
         "wires": [
             [
@@ -8854,7 +8862,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "",
-        "x": 950,
+        "x": 590,
         "y": 340,
         "wires": []
     },
@@ -8870,7 +8878,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
+        "x": 360,
         "y": 340,
         "wires": [
             [
@@ -8894,7 +8902,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 570,
+        "x": 190,
         "y": 340,
         "wires": [
             [
@@ -8921,7 +8929,7 @@
         "templateScope": "local",
         "className": "",
         "x": 150,
-        "y": 340,
+        "y": 100,
         "wires": [
             []
         ]
@@ -8971,10 +8979,10 @@
         "templateScope": "local",
         "className": "",
         "x": 150,
-        "y": 440,
+        "y": 420,
         "wires": [
             [
-                "51624227a4bca217"
+                "d7fcf14cad16e684"
             ]
         ]
     },
@@ -8984,7 +8992,7 @@
         "z": "tab_dashboard",
         "name": "",
         "scope": null,
-        "x": 760,
+        "x": 600,
         "y": 100,
         "wires": [
             [
@@ -9002,7 +9010,7 @@
         "links": [
             "liALL_status"
         ],
-        "x": 935,
+        "x": 735,
         "y": 100,
         "wires": []
     },
@@ -9052,8 +9060,8 @@
         "name": "",
         "ui": "d7cef5fd92f5328c",
         "events": "all",
-        "x": 320,
-        "y": 440,
+        "x": 600,
+        "y": 420,
         "wires": [
             [
                 "05319443a47b3e33"
@@ -9073,15 +9081,15 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
-        "y": 440,
+        "x": 770,
+        "y": 420,
         "wires": []
     },
     {
         "id": "429861d4b85de762",
         "type": "inject",
         "z": "tab_dashboard",
-        "name": "",
+        "name": "Deploy",
         "props": [
             {
                 "p": "payload"
@@ -9098,7 +9106,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 220,
+        "x": 190,
         "y": 520,
         "wires": [
             [
@@ -9137,7 +9145,7 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 200,
+        "x": 160,
         "y": 600,
         "wires": [
             [
@@ -9176,7 +9184,7 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 190,
+        "x": 150,
         "y": 560,
         "wires": [
             [
@@ -9200,7 +9208,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 450,
+        "x": 390,
         "y": 560,
         "wires": [
             [
@@ -9231,7 +9239,7 @@
                 "valueValue": "full"
             }
         ],
-        "x": 690,
+        "x": 650,
         "y": 560,
         "wires": [
             []
@@ -9846,8 +9854,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1010,
-        "y": 140,
+        "x": 810,
+        "y": 60,
         "wires": []
     },
     {
@@ -9949,6 +9957,26 @@
         ]
     },
     {
+        "id": "d7fcf14cad16e684",
+        "type": "function",
+        "z": "tab_dashboard",
+        "name": "access_control",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 420,
+        "wires": [
+            [
+                "51624227a4bca217"
+            ]
+        ]
+    },
+    {
         "id": "598b668a2f946b7b",
         "type": "inject",
         "z": "9a594799132c8131",
@@ -9966,7 +9994,7 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": "2",
         "topic": "start",
         "x": 210,
@@ -10067,7 +10095,7 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": "2",
         "topic": "start",
         "x": 210,
@@ -10159,7 +10187,9 @@
         "x": 180,
         "y": 400,
         "wires": [
-            []
+            [
+                "d884dbabccd3725b"
+            ]
         ]
     },
     {
@@ -10171,7 +10201,7 @@
         "links": [
             "liALL_status"
         ],
-        "x": 355,
+        "x": 375,
         "y": 400,
         "wires": []
     },
@@ -10264,7 +10294,7 @@
         "type": "debug",
         "z": "tab_status",
         "name": "All",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -10304,8 +10334,8 @@
         "links": [
             "32defa6408e7fa1b"
         ],
-        "x": 255,
-        "y": 160,
+        "x": 555,
+        "y": 180,
         "wires": [
             [
                 "74e123c8bfc3f837",
@@ -10325,8 +10355,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 160,
+        "x": 730,
+        "y": 180,
         "wires": []
     },
     {
@@ -10335,8 +10365,8 @@
         "z": "tab_errors",
         "name": "",
         "scope": null,
-        "x": 300,
-        "y": 240,
+        "x": 600,
+        "y": 260,
         "wires": [
             [
                 "4ffd59db47c35cad"
@@ -10352,8 +10382,8 @@
         "links": [
             "liALL_status"
         ],
-        "x": 505,
-        "y": 240,
+        "x": 805,
+        "y": 260,
         "wires": []
     },
     {
@@ -10369,8 +10399,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 400,
-        "y": 120,
+        "x": 700,
+        "y": 140,
         "wires": []
     },
     {
@@ -12801,5 +12831,71 @@
         "x": 335,
         "y": 300,
         "wires": []
+    },
+    {
+        "id": "a7aa2f71965fd31c",
+        "type": "debug",
+        "z": "3d22a65f67d95fb2",
+        "name": "debug node",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 610,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "5f2bc059bd639694",
+        "type": "function",
+        "z": "3d22a65f67d95fb2",
+        "name": "function node",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 120,
+        "wires": [
+            [
+                "a7aa2f71965fd31c"
+            ]
+        ]
+    },
+    {
+        "id": "986775487102348d",
+        "type": "inject",
+        "z": "3d22a65f67d95fb2",
+        "name": "inject node",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 120,
+        "wires": [
+            [
+                "5f2bc059bd639694"
+            ]
+        ]
     }
 ]
