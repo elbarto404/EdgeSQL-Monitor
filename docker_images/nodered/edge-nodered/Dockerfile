@@ -22,7 +22,6 @@ RUN npm install
 
 # Expose the listening port of Node-RED
 EXPOSE 1880
-EXPOSE 502
 
 # Environment variable holding file path for flows configuration
 ENV FLOWS=flows.json

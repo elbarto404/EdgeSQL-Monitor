@@ -1,24 +1,25 @@
 version: "2.4"
 
 services:
-  # PostgreSQL service acting as the primary database server.
   postgres_host:
-    image: postgres:17  # ORIGINAL IMAGE: PostgreSQL server
+    image: postgres:17  # ORIGINAL IMAGE
+    # image: edge-postgres:0.0.1
+    # image: timescale/timescaledb:latest-pg17
     restart: unless-stopped  
     container_name: postgres_host
-    mem_limit: 1g
     environment:
       POSTGRES_USER: edge
       POSTGRES_PASSWORD: edgeadmin
     volumes:
-      - postgres_data:/var/lib/postgresql/data    # Persistent database data
-      - postgres_etc:/var/lib/postgresql/etc        # Configuration files
-      - postgres_logs:/var/log/postgresql           # Log storage
-      - postgres_backups:/backups                    # Backup storage
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_etc:/var/lib/postgresql/etc
+      - postgres_logs:/var/log/postgresql
+      - postgres_backups:/backups
     networks:
       - proxy-redirect
     ports:
-      - "35432:5432"  # Maps host port 35432 to container's PostgreSQL port 5432
+      - "35432:5432"
+    mem_limit: 1g
     command: 
       -c shared_buffers=256MB
       -c work_mem=16MB
@@ -26,7 +27,6 @@ services:
       -c effective_cache_size=768MB
       -c max_connections=100
 
-  # PostgreSQL Exporter service to expose metrics for Prometheus monitoring.
   postgres_exporter:
     image: prometheuscommunity/postgres-exporter:v0.15.0  # ORIGINAL IMAGE
     restart: unless-stopped  
@@ -36,31 +36,30 @@ services:
     networks:
       - proxy-redirect
     ports:
-      - "39187:9187"  # Maps host port 39187 to the exporter's port 9187
+      - "39187:9187"
     depends_on:
       - postgres_host
     mem_limit: 128m
 
-  # pgAdmin service for managing PostgreSQL via a web interface.
   pgadmin:
-    image: dpage/pgadmin4:8.14  # ORIGINAL IMAGE
+    image: dpage/pgadmin4:8.14   # ORIGINAL IMAGE
+    # image: edge-pgadmin:0.0.1
     container_name: postgres_admin
     restart: unless-stopped 
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@edge.com  # Default login email
-      PGADMIN_DEFAULT_PASSWORD: edgeadmin    # Default login password
+      PGADMIN_DEFAULT_EMAIL: admin@edge.com       # Email di default per l'accesso a pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: edgeadmin         # Password di default per l'accesso a pgAdmin
     ports:
-      - "30080:80"  # Exposes pgAdmin on host port 30080
+      - "30080:80"  # Porta su cui accedere a pgAdmin
     networks:
       - proxy-redirect
     depends_on:
       - postgres_host
     mem_limit: 512m
     volumes:
-      - pgadmin_data:/var/lib/pgadmin  # Persist pgAdmin data
-      - pgadmin_logs:/var/log/pgadmin    # Store pgAdmin logs
+      - pgadmin_data:/var/lib/pgadmin        
+      - pgadmin_logs:/var/log/pgadmin          
 
-# Define persistent volumes for data storage.
 volumes:
   postgres_data:
     name: postgres_data
@@ -75,7 +74,6 @@ volumes:
   pgadmin_logs:
     name: pgadmin_logs
 
-# Use an external network for inter-container communication.
 networks:
   proxy-redirect:
     external: true

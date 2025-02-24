@@ -1,0 +1,29 @@
+version: '2.4' 
+
+services:
+  nodered:
+    image: edge-nodered:0.0.7
+    # image: edge-node:0.0.1
+    # image: nodered/node-red:4.0  # ORIGINAL IMAGE
+    container_name: flow-creator
+    restart: unless-stopped  
+    ports:
+      - "1880:1880"  
+      - "502:502"
+    volumes:
+      - ./nodered_data:/data    # Persist data by mounting the 'nodered_data' volume to '/data' in the container
+      - ./share_files:/home/nodered/node-red-home/node-red-files
+    environment:
+      - TZ=Europe/Rome        # Set the timezone to Europe/Rome
+    networks:
+      - proxy-redirect        # Connect the service to the existing external network named 'proxy-redirect'
+
+# volumes:
+#   nodered_data:
+#     name: nodered_data
+
+networks:
+  proxy-redirect:
+    external: true            # Specify that 'proxy-redirect' is an external network that already exists
+
+

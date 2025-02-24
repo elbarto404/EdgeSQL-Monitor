@@ -1,116 +1,91 @@
 version: "2.4"
 
 services:
+  # Grafana service: runs Grafana Enterprise with custom configuration, dashboards, and provisioning.
   grafana:
     image: grafana/grafana-enterprise:11.3.1-ubuntu
-    # image: grafana/grafana:11.3.0-ubuntu  # ORIGINAL IMAGE
-    # image: edge-grafana:0.0.1
     container_name: grafana
-    restart: unless-stopped  
+    restart: unless-stopped
+    mem_limit: 1g
     environment:
+      # Set admin credentials and rendering configuration
       GF_SECURITY_ADMIN_USER: edge
       GF_SECURITY_ADMIN_PASSWORD: edgeadmin
-      # GF_PATHS_CONFIG: /etc/grafana/custom.ini
+      # GF_PATHS_CONFIG: /etc/grafana/custom.ini  # Uncomment to use a custom config file
       GF_RENDERING_SERVER_URL: http://renderer:8081/render
       GF_RENDERING_CALLBACK_URL: http://grafana:3000
       GF_LOG_FILTERS: rendering:debug
       GF_INSTALL_PLUGINS: grafana-image-renderer
     ports:
-      - "33000:3000"
+      - "33000:3000"   # Exposes Grafana UI on host port 33000
     networks:
-      - proxy-redirect
-    mem_limit: 1g
+      - proxy-redirect  # Connects to the external network for inter-container communication
     user: '1000'
     volumes:
-      - grafana_data:/var/lib/grafana
-      - ./custom/provisioning:/etc/grafana/provisioning
-      - ./custom/dashboards:/var/lib/grafana/dashboards
-      - ./custom/bg:/usr/share/grafana/public/img/bg
-      # - ./custom/custom.ini:/etc/grafana/custom.ini
-      # - $PWD/admin_dashboards:/etc/grafana/dashboards
-      # - $PWD/user_dashboards:/var/lib/grafana/dashboards
-      # - grafana_config:/etc/grafana/provisioning
-      # - grafana_data:/var/lib/grafana
-      # - grafana_share:/usr/share/grafana
-      # - grafana_etc:/etc/grafana         # Mount the entire configuration directory
-      # - grafana_data:/var/lib/grafana    # Mount the entire data directory
-      # - grafana_logs:/var/log/grafana    # (Optional) Mount the log directory for easy access to logs from the host
+      - grafana_data:/var/lib/grafana         # Persist Grafana data
+      - ./custom/provisioning:/etc/grafana/provisioning  # Provisioning configuration files
+      - ./custom/dashboards:/var/lib/grafana/dashboards  # Pre-loaded dashboards
+      - ./custom/bg:/usr/share/grafana/public/img/bg      # Custom background images
 
+  # Renderer service: handles image rendering for Grafana dashboards.
   renderer:
     image: grafana/grafana-image-renderer:latest
     container_name: renderer
-    ports:
-      - "8087:8081"  # Porta di accesso al renderer
     mem_limit: 1g
+    ports:
+      - "8087:8081"  # Maps host port 8087 to renderer's internal port 8081
     depends_on:
-      - grafana
+      - grafana  # Ensures Grafana is started before the renderer
     networks:
       - proxy-redirect
     volumes:
-     - ./custom/renderer_config.json:/usr/src/app/config.json
+      - ./custom/renderer_config.json:/usr/src/app/config.json  # Custom renderer configuration
 
+  # Reporter service: custom service for generating reports using Grafana.
   reporter:
     image: my-reporter:0.0.1
     container_name: reporter
-    # mem_limit: 512m
-    ports:
-      - "8088:8088" # Expose the Reporter on port 8088
-    command: "--grafana-url http://grafana:3000 --generate  --render"
     mem_limit: 256m
+    ports:
+      - "8088:8088" # Exposes the Reporter service on host port 8088
+    command: "--grafana-url http://grafana:3000 --generate  --render"
     depends_on:
-      - renderer 
+      - renderer  # Ensures the renderer is running before reporter starts
     networks:
       - proxy-redirect
     volumes:
-     - ./custom/reporter/templates:/app/templates
-     - ./custom/reporter/reports:/app/reports
+      - ./custom/reporter/templates:/app/templates  # Report templates
+      - ./custom/reporter/reports:/app/reports          # Generated reports storage
 
-  # reporter:
-  #   image: izakmarais/grafana-reporter:latest
-  #   # image: edge-reporter:0.0.1
-  #   container_name: reporter
-  #   # mem_limit: 512m
-  #   ports:
-  #     - "8686:8686" # Expose the Reporter on port 8686
-  #   command: "-ip grafana:3000"
-  #   depends_on:
-  #     - renderer 
-  #   networks:
-  #     - proxy-redirect
-
-
+  # Filebrowser service: provides a web-based file management interface.
   filebrowser:
     image: filebrowser/filebrowser:v2-s6
     container_name: filebrowser
     restart: unless-stopped
     mem_limit: 128m
     ports:
-      - "8080:80"
+      - "8080:80"  # Exposes Filebrowser UI on host port 8080
     environment:
-      - TZ=Europe/Rome
+      - TZ=Europe/Rome  # Sets the timezone
     depends_on:
-      - reporter
+      - reporter  # Starts after reporter service is up
     networks:
       - proxy-redirect
     volumes:
-      - ./custom:/srv
-      - filebrowser_config:/config
-      - filebrowser_database:/database
+      - ./custom:/srv                    # Root folder for filebrowser to serve files from
+      - filebrowser_config:/config       # Persist filebrowser configuration
+      - filebrowser_database:/database   # Persist filebrowser database
 
+# Define persistent volumes for data storage.
 volumes:
-  # grafana_config:
-  #   name: grafana_config
   grafana_data:
     name: grafana_data
-  # grafana_share:
-  #   name: grafana_share
-  # grafana_logs:
-  #   name: grafana_logs
   filebrowser_config:
     name: filebrowser_config
   filebrowser_database:
     name: filebrowser_database
 
+# Use an external network for container communication.
 networks:
   proxy-redirect:
     external: true

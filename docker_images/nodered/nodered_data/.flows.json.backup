@@ -6656,7 +6656,7 @@
         "outputs": 0,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Function node script to initialize global variables\n\nconst tz = \"Europe/Rome\";\n\n// Data from the table\nconst protocol = [\n    \"S7\",\n    \"ModBus\",\n    \"OPC-UA\",\n    \"MQTT\",\n    \"HTTP\",\n    \"Manual\"\n];\nconst data_type = {\n    \"Bool\": \"BOOLEAN\",\n    \"Byte\": \"SMALLINT\",\n    \"Char\": \"CHAR(1)\",\n    \"Word\": \"SMALLINT\",\n    \"DWord\": \"INTEGER\",\n    \"LWord\": \"BIGINT\",\n    \"SInt\": \"SMALLINT\",\n    \"USInt\": \"SMALLINT\",\n    \"Int\": \"SMALLINT\",\n    \"UInt\": \"INTEGER\",\n    \"DInt\": \"INTEGER\",\n    \"UDInt\": \"BIGINT\",\n    \"LInt\": \"BIGINT\",\n    \"ULInt\": \"NUMERIC\",\n    \"Real\": \"REAL\",\n    \"LReal\": \"DOUBLE PRECISION\",\n    \"Time\": \"INTERVAL\",\n    \"Date\": \"DATE\",\n    \"TimeOfDay\": \"TIME\",\n    \"DateTime\": \"TIMESTAMP\",\n    \"String\": \"VARCHAR(254)\",\n    \"WString\": \"TEXT\"\n};\nconst access = [\n    \"Read\",\n    \"Write\",\n    \"Read/Write\"\n];\nconst sampling_mode = [\n    \"Continous\",\n    \"ContinousOnChange\",\n    \"Trigger\",\n    \"Manual\"\n];\nconst sampling_freq = [\n    \"None\",\n    \"500ms\",\n    \"1s\",\n    \"2s\",\n    \"5s\"\n];\nconst aggregations = [\n    \"None\",\n    \"1m\",\n    \"3m\",\n    \"5m\",\n    \"15m\",\n    \"30m\",\n    \"1h\",\n    \"12h\",\n    \"1g\",\n    \"1w\",\n    \"1M\",\n    [\"1m\", \"1h\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\", \"1M\"]\n];\nconst aggregation_type = [\n    \"None\",\n    \"Sum\",\n    \"Mean\"\n];\n\n\n// Initialize global variables\nglobal.set(\"tz\", tz);\nglobal.set(\"protocol\", protocol);\nglobal.set(\"data_type\", data_type);\nglobal.set(\"access\", access);\nglobal.set(\"sampling_mode\", sampling_mode);\nglobal.set(\"sampling_freq\", sampling_freq);\nglobal.set(\"aggregations\", aggregations);\nglobal.set(\"aggregation_type\", aggregation_type);\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Global variables initialized\" });",
+        "initialize": "// Function node script to initialize global variables\n\nconst tz = \"Europe/Rome\";\n\n// Data from the table\nconst protocol = [\n    \"S7\",\n    \"ModBus\",\n    \"OPC-UA\",\n    \"MQTT\",\n    \"HTTP\",\n    \"Manual\"\n];\nconst data_type = {\n    \"Bool\": \"BOOLEAN\",\n    \"Byte\": \"SMALLINT\",\n    \"Char\": \"CHAR(1)\",\n    \"Word\": \"SMALLINT\",\n    \"DWord\": \"INTEGER\",\n    \"LWord\": \"BIGINT\",\n    \"SInt\": \"SMALLINT\",\n    \"USInt\": \"SMALLINT\",\n    \"Int\": \"SMALLINT\",\n    \"UInt\": \"INTEGER\",\n    \"DInt\": \"INTEGER\",\n    \"UDInt\": \"BIGINT\",\n    \"LInt\": \"BIGINT\",\n    \"ULInt\": \"NUMERIC\",\n    \"Real\": \"REAL\",\n    \"LReal\": \"DOUBLE PRECISION\",\n    \"Time\": \"INTERVAL\",\n    \"Date\": \"DATE\",\n    \"TimeOfDay\": \"TIME\",\n    \"DateTime\": \"TIMESTAMP\",\n    \"String\": \"VARCHAR(254)\",\n    \"WString\": \"TEXT\"\n};\nconst access = [\n    \"Read\",\n    \"Write\",\n    \"Read/Write\"\n];\nconst sampling_mode = [\n    \"Continous\",\n    \"ContinousOnChange\",\n    \"Trigger\",\n    \"Manual\"\n];\nconst sampling_period = [\n    \"None\",\n    \"500ms\",\n    \"1s\",\n    \"2s\",\n    \"5s\"\n];\nconst aggregations = [\n    \"None\",\n    \"1m\",\n    \"3m\",\n    \"5m\",\n    \"15m\",\n    \"30m\",\n    \"1h\",\n    \"12h\",\n    \"1g\",\n    \"1w\",\n    \"1M\",\n    [\"1m\", \"1h\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\"],\n    [\"1m\", \"1h\", \"1g\", \"1w\", \"1M\"]\n];\nconst aggregation_type = [\n    \"None\",\n    \"Sum\",\n    \"Mean\"\n];\n\n\n// Initialize global variables\nglobal.set(\"tz\", tz);\nglobal.set(\"protocol\", protocol);\nglobal.set(\"data_type\", data_type);\nglobal.set(\"access\", access);\nglobal.set(\"sampling_mode\", sampling_mode);\nglobal.set(\"sampling_period\", sampling_period);\nglobal.set(\"aggregations\", aggregations);\nglobal.set(\"aggregation_type\", aggregation_type);\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Global variables initialized\" });",
         "finalize": "",
         "libs": [],
         "x": 160,
@@ -8871,7 +8871,7 @@
         "type": "function",
         "z": "tab_dashboard",
         "name": "get tags",
-        "func": "let tag_tables = global.get('tag_tables');\nlet count = 0;\nfor (let datum of tag_tables) {\n    let table = global.get(datum.name)\n    count += table.length\n}\nmsg.payload = count\nreturn msg;",
+        "func": "const tag_tables = global.get('tag_tables');\nlet count = 0;\nfor (let datum of tag_tables) {\n    let table = global.get(datum.name)\n    count += table.length\n}\nmsg.payload = count\nreturn msg;\n\n\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -10187,9 +10187,7 @@
         "x": 180,
         "y": 400,
         "wires": [
-            [
-                "d884dbabccd3725b"
-            ]
+            []
         ]
     },
     {

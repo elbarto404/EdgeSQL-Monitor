@@ -1,29 +1,28 @@
-version: '2.4' 
+version: '2.4'
 
 services:
+  # Node-RED service for creating and managing automation flows
   nodered:
     image: edge-nodered:0.0.7
-    # image: edge-node:0.0.1
-    # image: nodered/node-red:4.0  # ORIGINAL IMAGE
     container_name: flow-creator
     restart: unless-stopped  
     ports:
-      - "1880:1880"  
-      - "502:502"
+      - "1880:1880"  # Exposes Node-RED web interface
+      - "502:502"    # Additional port for external services
     volumes:
-      - ./nodered_data:/data    # Persist data by mounting the 'nodered_data' volume to '/data' in the container
-      - ./share_files:/home/nodered/node-red-home/node-red-files
+      - ./nodered_data:/data  # Persist Node-RED data
+      - ./share_files:/home/nodered/node-red-home/node-red-files  # Shared files
     environment:
-      - TZ=Europe/Rome        # Set the timezone to Europe/Rome
+      - TZ=Europe/Rome  
     networks:
-      - proxy-redirect        # Connect the service to the existing external network named 'proxy-redirect'
+      - proxy-redirect  # Connect to external network
 
-# volumes:
-#   nodered_data:
-#     name: nodered_data
+# Persistent volume for storing Node-RED data
+volumes:
+  nodered_data:
+    name: nodered_data
 
+# External network for inter-container communication
 networks:
   proxy-redirect:
-    external: true            # Specify that 'proxy-redirect' is an external network that already exists
-
-
+    external: true
