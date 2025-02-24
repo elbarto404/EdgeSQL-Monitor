@@ -8,7 +8,6 @@ services:
     restart: unless-stopped  
     ports:
       - "1880:1880"  # Exposes Node-RED web interface
-      - "502:502"    # Additional port for external services
     volumes:
       - ./nodered_data:/data  # Persist Node-RED data
       - ./share_files:/home/nodered/node-red-home/node-red-files  # Shared files
@@ -26,3 +25,4 @@ volumes:
 networks:
   proxy-redirect:
     external: true
+

@@ -12,7 +12,7 @@ services:
       GF_SECURITY_ADMIN_USER: edge
       GF_SECURITY_ADMIN_PASSWORD: edgeadmin
       # GF_PATHS_CONFIG: /etc/grafana/custom.ini  # Uncomment to use a custom config file
-      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_SERVER_URL: http://renderer:8087/render
       GF_RENDERING_CALLBACK_URL: http://grafana:3000
       GF_LOG_FILTERS: rendering:debug
       GF_INSTALL_PLUGINS: grafana-image-renderer
@@ -33,7 +33,7 @@ services:
     container_name: renderer
     mem_limit: 1g
     ports:
-      - "8087:8081"  # Maps host port 8087 to renderer's internal port 8081
+      - "8087:8087"  # Exposes the Renderer service on host port 8087
     depends_on:
       - grafana  # Ensures Grafana is started before the renderer
     networks:
