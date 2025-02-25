@@ -31,13 +31,10 @@ services:
   renderer:
     image: grafana/grafana-image-renderer:latest
     container_name: renderer
+    restart: unless-stopped
     mem_limit: 1g
-    ports:
-      - "8087:8087"  # Exposes the Renderer service on host port 8087
     depends_on:
       - grafana  # Ensures Grafana is started before the renderer
-    networks:
-      - proxy-redirect
     volumes:
       - ./custom/renderer_config.json:/usr/src/app/config.json  # Custom renderer configuration
 
@@ -45,9 +42,10 @@ services:
   reporter:
     image: my-reporter:0.0.1
     container_name: reporter
+    restart: unless-stopped
     mem_limit: 256m
     ports:
-      - "8088:8088" # Exposes the Reporter service on host port 8088
+      - "38088:8088" # Exposes the Reporter service on host port 8088
     command: "--grafana-url http://grafana:3000 --generate  --render"
     depends_on:
       - renderer  # Ensures the renderer is running before reporter starts
@@ -64,7 +62,7 @@ services:
     restart: unless-stopped
     mem_limit: 128m
     ports:
-      - "8080:80"  # Exposes Filebrowser UI on host port 8080
+      - "30080:80"  # Exposes Filebrowser UI on host port 30080
     environment:
       - TZ=Europe/Rome  # Sets the timezone
     depends_on:
