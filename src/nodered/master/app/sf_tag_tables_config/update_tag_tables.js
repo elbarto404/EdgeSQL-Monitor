@@ -148,6 +148,10 @@ for (let table of tag_tables) {
 }
 links.sort();
 
+// Update link in
+let loNode = updatedNodes.find(node => node.id === "lo_endpoints");
+loNode.links = links;
+
 
 // Deploy needed check and return
 const previousTabNodes = allNodes.filter(node => node.z === "tab_tag_tables").sort((a, b) => a.id.localeCompare(b.id));
@@ -157,9 +161,6 @@ deployNeeded = deployNeeded || JSON.stringify(previousTabNodes) !== JSON.stringi
 if (deployNeeded) {
     const deploycount = global.get("dpc_tag_tables") + 1 || 1;
     global.set("dpc_tag_tables", deploycount);
-    // Update link in
-    let loNode = updatedNodes.find(node => node.id === "lo_endpoints");
-    loNode.links = links;
     // Return updated nodes
     msg.log = msg.log || [];
     msg.log.push({ oldFlow: previousTabNodes, newFlow: updatedTabNodes });

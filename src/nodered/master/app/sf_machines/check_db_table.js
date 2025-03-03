@@ -37,3 +37,4 @@ END $$;
 msg.target = msg.database.name;
 msg.topic = "check_table";
 return msg;
+
